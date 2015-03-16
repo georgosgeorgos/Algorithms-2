@@ -382,6 +382,11 @@ C) DO
 http://codereview.stackexchange.com/
 28. Master OOP with Design Patterns and understand all Design Patterns that exists.
 29. Follow GitHub Users with lots of followers for a specific technology/language.
+30. Code using Vim and do everything on commandPrompt/Terminal (Add environment variables!)
+    (e.g.: Cygwin, gdb, makefile, git status)
+    Basically, stop using every IDE and just use VIM! and make use of the features of VIM!
+31.
+
 
 
 // */
