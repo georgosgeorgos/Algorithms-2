@@ -4,7 +4,20 @@
 // 2. To practice new programming questions before documenting into other files
 //-----------------------------------------------------------------------------------------------]
 
+// Temporary Practice:
+// Maximum Subarray Problem 
 
+
+#include <iostream>
+using namespace std; 
+
+int main(void)
+{
+    // Approach 1: Dynamic Programming 
+    // O(n) with handling special case of all (-)
+    
+    return 0;
+}
 
 
 //-----------------------------------------------------------------------------------------------
