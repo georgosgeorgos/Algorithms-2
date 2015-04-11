@@ -25,11 +25,13 @@
 9. Heaps (Priority Queue)
 10. Dynamically Allocated Array
 11. Interval Tree
+12. Segment Tree (Similar to Interval Tree)
 12. Graph (both adjacency list and adjacency matrix with the algorithms)
 13. Disjoint Set
 14. Fibonacci Heap
-15. BSP Tree
+15. BSP Tree = For determining order of print in graphic systems
 16. Suffix Tree
+17. Fenwick Tree = Binary Indexed Tree (For finding cumulative sums of array in O(logN))
 Multithreaded Data Structures for UNIX
 
 As well as, generate graph to compare speed (ECE344 Lab 4 and Lab 5)

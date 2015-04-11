@@ -398,9 +398,16 @@ http://codereview.stackexchange.com/
 30. Code using Vim and do everything on commandPrompt/Terminal (Add environment variables!)
     (e.g.: Cygwin, gdb, makefile, git status)
     Basically, stop using every IDE and just use VIM! and make use of the features of VIM!
-31.
+31. Contribute to opensource on GitHub
+32. Code up softwares that people use on GitHub. That's much more impressive than winning coding competitions. 
+33. Ability to read and work with large amount of code on GitHub! 
+34. Learn to package your code into an installer and executable. So non-programmers can just download it, install it, and run the .exe file! 
+35. Code has to be designed such that it is (testable, maintainable, extensible) 
 
 
+
+For programming challenges
+1. Tradeoff between time complexity, space complexity, and number of lines of code. 
 
 // */
 //----------------------------------------------------------------------

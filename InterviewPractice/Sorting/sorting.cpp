@@ -1,6 +1,7 @@
 //
 /*
 Table of Contents
+// Comparison Sorts 
 1. BubbleSort
 
 2. MergeSort
@@ -9,6 +10,7 @@ Table of Contents
 
 4. Randomized Quicksort
 
+// Non-Comparison Sort 
 5. Counting Sort
 
 6. Radix Sort
@@ -18,7 +20,11 @@ Table of Contents
 //----------------------------------------------------------------------------------------
 // TODO: Insertion Sort
 // TODO: Selection Sort
-
+// TODO: Heap Sort 
+// TODO: TimSort (Make sure you include the bug fixes) 
+// TODO: BucketSort (Improves 
+// TODO: PigeonSort (A special case of Counting Sort with lists) // Note: The one you came up with, but use linked list to make it a stable sort 
+// 
 //----------------------------------------------------------------------------------------
 /* //
 // 1 Bubble sort
