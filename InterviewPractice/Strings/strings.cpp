@@ -1,62 +1,65 @@
 //----------------------------------------------------------------------------------------
 /*
+>> g++ main.cpp
+>> a.exe
 Table of Contents
-
 1. Reverse a string In-Place
-
 2. Determine if every character in string is unique
-
 3. Determine if every character in string is unique using Bit Manipulation (only from 'a' to 'z')
-
 4. Remove Duplicated characters of strings in place, T(n) = O(n^2), S(n) = O(1)
+5. Implement Compression of a string (aabbbc->a2b3c1), T(n) = O(n), S(n) = O(n) 
 
-// Time Complexity, T(n) = O(n)
-// Space Complexity, S(n) = O(1)
+Note: To work between <cstring> and <string> 
+    string bigString = "aabccccaaa";
+    char* temp2; 
+    cin >> bigString; // if needed
+    const char* temp = bigString.c_str(); // must always be const char*
+    // Copy it into normal char*
+    strcpy(temp2, temp);
+    // Now can use temp2 as usual. 
+    // Must always malloc if changing an old cString
+    char* compressed = (char *) malloc(strlen(inputStr));
+    // Must also always null terminate the string! 
+*/
 //----------------------------------------------------------------------------------------
-
+/*
 TODO:
 
-0. Implement compression of a string,
-e.g. : aaabbbbbcccdeeefaabc
-
-char* compress(char* inputStr);
-// Note: You made the mistake of using arrays of characters and integers instead of outputting char *!!
-// should have done: a3b5c3d1e3f1a2b1c1 instead!
 
 
-0. Reading an input string of arbitrary size.
-// Refer to hackerrank problem 6 "Alternating Characters" for solution. But code yourself first that was from online
+	0. Reading an input string of arbitrary size.
+	// Refer to hackerrank problem 6 "Alternating Characters" for solution. But code yourself first that was from online
 
-0. A sentence has additional spaces between words, remove the additional spaces in place
-eg: "hi  i     am paul" -> "hi i am paul"
-Hint: 2 pointers, 1 to point to replace, one to search for more
+	0. A sentence has additional spaces between words, remove the additional spaces in place
+	eg: "hi  i     am paul" -> "hi i am paul"
+	Hint: 2 pointers, 1 to point to replace, one to search for more
 
-1. Longest Common Substring Using Dynamic Programming
-Note: This requires you to implement nested for loops in the form of a recursion
-Which is a new skill to learn!
+	1. Longest Common Substring Using Dynamic Programming
+	Note: This requires you to implement nested for loops in the form of a recursion
+	Which is a new skill to learn!
 
-3. Longest Common Substring Using Suffix Trees for > 2 strings
+	3. Longest Common Substring Using Suffix Trees for > 2 strings
 
-4. Exact Matching using Suffix Trees (location of each substring)
+	4. Exact Matching using Suffix Trees (location of each substring)
 
-5. Dictionary (Check if a string is found in the dictionary)
+	5. Dictionary (Check if a string is found in the dictionary)
 
-6. Finding all maximal palindromes in a String. (longest palindrome in a string)
-a) Hint: Manacher algorithm T(n) = O(n), S(n) = O(n) // fastest
-b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
-c) Dynamic Programming noting mirros center T(n) = O(n^2), S(n) = O(1) // least space
-
-
-7. Longest Increasing Subsequence
-
-8. Longest Duplicated substring in a string.
+	6. Finding all maximal palindromes in a String. (longest palindrome in a string)
+	a) Hint: Manacher algorithm T(n) = O(n), S(n) = O(n) // fastest
+	b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
+	c) Dynamic Programming noting mirros center T(n) = O(n^2), S(n) = O(1) // least space
 
 
-9. Implement strspn function
+	7. Longest Increasing Subsequence
 
-10. Reverse a Sentence (Bloomberg Round 1)
+	8. Longest Duplicated substring in a string.
 
-11.
+
+	9. Implement strspn function
+
+	10. Reverse a Sentence (Bloomberg Round 1)
+
+	11.
 
 */
 
@@ -98,6 +101,7 @@ void reverseStrMethod2(char* word)
     int i = 0;
     for (i = 0; i < n/2; i++)
     {
+    	// Swap
         char temp = word[n-1-i];
         word[n-1-i] = word[i];
         word[i] = temp;
@@ -268,3 +272,66 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------
+/*
+// 5. Implement Compression of a string
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n)
+// e.g. aabcccccaaa
+// With this function call 
+// char* compress(char* inputStr);
+	// Note: You made the mistake of using arrays of characters and integers instead of outputting char *!!
+	// should have done: a3b5c3d1e3f1a2b1c1 instead!
+
+#include <iostream> 
+#include <string> 
+#include <cstring> 
+#include <cstdio>
+#include <cstdlib> // itoa(int, char*, baseForInt)
+using namespace std; 
+
+char* compress(char* inputStr);
+
+int main(void) 
+{
+    string bigString = "aabccccaaa";
+    const char* temp = bigString.c_str();
+    char* compressed; 
+    char* temp2; 
+    strcpy(temp2, temp);
+    compressed = compress(temp2);
+    cout << bigString << endl;
+    printf("%s\n",compressed);
+}
+
+char* compress(char* inputStr)
+{
+    if (strlen(inputStr) == 0) return inputStr;
+    // Must malloc
+    char* compressed = (char*) malloc(strlen(inputStr));
+    compressed[strlen(inputStr)] = '\0';
+    unsigned long long int index = 0;
+    compressed[index] = inputStr[0];
+    char* temp3 = (char*) malloc(strlen("haha")) ;
+    int count = 1;
+    for (int i = 1; i < strlen(inputStr); i++)
+    {
+        if (inputStr[i] == compressed[index]) 
+        {
+            count++;
+        }
+        else
+        {
+            itoa(count,temp3, 10);
+            compressed[++index] = temp3[0];
+            count = 1; // initialize count
+            compressed[++index] = inputStr[i];
+        }
+    }
+    // Set last integer for string
+    itoa(count,temp3, 10);
+    compressed[++index] = temp3[0];
+    // Null terminate it
+    compressed[++index] = '\0';
+    return compressed; 
+}
+// */
