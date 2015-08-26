@@ -2,31 +2,26 @@
 // This file is like a rough paper
 // 1. To practce previous programming questions
 // 2. To practice new programming questions before documenting into other files
+// It also contains notes for you to read to practice programming challenges
 //-----------------------------------------------------------------------------------------------]
 
 // Temporary Practice:
 // Maximum Subarray Problem 
-
-
 #include <iostream>
 using namespace std; 
-
 int main(void)
 {
     // Approach 1: Dynamic Programming 
     // O(n) with handling special case of all (-)
-    
     return 0;
 }
-
-
 //-----------------------------------------------------------------------------------------------
 // For Interviews online, you need to be able to code it.
 // Thus, you need to use Standard Template Library as copying pasting your own previous code is not acceptable
-// Therefore, need use C++'s STL
+// Therefore, need to use C++'s STL
 
-// Need to know how to
-
+//-----------------------------------------------------------------------------------------------
+// Need to know how to:
 // stable_sort()
 // reverse() // to sort in reverse order
 // binary search()
@@ -36,8 +31,7 @@ int main(void)
 // iii) Traverse
 // iv) Search
 // v) Max? Min?
-//
-
+//-----------------------------------------------------------------------------------------------
 template <class X>
 int binarySearch(X a[], X element, int n);
 
@@ -49,7 +43,7 @@ template <class X>
 int binarySearch(X a[], X element, int n)
 {
     int first = 0;
-    int last = n -1;
+    int last = n - 1;
     while (first != last)
     {
         if (element <= a[(first+last)/2])
@@ -71,14 +65,11 @@ int binarySearch(X a[], X element, int n)
         return -1;
     }
 }
-
-
 //-----------------------------------------------------------------------------------------------
 // Longest Common Substring
 // Approach 1: Dynamic Programming
 // Time Complexity, T(n,m) = O(nm)
 // Space Complexity, S(n,m) = S(nm)
-
 //------------------------------------------------------------------------------------------------
 /*
 Add to numerical methods or mathematics
@@ -405,55 +396,104 @@ C) DO
 /* //
 //----------------------------------------------------------------------
 // Ways to Become the Best Programmer
+// Technical Skills, Usefulness to society, Produces income, Brings Fame
 //----------------------------------------------------------------------
-1. Understand, Augment, Create algorithms & data structures
-2. Code on paper (from memory => Memorize syntax)
-3. Solve programming challenges within 30 minutes
-4. Fix other people's bugs (Stack Overflow -> Use it like piazza)
-5. Create new algorithms to solve problems.
-6. Solve problems flexible (time & space tradeoffs)
-7. Contribute to open source (code daily), able to understand open source code quickly from documentation
-8. Write test cases for own code (C: Check, Java: Junit)
-9. Write test cases within development code using compiler primitives (e.g. #ifdef DEBUG assert(i == 1); #endif)
-10. Code for fun! (code sudoku game, payment at restaurants)
-11. Use debugger (C: GDB, C: Valgrind)
-12. Use Software Tools (Compilation, Documentation, Source Control) (C: Makefile, C: Doxygen, GIT, Subversion)
-13. Code modularity & portability (Classes, Helpfer Functions, Templates, Function pointers, Variable argument)
-14. Hack into programs (e.g. Try to hack into Diablo)
-15. Combine multiple languages together (Matlab, C++, JAVA, C, Android)
-16. Profile code for speed & space optimality
-17. Find out things about system (ECE344 Bonus Assignment)
-18. Ability to reduce problems to existing ones ( Max consecutive words -> Max substring , Reverse Words -> Reverse strings)
-19. Ace Programming Interviews (speak out loudly)
-20. Parallelize code (Threads, Processes, Scheduling, Event based, Map & Reduce, Using GPUs)
-21. Throw and Exception Handling
-22. Analyze how many time you would hit a function and reconsider if need to put inside while loop
-23. Perform garbage collection analysis the right way.
-24. Master OOP Design patterns
-25. Join hackathons and business plans, join hackerrank competitions!
-26. Focus on graphical user interface designs to make work a marketable product.
-27. Read and perform code reviews on stack exchange.
-http://codereview.stackexchange.com/
-28. Master OOP with Design Patterns and understand all Design Patterns that exists.
-29. Follow GitHub Users with lots of followers for a specific technology/language.
-30. Code using Vim and do everything on commandPrompt/Terminal (Add environment variables!)
-    (e.g.: Cygwin, gdb, makefile, git status)
-    Basically, stop using every IDE and just use VIM! and make use of the features of VIM!
-31. Contribute to opensource on GitHub
-32. Code up softwares that people use on GitHub. That's much more impressive than winning coding competitions. 
-33. Ability to read and work with large amount of code on GitHub! 
-34. Learn to package your code into an installer and executable. So non-programmers can just download it, install it, and run the .exe file! 
-35. Code has to be designed such that it is (testable, maintainable, extensible) 
+You need to prove to yourself and the world that you are the best by winning competitions. 
+1. Compete in hackathons 
+	- Goal:
+		- Difficulty => Was what you built difficult to implement, is it just nice graphics on some API? 
+		- Usefulness => Will people use your hack, does it solve a real problem 
+		- Originality => Were you the first person to come up with this solution
+		- Design => How is the user experience and user interface in using your product? How complete does it look?  
+	- Preparation: 
+		- Did you practice working with the technologies you need before the hackathon? 
+			(e.g. Google Maps, Android Sound, NodeJS/Javascript/AngularJS)
+		- Are you able to team up with a strong team? 
+	- Ability to learn something new and use it very quickly
+	_ Ability to implement things quickly 
+	- Ability to motivate, stay productive, sleep less. 
+	- Ability to pitch your idea to everyone during presentation and team gathering. 
+	- Ability to divide work and integrate between teams
+2. Compete in programming challenges
+	- Based on: 
+		- Algorithms => Knowledge on time space complexity 
+3. Kaggle Competitions 
+	- Based on: 
+		- Proficiency in Analyzing Existing Data
+		- Proficiency in Data Mining 
+		- Proficiency in using the right ML models and libraries 
+4. Open Source 
+	- Based on: 
+		- How often do other programmers use your work? 
+		- How easy are you able to understand large amount of code and improve it
+5. Start Ups (Compete in Life) 
+	- Based on: 
+		- Creating a solution that is: 
+			- Large User Base  or Difficult to re-invent by competitors
+			- Has a large market (people will use it) 
+			- Has a business model (how does your product produce revenue) 
+		- Ability to pitch to investors 
+			- What the problem is? 
+			- What your solution is? 
+				- Why is it unique? 
+			- What the business model is? 
+				- How will you earn money
+		- Ability to use open source code to achieve what you ned
+		- Ability to gather a strong team 
+Technical Skills Steps: (How to acquire the technical skills you need)
+1. Solve programming challenges quickly
+	- (Understand, Augment, Create) algorithms & data structures
+	- Code on paper (from memory => Memorize syntax)
+	- Solve problems flexible (time & space tradeoffs)
+	- Handle corner cases efficiently
+	- Ability to reduce problems to existing ones ( Max consecutive words -> Max substring , Reverse Words -> Reverse strings)
+	- Write test cases for own code (C: Check, Java: Junit)
+	- Use debugger (C: GDB, C: Valgrind) (e.g. Prof. Ashvin found out your problem quickly)
+	- Profile code for speed & space optimality
+	- Analyze how many time you would hit a function and reconsider if need to put inside while loop (Bloomberg Interview)
+	- Ace Programming Interviews (speak out loudly)
 
-For programming challenges
-1. Tradeoff between time complexity, space complexity, and number of lines of code. 
+2. Complete Hackathon Projects quickly
+	- Integrate API's together (REST API)	
+	- Integrate Internet of Things 
+		- How to connect Leap Motion with Air Drone 2.0 with Node Server 
+	- Fix other people's bugs (Stack Overflow -> Use it like piazza)
+	- Create new algorithms to solve problems.
 
+3. Understand large amount of code and use it
+	- Contribute to open source (code daily), able to understand open source code quickly from documentation
+	- Write test cases within development code using compiler primitives (e.g. #ifdef DEBUG assert(i == 1); #endif)
+	- Code for fun! (code sudoku game, payment at restaurants, playstation randomizer)
+	- Use Software Tools (Compilation, Documentation, Source Control) (C: Makefile, C: Doxygen, GIT, Subversion)
+	- Combine multiple languages together (Matlab, C++, JAVA, C, Android) (Don't be a language person, use what works best for a specific tool)
+	- Code modularity & portability (Classes, Helpfer Functions, Templates, Function pointers, Variable argument)
+	- Find out things about system (ECE344 Bonus Assignment), how the open source code is implemented (Piazza Hack)
+	- Read and perform code reviews on stack exchange.
+		http://codereview.stackexchange.com/
+	-  Code using Vim and do everything on commandPrompt/Terminal (Add environment variables!)
+		(e.g.: Cygwin, gdb, makefile, git status)
+		Basically, stop using every IDE and just use VIM! and make use of the features of VIM!
+	- Follow GitHub Users with lots of followers for a specific technology/language.
+	- Contribute to opensource on GitHub
+	- Code up softwares that people use on GitHub. That's much more impressive than winning coding competitions. 
+	- Hack into programs (e.g. Try to hack into Diablo)
+
+4. Kaggle competitions (Big Data)
+	- Parallelize code (Threads, Processes, Scheduling, Event based, Map & Reduce, Using GPUs)
+	- Work with Cloud Computing technologies
+
+5. Start Ups 
+	- Throw and Exception Handling
+	- Perform garbage collection analysis the right way.
+	- Master OOP Design patterns
+	- Focus on graphical user interface designs to make work a marketable product.
+	- User experience and user interface
+	- Code has to be designed such that it is (testable, maintainable, extensible) 
+	- Learn to package your code into an installer and executable. So non-programmers can just download it, install it, and run the .exe file! 
 // */
 //----------------------------------------------------------------------
 //
-
 /*
-
 // Using GDB on terminal
 Commands
 print j  // print variable j
@@ -469,8 +509,6 @@ help breakpoints // access documentation of gdb's commands such as breakpoints
 
 // Using compilation on terminal
 gcc -g -Wall -o programName main.c // Note: -g command is needed to store symbol table used during gdb sessions
-
-
 // */
 //----------------------------------------------------------------------
 
