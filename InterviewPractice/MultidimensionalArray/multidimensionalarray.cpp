@@ -1,14 +1,10 @@
 //----------------------------------------------------------------------------------------
 /* //
 Table of Contents
-
 1. Rotate 2D Image (N x N) 90 Degrees, T(n) = O(n^2), S(n) = O(n^2)
 2. Rotate 2D Image (N x N) 90 Degrees In Place, T(n) = O(n^2), S(n) = O(1)
 3. Traverse (NxN) array spirally
-TODO:
-1. Given a 2d array of integers, how do you efficiently modify the array to zero-out any rows and columns that originally contained a zero?
-Looking for a algorithm run time less than O(n^2) (can sacrifice space!)
-
+4. Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0, T(n,m) = O(nm), S(n,m) = O(n + m)
 // */
 //----------------------------------------------------------------------------------------
 /*
@@ -205,7 +201,8 @@ void traverseSpiralTopRight(int** a, int x1, int x2, int y1, int y2,void (*funcP
 void traverseSpiralBottomLeft(int** a, int x1, int x2, int y1, int y2,void (*funcPointer)(int));
 int main(void)
 {
-    int** a;
+    int** a;    
+    // Note: Can easily change value of N here due to great setup to see if it works for various values of N
     int N = 5;
     a = (int**) malloc(sizeof(int*) * N);
     int i = 0;
@@ -290,6 +287,92 @@ void traverseSpiralBottomLeft(int** a, int x1, int x2, int y1, int y2,void (*fun
         return traverseSpiralTopRight(a, x1+1, x2, y1, y2-1, funcPointer);
     }
     return;
+}
+// */
+//----------------------------------------------------------------------------------------
+/* //
+// 4 Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0
+// Time Complexity, T(n,m) = O(nm)
+// Space Complexity, S(n,m) = O(n + m)
+#include <cstdlib> 
+#include <cstdio>
+#include <iostream> 
+#include <ctime> // for time(NULL)
+using namespace std; 
+
+void zeroOut(int** array, int n, int m); 
+
+int main(void)
+{
+    srand(time(NULL));
+    int N = 3;
+    int M = 4; 
+    // Initialize the array of size N x M as well as print the current value 
+    //int a[N][M]; 
+    int** a = (int**) malloc(sizeof(int*) * N);
+    for(int i = 0; i < N; i++)
+    {
+        a[i] = (int*) malloc(sizeof(int) * M);
+    }
+    
+    for (int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < M; j++)
+        {
+            a[i][j] = rand() % 10; // set the current cell to be a random number between [0,9]
+            cout << a[i][j] << " "; 
+        }
+        cout << endl; 
+    }
+    zeroOut(a, N, M);
+    // Print the final result
+    cout << endl; 
+    for (int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < M; j++)
+        {
+            cout << a[i][j] << " "; 
+        }
+        cout << endl; 
+    }
+    return 0; 
+}
+
+void zeroOut(int** a, int n, int m) 
+{
+    int row[n];
+    int column[m]; 
+    for (int i = 0; i < n; i++)
+    {
+        row[i] = 0; 
+    }
+    for (int i = 0; i < m; i++)
+    {
+        column[i] = 0; 
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < m; j++)
+        {
+            if (a[i][j] == 0)
+            {
+                row[i] = 1; 
+                column[j] = 1; 
+            }          
+        }
+    }
+    for (int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < m; j++)
+        {
+            if (row[i] || column[j])
+            {
+                a[i][j] = 0;
+            }
+        }
+    }
+    return; 
 }
 // */
 //----------------------------------------------------------------------------------------
