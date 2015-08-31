@@ -99,8 +99,8 @@ void rotate90(int** image, int row, int col)
 /* //
 // 2 Rotate 2D Image (N x N) 90 Degrees In Place
 // Rotate an image 90 degrees in place. Can create constant memory but not an entire array
-// Time Complexity, T(n) = (n^2)
-// Space Complexity, S(n) = (n^2)
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(1)
 // TODO: Do this again, too many mistakes
 
 #include <stdlib.h>
