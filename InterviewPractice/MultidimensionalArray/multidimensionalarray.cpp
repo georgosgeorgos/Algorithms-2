@@ -2,13 +2,9 @@
 /* //
 Table of Contents
 
-1. Rotate 2D Image (N x N) 90 Degrees
-
-2. Rotate 2D Image (N x N) 90 Degrees In Place
-
+1. Rotate 2D Image (N x N) 90 Degrees, T(n) = O(n^2), S(n) = O(n^2)
+2. Rotate 2D Image (N x N) 90 Degrees In Place, T(n) = O(n^2), S(n) = O(1)
 3. Traverse (NxN) array spirally
-
-
 TODO:
 1. Given a 2d array of integers, how do you efficiently modify the array to zero-out any rows and columns that originally contained a zero?
 Looking for a algorithm run time less than O(n^2) (can sacrifice space!)
@@ -19,7 +15,8 @@ Looking for a algorithm run time less than O(n^2) (can sacrifice space!)
 // 1 Rotate 2D Image (N x N) 90 Degrees
 // Rotate an image 90 degrees, allowed to create new array
 // TODO: REDO THIS!!!!! TOO MUCH MISTAKES AT FIRST
-// This takes O(n^2)
+// Time Complexity, T(n) = (n^2)
+// Space Complexity, S(n) = (n^2)
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -102,8 +99,10 @@ void rotate90(int** image, int row, int col)
 /* //
 // 2 Rotate 2D Image (N x N) 90 Degrees In Place
 // Rotate an image 90 degrees in place. Can create constant memory but not an entire array
-// time->O(n^2)
+// Time Complexity, T(n) = (n^2)
+// Space Complexity, S(n) = (n^2)
 // TODO: Do this again, too many mistakes
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -152,17 +151,34 @@ int main(void)
     return 0;
 }
 
+// Simply perform a swap operation across 4 elements instead of the usual 2 elements
+// Basically, for a given N x N matrix, 
+// you will have to traverse a total of floor(N/2) layers. 
+// You traverse from the outer layer to the inner layer. 
+// At each layer, you need to go through 'end1' number of offsets
+// i = Layer number
+// j = Offset number at a given layer
+// end1 = Number of offsets at a given layer 
+// end2 = The inverse location of offset number for j 
+// Really, you are just solving for the 4 swap operation indices
+// [Row][Column]
+// [j][i]
+// [i][end2]
+// [end2][end1]
+// [end1][j]
+// Take note of how the pattern changes 
 void rotate90InPlace(int** image, int n)
 {
-    int i = 0;
-    int j = 0;
+    int i = 0; // i = layer #
+    int j = 0; // j = offset #
+    // floor(n/2) => Number of layers for a given N x N matrix
     for (i = 0; i < floor(n/2); i++)
     {
-        int end1 = n - i - 1;
+        int end1 = n - i - 1; // Number of offsets in current layer
         for(j = i; j < end1; j++)
         {
 
-            int end2 = n - j - 1;
+            int end2 = n - j - 1; // Inverse offset location  for current offset #, j
             int temp = image[j][i];
             image[j][i] = image[i][end2];
             image[i][end2] = image[end2][end1];
