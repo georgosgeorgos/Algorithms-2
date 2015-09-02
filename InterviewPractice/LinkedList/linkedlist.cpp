@@ -3,14 +3,16 @@
 /* //
 >> g++ -std=c++11 linkedlist.cpp
 >> a.exe
+Hints: 
+- Memory address of linkedlist is unique (pointed to by pointers)
+- Can always break circular linked list, solve the problem, then link it back to become circular again
+- Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
+
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
 2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
 3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
-
-Hints: 
-- Memory address of linkedlist is unique (pointed to by pointers)
-- Can always break circular linked list, solve the problem, then link it back to become circular again
+4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
 
 #include <forward_list> 
 forward_list<int> listA;
@@ -31,7 +33,6 @@ e.g.: int curr = listA.front();
 // TODO: Detect if a Linked List is circular
 // TODO: Insert an element into a sorted circular linked list (Microsoft Round 1)
 // */
-
 //----------------------------------------------------------------------------------------
 /*
 // 1 Reverse a Linked list
@@ -341,6 +342,75 @@ forward_list<int> removeDuplicateWithSort(forward_list<int> dup)
     dup.sort(); // sort using mergesort(), T(n) = O(nlgn)
     dup.unique(); // remove duplicate elements in 1 run across linkedlist, T(n) = O(n)
     return dup;
+}
+// */
+//----------------------------------------------------------------------------------------
+/* //
+// 4 Return Last K Elements of a Linked List 
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+
+#include <cstdio> 
+#include <cstdlib> 
+#include <iostream> 
+using namespace std; 
+struct node {
+    int value;
+    struct node* next; 
+};
+
+struct node * getLaskK(struct node * head, int k);
+
+int main(void)
+{
+    struct node * head; 
+    struct node* first = (struct node *) malloc(sizeof(struct node));
+    head = first;
+    struct node* prev = first; 
+    prev->value = 8;
+    for (int i = 0; i < 10; i++)
+    {
+        struct node* temp = (struct node *) malloc(sizeof(struct node));
+        prev->next = temp; 
+        prev = temp; 
+        prev->value = i; 
+        prev->next = NULL;
+    }
+    prev = head; 
+    while(prev)
+    {
+        cout << prev->value << " ";
+        prev = prev->next;
+    }
+    cout << endl;
+    int k = 5; 
+    head = getLaskK(head, k);
+    prev = head; 
+    while(prev)
+    {
+        cout << prev->value << " ";
+        prev = prev->next;
+    }
+    return 0;
+}
+
+// if k = 0 => Return NULL
+struct node * getLaskK(struct node * head, int k)
+{
+    if (k <= 0) return NULL;
+    struct node * last = head; 
+    for (int i = 1; i < k; i++)
+    {
+        // If less than k elements, return all the elements
+        if(!last) return head; 
+        last = last->next; 
+    }
+    while(last->next)
+    {
+        last = last->next; 
+        head = head->next; 
+    }
+    return head;
 }
 // */
 //----------------------------------------------------------------------------------------
