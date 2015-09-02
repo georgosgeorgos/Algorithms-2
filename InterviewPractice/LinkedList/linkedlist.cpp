@@ -6,6 +6,27 @@
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
 2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
+3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
+
+Hints: 
+- Memory address of linkedlist is unique (pointed to by pointers)
+- Can always break circular linked list, solve the problem, then link it back to become circular again
+
+#include <forward_list> 
+forward_list<int> listA;
+e.g.: int curr = listA.front(); 
+    push_front() // insert element to beginning
+    pop_front() // removes first element
+    front() // get first element
+    unique() // remove duplicates (only works if list is sorted)
+    sort()
+    clear()
+    insert_after()
+    emplace_after()
+    emplace_front()
+    erase_after()
+    resize()
+    swap()
 
 // TODO: Detect if a Linked List is circular
 // TODO: Insert an element into a sorted circular linked list (Microsoft Round 1)
@@ -101,6 +122,7 @@ struct node* reverseLinkedList(struct node* head)
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(n)
 // 5->4 + 8->7  = 1->4->1
+// Simply perform reverse  linked list algorithm on both lists first, then you can add from the back 
 #include <forward_list> // singly linked list
 #include <iostream>
 using namespace std;
@@ -197,6 +219,128 @@ int main(void)
     {
         cout << ' ' << node;
     }
+}
+// */
+//----------------------------------------------------------------------------------------
+/* //
+// 3 Remove Duplicates From Linked List
+
+// Method 1: Sort, Then Remove Duplicates 
+// Time Complexity, T(n) = O(nlogn) 
+// Space Complexity, S(n) = O(1) 
+// Method 2: Remove Duplicates Directly
+// Time Complexity, T(n) = O(n^2) 
+// Space Complexity, S(n) = O(1) 
+// note: Can reduce T(n) to O(1) by sacrificing space using hash table
+
+#include <cstdio>
+#include <cstdlib> 
+#include <iostream> 
+#include <forward_list> // singly linked list
+using namespace std; 
+
+forward_list<int> removeDuplicateWithSort(forward_list<int> dup);
+struct node* removeDuplicate(struct node* head);
+struct node {
+    int value; 
+    struct node* next; 
+};
+
+int main(void)
+{
+    forward_list<int> list1 = {2,3,8,1,5,2,3,5,8}; 
+    // input: 2->3->8->1->5->2->3->5->8
+    // output: 2->3->8->1->5
+    for(int& node: list1)
+    {
+        cout << node << ' '; 
+    }
+    cout << endl << "Method1: Sort Then Remove" << endl; 
+    list1 = removeDuplicateWithSort(list1);
+    for(int& node: list1)
+    {
+        cout << node << ' '; 
+    }
+    cout << endl; 
+    struct node* list2;
+    struct node* a1 = (struct node*) malloc(sizeof(struct node));
+    struct node* a2 = (struct node*) malloc(sizeof(struct node));
+    struct node* a3 = (struct node*) malloc(sizeof(struct node));
+    struct node* a4 = (struct node*) malloc(sizeof(struct node));
+    struct node* a5 = (struct node*) malloc(sizeof(struct node));
+    struct node* a6 = (struct node*) malloc(sizeof(struct node));
+    struct node* a7 = (struct node*) malloc(sizeof(struct node));
+    struct node* a8 = (struct node*) malloc(sizeof(struct node));
+    struct node* a9 = (struct node*) malloc(sizeof(struct node));
+    a1->value = 2;
+    a1->next = a2;
+    a2->value = 3;
+    a2->next = a3;
+    a3->value = 8;
+    a3->next = a4;
+    a4->value = 1;
+    a4->next = a5;
+    a5->value = 5;
+    a5->next = a6;
+    a6->value = 2;
+    a6->next = a7;
+    a7->value = 3;
+    a7->next = a8;
+    a8->value = 5;
+    a8->next = a9;
+    a9->value = 8;
+    a9->next = NULL;
+    list2 = a1;
+    cout << endl; 
+    struct node* head = list2;
+    while(head)
+    {
+        cout << head->value << " "; 
+        head = head->next; 
+    }
+    cout << endl << "Method2: Remove Directly" << endl; 
+    list2 = removeDuplicate(list2);
+    head = list2;
+    while(head)
+    {
+        cout << head->value << " "; 
+        head = head->next; 
+    }
+    return 0; 
+}
+
+struct node* removeDuplicate(struct node* head)
+{
+    struct node * curr; 
+    struct node * check; 
+    if(!head) return head; 
+    curr = head; 
+    check = curr; 
+    while(curr)
+    {
+        while(check->next)
+        {
+            if (check->next->value == curr->value)
+            {
+                check->next = check->next->next;
+            }
+            else 
+            {
+                check = check->next; 
+            }
+        }
+        curr = curr->next; 
+        check = curr; 
+    }
+
+    return head;
+}
+
+forward_list<int> removeDuplicateWithSort(forward_list<int> dup)
+{
+    dup.sort(); // sort using mergesort(), T(n) = O(nlgn)
+    dup.unique(); // remove duplicate elements in 1 run across linkedlist, T(n) = O(n)
+    return dup;
 }
 // */
 //----------------------------------------------------------------------------------------
