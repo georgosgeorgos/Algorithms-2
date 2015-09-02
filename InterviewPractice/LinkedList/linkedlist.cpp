@@ -1,20 +1,16 @@
 //
 //----------------------------------------------------------------------------------------
 /* //
+>> g++ -std=c++11 linkedlist.cpp
+>> a.exe
 Table of Contents
-
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
-
-2. Adding two numbers that are represented by lists
-
-
+2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
 
 // TODO: Detect if a Linked List is circular
-
 // TODO: Insert an element into a sorted circular linked list (Microsoft Round 1)
-
-// TODO:
 // */
+
 //----------------------------------------------------------------------------------------
 /*
 // 1 Reverse a Linked list
@@ -50,6 +46,7 @@ int main(void)
     head = a;
     struct node* curr = head;
     cout <<"Before Reversing" << endl;
+    // while (curr)
     while(curr != NULL)
     {
         cout << curr->value << " ";
@@ -74,6 +71,7 @@ struct node* reverseLinkedList(struct node* head)
     struct node* prev;
     struct node* curr;
     struct node* next;
+    // if (!head)
     if(head == NULL)
         return head;
     prev = head;
@@ -83,6 +81,7 @@ struct node* reverseLinkedList(struct node* head)
 
     // NOTE: MISTAKE HERE!! Forgot to point first element to NULL
     prev->next = NULL; // point first element to NULL
+    //while(curr) // NOTE: MISTAKE HERE! DID while(!curr) instead of while(curr) 
     while(curr!= NULL)
     {
         next= curr->next;
@@ -98,9 +97,10 @@ struct node* reverseLinkedList(struct node* head)
 // */
 //----------------------------------------------------------------------------------------
 /* //
-// 2 Adding two numbers that are represented by lists
+// 2 Adding two numbers that are represented by linked lists
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(n)
+// 5->4 + 8->7  = 1->4->1
 #include <forward_list> // singly linked list
 #include <iostream>
 using namespace std;
@@ -109,19 +109,19 @@ int main(void)
 {
     forward_list<int> list1;
     forward_list<int> list2;
-    // 55, 5->5
+    // 54, 4->5
     list1.push_front(5);
-    list1.push_front(5);
-    // 36 , 6->3
-    list2.push_front(3);
-    list2.push_front(6);
+    list1.push_front(4);
+    // 87 , 7->8
+    list2.push_front(8);
+    list2.push_front(7);
     // note: will traverse from 6->3
     // => will print 6 3
 
     // Note: the result list will be in proper order
     // 36 + 55 = 91 => 9->1
 
-    // Note: If above is not in right order, simply do reverseLinkedList algorithm first.
+    // Note: If above is not in right order, simply do reverseLinkedList algorithm first. T(n) = O(n) 
 
     for ( int& node: list1 )
     {
