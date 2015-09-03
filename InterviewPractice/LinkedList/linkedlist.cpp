@@ -13,6 +13,7 @@ Table of Contents
 2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
 3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
 4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
+5. Delete Node From Middle Of Linked List, Given Access to That Node, T(n) = O(n), S(n) = O(1)
 
 #include <forward_list> 
 forward_list<int> listA;
@@ -411,6 +412,75 @@ struct node * getLaskK(struct node * head, int k)
         head = head->next; 
     }
     return head;
+}
+// */
+//----------------------------------------------------------------------------------------
+/* //
+// 5 Delete Node From Middle Of Linked List, Given Access to That Node
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+// Note: Doesn't work if last node given
+
+#include <cstdio> 
+#include <cstdlib> 
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int value;
+    struct node * next; 
+};
+void deleteThis(struct node * curr);
+
+int main(void)
+{
+    int i = 0; 
+    struct node* head = (struct node *) malloc(sizeof(struct node)); 
+    struct node* curr; 
+    head->value = 3;
+    head->next = NULL;
+    for(int i = 0; i < 10; i++)
+    {
+        struct node* temp = (struct node *) malloc(sizeof(struct node)); 
+        temp->value = i; 
+        temp->next = head;
+        head = temp;
+        if(i == 5)
+        {
+            curr = temp;
+        }
+    }
+    struct node* loop = head; 
+    while(loop)
+    {
+        cout << loop->value << " "; 
+        loop = loop->next;
+    }
+    cout << endl;
+    deleteThis(curr);
+    loop = head;
+    while(loop)
+    {
+        cout << loop->value << " "; 
+        loop = loop->next;
+    }
+    cout << endl;
+    return 0;
+}
+
+void deleteThis(struct node * curr)
+{
+    while(curr->next)
+    {
+        curr->value = curr->next->value;
+        // Note: Mistake here! Forgot to release last node 
+        if(!curr->next->next)
+        {
+            curr->next = NULL;
+            break;
+        }
+        curr = curr->next;
+    }
 }
 // */
 //----------------------------------------------------------------------------------------
