@@ -7,6 +7,8 @@ Hints:
 - Memory address of linkedlist is unique (pointed to by pointers)
 - Can always break circular linked list, solve the problem, then link it back to become circular again
 - Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
+- If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
+- Can always transfer values of linkedlist instead of the values
 
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
@@ -14,6 +16,11 @@ Table of Contents
 3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
 4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
 5. Delete Node From Middle Of Linked List, Given Access to That Node, T(n) = O(n), S(n) = O(1)
+6. Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
+8. Detect if a Linked List is a palindrome T(n) = O(n) , S(n) = O(n) TODO: INT
+TODO: 
+7. Given Circular Linked List, return node at beginning of circular list, T(n) = O(n) , S(n) = O(1) TODO: INT
+9. Insert an element into a sorted circular linked list (Microsoft Round 1)
 
 #include <forward_list> 
 forward_list<int> listA;
@@ -31,8 +38,63 @@ e.g.: int curr = listA.front();
     resize()
     swap()
 
-// TODO: Detect if a Linked List is circular
-// TODO: Insert an element into a sorted circular linked list (Microsoft Round 1)
+// */
+//----------------------------------------------------------------------------------------
+/* //
+// 7 Given Circular Linked List, return node at beginning of circular list
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+
+#include <cstdio> 
+#include <cstdlib> 
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int value; 
+    struct node * next;
+};
+
+struct node * getStartNode(struct node * head);
+
+int main(void)
+{
+    struct node * head = (struct node *) malloc(sizeof(struct node));
+    head->value = 15;
+    head->next = NULL;
+    struct node * last = head;
+    struct node * curr;
+    for (int i = 0; i < 5; i++)
+    {
+        struct node * temp = (struct node *) malloc(sizeof(struct node));
+        temp->value = i;
+        temp->next = head;
+        head = temp;
+        if (i == 3) curr = head;
+    }
+    last->next = curr;
+    curr = head;
+    for(int i = 0; i < 12; i++)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl; 
+    curr = getStartNode(head);
+    curr = head;
+    for(int i = 0; i < 12; i++)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl; 
+    return 0;
+}
+
+struct node * getStartNode(struct node * head)
+{
+    return head;
+}
 // */
 //----------------------------------------------------------------------------------------
 /*
@@ -481,6 +543,194 @@ void deleteThis(struct node * curr)
         }
         curr = curr->next;
     }
+}
+// */
+//----------------------------------------------------------------------------------------
+/* // 
+// 6 Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+
+#include <cstdio> 
+#include <cstdlib> 
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int value; 
+    struct node * next;
+};
+
+bool checkCircular(struct node * head);
+
+int main(void)
+{
+    struct node * head = (struct node *) malloc(sizeof(struct node));
+    head->value = 15;
+    head->next = NULL;
+    struct node * last = head;
+    for (int i = 0; i < 5; i++)
+    {
+        struct node * temp = (struct node *) malloc(sizeof(struct node));
+        temp->value = i;
+        temp->next = head;
+        head = temp;
+    }
+    last->next = head;
+    struct node * curr = head;
+    for(int i = 0; i < 12; i++)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl; 
+    bool circle = checkCircular(head);
+    if (circle) cout << "Circular Linked List Detected" << endl;
+    else cout << "No Circular Linked List Detected" << endl;
+    head = (struct node *) malloc(sizeof(struct node));
+    head->value = 15;
+    head->next = NULL;
+    for (int i = 0; i < 5; i++)
+    {
+        struct node * temp = (struct node *) malloc(sizeof(struct node));
+        temp->value = i;
+        temp->next = head;
+        head = temp;
+    }
+    curr = head;
+    while (curr)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl;
+    curr = head;
+    circle = checkCircular(curr);
+    if (circle) cout << "Circular Linked List Detected" << endl;
+    else cout << "No Circular Linked List Detected" << endl;
+    return 0;
+}
+
+bool checkCircular(struct node * head)
+{
+    if (!head) return false;
+    struct node * slow = head; 
+    struct node * fast = head->next; 
+    while (fast)
+    {
+        fast = fast->next;
+        if (fast == slow) return true;
+        slow = slow->next; 
+        // MISTAKE: Forgot to check fast has a next value here! If fast has no next, will result in segmentation fault
+        if(fast)
+        {
+            fast = fast->next;
+            if (fast == slow) return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    return false;
+}
+// */
+//----------------------------------------------------------------------------------------
+/* // 
+// 8 Detect if a Linked List is a palindrome 
+// Time Complexity, T(n) = O(n) 
+// Space Complexity, S(n) = O(n) 
+
+#include <cstdio> 
+#include <cstdlib> 
+#include <iostream> 
+#include <stack> 
+using namespace std; 
+
+struct node {
+    int value;
+    struct node * next;
+};
+
+bool isPalindrome(struct node * head);
+int main(void)
+{
+    struct node * head = (struct node *) malloc(sizeof(struct node));
+    head->value = 0;
+    head->next = NULL;
+    for(int i = 1; i < 4; i++)
+    {
+        struct node * temp = (struct node *) malloc(sizeof(struct node));
+        temp->value = i;
+        temp->next = head;
+        head = temp;
+    }
+    for(int i = 4; i >= 0; i--)
+    {
+        struct node * temp = (struct node *) malloc(sizeof(struct node));
+        temp->value = i;
+        temp->next = head;
+        head = temp;
+    }
+    struct node * curr = head;
+    while(curr)
+    {
+        cout << curr->value << " ";
+        curr = curr->next; 
+    }
+    cout << endl;
+    bool palindrome = isPalindrome(head);
+    if(palindrome) cout << "Linked list is a palindrome" << endl;
+    else cout << "Linked list is NOT a palindrome" << endl;
+    head = (struct node *) malloc(sizeof(struct node));
+    head->value = 0;
+    head->next = NULL;
+    for(int i = 1; i < 4; i++)
+    {
+        struct node * temp = (struct node *) malloc(sizeof(struct node));
+        temp->value = i;
+        temp->next = head;
+        head = temp;
+    }
+    curr = head;
+    while(curr)
+    {
+        cout << curr->value << " ";
+        curr = curr->next; 
+    }
+    cout << endl;
+    palindrome = isPalindrome(head);
+    if(palindrome) cout << "Linked list is a palindrome" << endl;
+    else cout << "Linked list is NOT a palindrome" << endl;
+    return 0;
+}
+
+bool isPalindrome(struct node * head)
+{
+    stack<int> s; 
+    struct node * curr = head; 
+    struct node * fast = head; 
+    while(curr)
+    {
+        if(fast)
+        {
+            s.push(curr->value);
+            fast = fast->next;
+            if(fast) fast = fast->next;
+            // Pop the middle element
+            else s.pop();
+        }
+        else 
+        {
+            int val = s.top();
+            s.pop();
+            if (val != curr->value) return false;
+        }
+        curr = curr->next;
+
+    }
+    // Iterated through entire linked list and no problems, it is a palindrome
+    return true;
 }
 // */
 //----------------------------------------------------------------------------------------
