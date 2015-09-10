@@ -96,6 +96,8 @@ void minStack::push(int value)
 
 void minStack::pop()
 {
+    // If stack is empty, don't do anything
+    if (s.empty()) return;
     // If popping a minimum value
     if (s.top() == sMin.top())
     {
