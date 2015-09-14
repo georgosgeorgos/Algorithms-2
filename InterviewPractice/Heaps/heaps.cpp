@@ -1,21 +1,19 @@
 //----------------------------------------------------------------------------------------
-/* //
-// 1 Implement BuildHeap, which converts an unsorted array into a Binary Heap, T(N) = O(NlogN), S(N) = O(1)
+/* 
+1 Implement BuildHeap, which converts an unsorted array into a Binary Heap, T(N) = O(NlogN), S(N) = O(1)
 
 TODO:
-1. Implement a Heap with Arrays 
+2. Implement a Heap with Arrays 
     // If index starts from 0
     parent  = floor(i/2 - 1/2)
     leftChild = 2i + 1 
     rightChild = 2i + 2
-2. Implement HeapSort() 
-3. Find kth largest elements from an array , T(n) = O(klogk), S(n) = O(k) 
+3. Implement HeapSort() 
+4. Find kth largest elements from an array , T(n) = O(klogk), S(n) = O(k) 
 
 Implement Heapify() T(n) = O(logN)
-2. Heapify
-3. HeapSort
-
-
+5. Heapify
+6. HeapSort
 
 Binary Heap
 Binomial Heap 
