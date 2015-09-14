@@ -10,6 +10,8 @@ Table of Contents
 
 4. Randomized Quicksort, T(n) = O(n^2), S(n) = O(1)
 
+5. HeapSort, T(n) = O(nlogn), S(n) = O(1)
+
 // Non-Comparison Sort 
 6. Counting Sort, T(n,k) = O(k + n), S(n,k) = O(k + n) 
 
@@ -17,19 +19,14 @@ Table of Contents
 
 8. Binary Search, T(n) = O(logn), S(n) = O(1)
 
-// TODO: 
-
-5. HeapSort, T(n) = O(nlogn), S(n) = O(1)
-
-*/
 //----------------------------------------------------------------------------------------
+// TODO 
 // TODO: Insertion Sort
 // TODO: Selection Sort
-// TODO: Heap Sort 
 // TODO: TimSort (Make sure you include the bug fixes) 
 // TODO: BucketSort (Improves 
 // TODO: PigeonSort (A special case of Counting Sort with lists) // Note: The one you came up with, but use linked list to make it a stable sort 
-// 
+*/
 //----------------------------------------------------------------------------------------
 /* //
 // 1 Bubble sort
@@ -396,6 +393,169 @@ void swapRandomizedQuickSort(int *p, int l, int r)
 }
 // */
 //----------------------------------------------------------------------------------------------------
+/* // 
+// 5 HeapSort
+// Time Complexity, T(n) = O(nlogn)
+// Space Complexity, S(n) = O(1)
+#include <cmath> // for log2()
+#include <iostream> 
+using namespace std; 
+
+// true => sort ascending order, false => sort descending order
+int * heapSort(int * a, int size, bool ascOrDesc);
+// true => Build a max heap, false => Build a min heap
+int * buildHeap(int * a, int size, bool maxOrMin); 
+int * heapify (int * a, int index, int size, bool maxOrMin);
+void swap(int* a, int* b);
+
+int main(void)
+{
+    int n = 10;
+    int * a = new int[n];
+    for (int i = 0; i < n; i++)
+    {
+        if (i%2)
+            a[i] = i * 3; 
+        else 
+            a[i] = i * 2; 
+                
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[i] << " ";
+    }
+    cout << endl;
+    cout << "Sort ascending" << endl;
+    heapSort(a,n,true);
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[i] << " ";
+    }
+    cout << endl;
+    cout << "Sort descending" << endl;
+    heapSort(a,n,false);
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[i] << " ";
+    }
+    cout << endl;
+    return 0; 
+}
+
+int * heapSort(int * a, int size, bool ascOrDesc)
+{
+    // First, build a heap. 
+    // If ascending, need to build a maxHeap, if descending, need to build a minHeap
+    buildHeap(a, size, ascOrDesc);
+    // Now, sort it 
+    for(int i = size - 1; i >= 0; i--)
+    {
+        // first swap the root element (currMax) with the last,
+        swap(&a[0], &a[i]);
+        // and heapify the root element downwards
+        heapify(a, 0, i, ascOrDesc);
+    }
+    return a;
+}
+
+// O(n) 
+int * buildHeap(int * a, int size, bool maxOrMin)
+{
+    // calculate finalIndex that you need to begin with since there is no point starting from the leaves
+    int finalIndex = floor(log2(size));  
+    finalIndex = pow(2,finalIndex) - 2;
+    for (int i = finalIndex; i >= 0; i--)
+    {
+        // heapify from that index onwards
+        a = heapify(a, i, size, maxOrMin);
+    }
+    return a; 
+}
+
+// Assumes the binary heap below this node is indeed a binary heap 
+// T(n) = O(logn)
+int * heapify (int * a, int index, int size, bool maxOrMin)
+{
+    // Get index of left and right child
+    int left = 2*index + 1; 
+    int right = 2*index + 2; 
+    // Mistake: Declared smallest and largest within if statement instead of here so that below can access
+    int smallest = -1;
+    int largest =  -1;
+    if(left < size && right < size) 
+    {
+        // if want largest to be on top 
+        if (maxOrMin)
+        {
+            int larger = a[left] >= a[right] ? left : right;
+            largest = a[index] >= a[larger] ? index : larger;
+        }
+        else 
+        {
+            int smaller = a[left] <= a[right] ? left : right;
+            smallest = a[index] <= a[smaller] ? index : smaller;
+        }
+    }
+    else if (left < size) 
+    {
+        if (maxOrMin)
+        {
+            largest = a[index] >= a[left] ? index : left;
+        }
+        else 
+        {
+            smallest = a[index] <= a[left] ? index : left;
+        }
+    }
+    else if (right < size) 
+    {
+        if (maxOrMin)
+        {
+            largest = a[index] >= a[right] ? index : right;
+        }
+        else 
+        {
+            smallest = a[index] <= a[left] ? index : left;
+        }
+    }
+    // Else, if no child, just return it
+    else 
+    {
+        return a;
+    }
+    // If has any child
+    if (maxOrMin)
+    {
+        if(largest != index) 
+        {
+            swap (&a[largest], &a[index]);
+            // Recursively heapify 
+            heapify(a, largest, size, maxOrMin);
+        }
+        // Return a at the end
+        return a; 
+    }
+    else
+    {
+        if(smallest != index) 
+        {
+            swap (&a[smallest], &a[index]);
+            // Recursively heapify 
+            heapify(a,smallest, size, maxOrMin);
+        }
+        return a; 
+    }
+}
+
+void swap(int* a, int* b)
+{
+    int temp = *a; 
+    *a = *b;
+    *b = temp;
+    return;
+}
+// */
+//----------------------------------------------------------------------------------------------------
 /* //
 // 6 Counting Sort (A stable sort)
 // Requirement: All numbers are integers in range 0 to k
@@ -653,3 +813,4 @@ int binarySearch(X a[], X element, int n)
     }
 }
 // */
+//----------------------------------------------------------------------------------------------------
