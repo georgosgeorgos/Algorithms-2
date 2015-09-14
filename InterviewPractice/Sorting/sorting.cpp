@@ -2,20 +2,25 @@
 /*
 Table of Contents
 // Comparison Sorts 
-1. BubbleSort
+1. BubbleSort, T(n) = O(n^2), S(n) = O(1)
 
-2. MergeSort
+2. MergeSort, T(n) = O(nlogn), S(n) = O(nlogn) 
 
-3. QuickSort
+3. QuickSort, T(n) = O(n^2), S(n) = O(1)
 
-4. Randomized Quicksort
+4. Randomized Quicksort, T(n) = O(n^2), S(n) = O(1)
 
 // Non-Comparison Sort 
-5. Counting Sort
+6. Counting Sort, T(n,k) = O(k + n), S(n,k) = O(k + n) 
 
-6. Radix Sort
+7. Radix Sort, T(n,k,d) = O(d(k + n)), S(n,k) = O(k + n) 
 
-7. Binary Search
+8. Binary Search, T(n) = O(logn), S(n) = O(1)
+
+// TODO: 
+
+5. HeapSort, T(n) = O(nlogn), S(n) = O(1)
+
 */
 //----------------------------------------------------------------------------------------
 // TODO: Insertion Sort
@@ -28,6 +33,8 @@ Table of Contents
 //----------------------------------------------------------------------------------------
 /* //
 // 1 Bubble sort
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(1)
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -88,10 +95,8 @@ int main(void)
 //----------------------------------------------------------------------------------------
 /*
 // Practice 2: Template Bubble Sort
-//Time Complexity:
-//O(n^2)
-//Space Complexity:
-//O(1)
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(1)
 
 #include <iostream>
 using namespace std;
@@ -138,6 +143,8 @@ void swap(X ab[], int a, int b)
 //----------------------------------------------------------------------------------------
 /* //
 // 2 Template Merge Sort
+// Time Complexity, T(n) = O(nlogn)
+// Space Complexity, S(n) = O(nlogn)
 // OMG, it works perfectly on first trial!!
 // only 1 mistake of not closing curly braces properly due to nested else and for =D =D =D
 // Note: Update: Fixed small mistake that q is either n/2 or n/2+1 depending on whether n is odd or even
@@ -246,8 +253,8 @@ void mergesort(X a[], int n)
 //----------------------------------------------------------------------------------------
 /* //
 // 3 QuickSort (A stable sort)
-// Time Complexity: O(n^2) worst case, O(nlgn) Average case (or as long as constant partition ratio)
-// Space Complexity: O(1) note: sorts in place
+// Time Complexity, T(n) = O(n^2) worst case, O(nlgn) Average case (or as long as constant partition ratio)
+// Space Complexity, S(n) = O(1) note: sorts in place
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -316,7 +323,7 @@ void swapQuickSort(int *p, int l, int r)
 //----------------------------------------------------------------------------------------------------
 /* //
 // 4 Randomized QuickSort (A stable sort) (higher chance to get average case than worst case)
-// Time Complexity: O(n^2l) worst case, O(nlgn) Average case (or as long as constant partition ratio)
+// Time Complexity: O(n^2) worst case, O(nlgn) Average case (or as long as constant partition ratio)
 // Space Complexity: O(1) note: sorts in place
 #include <iostream>
 #include <stdio.h>
@@ -390,10 +397,10 @@ void swapRandomizedQuickSort(int *p, int l, int r)
 // */
 //----------------------------------------------------------------------------------------------------
 /* //
-// 5 Counting Sort (A stable sort)
+// 6 Counting Sort (A stable sort)
 // Requirement: All numbers are integers in range 0 to k
-// Time Complexity: O(k+n)
-// Space Complexity: O(k+n)
+// Time Complexity, T(n,k) = O(k+n)
+// Space Complexity: T(n,k) = O(k+n)
 
 #include <stdio.h>
 #include <stdlib.h> // for malloc
@@ -476,11 +483,11 @@ void countingSort(int* p, int n, int k)
 // */
 //----------------------------------------------------------------------------------------------------
 /* //
-// 6 Radix Sort
+// 7 Radix Sort
 // Counting Sort (A stable sort)
 // Requirement: All numbers are integers in range 0 to k
-// Time Complexity: O(d(k+n))
-// Space Complexity: O(k+n)
+// Time Complexity, T(n,k,d) = O(d(k+n))
+// Space Complexity, S(n,k,d) O(k+n)
 
 #include <stdio.h>
 #include <stdlib.h> // for malloc
@@ -607,7 +614,9 @@ void countingSortForRadixSort(int* p, int n, int k, int d)
 // */
 //----------------------------------------------------------------------------------------------------
 /* //
-// 7 Binary Search
+// 8 Binary Search
+// Time Complexity, T(n) = O(logn)
+// Space Complexity, S(n) = O(1)
 
 template <class X>
 int binarySearch(X a[], X element, int n);
