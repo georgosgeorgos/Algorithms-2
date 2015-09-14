@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------
 /* 
-1 Implement BuildHeap, which converts an unsorted array into a Binary Heap, T(N) = O(NlogN), S(N) = O(1)
+1 Implement BuildHeap, which converts an unsorted array into a Binary Heap, T(N) = O(N), S(N) = O(1)
 
 TODO:
 2. Implement a Heap with Arrays 
@@ -25,7 +25,7 @@ etc. (refer to wikipedia)
 //----------------------------------------------------------------------------------------
 /* 
 // 1 Implement BuildHeap, which converts an unsorted array into a Binary Heap 
-// Time Complexity, T(N) = O(NlogN)
+// Time Complexity, T(N) = O(N)
 // Space Complexity, S(N) = O(1)
 
 #include <cmath> // for log2()
@@ -72,7 +72,16 @@ int main(void)
 }
 
 
-// O(nlogn) 
+// O(N) 
+// Note: The reason that the complexity is O(N) instead of O(NlogN) is because 
+// only at the node that you traverse O(logN) nodes in the worst case whereas the finalIndex you will traverse only 1 node
+// Therefore, you traverse:  logN + (logN - 1) + (logN - 2) + ... + 1 in the worst case. 
+// This sums up to N(logN) - ( 1 + 2 + ... + (logN-1)) 
+// At each level, i (root node is level = 1), the maximum number of nodes at that level is  (N+1)/((2^i) + 1)
+// Cost of heapify  at height, i is at most i 
+// Doing the calculations, you will find that the worst case complexity is O(N) instead.  
+// Refer to this for more information: http://www.dgp.toronto.edu/people/JamesStewart/378notes/08buildheap/ 
+
 int * buildHeap(int * a, int size, bool maxOrMin)
 {
     // calculate finalIndex that you need to begin with since there is no point starting from the leaves
