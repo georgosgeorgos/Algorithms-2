@@ -1,11 +1,9 @@
 /* 
 Table of Contents
 0. SOLID 
-1. Strategy Design Pattern 
-    - Separate method definition from classes
-    - This way, each child class can have their own method definition of a specific interface 
-2. Observer Design Pattern
-    - Subscriber and Publisher
+//-------------------------------
+A) Creational Design Pattern
+//-------------------------------
 3. Factory Design Pattern
     - To create random child class objects in a game. A 'factory' that returns random objects created 
 5. Singleton Design Pattern
@@ -16,7 +14,25 @@ Table of Contents
         and when you won't know all variables at once. 
     - You can construct each variable step by step
     - You can construct the objects differently using different classes
+7. Prototype Design Pattern
+    - When want to create a clone of an object to 'prototype' with it first before reassigning as original
+    - e.g. Bank Account transactions 
+//-------------------------------
+B) Behavioral Design Pattern
+//-------------------------------
+1. Strategy Design Pattern 
+    - Separate method definition from classes
+    - This way, each child class can have their own method definition of a specific interface 
+2. Observer Design Pattern
+    - Subscriber and Publisher
+//-------------------------------
+C) Structural Design Pattern
+//-------------------------------
+
+
+//-------------------------------
 TODO:
+8. Decorator Design Pattern 
 4. Abstract Factory Design Pattern
 20. Iterator Design Pattern
 */ 
@@ -45,18 +61,19 @@ TODO:
 //      - Factory Design Pattern
 //      - Singleton Design Pattern
 //      - Builder Design Pattern
-// b) Structural Design Pattern 
-//      - Adapter Design Pattern
-//      - Bridge Design Pattern
-//      - Composite Design Pattern
-//      - Decorator Design Pattern
-// c) Behavioral Design Pattern 
+//      - Prototype Design Pattern
+// b) Behavioral Design Pattern 
 //      - Strategy Design Pattern
 //      - Observer Design Pattern
 //      - Iterator Design Pattern
 //      - Mediator Design Pattern
 //      - Memento Design Pattern
 //      - Visitor Design Pattern
+// c) Structural Design Pattern 
+//      - Adapter Design Pattern
+//      - Bridge Design Pattern
+//      - Composite Design Pattern
+//      - Decorator Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
@@ -576,18 +593,25 @@ int main(void)
 // Hide creation of parts from user
 // Only builder knows the specifics 
 
+// Use Case 1: Too many Variables
 // Basically, if there is an object that contains a lot of member variables/objects. 
 // Lets say 100. 
 // Problem is: 
 //  Passing all 100 into 1 constructor is tedious
 //  Constructing all 100 variables is not efficient. 
-//  You may  only get the variables 1 at a time instead of all 100. Waiting until you have all 100 variables 
+//  You may only get the variables 1 at a time instead of all 100. Waiting until you have all 100 variables 
 //  before you start constructing anything is a waste of time. 
 //
 //  Thus, you have the Builder class, each time you get 1 variable, you pass it to the Builder class to construct. 
 //  By the time you are done with passing in the 100th variable, the builder class already constructed all 99 other variables, 
 //  this final variable allows constructor class to finish constructing. Only when you are very sure with the 100 variables you pass in, 
 //  you can ask the Builder class to return to you the object that was constructed
+
+// Use Case 2: Similar Complex Design process 
+// Constructing a robot is a similar design proces. You need to make the arms and then make the legs. 
+// However, you can pass it variables so it does a different construction for arms and legs 
+// You can have classes that initialize all 100 variables for you. 
+// Then, you can pass those classes in as a parameter to the Builder, which reads those pre-defined variables and constructs the robot
 //-------------------------------
 /* //
 #include <string>
@@ -601,6 +625,7 @@ public:
     // Each different construction method that accepts each different variable
     virtual void setRobotArms(string arms) = 0;
     virtual void setRobotLegs(string legs) = 0;
+    // Imagine there are 100 more of these
 };
 
 // Implement the plan with a specific robot
@@ -609,14 +634,15 @@ class Robot : public RobotPlan
 private: 
     string robotArms;
     string robotLegs;
+    // Imagine there are 100 more of these
 public:
     void setRobotArms(string arms) 
     {
-        robotArms = arms;
+        this->robotArms = arms;
     }
     void setRobotLegs(string legs) 
     {
-        robotLegs = legs;
+        this->robotLegs = legs;
     }
     string getRobotArms()
     {
@@ -638,6 +664,7 @@ public:
 };
 
 // A special type of robotBuilder that builds the robot with the 'Tamiya' Brand
+// Basically initializes all 100 paramaters for you so you don't have to remember them
 class TamiyaRobotBuilder : public RobotBuilder
 {
 private:
@@ -653,11 +680,13 @@ public:
     // Build the arms 
     void buildRobotArms()
     {
+        // Arms Version Tamiya is the default value forthe Arms variable for TamiyaRobot
         robot->setRobotArms("Arms Version Tamiya");
     }
     // Build the legs
     void buildRobotLegs()
     {
+        // Legs Version Tamiya is the default value forthe Arms variable for TamiyaRobot
         robot->setRobotLegs("Legs Version Tamiya");
     }
     // Return the robot that was build
@@ -687,6 +716,7 @@ public:
     // Build the robot
     void makeRobot() 
     {
+        // Strategy Design Pattern here
         this->robotBuilder->buildRobotArms();
         this->robotBuilder->buildRobotLegs();
     }
@@ -699,6 +729,7 @@ int main(void)
     // Use the Tamiya Robot Builder brand
     RobotBuilder* instanceRobot = new TamiyaRobotBuilder();
     // Pass robot specification (you want it to be a Tamiya Robot) to engineer
+    // The Tamiya Robot class already contains the default values of all 100 parameters to create a Tamiya Robot
     RobotEngineer* robotEngineer = new RobotEngineer(instanceRobot);
     // Make engineer build the robot after passing in all specifications and variables
     robotEngineer->makeRobot();
@@ -707,6 +738,80 @@ int main(void)
     // Use the robot
     cout << "Robot Built" << endl; 
     cout << completedRobot->getRobotArms() << " | " << completedRobot->getRobotLegs() << endl;
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 7 Prototype Design Pattern
+//-------------------------------
+// Create new objects by cloning other objects
+// Adding of any subclass instance of known parent class at runtime 
+// A number of potential classes that want to use only if needed during runtime
+// Reduces need for creating subclasses
+// Used whenever you want to clone something instead of creating a new one
+// Clone => Maintains all attributes and properties
+// New => Make a new object with initial attribute and properties
+//
+// Application: 
+//      Bank Operations -> Clone your account information, perform work on clone until succeed
+//                         replace from original account only when done
+//                         You are essentally 'prototyping' on the clone and then releasing once it works
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Interface
+class Animal
+{
+public:
+    // All animals must have a way to clone itself
+    // For polymorphism
+    virtual Animal* makeCopy() = 0;
+};
+
+class Sheep : public Animal 
+{
+private:
+    int weight;
+public:
+    Sheep() : weight(20) {};
+    Sheep(int _weight) : weight(_weight) {};
+    Animal* makeCopy() 
+    {
+        // note: NULL can only be passed into pointers
+        Sheep* sheepObj = NULL;
+        // Clone this sheep with same properties
+        sheepObj = new Sheep(this->weight);
+        return  sheepObj;
+    }
+    int getWeight() { return weight; }
+};
+
+class CloneFactory
+{
+public:
+    // Get the clone of this animal passed in
+    Animal* getClone(Animal* animal)
+    {
+        return animal->makeCopy();
+    }
+};
+
+int main(void)
+{
+    CloneFactory* animalMaker = new CloneFactory();
+    Sheep * a = new Sheep();
+    Sheep * clonedSheep = (Sheep *) animalMaker->getClone(a);
+    // Print to show that they are different
+    if (a == clonedSheep)
+        cout << "Both refer to same sheep" << endl;
+    else
+    {
+        cout << "Both refer to different sheep" << endl;
+        cout << " original: " << a->getWeight() << " | cloned: " << clonedSheep->getWeight() << endl;
+    }
     return 0;
 }
 // */
