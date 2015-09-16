@@ -2,13 +2,23 @@
 Table of Contents
 0. SOLID 
 1. Strategy Design Pattern 
+    - Separate method definition from classes
+    - This way, each child class can have their own method definition of a specific interface 
 2. Observer Design Pattern
+    - Subscriber and Publisher
 3. Factory Design Pattern
+    - To create random child class objects in a game. A 'factory' that returns random objects created 
 5. Singleton Design Pattern
-
+    - Only 1 object of a particular class 
+    - e.g. Global Counter, Logging, Accessing shared resource
+6. Builder Design Pattern
+    - When Object construction is complicated, takes a long time, has too many variables to construct 
+        and when you won't know all variables at once. 
+    - You can construct each variable step by step
+    - You can construct the objects differently using different classes
 TODO:
 4. Abstract Factory Design Pattern
-6. Iterator Design Pattern
+20. Iterator Design Pattern
 */ 
 //---------------------------------------------------------------------------------------------------------------------------------
 // 0 SOLID 
@@ -27,11 +37,30 @@ TODO:
 //      - Design Top Level Down
 //      - Any changes to bottom level classes will not affect top level classes
 //      - Introduce abstraction layer between classes to handle compatibility for any changes in any level.
-//---------------------------------------------------------------------------------------------------------------------------------
-// 1 Strategy Design Pattern 
 // - Avoid duplicated code
 // - Keep class changes from forcing other class changes
 // - don't add methods that are not used by all subclasses
+// Types of Design Patterns: 
+// a) Creational Design Pattern 
+//      - Factory Design Pattern
+//      - Singleton Design Pattern
+//      - Builder Design Pattern
+// b) Structural Design Pattern 
+//      - Adapter Design Pattern
+//      - Bridge Design Pattern
+//      - Composite Design Pattern
+//      - Decorator Design Pattern
+// c) Behavioral Design Pattern 
+//      - Strategy Design Pattern
+//      - Observer Design Pattern
+//      - Iterator Design Pattern
+//      - Mediator Design Pattern
+//      - Memento Design Pattern
+//      - Visitor Design Pattern
+//  
+//---------------------------------------------------------------------------------------------------------------------------------
+// 1 Strategy Design Pattern 
+//-------------------------------
 // Demonstrates Decoupling => Separate implementation of class with implementation of algorithms
 //  => Interface is used as an instance variable (Fly)
 // that dynamically changes.
@@ -39,7 +68,6 @@ TODO:
 // with a pointer.
 // Each subclass of this parent class will point this flying pointer to the right
 // class from the set of classes that implements the interface
-
 // In this example:
 // Parent Class : Animal()
 // Child Class : Dog(), Bird()
@@ -48,6 +76,11 @@ TODO:
 // note: ItFly() & CantFly() is known as a family of algorithms, encapsulated in Interface Fly()
 // whereby, you define the algorithms differently from the subclass (Dog(), Birds())
 // by doing so, you don't have to redefie ItFly() methods and CantFly() methods in every single animal subclass
+// Strengths: You have a list of algorithms that can be called dynamically at runtime. 
+//            Each class can just change its algorithms during runtime or sometime in future. 
+//            Dont couple a class permanently with its algorithm choices
+//-------------------------------
+/* //
 #include <string>
 #include <iostream>
 using namespace std;
@@ -57,7 +90,7 @@ class Fly
 {
 public:
     virtual string fly() = 0;
-} ;
+};
 
 // make a subclass for animals that implements the interface Flys
 class ItFly : public Fly
@@ -155,6 +188,7 @@ int main(void)
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 2 Observer Design Pattern
+//-------------------------------
 // Used when:
 // - need many other objects to receive an update when another object changes
 
@@ -165,7 +199,7 @@ int main(void)
 // Advantage:
 //  - Subject don't have to know anything about Observers
 // Disadvantage:
-//  - Subject may send updates that don't relate to some Observers to all of them
+//  - Subject may send updates that don't relate to some Observers 
 
 // In this example:
 // Interface : Observer(), Subject()
@@ -174,8 +208,9 @@ int main(void)
 // automatically to the subject's list of observers.
 // Similarly, each subject automatically calls each of its list of observers update() method
 // when it updates any of its values.
+//-------------------------------
+/* //
 #include <vector> // vector of Observers
-
 #include <iostream>
 using namespace std;
 
@@ -183,13 +218,17 @@ using namespace std;
 class Observer
 {
 public:
+    // Note: It is public so the Subject can call it
     virtual void update(double _ibmPrice, double _applePrice, double _googlePrice) = 0;
+    // Note: Interface doesn't contain any members 
 };
 
-// Define Iterface
+
+// Subject Interface 
 class Subject
 {
 public:
+    // Note: It is public so the Observer can call it
     virtual void registerObs(Observer* o) = 0;
     virtual void unregisterObs(Observer* o) = 0;
     virtual void notifyObserver() = 0;
@@ -231,11 +270,19 @@ public:
     }
 };
 
+// A global int for observer class to keep track of which observer it is in Subscriber
+// Serves as an ID
 int StockObserver::observerIDTracker = 0; // initialization in CPP file instead of header file!
 
 class StockGrabber : public Subject
 {
 private:
+    // Note: Ensure this is a weak reference
+        // This is so that if an Observer forgets to unregister itself, the termination of the Observer itself 
+        // will handling cleaning up its memory. 
+        // If this was a strong reference and Observer forgets to unregister itself, the termination of the Observer itself
+        // does not remove it from the list of observers here. Then, the Subscriber will be holding a reference to an object that no 
+        // longer exist in the observer and is useless. Wasted memory
     vector<Observer*> observers; // vector of Observer pointers
     double ibmPrice, applePrice, googlePrice;
 public:
@@ -298,7 +345,7 @@ int main(void)
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 3 Factory Design Pattern
-
+//-------------------------------
 // used when:
 // Method returns one of several possible classes that share a common superclass
 // Basically, when don't know what class object will be needed
@@ -309,13 +356,13 @@ int main(void)
 // RNG picks a random enemy type
 // Factory object will return a dynamically created enemy and throw it on the screen
 
-
 // In this example:
-// Parent Class : EnemyShip(), EnemyShipFactory
+// Parent Class : EnemyShip(), EnemyShipFactory()
 // Child Class : UFOEnemyShip(), RocketEnemyShip()
 // GrandChild Class: BigUFOShip
 // note: EnemyShipFactory basically returns a type of EnemyShip since you can't have a class returning itself.
-
+//-------------------------------
+/* //
 #include <string>
 #include <iostream>
 using namespace std;
@@ -401,7 +448,7 @@ public:
     }
 };
 
-// gloabl functions
+// global functions
 
 void doStuffEnemy(EnemyShip* anEnemyShip)
 {
@@ -419,7 +466,8 @@ int main(void)
     int userInput = 0;
     cout << "Pleas enter 0 or 1" << endl;
     cin >> userInput;
-     EnemyShip* Ship;
+    EnemyShip* Ship;
+    // Note: You basically put all these if, else into a class instead
     if (userInput)
     {
         Ship = new UFOEnemyShip();
@@ -443,26 +491,35 @@ int main(void)
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
+//TODO:
 // 4 Abstract Factory Design Pattern
+//-------------------------------
 // refer to Derek Banas's video on youtube
-
 // Like a factory, but everything is encapsulated
 // This includes:
 // - Method that orders the object
-// - Fatory that builds the object
+// - Factory that builds the object
 // - Final Objects
 // - Final object that contain objects that use the Strategy Pattern
+//-------------------------------
+/*
+#include <iostream> 
+// */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 5 Singleton Design Pattern
-
+//-------------------------------
 // used when can only instantiate 1 object from a class
 // Examples: File Logging, Global Clock/Counter
 // Logging is acceptable for good design as it doesn't affect execution of code.
+// Basically, if object does not exist yet, create it. If it exist, return the existing object
+// Make sure sconstructor is private so there is no other way to create an object except using the createInstance in the static way
 
 // In this example:
 // Parent Class : SingletonCounter()
 // note: This demonstrates how to implement a global counter for all classes that needs to
 // access a global counter/clock  in a game for example as it should be the same clock.
+//-------------------------------
+/* // 
 #include <iostream>
 using namespace std;
 
@@ -479,6 +536,7 @@ private:
         counterValue = 0;
     }
 public:
+    // To return a static object, need to declare that you are returning a static object here
     static SingletonCounter* getInstance()
     {
         if (firstInstance == NULL)
@@ -491,6 +549,7 @@ public:
     void setValue(int _value) {counterValue = _value;}
 };
 
+// To ensure that at start of program, firstInstance is NULL
 SingletonCounter* SingletonCounter::firstInstance = NULL;
 
 
@@ -510,15 +569,159 @@ int main(void)
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 6 Iterator Design Pattern
+// 6 Builder Design Pattern
+//-------------------------------
+// To create an object made from a bunch of other objects
+// Each creation part is independent of main object
+// Hide creation of parts from user
+// Only builder knows the specifics 
 
+// Basically, if there is an object that contains a lot of member variables/objects. 
+// Lets say 100. 
+// Problem is: 
+//  Passing all 100 into 1 constructor is tedious
+//  Constructing all 100 variables is not efficient. 
+//  You may  only get the variables 1 at a time instead of all 100. Waiting until you have all 100 variables 
+//  before you start constructing anything is a waste of time. 
+//
+//  Thus, you have the Builder class, each time you get 1 variable, you pass it to the Builder class to construct. 
+//  By the time you are done with passing in the 100th variable, the builder class already constructed all 99 other variables, 
+//  this final variable allows constructor class to finish constructing. Only when you are very sure with the 100 variables you pass in, 
+//  you can ask the Builder class to return to you the object that was constructed
+//-------------------------------
+/* //
+#include <string>
+#include <iostream> 
+using namespace std;
+
+// Interface
+class RobotPlan 
+{
+public:
+    // Each different construction method that accepts each different variable
+    virtual void setRobotArms(string arms) = 0;
+    virtual void setRobotLegs(string legs) = 0;
+};
+
+// Implement the plan with a specific robot
+class Robot : public RobotPlan
+{
+private: 
+    string robotArms;
+    string robotLegs;
+public:
+    void setRobotArms(string arms) 
+    {
+        robotArms = arms;
+    }
+    void setRobotLegs(string legs) 
+    {
+        robotLegs = legs;
+    }
+    string getRobotArms()
+    {
+        return robotArms;
+    }
+    string getRobotLegs()
+    {
+        return robotLegs;
+    }
+};
+
+// Interface For Building
+class RobotBuilder
+{
+public:
+    virtual void buildRobotArms() = 0;
+    virtual void buildRobotLegs() = 0;
+    virtual Robot* getRobot() = 0;
+};
+
+// A special type of robotBuilder that builds the robot with the 'Tamiya' Brand
+class TamiyaRobotBuilder : public RobotBuilder
+{
+private:
+    // The robot to be build
+    // note: can only declare pointers when have abstract classes
+    Robot* robot; // note: Similar to Strategy Design Pattern
+public:
+    // Build the robot
+    TamiyaRobotBuilder() 
+    {
+        this->robot = new Robot();
+    }
+    // Build the arms 
+    void buildRobotArms()
+    {
+        robot->setRobotArms("Arms Version Tamiya");
+    }
+    // Build the legs
+    void buildRobotLegs()
+    {
+        robot->setRobotLegs("Legs Version Tamiya");
+    }
+    // Return the robot that was build
+    Robot* getRobot() 
+    {
+        return this->robot;
+    }
+};
+
+// 
+class RobotEngineer 
+{
+private:
+    // Has a robot to build the robot
+    RobotBuilder* robotBuilder; // Note: Can only declare pointers for Abstract Classes
+public:
+    // Receives a variable robotBuilder, different variable returns the 
+    RobotEngineer(RobotBuilder* _robotBuilder)
+    {
+        this->robotBuilder = _robotBuilder;
+    }
+    // Get the robotBuilder to build the robot
+    Robot* getRobot() 
+    {
+        return this->robotBuilder->getRobot();
+    }
+    // Build the robot
+    void makeRobot() 
+    {
+        this->robotBuilder->buildRobotArms();
+        this->robotBuilder->buildRobotLegs();
+    }
+};
+
+int main(void)
+{
+    // Create the robot using the blueprint defined in TamiyaRobotBuilder()
+    // This blueprint allows you to start passing in variables to start constructing each component
+    // Use the Tamiya Robot Builder brand
+    RobotBuilder* instanceRobot = new TamiyaRobotBuilder();
+    // Pass robot specification (you want it to be a Tamiya Robot) to engineer
+    RobotEngineer* robotEngineer = new RobotEngineer(instanceRobot);
+    // Make engineer build the robot after passing in all specifications and variables
+    robotEngineer->makeRobot();
+    // Get the robot that is completely constructed and made by the engineer
+    Robot* completedRobot = robotEngineer->getRobot();
+    // Use the robot
+    cout << "Robot Built" << endl; 
+    cout << completedRobot->getRobotArms() << " | " << completedRobot->getRobotLegs() << endl;
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+//TODO:
+// 20 Iterator Design Pattern
+//-------------------------------
 // used to access different collections of Objects
 // Treat iterator the same for Array, HashTable, Queue, BST, etc.
 // Can write polymorphic code as treat each collection of objects the same way
 // as each collection of objects implement the same interface.
 // Also, you won't be able to modify the container for those objects as you only have access to
 // each individual elements separately.
-//----------------------------- ---------------------------------------------------------------------------
+//-------------------------------
+/*
 #include <string>
 #include <iostream>
 using namespace std;
@@ -547,3 +750,4 @@ int main(void)
     return 0;
 }
 // */
+//---------------------------------------------------------------------------------------------------------------------------------
