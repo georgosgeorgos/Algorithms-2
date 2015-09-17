@@ -38,9 +38,12 @@ C) Structural Design Pattern
 8. Decorator Design Pattern 
     - To be able to extend functionality inheritance by creating each other recursively, passing in a variable that grows between creations
     e.g. A PlainPizza that you can recursively add in different toppings which adds to the cost
+10. Adapter Design Pattern
+    - To adapt an existing interface (Target Interface) with a new interface
+    - Create an adapter class that maps all existing methods to the new methods 
+        that should be called instead
 //-------------------------------
 TODO:
-10. Adapter Design Pattern
 4. Abstract Factory Design Pattern
 20. Iterator Design Pattern
 */ 
@@ -84,21 +87,6 @@ TODO:
 //      - Bridge Design Pattern
 //      - Composite Design Pattern
 //  
-//---------------------------------------------------------------------------------------------------------------------------------
-// 10 Adapter Design Pattern
-//-------------------------------
-// note:
-//-------------------------------
-//
-#include <string>
-#include <iostream>
-using namespace std;
-
-int main(void)
-{
-    return 0;
-}
-
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -1128,6 +1116,86 @@ int main(void)
     // note: TV's up() and down() commands are hidden
     return 0;
 }
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 10 Adapter Design Pattern
+//-------------------------------
+// To allow 2 incompatible interfaces to work together. 
+// Used when client expects a certain interface
+// All classes must implement every method defined by the shared interface
+// 
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Target Interface
+// note: This is what the client expects to see
+class TargetInterface
+{
+public:
+    virtual void attackSwords() = 0; 
+    virtual void defendShields() = 0; 
+};
+
+// Implementation of Client Interface
+class OldWeapons : public TargetInterface
+{
+public:
+    void attackSwords() 
+    {
+        cout << "Attack with Swords" << endl;
+    }
+    void defendShields() 
+    {
+        cout << "Defend with Shields" << endl;
+    }
+};
+
+// Implementation of Actual Interface that exists
+class ActualInterface
+{
+public:
+    void attackBombs() 
+    {
+        cout << "Attack with Bombs" << endl;
+    }
+    void defendTowers()
+    {
+        cout << "Defend with Towers" << endl;
+    }
+};
+
+class Adapter : public TargetInterface
+{
+private:
+    ActualInterface* act; 
+public:
+    Adapter(ActualInterface* a)
+    {
+        act = a;
+    }
+    void attackSwords() 
+    {
+        act->attackBombs();
+    }
+    void defendShields() 
+    {
+        act->defendTowers();
+    }
+};
+
+
+int main(void)
+{
+    ActualInterface* latest = new ActualInterface;
+    Adapter* adapt = new Adapter(latest);
+    adapt->attackSwords(); // note: It calls the bombs instead of sword
+    adapt->defendShields(); // note: It calls the towers instead of shields
+    return 0;
+}
+// */
 //---------------------------------------------------------------------------------------------------------------------------------
 //TODO:
 // 20 Iterator Design Pattern
