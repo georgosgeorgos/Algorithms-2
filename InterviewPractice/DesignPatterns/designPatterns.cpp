@@ -28,11 +28,12 @@ B) Behavioral Design Pattern
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
-
-
+8. Decorator Design Pattern 
+    - To be able to extend functionality inheritance by creating each other recursively, passing in a variable that grows between creations
+    e.g. A PlainPizza that you can recursively add in different toppings which adds to the cost
 //-------------------------------
 TODO:
-8. Decorator Design Pattern 
+9. Command Design Pattern
 4. Abstract Factory Design Pattern
 20. Iterator Design Pattern
 */ 
@@ -70,11 +71,24 @@ TODO:
 //      - Memento Design Pattern
 //      - Visitor Design Pattern
 // c) Structural Design Pattern 
+//      - Decorator Design Pattern
 //      - Adapter Design Pattern
 //      - Bridge Design Pattern
 //      - Composite Design Pattern
-//      - Decorator Design Pattern
 //  
+//---------------------------------------------------------------------------------------------------------------------------------
+// 9 Command Design Pattern
+//-------------------------------
+// note:
+//-------------------------------
+#include <string>
+#include <iostream>
+using namespace std;
+
+int main(void)
+{
+    return 0;
+}
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -812,6 +826,113 @@ int main(void)
         cout << "Both refer to different sheep" << endl;
         cout << " original: " << a->getWeight() << " | cloned: " << clonedSheep->getWeight() << endl;
     }
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 8 Decorator Design Pattern
+//-------------------------------
+// Modify an object dynamically 
+// Extend capability of object (similar to inheritance) but do so at runtime. 
+// Add functionality using many simple classes
+// Basically, keep passing each class into each other's constructor and adding properties to its variables as passed into constructors
+
+// Example application: Pizza Toppings, Each different topping you add on a pizza increases its costs. 
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Interface 
+class Pizza 
+{
+public:
+    virtual string getDescription() = 0;
+    virtual double getCost() = 0;
+};    
+
+// An empty pizza
+class PlainPizza : public Pizza
+{
+private:
+    string description;
+    double cost; 
+public:
+    PlainPizza() 
+    {
+        cost = 0.20;
+        description = "A plain Pizza"; 
+    }
+    string getDescription()
+    {
+        return description;
+    }
+    double getCost()
+    {
+        return cost;
+    }
+};
+
+// Toppings implements the interface and contains a pizza 
+class Toppings : public Pizza
+{
+private: 
+    Pizza* abc; 
+public:
+    Toppings(Pizza * a)
+    {
+        this->abc = a; 
+    }
+    string getDescription()
+    {
+        return this->abc->getDescription();
+    }
+    double getCost()
+    {
+        return this->abc->getCost();
+    }
+};
+
+class ToppingTypeOne : public Toppings
+{
+public:
+    ToppingTypeOne(Pizza * a) : Toppings(a)
+    {
+        // Call parent constructor above
+    }
+    string getDescription()
+    {
+        return Toppings::getDescription() + ", Topping One";
+    }
+    double getCost()
+    {
+        return Toppings::getCost() + 0.50;
+    }
+};
+
+class ToppingTypeTwo : public Toppings
+{
+public:
+    ToppingTypeTwo(Pizza * a) : Toppings(a)
+    {
+        // Call parent constructor above
+    }
+    string getDescription()
+    {
+        return Toppings::getDescription() + ", Topping Two";
+    }
+    double getCost()
+    {
+        return Toppings::getCost() + 0.35;
+    }
+};
+
+int main(void) 
+{
+    Pizza* basicPizza = new ToppingTypeTwo(new ToppingTypeOne(new PlainPizza()));
+    cout << "Pizza is: " <<  basicPizza->getDescription() << endl;
+    cout << "Total Cost: " << basicPizza->getCost() << endl;
     return 0;
 }
 // */
