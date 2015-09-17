@@ -99,12 +99,20 @@ TODO:
 //---------------------------------------------------------------------------------------------------------------------------------
 // 12 Iterator Design Pattern
 //-------------------------------
-// used to access different collections of Objects
-// Treat iterator the same for Array, HashTable, Queue, BST, etc.
-// Can write polymorphic code as treat each collection of objects the same way
-// as each collection of objects implement the same interface.
-// Also, you won't be able to modify the container for those objects as you only have access to
-// each individual elements separately.
+// Basically same as C++ Iterators
+// Lets you iterate through different representations without knowing how the representations work
+// Therefore, it decouples Algorithms with the Data Structures 
+// The algorithm runs on the iterators, the iterators handle iterating differently on different data structures and apply that algorithm to them.
+// Iterator allows a same way to access a different collection of objects
+// Thus, don't need to know what data structure is being used when implementing an algorithm. 
+// But of course, you need to implement iterators for each different data structure that allows the algorithm to call them
+// In addition, you can also traverse the same data structure in a different order using iterators
+// Iterator keeps track of its own traversal state, therefore, you can have more than 1 iterator running simultaneously.
+
+// Example Application:
+//          Different iterators to traverse a BST for (preorder, inorder, postorder)
+// Note: You won't be able to modify the container for those objects as you only have access to each individual elements separately.
+//       Just means you can only do the foreach loop instead of the normal C style for loop
 //-------------------------------
 //
 #include <string>
@@ -124,7 +132,6 @@ public:
         bandName = newBandName;
         yearReleased = newYearReleased;
     }
-
     string getSongName() {return songName;}
     string getBandName() {return bandName;}
     int getYearReleased() {return yearReleased;}
@@ -166,13 +173,13 @@ using namespace std;
 class Fly
 {
 public:
-    virtual string fly() = 0;
+    virtual string fly() const = 0;
 };
 
 // make a subclass for animals that implements the interface Flys
 class ItFly : public Fly
 {
-    string fly()
+    string fly() const
     {
         return "Fly!!";
     }
@@ -181,7 +188,7 @@ class ItFly : public Fly
 // make a subclass for animals that implements the interface Flys
 class CantFly : public Fly
 {
-    string fly()
+    string fly() const
     {
         return "Don't Fly!!";
     }
@@ -828,7 +835,7 @@ class Animal
 public:
     // All animals must have a way to clone itself
     // For polymorphism
-    virtual Animal* makeCopy() = 0;
+    virtual Animal* makeCopy() const = 0;
 };
 
 class Sheep : public Animal 
@@ -838,7 +845,7 @@ private:
 public:
     Sheep() : weight(20) {};
     Sheep(int _weight) : weight(_weight) {};
-    Animal* makeCopy() 
+    Animal* makeCopy() const
     {
         // note: NULL can only be passed into pointers
         Sheep* sheepObj = NULL;
@@ -894,8 +901,8 @@ using namespace std;
 class Pizza 
 {
 public:
-    virtual string getDescription() = 0;
-    virtual double getCost() = 0;
+    virtual string getDescription() const = 0;
+    virtual double getCost() const = 0;
 };    
 
 // An empty pizza
@@ -910,11 +917,11 @@ public:
         cost = 0.20;
         description = "A plain Pizza"; 
     }
-    string getDescription()
+    string getDescription() const
     {
         return description;
     }
-    double getCost()
+    double getCost() const
     {
         return cost;
     }
@@ -930,11 +937,11 @@ public:
     {
         this->abc = a; 
     }
-    string getDescription()
+    string getDescription() const
     {
         return this->abc->getDescription();
     }
-    double getCost()
+    double getCost() const
     {
         return this->abc->getCost();
     }
@@ -947,11 +954,11 @@ public:
     {
         // Call parent constructor above
     }
-    string getDescription()
+    string getDescription() const
     {
         return Toppings::getDescription() + ", Topping One";
     }
-    double getCost()
+    double getCost() const
     {
         return Toppings::getCost() + 0.50;
     }
@@ -964,11 +971,11 @@ public:
     {
         // Call parent constructor above
     }
-    string getDescription()
+    string getDescription() const
     {
         return Toppings::getDescription() + ", Topping Two";
     }
-    double getCost()
+    double getCost() const
     {
         return Toppings::getCost() + 0.35;
     }
@@ -1183,19 +1190,19 @@ using namespace std;
 class TargetInterface
 {
 public:
-    virtual void attackSwords() = 0; 
-    virtual void defendShields() = 0; 
+    virtual void attackSwords() const = 0; 
+    virtual void defendShields() const = 0; 
 };
 
 // Implementation of Client Interface
 class OldWeapons : public TargetInterface
 {
 public:
-    void attackSwords() 
+    void attackSwords() const
     {
         cout << "Attack with Swords" << endl;
     }
-    void defendShields() 
+    void defendShields() const 
     {
         cout << "Defend with Shields" << endl;
     }
@@ -1224,16 +1231,15 @@ public:
     {
         act = a;
     }
-    void attackSwords() 
+    void attackSwords() const
     {
         act->attackBombs();
     }
-    void defendShields() 
+    void defendShields() const
     {
         act->defendTowers();
     }
 };
-
 
 int main(void)
 {
