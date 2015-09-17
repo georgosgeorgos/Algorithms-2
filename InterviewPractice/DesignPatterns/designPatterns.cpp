@@ -32,6 +32,12 @@ B) Behavioral Design Pattern
 2. Observer Design Pattern
     - Subscriber and Publisher
     - All subscribers are notified whenever a publisher makes a change
+11. Template Method Design Pattern
+    - TemplateMethod define in mainInterface is how the method structure is gonna work
+    - It calls a bunch of abstract submethods that are defined differently in different subclasses
+    - Think of template implementation in C++ that allows you to customize the datatypes. 
+    - For this, you have a template methods where you can customize the methods inside that template method
+    - You can customize local variables by defining abstract methods that returns different local variables
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -44,8 +50,9 @@ C) Structural Design Pattern
         that should be called instead
 //-------------------------------
 TODO:
+12. Iterator Design Pattern
 4. Abstract Factory Design Pattern
-20. Iterator Design Pattern
+21. Facade Design Pattern
 */ 
 //---------------------------------------------------------------------------------------------------------------------------------
 // 0 SOLID 
@@ -75,8 +82,9 @@ TODO:
 //      - Prototype Design Pattern
 // b) Behavioral Design Pattern 
 //      - Strategy Design Pattern
-//      - Observer Design Pattern
 //      - Command Design Pattern
+//      - Observer Design Pattern
+//      - Template Method Design Pattern
 //      - Iterator Design Pattern
 //      - Mediator Design Pattern
 //      - Memento Design Pattern
@@ -84,9 +92,49 @@ TODO:
 // c) Structural Design Pattern 
 //      - Decorator Design Pattern
 //      - Adapter Design Pattern
+//      - Facade Design Pattern
 //      - Bridge Design Pattern
 //      - Composite Design Pattern
 //  
+//---------------------------------------------------------------------------------------------------------------------------------
+// 12 Iterator Design Pattern
+//-------------------------------
+// used to access different collections of Objects
+// Treat iterator the same for Array, HashTable, Queue, BST, etc.
+// Can write polymorphic code as treat each collection of objects the same way
+// as each collection of objects implement the same interface.
+// Also, you won't be able to modify the container for those objects as you only have access to
+// each individual elements separately.
+//-------------------------------
+//
+#include <string>
+#include <iostream>
+using namespace std;
+
+class SongInfo
+{
+private:
+    string songName;
+    string bandName;
+    int yearReleased;
+public:
+    SongInfo(string newSongName, string newBandName, int newYearReleased)
+    {
+        songName = newSongName;
+        bandName = newBandName;
+        yearReleased = newYearReleased;
+    }
+
+    string getSongName() {return songName;}
+    string getBandName() {return bandName;}
+    int getYearReleased() {return yearReleased;}
+};
+
+int main(void)
+{
+    return 0;
+}
+// */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -1197,43 +1245,99 @@ int main(void)
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-//TODO:
-// 20 Iterator Design Pattern
+// 11 Template Method Design Pattern
 //-------------------------------
-// used to access different collections of Objects
-// Treat iterator the same for Array, HashTable, Queue, BST, etc.
-// Can write polymorphic code as treat each collection of objects the same way
-// as each collection of objects implement the same interface.
-// Also, you won't be able to modify the container for those objects as you only have access to
-// each individual elements separately.
+// Basically a Template Method will be defined in the mainInterface and how it is gonna work. 
+// Then in template method, it calls a bunch of submethods that are defined differently in different subclasses that implements this Template Method interface
+// Think of template implementation in C++ that allows you to customize the datatypes. 
+// For this, you have a template methods where you can customize the methods inside that template methods
+// You can customize local variables by defining abstract methods that returns different local variables
 //-------------------------------
-/*
+/* //
 #include <string>
 #include <iostream>
 using namespace std;
 
-class SongInfo
+// TemplateMethod Interface
+class TemplateMethod
 {
-private:
-    string songName;
-    string bandName;
-    int yearReleased;
 public:
-    SongInfo(string newSongName, string newBandName, int newYearReleased)
+    // These are submethods that needs to be defined in children that implements this method
+    virtual void methodOne() = 0;
+    virtual void methodTwo() = 0;
+    virtual void methodThree() = 0;
+    virtual string getVarStr() = 0;
+    // This is the template method 
+    // It will always be the same, its just the variables inside it may change
+    void mainTemplateMethod() 
     {
-        songName = newSongName;
-        bandName = newBandName;
-        yearReleased = newYearReleased;
+        cout << "Doing some stuff before calling method 1" << endl;
+        // Call method one
+        methodOne();
+        cout << "Doing some stuff between method 1 and method 2" << endl;
+        methodTwo();
+        cout << "Doing some stuff between method 2 and method 3" << endl;
+        string haha = getVarStr(); 
+        cout << haha << endl;
+        // Call method 3 5 times
+        for(int i = 0; i < 5; i++)
+        {
+            methodThree();
+        }
+        cout << "Done calling method 3" << endl;
     }
-
-    string getSongName() {return songName;}
-    string getBandName() {return bandName;}
-    int getYearReleased() {return yearReleased;}
 };
+
+class subClassOne : public TemplateMethod
+{
+    // Override the abstract methods that needs to be implemented
+    void methodOne()
+    {
+        cout << "haha " << endl;
+    }
+    void methodTwo()
+    {
+        cout << "bebe " << endl;
+    }
+    void methodThree()
+    {
+        cout << "kiki " << endl;
+    }
+    string getVarStr() 
+    {
+        return "ChangeVariablesToo!";
+    }
+};
+
+int main(void)
+{
+    TemplateMethod* a = new subClassOne();
+    a->mainTemplateMethod();
+    return 0;
+}
+
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 21 Facade Design Pattern
+// TODO: Too simple, implement later, you kind of understand it
+//-------------------------------
+// To create a simple interface for users
+// Application: Withdraw(50)
+//          - Enter clientID and password
+//          - Authenticate
+//          - Check  Balance
+//          - Give out 50  & deduct from account
+//          - Receipt
+//-------------------------------
+/* 
+#include <string>
+#include <iostream>
+using namespace std;
 
 int main(void)
 {
     return 0;
 }
+
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
