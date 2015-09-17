@@ -23,8 +23,15 @@ B) Behavioral Design Pattern
 1. Strategy Design Pattern 
     - Separate method definition from classes
     - This way, each child class can have their own method definition of a specific interface 
+    - Application: Sorting (MergeSort may work better in some cases, QuickSort in other cases)
+9. Command Design Pattern
+    - To be able to queue a set of commands
+    - To be ablt to keep track of commands executed
+    - To encapsulate a set of methods that are executed in order for a command to execute
+    - Application: Client-Server Interface, where commands must be queued and sent over the server to execute an inner method. 
 2. Observer Design Pattern
     - Subscriber and Publisher
+    - All subscribers are notified whenever a publisher makes a change
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -33,7 +40,7 @@ C) Structural Design Pattern
     e.g. A PlainPizza that you can recursively add in different toppings which adds to the cost
 //-------------------------------
 TODO:
-9. Command Design Pattern
+10. Adapter Design Pattern
 4. Abstract Factory Design Pattern
 20. Iterator Design Pattern
 */ 
@@ -66,6 +73,7 @@ TODO:
 // b) Behavioral Design Pattern 
 //      - Strategy Design Pattern
 //      - Observer Design Pattern
+//      - Command Design Pattern
 //      - Iterator Design Pattern
 //      - Mediator Design Pattern
 //      - Memento Design Pattern
@@ -77,10 +85,11 @@ TODO:
 //      - Composite Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 9 Command Design Pattern
+// 10 Adapter Design Pattern
 //-------------------------------
 // note:
 //-------------------------------
+//
 #include <string>
 #include <iostream>
 using namespace std;
@@ -89,6 +98,7 @@ int main(void)
 {
     return 0;
 }
+
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -936,6 +946,188 @@ int main(void)
     return 0;
 }
 // */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 9 Command Design Pattern
+//-------------------------------
+//  An object is used to encapsulate all information needed for calling a method.
+//  Information includes: methodName, ownerOfMethod, methodParameterValues
+//  Terminology: 
+//      1. Receiver: The actual object that executes the methods in lowest level
+//          e.g. Television with up() and down() methods
+//      2. Command: A set of commands that can be seen by the invoker
+//          - ConcreteCommand: An implementation of the command with respect to a receiver
+//          - Knows "WHAT" to do
+//      3. Invoker: Invokes the commands, to keep track of which commands are executed, or place them in queues
+//          - e.g.: A button
+//          - Knows "WHEN" to do
+//      4. Client: What the user of your program sees
+//          - e.g.: PressRedButton(), UnpressRedButton()
+//  Stores: 
+//      - List of code executed many times or later by Invoker 
+//      - Can implement undo procedures for past commands
+//  Application:
+//      - Queue a list of commands to be executed later
+//      - Grouping up a set of actual methods into a command that does everthing
+//  Disadvantages:
+//      Command Design Pattern results in many small classes that stores list of commands
+//      Basically, a lot of different classes that executes similar commands in different order
+//  Differences with Strategy Pattern: 
+//      - Strategy is the hope of implementing methods differently in subclasses, polymorphism
+//      - Strategy is hope of decoupling algorithms with classes
+//      - Strategy is about 'HOW' something is done
+//      - Command is about 'WHAT' needs to be done
+//      - Command is hope of attaching a bunch of code to a command seen by the client
+//      - Command is hope of encapsulation of methods 
+//      - Command is to be able to queue a list of commands and keep track of commands executed
+//      - Command is to be able to transport a command (e.g. from client to server remotely, needs queue)
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Receiver Interface
+class ElectronicDevice
+{
+public:
+    virtual void up() = 0;
+    virtual void down() = 0;
+};
+
+// An actual Receiver, 
+// Television receives the commands
+class Television : public ElectronicDevice
+{
+private: 
+    int volume;
+public:
+    Television()
+    {
+        volume = 0;
+    }
+    void up()
+    {
+        volume++;
+        cout << "Up: " << volume << endl;
+    }
+    void down()
+    {
+        volume--;
+        cout << "Down: " << volume << endl;
+    }
+};
+
+// Command Interface
+// Types of commands that the Invoker can execute
+class Command
+{
+public:
+    virtual void execute() = 0;
+    virtual void undo() = 0;
+};
+
+// Method 1 , also known as ConcreteCommand. 
+// It connects the Command and Receiver. 
+// ConcreteCommand -> Implementation of Command Interface on the Receiver
+class TurnTvUp : public Command
+{
+private:
+    ElectronicDevice* theDevice; // Receiver
+public:
+    TurnTvUp(ElectronicDevice * newDevice)
+    {
+        theDevice = newDevice;
+    }
+    void execute()
+    {
+        theDevice->up();
+    }
+    void undo()
+    {
+        theDevice->down();
+    }
+};
+
+// Method 2, a ConcreteCommand
+class TurnTvDown : public Command
+{
+private:
+    ElectronicDevice* theDevice;
+public:
+    TurnTvDown(ElectronicDevice * newDevice)
+    {
+        theDevice = newDevice;
+    }
+    void execute()
+    {
+        theDevice->down();
+    }
+    void undo()
+    {
+        theDevice->up();
+    }
+};
+
+// Invoker Interface
+// It can only use the Command Interface's methods
+class DeviceButton
+{
+private:
+    Command* theCommand;
+public:
+    DeviceButton(Command* newCommand)
+    {
+        theCommand = newCommand;
+    }
+    void press()
+    {
+        theCommand->execute();
+    }
+    void undo()
+    {
+        theCommand->undo();
+    }
+};
+
+// Client Interface
+// It creates a ConcreteCommand and set its Receivers
+class  TvRemote
+{
+public:
+    // Static here is so that you can use this function publicly without making an object
+    static ElectronicDevice* getDevice()
+    {
+        return new Television();
+    }
+};
+
+int main(void)
+{
+    // Get the device
+    // Note: Can use TvRemote's getDevice method without having an object as method is declared static
+    ElectronicDevice* newReceiver = TvRemote::getDevice(); // let the receiver be a television
+    // First turn tv up`
+    // Pass in Client to get the Command for that client
+    // note: Client interface contains the Receiver
+    TurnTvUp* increaseVolumeCommand= new TurnTvUp(newReceiver); 
+    // To invoke command, pass Command Object to Invoker Object
+    // Can pass different Command Object to Invoker object
+    DeviceButton* upButtonInvoker= new DeviceButton(increaseVolumeCommand);
+    // note: Invoker allows book keeping of commands executed
+    // note: Invoker can place commands into a queue to be executed later
+    upButtonInvoker->press();
+    upButtonInvoker->undo();
+    // Now turn tv down
+    TurnTvDown* reduceVolumeCommand= new TurnTvDown(newReceiver);
+    DeviceButton* downButtonInvoker = new DeviceButton(reduceVolumeCommand);
+    // Turn tv down 3 times
+    downButtonInvoker->press();
+    downButtonInvoker->press();
+    downButtonInvoker->press();
+    downButtonInvoker->undo();
+    // note: TV's up() and down() commands are hidden
+    return 0;
+}
 //---------------------------------------------------------------------------------------------------------------------------------
 //TODO:
 // 20 Iterator Design Pattern
