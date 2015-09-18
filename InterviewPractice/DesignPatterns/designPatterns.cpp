@@ -52,6 +52,9 @@ B) Behavioral Design Pattern
     - If it is, it will handle it. After that, it can either:
         - i) continue to send the request to next node 
         - ii) end the request as it is handled
+17. Interpreter Design Pattern
+    - To handle parsing of languages
+    - Convert from one data representation to another
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -76,7 +79,7 @@ C) Structural Design Pattern
     - Interface for (expensive, remote) objects
 //-------------------------------
 TODO:
-17. Interpreter Design Pattern
+18. Mediator Design Pattern 
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
     - Simplify Interface
@@ -119,8 +122,8 @@ TODO:
 //      - State Design Pattern
 //      - Chain Of Responsibility Design Pattern
 //      - Interpreter Design Pattern
-//      - Iterator Design Pattern
 //      - Mediator Design Pattern
+//      - Iterator Design Pattern
 //      - Memento Design Pattern
 //      - Visitor Design Pattern
 // c) Structural Design Pattern 
@@ -133,7 +136,7 @@ TODO:
 //      - Bridge Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 17 Interpreter Design Pattern
+// 18 Mediator Design Pattern
 //-------------------------------
 // used when:
 //-------------------------------
@@ -1906,6 +1909,192 @@ int main(void)
     a->handle(purchase);
     purchase = 999999.0;
     a->handle(purchase);
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 17 Interpreter Design Pattern
+//-------------------------------
+// To evaluate sentences in a language 
+// Convert one representation of data into another
+// Classes: 
+//      Expression Interface`: Interface for nodes. Contains the method interpret() 
+//      Terminal Nodes: Nodes that do not contain other expressions (Leaf nodes in tree)
+//      Non-Terminal Nodes: Nodes that contain other expression (Leaf nodes in tree)
+// Application: Convert Roman Numerals to actual integers
+// Application: Convert feet to metres
+// Application: Compilers 
+//-------------------------------
+/* //
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+#include <stack>
+#include <string>
+#include <iostream>
+using namespace std;
+// need C++11
+
+// e.g. Postfix mathematics notation, 3 = 1 2 + (instead of 3 = 1+2 which is infix)
+// e.g. (3 - 2 + 1) * 4 (infix) = 4 3 2 - 1 + * (postfix) = 8
+// Tree representation
+//               *
+//              / \
+//             +  4
+//            / \
+//           -   1
+//          / \
+//         3   2
+
+// Expression Interface`
+class Expression
+{
+public: 
+    virtual int interpret() = 0;
+};
+
+// Terminal Node
+class NumberExpression : public Expression
+{
+private:
+    int num;
+public:
+    NumberExpression(int i) : num(i) {}
+    NumberExpression(string i) 
+    {
+        num = atoi(i.c_str());
+    } 
+    int interpret()
+    {
+        return num;
+    }
+};
+
+// Non-Terminal Node
+class Multiply : public Expression
+{
+private:
+    Expression * leftExpression;
+    Expression * rightExpression;
+public:
+    Multiply(Expression * left, Expression * right) 
+    {
+        this->leftExpression = left;
+        this->rightExpression = right;
+    }
+    int interpret()
+    {
+        return leftExpression->interpret() * rightExpression->interpret();
+    }
+};
+
+// Non-Terminal Node
+class Plus: public Expression
+{
+private:
+    Expression * leftExpression;
+    Expression * rightExpression;
+public:
+    Plus(Expression * left, Expression * right) 
+    {
+        this->leftExpression = left;
+        this->rightExpression = right;
+    }
+    int interpret()
+    {
+        return leftExpression->interpret() + rightExpression->interpret();
+    }
+};
+
+class Minus: public Expression
+{
+private:
+    Expression * leftExpression;
+    Expression * rightExpression;
+public:
+    Minus(Expression * left, Expression * right) 
+    {
+        this->leftExpression = left;
+        this->rightExpression = right;
+    }
+    int interpret()
+    {
+        return leftExpression->interpret() - rightExpression->interpret();
+    }
+};
+
+bool isOperator(const string s)
+{
+    const char* temp = s.c_str();
+    if (strcmp("+",temp) == 0)
+    {
+        return true;
+    }
+    else if (strcmp("-",temp) == 0)
+    {
+        return true;
+    }
+    else if (strcmp("*",temp) == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+Expression * getOperator(const string s, Expression * left, Expression * right)
+{
+    const char* temp = s.c_str();
+    if (strcmp("+",temp) == 0)
+    {
+        return new Plus(left, right);
+    }
+    else if (strcmp("-",temp) == 0)
+    {
+        return new Minus(left, right);
+    }
+    else if (strcmp("*",temp) == 0)
+    {
+        return new Multiply(left, right);
+    }
+    cout << " NOT AN OPERATOR ERROR! " << endl;
+    return NULL;
+}
+
+int main(void)
+{
+    string pattern = "4 3 2 - 1 + *";
+    vector<string> v; 
+    v.push_back("4");
+    v.push_back("3");
+    v.push_back("2");
+    v.push_back("-");
+    v.push_back("1");
+    v.push_back("+");
+    v.push_back("*");
+    stack<NumberExpression*> s; 
+    // note: auto needs >> g++ -std=c++11 fileName.cpp
+    for(auto i = v.begin(); i != v.end(); i++)
+    {
+        // Pop latest 2 elements, and push
+        if(isOperator(*i))
+        {
+            Expression * right = s.top();
+            s.pop();
+            Expression * left = s.top();
+            s.pop();
+            Expression * op = getOperator(*i, left, right);
+            int result = op->interpret();
+            s.push(new NumberExpression(result));
+        }
+        else
+        {
+            NumberExpression * a = new NumberExpression(*i);
+            s.push(a);
+        }
+    }
+    Expression * z = s.top();
+    s.pop();
+    cout << "Result: " << z->interpret() << endl;
     return 0;
 }
 // */
