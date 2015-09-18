@@ -48,11 +48,22 @@ C) Structural Design Pattern
     - To adapt an existing interface (Target Interface) with a new interface
     - Create an adapter class that maps all existing methods to the new methods 
         that should be called instead
+12. Composite Design Pattern
+    - Allows a client on running methods on both single objects and composite objects (composed of many single objects and/or composite objects) the same way
+    - Component Interface => Interface for all objects including composite objects. 
+                             Allows accessing components recursively
+    - Primitive/Leaf => Represent end points of the composition
+    - Composite => Represent a component that may have children
+    - note: Both primitive and composite needs to be handled differently, but on Component Interface, they are called the same
+    - Application: e.g. Computer Graphics project where you multiply the matrix recursively along the tree. 
+13. Flyweight Design Pattern
+    - To save space by sharing data 
 //-------------------------------
 TODO:
-12. Iterator Design Pattern
+14. State Design Pattern
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
+22. Iterator Design Pattern
 */ 
 //---------------------------------------------------------------------------------------------------------------------------------
 // 0 SOLID 
@@ -93,49 +104,19 @@ TODO:
 //      - Decorator Design Pattern
 //      - Adapter Design Pattern
 //      - Facade Design Pattern
-//      - Bridge Design Pattern
 //      - Composite Design Pattern
+//      - Flyweight Design Pattern
+//      - Bridge Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 12 Iterator Design Pattern
+// 14 State Design Pattern
 //-------------------------------
-// Basically same as C++ Iterators
-// Lets you iterate through different representations without knowing how the representations work
-// Therefore, it decouples Algorithms with the Data Structures 
-// The algorithm runs on the iterators, the iterators handle iterating differently on different data structures and apply that algorithm to them.
-// Iterator allows a same way to access a different collection of objects
-// Thus, don't need to know what data structure is being used when implementing an algorithm. 
-// But of course, you need to implement iterators for each different data structure that allows the algorithm to call them
-// In addition, you can also traverse the same data structure in a different order using iterators
-// Iterator keeps track of its own traversal state, therefore, you can have more than 1 iterator running simultaneously.
-
-// Example Application:
-//          Different iterators to traverse a BST for (preorder, inorder, postorder)
-// Note: You won't be able to modify the container for those objects as you only have access to each individual elements separately.
-//       Just means you can only do the foreach loop instead of the normal C style for loop
+// used when:
 //-------------------------------
 //
 #include <string>
 #include <iostream>
 using namespace std;
-
-class SongInfo
-{
-private:
-    string songName;
-    string bandName;
-    int yearReleased;
-public:
-    SongInfo(string newSongName, string newBandName, int newYearReleased)
-    {
-        songName = newSongName;
-        bandName = newBandName;
-        yearReleased = newYearReleased;
-    }
-    string getSongName() {return songName;}
-    string getBandName() {return bandName;}
-    int getYearReleased() {return yearReleased;}
-};
 
 int main(void)
 {
@@ -1324,6 +1305,229 @@ int main(void)
 
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
+// 12 Composite Design Pattern
+//-------------------------------
+// To represent part-whole hierarchies 
+// Can structure data, or represent inner working of every part of an object individually
+// Allows a client on running methods on both single objects and composite objects (composed of many single objects and/or composite objects) the same way
+// Component Interface => Interface for all objects including composite objects. 
+//                      Allows accessing components recursively
+//  Primitive/Leaf => Represent end points of the composition
+//  Composite => Represent a component that may have children
+//  note: Both primitive and composite needs to be handled differently, but on Component Interface, they are called the same
+// Application: e.g. Computer Graphics project where you multiply the matrix recursively along the tree. 
+//-------------------------------
+/* //
+#include <vector> 
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Component Interface
+class Component
+{
+public:
+    virtual void traverse() const = 0;
+};
+
+class Primitive : public Component
+{
+private:
+    int value;
+public: 
+    Primitive(int _value) 
+    {
+        this->value = _value;
+    }
+    void traverse() const
+    {
+        cout << value << " ";
+    }
+};
+
+class Composite : public Component
+{
+private:
+    int value;
+    vector<Component *> vec; // note: It is Component to be able to contain either Primitive or another Composite
+public:
+    Composite(int _value)
+    {
+        value = _value;
+    }
+    void traverse() const
+    {
+        cout << value << " ";
+        for(int i = 0 ; i < vec.size() ; i++)
+        {
+            vec[i]->traverse();
+        }
+    }
+    // Mistake: Used add Composite* instead of add Component * here, then it couldn't add Primitive*
+    void add(Component* a) 
+    {
+        vec.push_back(a);
+    }
+};
+
+
+// Can have further classes defined inside Composite itself
+class Row : public Composite
+{
+public:
+    Row(int val) : Composite(val) {}
+    void traverse() const
+    {
+        cout << "Row:"; 
+        // Call parent's traverse
+        Composite::traverse();
+    }
+};
+
+class Col : public Composite
+{
+public:
+    Col(int val) : Composite(val) {}
+    void traverse() const
+    {
+        cout << "Col:"; 
+        // Call parent's traverse
+        Composite::traverse();
+    }
+};
+
+int main(void)
+{
+    Row * first = new Row(1);
+    Col * second = new Col(2);
+    Col * third = new Col(3);
+    Row * fourth = new Row(4);
+    Row * fifth = new Row(5);
+    first->add(second);
+    first->add(third);
+    third->add(fourth);
+    third->add(fifth);
+    // Add leaves
+    first->add(new Primitive(6));
+    second->add(new Primitive(7));
+    third->add(new Primitive(8));
+    fourth->add(new Primitive(9));
+    fifth->add(new Primitive(10));
+    // note: It does a DFS
+    first->traverse();
+    // 1-6
+    // |\
+    // 2 3-8
+    // | |\
+    // 7 4 5
+    //   |  \
+    //   9   10
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 13 Flyweight Design Pattern
+//-------------------------------
+// Flyweight object -> Objects that do not contain a lot of data => light weight => can fly
+// To minimize memory use by sharing as much data as possible
+// Share some part of the object state
+// Intrinsic State => State that can be shared
+// Extrinsic State => State that is unique to each object
+// Used when data is constant (intrinsic data) in a lot of different objects
+// A client class for containing extrinsic data and pass the extrinsic data to flyweight objects as necessary 
+// Flyweight object contains intrinsic data
+// note: Flyweight object must be immutable so that sharing of data is safe during concurrency
+// Classes:
+// i) Flyweight Interface: How flyweight object retrieves extrinsic data and act on it
+// ii) ConcreteFlyweight : Implementation of Flyweight interface storing only intrinsic data
+// iii) FlyweightFactory : Create and manage sharing of flyweight objects, garbage collection of flyweight objects
+// iv) Client: Keeps references to flyweight objects needed, stores/computes extrinsic data, can only obtain flyweight objects using FlyweightFactory
+//
+// Application: Text editor, each alphabet's data to draw on a screen is stored in a class
+//              Then, text editor only has to keep track of the position alphabet to be drawn instead of how exactly to draw the alphabet
+// Application: Cache -> Load all images at once and store inside Flyweight objects, refer to Flyweight objects later
+// Problem: Longer runtime as need to compute extrinsic data and retrieve intrinsic data from client
+//-------------------------------
+/* // 
+#include <map> 
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Define external data to pass in to it (in this case, int x and int y)
+class FlyweightInterface
+{
+public:
+    virtual void draw(int x, int y) const = 0;
+};
+
+// Implement FlyweightInterface including intrinsic data
+class ConcreteFlyweight : public FlyweightInterface
+{
+private:
+    string color; // intrinsic data that is shared
+public:
+    ConcreteFlyweight(string _color)
+    {
+        this->color = _color;
+    }
+    void draw(int x, int y) const
+    {
+        cout << "Drawing an object with color: " << color << " and positions x:" << x << " y:" << y << endl;
+    }
+};
+
+class FlyweightFactory
+{
+private:
+    // Maintains existing ConcreteFlyweight objects and returns them as necessary 
+    // Mistake: Must also declare the shared hashtable of objects to be static
+    static map<string, ConcreteFlyweight*> mappings;
+
+    // Needed to initialize static map in C++ 
+    static map<string, ConcreteFlyweight*> initMap()
+    {
+       map<string, ConcreteFlyweight*> temp;
+       temp["none"] =  new ConcreteFlyweight("none");
+       return temp;
+    }
+public:
+    static ConcreteFlyweight* getFlyWeight(string color)
+    {
+        ConcreteFlyweight* flyObj = mappings[color];
+        // If flyObj returns NULL
+        if(!flyObj)
+        {
+            cout << "Creating new flyweight object with color: " << color << endl;
+            flyObj = new ConcreteFlyweight(color);
+            mappings[color] = flyObj;
+        }
+        else 
+        {
+            cout << "Using created flyweight object" << endl;
+        }
+        return flyObj;
+    }
+};
+
+// IMPORTANT!
+// Mistake: Must initialize static members
+// Thus, must define initMap() function privately for initialization of static map
+map<string, ConcreteFlyweight*> FlyweightFactory::mappings = initMap();
+
+int main(void)
+{
+    // Client
+    ConcreteFlyweight* blueRect = FlyweightFactory::getFlyWeight("blue");
+    blueRect->draw(3, 5);
+    blueRect->draw(7, 8);
+    ConcreteFlyweight* redRect = FlyweightFactory::getFlyWeight("red");
+    redRect->draw(1,2);
+    blueRect->draw(4, 6);
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
 // 21 Facade Design Pattern
 // TODO: Too simple, implement later, you kind of understand it
 //-------------------------------
@@ -1345,5 +1549,51 @@ int main(void)
     return 0;
 }
 
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 22 Iterator Design Pattern
+//-------------------------------
+// Basically same as C++ Iterators
+// Lets you iterate through different representations without knowing how the representations work
+// Therefore, it decouples Algorithms with the Data Structures 
+// The algorithm runs on the iterators, the iterators handle iterating differently on different data structures and apply that algorithm to them.
+// Iterator allows a same way to access a different collection of objects
+// Thus, don't need to know what data structure is being used when implementing an algorithm. 
+// But of course, you need to implement iterators for each different data structure that allows the algorithm to call them
+// In addition, you can also traverse the same data structure in a different order using iterators
+// Iterator keeps track of its own traversal state, therefore, you can have more than 1 iterator running simultaneously.
+
+// Example Application:
+//          Different iterators to traverse a BST for (preorder, inorder, postorder)
+// Note: You won't be able to modify the container for those objects as you only have access to each individual elements separately.
+//       Just means you can only do the foreach loop instead of the normal C style for loop
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+class SongInfo
+{
+private:
+    string songName;
+    string bandName;
+    int yearReleased;
+public:
+    SongInfo(string newSongName, string newBandName, int newYearReleased)
+    {
+        songName = newSongName;
+        bandName = newBandName;
+        yearReleased = newYearReleased;
+    }
+    string getSongName() {return songName;}
+    string getBandName() {return bandName;}
+    int getYearReleased() {return yearReleased;}
+};
+
+int main(void)
+{
+    return 0;
+}
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
