@@ -45,6 +45,13 @@ B) Behavioral Design Pattern
     - Decentralization of State Classes => Each ConcreteState defines which other Concrete State it transitions to. 
     -      => Advantage: Easy to maintain 
     -      => Disadvantage: A coupling between ConcreteStates, each state must know of each other's existence
+16. Chain Of Responsibility Design Pattern
+    - Basically, a request comes to a linked list of objects, 
+    - each object take turns to see if it is able to handle the request. 
+    - If it does not, it sends the request to the next node in the list
+    - If it is, it will handle it. After that, it can either:
+        - i) continue to send the request to next node 
+        - ii) end the request as it is handled
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -69,7 +76,7 @@ C) Structural Design Pattern
     - Interface for (expensive, remote) objects
 //-------------------------------
 TODO:
-16. Interpreter Design Pattern
+17. Interpreter Design Pattern
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
     - Simplify Interface
@@ -110,6 +117,7 @@ TODO:
 //      - Observer Design Pattern
 //      - Template Method Design Pattern
 //      - State Design Pattern
+//      - Chain Of Responsibility Design Pattern
 //      - Interpreter Design Pattern
 //      - Iterator Design Pattern
 //      - Mediator Design Pattern
@@ -125,7 +133,7 @@ TODO:
 //      - Bridge Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 15 Interpreter Design Pattern
+// 17 Interpreter Design Pattern
 //-------------------------------
 // used when:
 //-------------------------------
@@ -138,7 +146,7 @@ int main(void)
 {
     return 0;
 }
-
+// */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -1790,6 +1798,116 @@ int main(void)
     a->drawImage();
     return 0;
 }    
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 16 Chain Of Responsibility Design Pattern
+//-------------------------------
+// Basically, a request comes to a linked list of objects, 
+// each object take turns to see if it is able to handle the request. 
+// If it does not, it sends the request to the next node in the list
+// If it is, it will handle it. After that, it can either:
+// i) continue to send the request to next node 
+// ii) end the request as it is handled
+// If no nodes are able to handle the request, the last node needs to handle the request the default way defined in the parent
+// used when: Want to set a chain of methods to try out on a request, easily extensible by just adding a new node into the chain
+// Classes: 
+//      Handler: Contains the default handle() if no nodes can process the request
+//      ConcreteHandler: Each node in the handler with its own implemented method to process the request
+//      Request: The class containing information about the request to be handled
+// Applications: Communication Networks where you only respond to a request if it matches your memory address ID. Otherwise, just pass it along the list 
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Note: In this example, the Request class is simply a double
+
+// Default handler if none of the node is able to handle
+class Handler 
+{
+protected:
+    Handler * successor; // next handler to call 
+public:
+    Handler() 
+    {
+        successor = NULL;
+    }
+    Handler(Handler * _next) 
+    {
+        successor = _next;
+    }
+    virtual void handle(double request) 
+    {
+        cout << "The cost: " << request << " is too high for any budget" << endl;
+    }
+    void setNext(Handler * _next)
+    {
+        successor = _next; 
+    }
+};
+
+// Handler in the first node
+class SubHandler : public Handler
+{
+private:
+    double budget; // specific for this example
+public:
+    SubHandler() : Handler() { budget = -1;}
+    SubHandler(double _budget) : Handler() 
+    {
+        this->budget = _budget;
+    }
+    SubHandler(double _budget, Handler* _next) : Handler(_next) 
+    {
+        this->budget = _budget;
+    }
+    void handle(double request) 
+    {
+        if (request <= this->budget) 
+        {
+            cout << "Purchase is made by this handler with budget " << budget << endl;
+        }
+        else 
+        {
+            // Note: Can directly access successor because it is defined as protected
+            if (successor)
+            {
+                // Let the next node process the request
+                successor->handle(request);
+            }
+            else
+            {
+                // Call the default parent behavior
+                Handler::handle(request);
+            }
+        }
+    }
+};
+
+int main(void)
+{
+    double purchase = 80.0; // price of requested item
+    Handler * ceo = new SubHandler(100000.0);
+    Handler * manager = new SubHandler(10000.0, ceo);
+    Handler * employee = new SubHandler(1000.0, manager);
+    Handler * intern = new SubHandler(100.0, employee);
+    Handler * a = intern;
+    // MISTAKE: A pointer of a parent class to a parent class object will automatically call the parent's class method!
+    //          Used to have:
+    //          Handler * a = new Handler(); a->setNext(intern);
+    //          Which was wrong cause you default to calling the parent's method in the calls to handle() below
+    a->handle(purchase);
+    purchase = 180.0;
+    a->handle(purchase);
+    purchase = 1180.0;
+    a->handle(purchase);
+    purchase = 11180.0;
+    a->handle(purchase);
+    purchase = 999999.0;
+    a->handle(purchase);
+    return 0;
+}
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 21 Facade Design Pattern
