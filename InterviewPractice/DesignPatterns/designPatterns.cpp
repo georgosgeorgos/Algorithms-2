@@ -1,6 +1,6 @@
 /* 
 Table of Contents
-0. SOLID 
+0. Design Principles: SOLID 
 //-------------------------------
 A) Creational Design Pattern
 //-------------------------------
@@ -65,15 +65,21 @@ C) Structural Design Pattern
     - Application: e.g. Computer Graphics project where you multiply the matrix recursively along the tree. 
 13. Flyweight Design Pattern
     - To save space by sharing data 
+15. Proxy Design Pattern
+    - Interface for (expensive, remote) objects
 //-------------------------------
 TODO:
-15. Proxy Design Pattern
+16. Interpreter Design Pattern
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
+    - Simplify Interface
 22. Iterator Design Pattern
+30. Reference Counting Pointer Garbage Collection Class Wrapper Automation (Bloomberg Interview)
+        - using Proxy Design Pattern  and Flyweight Pattern
 */ 
 //---------------------------------------------------------------------------------------------------------------------------------
-// 0 SOLID 
+// 0 Design Principles: SOLID 
+//-------------------------------
 // SOLID => Guidelines on Design Patterns to create maintainable and extensible software
 // i) Single Responsibility Principle
 //      - Every class has a single responsibility
@@ -104,6 +110,7 @@ TODO:
 //      - Observer Design Pattern
 //      - Template Method Design Pattern
 //      - State Design Pattern
+//      - Interpreter Design Pattern
 //      - Iterator Design Pattern
 //      - Mediator Design Pattern
 //      - Memento Design Pattern
@@ -111,16 +118,18 @@ TODO:
 // c) Structural Design Pattern 
 //      - Decorator Design Pattern
 //      - Adapter Design Pattern
-//      - Facade Design Pattern
+//      - Facade Design Pattern => Interface for complicated implementation objects
+//      - Proxy Design Pattern => Interface for high time/space complexity objects, to get them only when needed
 //      - Composite Design Pattern
 //      - Flyweight Design Pattern
 //      - Bridge Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 15 Proxy Design Pattern
+// 15 Interpreter Design Pattern
 //-------------------------------
 // used when:
 //-------------------------------
+//
 #include <string>
 #include <iostream>
 using namespace std;
@@ -128,8 +137,8 @@ using namespace std;
 int main(void)
 {
     return 0;
-}    
-// */
+}
+
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -1677,6 +1686,110 @@ int main(void)
 
     return 0;
 }
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 15 Proxy Design Pattern
+//-------------------------------
+// Create a wrapper for high time/space complexity objects, and get them only when needed
+// Defer full cost of creation until we need the actual object. 
+// Proxy => A place holder for an expensive object
+// Application: Copy on write (Copying a large object takes a long time, if its read only, then use flyweight)
+//              Only when you wanna write it (change it to be unique, then you can copy it)
+// Application: Garbage Collection Automation (Reference Counting Pointer)
+//              Proxy keeps a reference count to an actual object being read, when no more pointers 
+//              points to that object, delete it from memory as it is no longer needed
+// Application: Large Files
+//      Images in Webpages, (images in webpages take long time to load, so put a proxy(placeholder) 
+//      first and load them later only when the user has scrolled down to them and it is needed
+// Application: Security
+//      Limit access to actual class based on security
+//  Application: Lock
+//      Ensure current thread has a lock before accessing a resource
+//-------------------------------
+/* //
+#include <string>
+#include <cstdlib>
+#include <iostream>
+using namespace std;
+
+// Interface to Proxy an actual object, known as Subject
+// Need to be implemented by both actual object and proxy object
+class ProxyInterface
+{
+public:
+    virtual void drawImage() = 0;
+};
+
+class ActualImage : public ProxyInterface
+{
+private:    
+    // The actual image
+    double** image; 
+    int N; // specific only for this example
+public:
+    // Creating an actual image is an expensive process
+    ActualImage(string pathToImage)
+    {
+        cout << "Loading image from " << pathToImage << endl;
+        N = 3;
+        image = (double **) malloc(sizeof(double*) * N); 
+        for(int i = 0; i < N; i++)
+        {
+            image[i] = (double *) malloc(sizeof(double) * N);
+        }
+        for(int i = 0; i < N;i++)
+        {
+            for(int j = 0; j < N; j++)
+            {
+                image[i][j] = i-j;
+            }
+        }
+    }
+    void drawImage()
+    {
+        for(int i = 0; i < N;i++)
+        {
+            for(int j = 0; j < N; j++)
+            {
+                cout << image[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+class ProxyImage : public ProxyInterface
+{
+private:
+    // ProxyImage must contain a reference to ActualImage
+    ActualImage* placeHolder; 
+    string pathToImage; // ProxyImage need to contain data to load ActualImage only when necessary. This is like temporary small data needed for loading 
+public:
+    ProxyImage(string _pathToImage) 
+    {
+        this->pathToImage = _pathToImage;
+        this->placeHolder = NULL;
+    }
+    void drawImage()
+    {
+        // Now only create image when needed
+        placeHolder = new ActualImage(pathToImage);
+        placeHolder->drawImage();
+        delete placeHolder;
+    }
+};
+
+int main(void)
+{
+    string imagePath = "data/img.jpg";
+    // Create a proxy image, fast operation
+    cout << "Creating Proxy Image" << endl;
+    ProxyInterface* a = new ProxyImage(imagePath);
+    cout << "Drawing Proxy Image" << endl;
+    // Draw proxy image, slow operation as it only creates the actual image as needed now
+    a->drawImage();
+    return 0;
+}    
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 21 Facade Design Pattern
