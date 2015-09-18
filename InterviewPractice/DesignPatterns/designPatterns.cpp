@@ -38,6 +38,13 @@ B) Behavioral Design Pattern
     - Think of template implementation in C++ that allows you to customize the datatypes. 
     - For this, you have a template methods where you can customize the methods inside that template method
     - You can customize local variables by defining abstract methods that returns different local variables
+14. State Design Pattern
+    - To allow an objects behavior to vary based on its state during runtime without too many conditional statements
+    - All state specific behavior is in a ConcreteState class, this ease maintenance such as adding a new state 
+    - Do not rely on current state based on a variable in the Context class, doing so will require lots of conditional statements in that one class
+    - Decentralization of State Classes => Each ConcreteState defines which other Concrete State it transitions to. 
+    -      => Advantage: Easy to maintain 
+    -      => Disadvantage: A coupling between ConcreteStates, each state must know of each other's existence
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -60,7 +67,7 @@ C) Structural Design Pattern
     - To save space by sharing data 
 //-------------------------------
 TODO:
-14. State Design Pattern
+15. Proxy Design Pattern
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
 22. Iterator Design Pattern
@@ -96,6 +103,7 @@ TODO:
 //      - Command Design Pattern
 //      - Observer Design Pattern
 //      - Template Method Design Pattern
+//      - State Design Pattern
 //      - Iterator Design Pattern
 //      - Mediator Design Pattern
 //      - Memento Design Pattern
@@ -109,11 +117,10 @@ TODO:
 //      - Bridge Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 14 State Design Pattern
+// 15 Proxy Design Pattern
 //-------------------------------
 // used when:
 //-------------------------------
-//
 #include <string>
 #include <iostream>
 using namespace std;
@@ -121,7 +128,7 @@ using namespace std;
 int main(void)
 {
     return 0;
-}
+}    
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
@@ -1524,6 +1531,150 @@ int main(void)
     ConcreteFlyweight* redRect = FlyweightFactory::getFlyWeight("red");
     redRect->draw(1,2);
     blueRect->draw(4, 6);
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 14 State Design Pattern
+//-------------------------------
+// To allow an objects behavior to vary based on its state during runtime without too many conditional statements
+// All state specific behavior is in a ConcreteState class, this ease maintenance such as adding a new state 
+// Do not rely on current state based on a variable in the Context class, doing so will require lots of conditional statements in that one class
+// Decentralization of State Classes => Each ConcreteState defines which other Concrete State it transitions to. 
+//      => Advantage: Easy to maintain 
+//      => Disadvantage: A coupling between ConcreteStates, each state must know of each other's existence
+// Classes: 
+//      Context/Machine => Interface for client  (Finite State Machine)
+//              => Maintains an instance of current concreteState using a StateInterface pointer, which identifies what state the Context is currently in
+//              => If implementing decentralization of state classes, need allow a way for ConcreteState to change the current state explicitly
+//              (Uses Strategy Design Pattern)
+//      State Interface => Interface for behavior of current state
+//      ConcreteState => Each individual state and its behavior
+// Applications: Finite State Machine
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Finite State Machine
+class Machine
+{
+private:
+    // NOTE: You need the word class here as State is only defined below
+    class State * current; // A pointer to the current state
+    double input; 
+public:
+    Machine();
+    // To set the current state
+    void setCurrent(State *s) 
+    {
+        this->current = s;
+    }
+    double getInput()
+    {
+        return this->input;
+    }
+    void setInput(double in)
+    {
+        this->input = in;
+    }
+    void act();
+};
+
+// State Interface 
+class State
+{
+public:
+    // Method to change state to set Machine m to state s
+    virtual void changeState(Machine *m) = 0; 
+    // A behavior
+    virtual void doAction() = 0 ; 
+};
+
+class ConcreteStateOne : public State
+{
+    void doAction() 
+    {
+        cout << "Action from State One" << endl;
+    }
+    void changeState(Machine *m);
+};
+
+class ConcreteStateTwo : public State
+{
+    void doAction() 
+    {
+        cout << "Action from State Two" << endl;
+    }
+    void changeState(Machine *m);
+};
+
+class ConcreteStateThree : public State
+{
+    void doAction() 
+    {
+        cout << "Action from State Three" << endl;
+    }
+    void changeState(Machine *m);
+};
+
+// Note: Whenever you have circular dependencies, you can only define the implementation after 
+//      providing all header file details (class definitions)
+// Constructor for Machine
+Machine::Machine()
+{
+    input = 0; 
+    // Initialize to first state
+    current = new ConcreteStateOne();
+}
+
+void Machine::act()
+{
+    // Note: Both doAction() and changeState() must be public and not protected for Machine to access them here
+    this->current->doAction();
+    this->current->changeState(this);
+}
+
+// Need only give implementation after including all classes that exist
+void ConcreteStateOne::changeState(Machine *m)
+{
+        m->setCurrent(new ConcreteStateTwo);
+        delete this;
+}
+void ConcreteStateTwo::changeState(Machine *m)
+{
+        if (m->getInput() < 0)
+            m->setCurrent(new ConcreteStateOne);
+        else
+            m->setCurrent(new ConcreteStateThree);
+        delete this;
+}
+void ConcreteStateThree::changeState(Machine *m)
+{
+        return;
+        // Always stay at state three
+}
+
+int main(void)
+{
+    Machine* m = new Machine();
+    // Perform action
+    m->act();
+    // Perform action
+    m->act();
+    m->act();
+    m->act();
+    m->act();
+    delete m;
+    cout << "To show next state depends on inputs" << endl;
+    m = new Machine();
+    m->setInput(-1);
+    m->act();
+    m->act();
+    m->act();
+    m->act();
+
     return 0;
 }
 // */
