@@ -58,6 +58,8 @@ B) Behavioral Design Pattern
 18. Mediator Design Pattern 
     - To implement communication between objects
     - Application: Control Tower for planes, Router for internet connection between different devices
+19. Memento Design Pattern
+    - To restore an object to its previous state after applying a temporary change (moment)
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -82,7 +84,7 @@ C) Structural Design Pattern
     - Interface for (expensive, remote) objects
 //-------------------------------
 TODO:
-19. Memento Design Pattern
+20. Visitor Design Pattern
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
     - Simplify Interface
@@ -139,7 +141,7 @@ TODO:
 //      - Bridge Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 19 Memento Design Pattern
+// 20 Visitor Design Pattern
 //-------------------------------
 // used when:
 //-------------------------------
@@ -152,7 +154,6 @@ int main(void)
 {
     return 0;
 }
-
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
@@ -2195,6 +2196,92 @@ int main(void)
     paul->send(1, "lala");
     // Note: Can also send message to self through mediator
     paul->send(2, "lala");
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 19 Memento Design Pattern
+//-------------------------------
+// To restore an object to its previous state after applying a temporary change (moment)
+// Classes:
+//      Originator => Object that saves Memento original state and creates a new temporary Memento with current state
+//      Caretaker => Going to modify  Memento but wants to undo the change, it requests Memento from Originator
+//                   It passes Memento back to Originator to revert the Memento back to original state.
+//                   Contains all previous versions of Memento.
+//      Memento => Object requested to Originator by Caretaker, which is later passed back into Originator to revert to original state
+//                 Must have interface for accessing necessary state variables for Originator, so that does not violate encapsulation
+//  Applications: 
+//      Random Number Generator always generates same number sequence with same seed(state)
+//      Saving a game`
+//      Undo and Redo operations in text editors
+//
+//-------------------------------
+/* //
+#include <vector>
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Object that is to be saved
+class Memento
+{
+private:
+    string state;
+public:
+    Memento(string s) : state(s) {}
+    string getState() {return state;}
+    void setState(string s) { state = s;}
+};
+
+// Class that saves the current state, or restores a Memento to a saved state
+class Originator
+{
+private:
+    string savedState;
+public:
+    void save(Memento* m) 
+    {
+        savedState = m->getState();
+    }
+    Memento* createMemento()
+    {
+        Memento* m = new Memento(savedState);
+        return m;
+    }
+}; 
+
+class CareTaker
+{
+private:
+    vector<Memento *> mementos; // a list of all the saved momentos
+public:
+    void addMemento(Memento * m)
+    {
+        mementos.push_back(m);
+    }
+    Memento * getMemento(int index)
+    {
+        return mementos[index];
+    }
+};
+
+int main(void)
+{
+    Originator* origin = new Originator(); 
+    CareTaker* care = new CareTaker();
+    Memento * m1 = new Memento("State 1");
+    origin->save(m1);
+    // Add first State
+    care->addMemento(origin->createMemento());
+    Memento * m2 = new Memento("State 2");
+    origin->save(m2);
+    // Add second State
+    care->addMemento(origin->createMemento());
+
+    // Get back first state
+    origin->save(care->getMemento(0));
+    Memento * m3 = origin->createMemento();
+    cout << "First saved state is: " << m3->getState() << endl;
     return 0;
 }
 // */
