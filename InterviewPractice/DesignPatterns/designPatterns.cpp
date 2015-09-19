@@ -55,6 +55,9 @@ B) Behavioral Design Pattern
 17. Interpreter Design Pattern
     - To handle parsing of languages
     - Convert from one data representation to another
+18. Mediator Design Pattern 
+    - To implement communication between objects
+    - Application: Control Tower for planes, Router for internet connection between different devices
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -79,7 +82,7 @@ C) Structural Design Pattern
     - Interface for (expensive, remote) objects
 //-------------------------------
 TODO:
-18. Mediator Design Pattern 
+19. Memento Design Pattern
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
     - Simplify Interface
@@ -136,7 +139,7 @@ TODO:
 //      - Bridge Design Pattern
 //  
 //---------------------------------------------------------------------------------------------------------------------------------
-// 18 Mediator Design Pattern
+// 19 Memento Design Pattern
 //-------------------------------
 // used when:
 //-------------------------------
@@ -149,6 +152,7 @@ int main(void)
 {
     return 0;
 }
+
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
@@ -2095,6 +2099,102 @@ int main(void)
     Expression * z = s.top();
     s.pop();
     cout << "Result: " << z->interpret() << endl;
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 18 Mediator Design Pattern
+//-------------------------------
+// Handles communication between objects
+// Reduces dependencies between how objects communicate => loosely coupled
+// Allows many to many relationships, mappings between relationships is easier
+// Classes:
+//      - Mediator Interface => Interface for communication betwee Colleague Objects
+//      - ConcreteMediator > Coordinates communication between Colleague objects 
+//      - Colleague -> Communicates with other Colleague through its Mediator
+//  Applications:
+//      Control Tower => All airplanes communicate via control tower. 
+//      Router => All devices (phone, laptop) communicate via router
+//      Unix Control Groups => A group can have >= 0 users, a user can have >= groups
+//-------------------------------
+/* //
+#include <map>
+#include <string>
+#include <iostream>
+using namespace std;
+
+class Mediator
+{
+public:
+    virtual void send(const int id, const string message) = 0;
+};
+
+class ConcreteMediator : public Mediator
+{
+private:
+    map<int, class Colleague*> colleagues;
+    bool exist(int id);
+public:
+    void setColleague(Colleague * c);
+    void send(int id, const string message);
+};
+
+class Colleague
+{
+private:
+    Mediator * mediator; 
+    int id;
+public:
+    Colleague(int _id) : id(_id) {}
+    int getId() { return id; }
+    // MISTAKE: Only constructors take the form  className() : mediator(m) {}
+    void setMediator(Mediator * m) 
+    {
+        mediator = m;
+    }
+    void receive (const string  msg)
+    {
+        cout << "Message received by " << id << ": " << msg << endl;
+    }
+    void send (int sendId, string msg)
+    {
+        cout << id << " send message to " << sendId << ": " << msg << endl;
+        mediator->send(sendId, msg);
+    }
+};
+
+bool ConcreteMediator::exist(int id)
+{
+    return colleagues.find(id) != colleagues.end();
+}
+void ConcreteMediator::setColleague(Colleague * c)
+{
+    if (!exist(c->getId()))
+    {
+        c->setMediator(this);
+        colleagues[c->getId()] = c;
+    } 
+}
+void ConcreteMediator::send(int id, const string message)
+{
+    if(exist(id))
+    {
+        Colleague *c = colleagues[id];
+        c->receive(message);
+    }
+}
+
+int main(void)
+{
+    Colleague * peter = new Colleague(1);
+    Colleague * paul = new Colleague(2);
+    ConcreteMediator * m = new ConcreteMediator();
+    m->setColleague(peter);
+    m->setColleague(paul);
+    peter->send(2, "haha");
+    paul->send(1, "lala");
+    // Note: Can also send message to self through mediator
+    paul->send(2, "lala");
     return 0;
 }
 // */
