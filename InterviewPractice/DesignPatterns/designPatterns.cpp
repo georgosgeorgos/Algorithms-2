@@ -60,6 +60,10 @@ B) Behavioral Design Pattern
     - Application: Control Tower for planes, Router for internet connection between different devices
 19. Memento Design Pattern
     - To restore an object to its previous state after applying a temporary change (moment)
+20. Visitor Design Pattern
+    - To add methods to different classes without modifying those classes (honors open-closed principle)
+    - Uses double dispatch => Operation depends on: 2 dynamic classes 
+    -                          2 receivers are: The type of visitor class and the type element it visits (visitable)
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
@@ -84,7 +88,6 @@ C) Structural Design Pattern
     - Interface for (expensive, remote) objects
 //-------------------------------
 TODO:
-20. Visitor Design Pattern
 4. Abstract Factory Design Pattern
 21. Facade Design Pattern
     - Simplify Interface
@@ -128,9 +131,9 @@ TODO:
 //      - Chain Of Responsibility Design Pattern
 //      - Interpreter Design Pattern
 //      - Mediator Design Pattern
-//      - Iterator Design Pattern
 //      - Memento Design Pattern
 //      - Visitor Design Pattern
+//      - Iterator Design Pattern
 // c) Structural Design Pattern 
 //      - Decorator Design Pattern
 //      - Adapter Design Pattern
@@ -140,21 +143,6 @@ TODO:
 //      - Flyweight Design Pattern
 //      - Bridge Design Pattern
 //  
-//---------------------------------------------------------------------------------------------------------------------------------
-// 20 Visitor Design Pattern
-//-------------------------------
-// used when:
-//-------------------------------
-//
-#include <string>
-#include <iostream>
-using namespace std;
-
-int main(void)
-{
-    return 0;
-}
-// */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -2282,6 +2270,121 @@ int main(void)
     origin->save(care->getMemento(0));
     Memento * m3 = origin->createMemento();
     cout << "First saved state is: " << m3->getState() << endl;
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 20 Visitor Design Pattern
+//-------------------------------
+// To add methods to different classes without modifying those classes (honors open-closed principle)
+// Uses double dispatch => Operation depends on: 2 dynamic classes 
+//                          2 receivers are: The type of visitor class and the type element it visits (visitable)
+// Requires Visitable class to have an interface that allows you to add to it by just defining a new Visitor class. 
+// Thus, each time you need to make a new change, as long as your different classes already implements the Visitable Interface, 
+// you just need to make a new concreteVisitor and pass in that as a parameter to the object's accept function.
+// Classes:
+//      - Visitor Interface => A new interface that needs to be implemented by a new concreteClass that handles each different class differently. 
+//      - Concrete Visitor => Implements the Visitor Interface by adding many different visit() function accepting different type of classes (function overloading)
+//                            It implements the visit() method
+//                            Each different class has its own visit() method in ConcreteVisitor class
+//      - Visitable Interface => A new interface that needs to be implemented by the different classes that needs to change. 
+//                              Contains the Visit function. Instead of changing each different class, you just need to add in the method
+//                              accept(Visitor * visitor) { visitor->visit(this); }
+//      - Accept Function() => This is a simple method that is added to each different class that needs to be changed
+//      - Visit Function() => This is a method implemented by ConcreteVisitor
+// Applications: 
+//      Public API - Make new Visitor class for existing class to call the accept(visitor) function)_
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Visitor Interface
+class Visitor 
+{
+public:
+    virtual void visit(class TypeA* A) = 0;
+    virtual void visit(class TypeB* B) = 0;
+};
+
+// Concrete Visitor 1 => Count
+// note: Each type of class needs its own visit() method
+class CountVisitor : public Visitor 
+{
+private:
+    int numA, numB;
+public:
+    void visit(TypeA* A); 
+    void visit(TypeB* B);
+};
+
+// Concrete Visitor 2 => print
+class PrintVisitor : public Visitor 
+{
+public:
+    void visit(TypeA* A); 
+    void visit(TypeB* B);
+};
+
+// Visitable Interface
+// Each class that you want to change must implement Visitable Interface
+class Visitable
+{
+public:
+    virtual void accept(Visitor * visitor) = 0;
+    // note: Every class's accept implementation will be the same
+};
+
+class TypeA : public Visitable
+{
+public:
+    void accept(Visitor * visitor) 
+    {
+        visitor->visit(this);
+    }
+}; 
+
+class TypeB : public Visitable
+{
+public:
+    void accept(Visitor * visitor) 
+    {
+        visitor->visit(this);
+    }
+}; 
+
+void CountVisitor::visit(TypeA* A) 
+{
+    numA++;
+    cout << "numA is: " << numA << endl;
+}
+
+void CountVisitor::visit(TypeB* B) 
+{
+    numB--;
+    cout << "numB is: " << numB << endl;
+}
+
+void PrintVisitor::visit(TypeA* A) 
+{
+    cout << "Type A" << endl;
+}
+void PrintVisitor::visit(TypeB* B) 
+{
+    cout << "Type B" << endl;
+}
+
+int main(void)
+{
+    TypeA * a = new TypeA();
+    TypeB * b = new TypeB();
+    Visitor * v1 = new CountVisitor();
+    Visitor * v2 = new PrintVisitor();
+    a->accept(v1);
+    a->accept(v2);
+    b->accept(v1);
+    b->accept(v2);
     return 0;
 }
 // */
