@@ -4,17 +4,17 @@ Table of Contents
 //-------------------------------
 A) Creational Design Pattern
 //-------------------------------
-3. Factory Design Pattern
-    - To create random child class objects in a game. A 'factory' that returns random objects created 
-5. Singleton Design Pattern
+1. Singleton Design Pattern
     - Only 1 object of a particular class 
     - e.g. Global Counter, Logging, Accessing shared resource
-6. Builder Design Pattern
+2. Factory Design Pattern
+    - To create random child class objects in a game. A 'factory' that returns random objects created 
+3. Builder Design Pattern
     - When Object construction is complicated, takes a long time, has too many variables to construct 
         and when you won't know all variables at once. 
     - You can construct each variable step by step
     - You can construct the objects differently using different classes
-7. Prototype Design Pattern
+4. Prototype Design Pattern
     - When want to create a clone of an object to 'prototype' with it first before reassigning as original
     - e.g. Bank Account transactions 
 //-------------------------------
@@ -24,57 +24,61 @@ B) Behavioral Design Pattern
     - Separate method definition from classes
     - This way, each child class can have their own method definition of a specific interface 
     - Application: Sorting (MergeSort may work better in some cases, QuickSort in other cases)
-9. Command Design Pattern
-    - To be able to queue a set of commands
-    - To be ablt to keep track of commands executed
-    - To encapsulate a set of methods that are executed in order for a command to execute
-    - Application: Client-Server Interface, where commands must be queued and sent over the server to execute an inner method. 
-2. Observer Design Pattern
+2. Visitor Design Pattern
+    - To add methods to different classes without modifying those classes (honors open-closed principle)
+    - Uses double dispatch => Operation depends on: 2 dynamic classes 
+    -                          2 receivers are: The type of visitor class and the type element it visits (visitable)
+3. Observer Design Pattern
     - Subscriber and Publisher
     - All subscribers are notified whenever a publisher makes a change
-11. Template Method Design Pattern
+4. Template Method Design Pattern
     - TemplateMethod define in mainInterface is how the method structure is gonna work
     - It calls a bunch of abstract submethods that are defined differently in different subclasses
     - Think of template implementation in C++ that allows you to customize the datatypes. 
     - For this, you have a template methods where you can customize the methods inside that template method
     - You can customize local variables by defining abstract methods that returns different local variables
-14. State Design Pattern
-    - To allow an objects behavior to vary based on its state during runtime without too many conditional statements
-    - All state specific behavior is in a ConcreteState class, this ease maintenance such as adding a new state 
-    - Do not rely on current state based on a variable in the Context class, doing so will require lots of conditional statements in that one class
-    - Decentralization of State Classes => Each ConcreteState defines which other Concrete State it transitions to. 
-    -      => Advantage: Easy to maintain 
-    -      => Disadvantage: A coupling between ConcreteStates, each state must know of each other's existence
-16. Chain Of Responsibility Design Pattern
+5. Chain Of Responsibility Design Pattern
     - Basically, a request comes to a linked list of objects, 
     - each object take turns to see if it is able to handle the request. 
     - If it does not, it sends the request to the next node in the list
     - If it is, it will handle it. After that, it can either:
         - i) continue to send the request to next node 
         - ii) end the request as it is handled
-17. Interpreter Design Pattern
-    - To handle parsing of languages
-    - Convert from one data representation to another
-18. Mediator Design Pattern 
+6. State Design Pattern
+    - To allow an objects behavior to vary based on its state during runtime without too many conditional statements
+    - All state specific behavior is in a ConcreteState class, this ease maintenance such as adding a new state 
+    - Do not rely on current state based on a variable in the Context class, doing so will require lots of conditional statements in that one class
+    - Decentralization of State Classes => Each ConcreteState defines which other Concrete State it transitions to. 
+    -      => Advantage: Easy to maintain 
+    -      => Disadvantage: A coupling between ConcreteStates, each state must know of each other's existence
+7. Memento Design Pattern
+    - To restore an object to its previous state after applying a temporary change (moment)
+8. Mediator Design Pattern 
     - To implement communication between objects
     - Application: Control Tower for planes, Router for internet connection between different devices
-19. Memento Design Pattern
-    - To restore an object to its previous state after applying a temporary change (moment)
-20. Visitor Design Pattern
-    - To add methods to different classes without modifying those classes (honors open-closed principle)
-    - Uses double dispatch => Operation depends on: 2 dynamic classes 
-    -                          2 receivers are: The type of visitor class and the type element it visits (visitable)
+9. Command Design Pattern
+    - To be able to queue a set of commands
+    - To be ablt to keep track of commands executed
+    - To encapsulate a set of methods that are executed in order for a command to execute
+    - Application: Client-Server Interface, where commands must be queued and sent over the server to execute an inner method. 
+10. Interpreter Design Pattern
+    - To handle parsing of languages
+    - Convert from one data representation to another
 //-------------------------------
 C) Structural Design Pattern
 //-------------------------------
-8. Decorator Design Pattern 
+1. Decorator Design Pattern 
     - To be able to extend functionality inheritance by creating each other recursively, passing in a variable that grows between creations
     e.g. A PlainPizza that you can recursively add in different toppings which adds to the cost
-10. Adapter Design Pattern
+2. Flyweight Design Pattern
+    - To save space by sharing data 
+3. Adapter Design Pattern
     - To adapt an existing interface (Target Interface) with a new interface
     - Create an adapter class that maps all existing methods to the new methods 
         that should be called instead
-12. Composite Design Pattern
+4. Proxy Design Pattern
+    - Interface for (expensive, remote) objects
+5. Composite Design Pattern
     - Allows a client on running methods on both single objects and composite objects (composed of many single objects and/or composite objects) the same way
     - Component Interface => Interface for all objects including composite objects. 
                              Allows accessing components recursively
@@ -82,17 +86,13 @@ C) Structural Design Pattern
     - Composite => Represent a component that may have children
     - note: Both primitive and composite needs to be handled differently, but on Component Interface, they are called the same
     - Application: e.g. Computer Graphics project where you multiply the matrix recursively along the tree. 
-13. Flyweight Design Pattern
-    - To save space by sharing data 
-15. Proxy Design Pattern
-    - Interface for (expensive, remote) objects
 //-------------------------------
 TODO:
-4. Abstract Factory Design Pattern
-21. Facade Design Pattern
+. Abstract Factory Design Pattern
+. Facade Design Pattern
     - Simplify Interface
-22. Iterator Design Pattern
-30. Reference Counting Pointer Garbage Collection Class Wrapper Automation (Bloomberg Interview)
+. Iterator Design Pattern
+. Reference Counting Pointer Garbage Collection Class Wrapper Automation (Bloomberg Interview)
         - using Proxy Design Pattern  and Flyweight Pattern
 */ 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -118,31 +118,486 @@ TODO:
 // - don't add methods that are not used by all subclasses
 // Types of Design Patterns: 
 // a) Creational Design Pattern 
-//      - Factory Design Pattern
 //      - Singleton Design Pattern
+//      - Factory Design Pattern
 //      - Builder Design Pattern
 //      - Prototype Design Pattern
 // b) Behavioral Design Pattern 
 //      - Strategy Design Pattern
-//      - Command Design Pattern
+//      - Visitor Design Pattern
 //      - Observer Design Pattern
 //      - Template Method Design Pattern
-//      - State Design Pattern
 //      - Chain Of Responsibility Design Pattern
-//      - Interpreter Design Pattern
-//      - Mediator Design Pattern
+//      - State Design Pattern
 //      - Memento Design Pattern
-//      - Visitor Design Pattern
+//      - Mediator Design Pattern
+//      - Command Design Pattern
+//      - Interpreter Design Pattern
 //      - Iterator Design Pattern
 // c) Structural Design Pattern 
 //      - Decorator Design Pattern
+//      - Flyweight Design Pattern
 //      - Adapter Design Pattern
-//      - Facade Design Pattern => Interface for complicated implementation objects
 //      - Proxy Design Pattern => Interface for high time/space complexity objects, to get them only when needed
 //      - Composite Design Pattern
-//      - Flyweight Design Pattern
+//      - Facade Design Pattern => Interface for complicated implementation objects
 //      - Bridge Design Pattern
 //  
+//---------------------------------------------------------------------------------------------------------------------------------
+//TODO:
+// 4 Abstract Factory Design Pattern
+//-------------------------------
+// refer to Derek Banas's video on youtube
+// Like a factory, but everything is encapsulated
+// This includes:
+// - Method that orders the object
+// - Factory that builds the object
+// - Final Objects
+// - Final object that contain objects that use the Strategy Pattern
+//-------------------------------
+/*
+#include <iostream> 
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 1 Singleton Design Pattern
+//-------------------------------
+// used when can only instantiate 1 object from a class
+// Examples: File Logging, Global Clock/Counter
+// Logging is acceptable for good design as it doesn't affect execution of code.
+// Basically, if object does not exist yet, create it. If it exist, return the existing object
+// Make sure sconstructor is private so there is no other way to create an object except using the createInstance in the static way
+
+// In this example:
+// Parent Class : SingletonCounter()
+// note: This demonstrates how to implement a global counter for all classes that needs to
+// access a global counter/clock  in a game for example as it should be the same clock.
+//-------------------------------
+/* // 
+#include <iostream>
+using namespace std;
+
+// A Singleton class
+class SingletonCounter
+{
+private:
+    int counterValue;
+    static SingletonCounter* firstInstance;
+    SingletonCounter()
+    {
+        // do nothing, but make it private so main() cannot use the constructor since it is private
+        // and is forced to use getInstance() method below
+        counterValue = 0;
+    }
+public:
+    // To return a static object, need to declare that you are returning a static object here
+    static SingletonCounter* getInstance()
+    {
+        if (firstInstance == NULL)
+        {
+            firstInstance = new SingletonCounter();
+        }
+        return firstInstance;
+    }
+    int getValue() {return counterValue;}
+    void setValue(int _value) {counterValue = _value;}
+};
+
+// To ensure that at start of program, firstInstance is NULL
+SingletonCounter* SingletonCounter::firstInstance = NULL;
+
+
+int main(void)
+{
+    SingletonCounter* uniqueInstance = SingletonCounter::getInstance();
+    cout << uniqueInstance->getValue() << endl;
+    // The below doesn't do anything as it retrieves back the same instace
+    uniqueInstance = SingletonCounter::getInstance();
+    // uniqueInstance2 points to the same object as uniqueInstance
+    SingletonCounter* uniqueInstance2 = SingletonCounter::getInstance();
+    uniqueInstance2->setValue(3);
+    // Note: Both having same value proving they are pointing to same object
+    cout << uniqueInstance2->getValue() << endl;
+    cout << uniqueInstance->getValue() << endl;
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 2 Factory Design Pattern
+//-------------------------------
+// used when:
+// Method returns one of several possible classes that share a common superclass
+// Basically, when don't know what class object will be needed
+// Centralize class selection code
+
+// For instance,
+// Create a new enemy in a game
+// RNG picks a random enemy type
+// Factory object will return a dynamically created enemy and throw it on the screen
+
+// In this example:
+// Parent Class : EnemyShip(), EnemyShipFactory()
+// Child Class : UFOEnemyShip(), RocketEnemyShip()
+// GrandChild Class: BigUFOShip
+// note: EnemyShipFactory basically returns a type of EnemyShip since you can't have a class returning itself.
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+class EnemyShip
+{
+private:
+    string name;
+    double amountDamage;
+
+public:
+    string getName(){return name;}
+    void setName(string newName) {name = newName;}
+    double getDamage(){return amountDamage;}
+    void setDamage(double _amountDamage) {amountDamage = _amountDamage;}
+
+    // AI to follow the hero as an enemy
+    void followHeroShip()
+    {
+        cout << name << " is following hero" << endl;
+    }
+
+    void displayEnemyShip()
+    {
+        cout << name << " is on the screen" << endl;
+    }
+
+    void enemyShipShoots()
+    {
+        cout << name << " attacks!" << endl;
+    }
+};
+
+class UFOEnemyShip: public EnemyShip
+{
+public:
+    UFOEnemyShip()
+    {
+        setName("UFO Enemy Ship");
+        setDamage(20.0);
+    }
+};
+
+class RocketEnemyShip: public EnemyShip
+{
+public:
+    RocketEnemyShip()
+    {
+        setName("Rocket Enemy Ship");
+        setDamage(10.0);
+    }
+};
+
+class BigUFOShip: public UFOEnemyShip
+{
+public:
+    BigUFOShip()
+    {
+        setName("BIG UFO Enemy Ship");
+        setDamage(50.0);
+    }
+};
+
+// Factory Design Pattern handles decision making
+class EnemyShipFactory
+{
+public:
+    EnemyShip* makeEnemyShip(int newShipType)
+    {
+        EnemyShip* newShip = NULL;
+        if(newShipType == 1)
+        {
+            return new UFOEnemyShip();
+        }
+        else if(newShipType == 2)
+        {
+            return new RocketEnemyShip();
+        }
+        else
+        {
+            return new BigUFOShip();
+        }
+    }
+};
+
+// global functions
+
+void doStuffEnemy(EnemyShip* anEnemyShip)
+{
+    anEnemyShip->followHeroShip();
+    anEnemyShip->displayEnemyShip();
+    anEnemyShip->enemyShipShoots();
+}
+int main(void)
+{
+    //---------------------------------------------------------
+    // Old Method which is terrible
+    //---------------------------------------------------------
+    // Get user input
+    // If user input is 1, create ufoShip
+    int userInput = 0;
+    cout << "Pleas enter 0 or 1" << endl;
+    cin >> userInput;
+    EnemyShip* Ship;
+    // Note: You basically put all these if, else into a class instead
+    if (userInput)
+    {
+        Ship = new UFOEnemyShip();
+    }
+    else
+    {
+        Ship = new RocketEnemyShip();
+    }
+    doStuffEnemy(Ship); // old ways to program a game , but not dynamic!
+    //---------------------------------------------------------
+    // Using Factory Design Method
+    //---------------------------------------------------------
+
+    EnemyShipFactory* shipFactory = new EnemyShipFactory();
+    EnemyShip* enemy = NULL;
+    cout << "Pleas enter 0 or 1 or 2" << endl;
+    cin >> userInput;
+    enemy = shipFactory->makeEnemyShip(userInput); // notice how the code is so much simpler cause you put selection into a class.
+    doStuffEnemy(enemy); // old ways to program a game , but not dynamic!
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 3 Builder Design Pattern
+//-------------------------------
+// To create an object made from a bunch of other objects
+// Each creation part is independent of main object
+// Hide creation of parts from user
+// Only builder knows the specifics 
+
+// Use Case 1: Too many Variables
+// Basically, if there is an object that contains a lot of member variables/objects. 
+// Lets say 100. 
+// Problem is: 
+//  Passing all 100 into 1 constructor is tedious
+//  Constructing all 100 variables is not efficient. 
+//  You may only get the variables 1 at a time instead of all 100. Waiting until you have all 100 variables 
+//  before you start constructing anything is a waste of time. 
+//
+//  Thus, you have the Builder class, each time you get 1 variable, you pass it to the Builder class to construct. 
+//  By the time you are done with passing in the 100th variable, the builder class already constructed all 99 other variables, 
+//  this final variable allows constructor class to finish constructing. Only when you are very sure with the 100 variables you pass in, 
+//  you can ask the Builder class to return to you the object that was constructed
+
+// Use Case 2: Similar Complex Design process 
+// Constructing a robot is a similar design proces. You need to make the arms and then make the legs. 
+// However, you can pass it variables so it does a different construction for arms and legs 
+// You can have classes that initialize all 100 variables for you. 
+// Then, you can pass those classes in as a parameter to the Builder, which reads those pre-defined variables and constructs the robot
+//-------------------------------
+/* //
+#include <string>
+#include <iostream> 
+using namespace std;
+
+// Interface
+class RobotPlan 
+{
+public:
+    // Each different construction method that accepts each different variable
+    virtual void setRobotArms(string arms) = 0;
+    virtual void setRobotLegs(string legs) = 0;
+    // Imagine there are 100 more of these
+};
+
+// Implement the plan with a specific robot
+class Robot : public RobotPlan
+{
+private: 
+    string robotArms;
+    string robotLegs;
+    // Imagine there are 100 more of these
+public:
+    void setRobotArms(string arms) 
+    {
+        this->robotArms = arms;
+    }
+    void setRobotLegs(string legs) 
+    {
+        this->robotLegs = legs;
+    }
+    string getRobotArms()
+    {
+        return robotArms;
+    }
+    string getRobotLegs()
+    {
+        return robotLegs;
+    }
+};
+
+// Interface For Building
+class RobotBuilder
+{
+public:
+    virtual void buildRobotArms() = 0;
+    virtual void buildRobotLegs() = 0;
+    virtual Robot* getRobot() = 0;
+};
+
+// A special type of robotBuilder that builds the robot with the 'Tamiya' Brand
+// Basically initializes all 100 paramaters for you so you don't have to remember them
+class TamiyaRobotBuilder : public RobotBuilder
+{
+private:
+    // The robot to be build
+    // note: can only declare pointers when have abstract classes
+    Robot* robot; // note: Similar to Strategy Design Pattern
+public:
+    // Build the robot
+    TamiyaRobotBuilder() 
+    {
+        this->robot = new Robot();
+    }
+    // Build the arms 
+    void buildRobotArms()
+    {
+        // Arms Version Tamiya is the default value forthe Arms variable for TamiyaRobot
+        robot->setRobotArms("Arms Version Tamiya");
+    }
+    // Build the legs
+    void buildRobotLegs()
+    {
+        // Legs Version Tamiya is the default value forthe Arms variable for TamiyaRobot
+        robot->setRobotLegs("Legs Version Tamiya");
+    }
+    // Return the robot that was build
+    Robot* getRobot() 
+    {
+        return this->robot;
+    }
+};
+
+// 
+class RobotEngineer 
+{
+private:
+    // Has a robot to build the robot
+    RobotBuilder* robotBuilder; // Note: Can only declare pointers for Abstract Classes
+public:
+    // Receives a variable robotBuilder, different variable returns the 
+    RobotEngineer(RobotBuilder* _robotBuilder)
+    {
+        this->robotBuilder = _robotBuilder;
+    }
+    // Get the robotBuilder to build the robot
+    Robot* getRobot() 
+    {
+        return this->robotBuilder->getRobot();
+    }
+    // Build the robot
+    void makeRobot() 
+    {
+        // Strategy Design Pattern here
+        this->robotBuilder->buildRobotArms();
+        this->robotBuilder->buildRobotLegs();
+    }
+};
+
+int main(void)
+{
+    // Create the robot using the blueprint defined in TamiyaRobotBuilder()
+    // This blueprint allows you to start passing in variables to start constructing each component
+    // Use the Tamiya Robot Builder brand
+    RobotBuilder* instanceRobot = new TamiyaRobotBuilder();
+    // Pass robot specification (you want it to be a Tamiya Robot) to engineer
+    // The Tamiya Robot class already contains the default values of all 100 parameters to create a Tamiya Robot
+    RobotEngineer* robotEngineer = new RobotEngineer(instanceRobot);
+    // Make engineer build the robot after passing in all specifications and variables
+    robotEngineer->makeRobot();
+    // Get the robot that is completely constructed and made by the engineer
+    Robot* completedRobot = robotEngineer->getRobot();
+    // Use the robot
+    cout << "Robot Built" << endl; 
+    cout << completedRobot->getRobotArms() << " | " << completedRobot->getRobotLegs() << endl;
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 4 Prototype Design Pattern
+//-------------------------------
+// Create new objects by cloning other objects
+// Adding of any subclass instance of known parent class at runtime 
+// A number of potential classes that want to use only if needed during runtime
+// Reduces need for creating subclasses
+// Used whenever you want to clone something instead of creating a new one
+// Clone => Maintains all attributes and properties
+// New => Make a new object with initial attribute and properties
+//
+// Application: 
+//      Bank Operations -> Clone your account information, perform work on clone until succeed
+//                         replace from original account only when done
+//                         You are essentally 'prototyping' on the clone and then releasing once it works
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Interface
+class Animal
+{
+public:
+    // All animals must have a way to clone itself
+    // For polymorphism
+    virtual Animal* makeCopy() const = 0;
+};
+
+class Sheep : public Animal 
+{
+private:
+    int weight;
+public:
+    Sheep() : weight(20) {};
+    Sheep(int _weight) : weight(_weight) {};
+    Animal* makeCopy() const
+    {
+        // note: NULL can only be passed into pointers
+        Sheep* sheepObj = NULL;
+        // Clone this sheep with same properties
+        sheepObj = new Sheep(this->weight);
+        return  sheepObj;
+    }
+    int getWeight() { return weight; }
+};
+
+class CloneFactory
+{
+public:
+    // Get the clone of this animal passed in
+    Animal* getClone(Animal* animal)
+    {
+        return animal->makeCopy();
+    }
+};
+
+int main(void)
+{
+    CloneFactory* animalMaker = new CloneFactory();
+    Sheep * a = new Sheep();
+    Sheep * clonedSheep = (Sheep *) animalMaker->getClone(a);
+    // Print to show that they are different
+    if (a == clonedSheep)
+        cout << "Both refer to same sheep" << endl;
+    else
+    {
+        cout << "Both refer to different sheep" << endl;
+        cout << " original: " << a->getWeight() << " | cloned: " << clonedSheep->getWeight() << endl;
+    }
+    return 0;
+}
+// */
 //---------------------------------------------------------------------------------------------------------------------------------
 // 1 Strategy Design Pattern 
 //-------------------------------
@@ -272,7 +727,122 @@ int main(void)
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 2 Observer Design Pattern
+// 2 Visitor Design Pattern
+//-------------------------------
+// To add methods to different classes without modifying those classes (honors open-closed principle)
+// Uses double dispatch => Operation depends on: 2 dynamic classes 
+//                          2 receivers are: The type of visitor class and the type element it visits (visitable)
+// Requires Visitable class to have an interface that allows you to add to it by just defining a new Visitor class. 
+// Thus, each time you need to make a new change, as long as your different classes already implements the Visitable Interface, 
+// you just need to make a new concreteVisitor and pass in that as a parameter to the object's accept function.
+// Classes:
+//      - Visitor Interface => A new interface that needs to be implemented by a new concreteClass that handles each different class differently. 
+//      - Concrete Visitor => Implements the Visitor Interface by adding many different visit() function accepting different type of classes (function overloading)
+//                            It implements the visit() method
+//                            Each different class has its own visit() method in ConcreteVisitor class
+//      - Visitable Interface => A new interface that needs to be implemented by the different classes that needs to change. 
+//                              Contains the Visit function. Instead of changing each different class, you just need to add in the method
+//                              accept(Visitor * visitor) { visitor->visit(this); }
+//      - Accept Function() => This is a simple method that is added to each different class that needs to be changed
+//      - Visit Function() => This is a method implemented by ConcreteVisitor
+// Applications: 
+//      Public API - Make new Visitor class for existing class to call the accept(visitor) function)_
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Visitor Interface
+class Visitor 
+{
+public:
+    virtual void visit(class TypeA* A) = 0;
+    virtual void visit(class TypeB* B) = 0;
+};
+
+// Concrete Visitor 1 => Count
+// note: Each type of class needs its own visit() method
+class CountVisitor : public Visitor 
+{
+private:
+    int numA, numB;
+public:
+    void visit(TypeA* A); 
+    void visit(TypeB* B);
+};
+
+// Concrete Visitor 2 => print
+class PrintVisitor : public Visitor 
+{
+public:
+    void visit(TypeA* A); 
+    void visit(TypeB* B);
+};
+
+// Visitable Interface
+// Each class that you want to change must implement Visitable Interface
+class Visitable
+{
+public:
+    virtual void accept(Visitor * visitor) = 0;
+    // note: Every class's accept implementation will be the same
+};
+
+class TypeA : public Visitable
+{
+public:
+    void accept(Visitor * visitor) 
+    {
+        visitor->visit(this);
+    }
+}; 
+
+class TypeB : public Visitable
+{
+public:
+    void accept(Visitor * visitor) 
+    {
+        visitor->visit(this);
+    }
+}; 
+
+void CountVisitor::visit(TypeA* A) 
+{
+    numA++;
+    cout << "numA is: " << numA << endl;
+}
+
+void CountVisitor::visit(TypeB* B) 
+{
+    numB--;
+    cout << "numB is: " << numB << endl;
+}
+
+void PrintVisitor::visit(TypeA* A) 
+{
+    cout << "Type A" << endl;
+}
+void PrintVisitor::visit(TypeB* B) 
+{
+    cout << "Type B" << endl;
+}
+
+int main(void)
+{
+    TypeA * a = new TypeA();
+    TypeB * b = new TypeB();
+    Visitor * v1 = new CountVisitor();
+    Visitor * v2 = new PrintVisitor();
+    a->accept(v1);
+    a->accept(v2);
+    b->accept(v1);
+    b->accept(v2);
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 3 Observer Design Pattern
 //-------------------------------
 // Used when:
 // - need many other objects to receive an update when another object changes
@@ -429,564 +999,510 @@ int main(void)
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 3 Factory Design Pattern
+// 4 Template Method Design Pattern
 //-------------------------------
-// used when:
-// Method returns one of several possible classes that share a common superclass
-// Basically, when don't know what class object will be needed
-// Centralize class selection code
-
-// For instance,
-// Create a new enemy in a game
-// RNG picks a random enemy type
-// Factory object will return a dynamically created enemy and throw it on the screen
-
-// In this example:
-// Parent Class : EnemyShip(), EnemyShipFactory()
-// Child Class : UFOEnemyShip(), RocketEnemyShip()
-// GrandChild Class: BigUFOShip
-// note: EnemyShipFactory basically returns a type of EnemyShip since you can't have a class returning itself.
+// Basically a Template Method will be defined in the mainInterface and how it is gonna work. 
+// Then in template method, it calls a bunch of submethods that are defined differently in different subclasses that implements this Template Method interface
+// Think of template implementation in C++ that allows you to customize the datatypes. 
+// For this, you have a template methods where you can customize the methods inside that template methods
+// You can customize local variables by defining abstract methods that returns different local variables
 //-------------------------------
 /* //
 #include <string>
 #include <iostream>
 using namespace std;
 
-class EnemyShip
+// TemplateMethod Interface
+class TemplateMethod
+{
+public:
+    // These are submethods that needs to be defined in children that implements this method
+    virtual void methodOne() = 0;
+    virtual void methodTwo() = 0;
+    virtual void methodThree() = 0;
+    virtual string getVarStr() = 0;
+    // This is the template method 
+    // It will always be the same, its just the variables inside it may change
+    void mainTemplateMethod() 
+    {
+        cout << "Doing some stuff before calling method 1" << endl;
+        // Call method one
+        methodOne();
+        cout << "Doing some stuff between method 1 and method 2" << endl;
+        methodTwo();
+        cout << "Doing some stuff between method 2 and method 3" << endl;
+        string haha = getVarStr(); 
+        cout << haha << endl;
+        // Call method 3 5 times
+        for(int i = 0; i < 5; i++)
+        {
+            methodThree();
+        }
+        cout << "Done calling method 3" << endl;
+    }
+};
+
+class subClassOne : public TemplateMethod
+{
+    // Override the abstract methods that needs to be implemented
+    void methodOne()
+    {
+        cout << "haha " << endl;
+    }
+    void methodTwo()
+    {
+        cout << "bebe " << endl;
+    }
+    void methodThree()
+    {
+        cout << "kiki " << endl;
+    }
+    string getVarStr() 
+    {
+        return "ChangeVariablesToo!";
+    }
+};
+
+int main(void)
+{
+    TemplateMethod* a = new subClassOne();
+    a->mainTemplateMethod();
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 5 Chain Of Responsibility Design Pattern
+//-------------------------------
+// Basically, a request comes to a linked list of objects, 
+// each object take turns to see if it is able to handle the request. 
+// If it does not, it sends the request to the next node in the list
+// If it is, it will handle it. After that, it can either:
+// i) continue to send the request to next node 
+// ii) end the request as it is handled
+// If no nodes are able to handle the request, the last node needs to handle the request the default way defined in the parent
+// used when: Want to set a chain of methods to try out on a request, easily extensible by just adding a new node into the chain
+// Classes: 
+//      Handler: Contains the default handle() if no nodes can process the request
+//      ConcreteHandler: Each node in the handler with its own implemented method to process the request
+//      Request: The class containing information about the request to be handled
+// Applications: Communication Networks where you only respond to a request if it matches your memory address ID. Otherwise, just pass it along the list 
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Note: In this example, the Request class is simply a double
+
+// Default handler if none of the node is able to handle
+class Handler 
+{
+protected:
+    Handler * successor; // next handler to call 
+public:
+    Handler() 
+    {
+        successor = NULL;
+    }
+    Handler(Handler * _next) 
+    {
+        successor = _next;
+    }
+    virtual void handle(double request) 
+    {
+        cout << "The cost: " << request << " is too high for any budget" << endl;
+    }
+    void setNext(Handler * _next)
+    {
+        successor = _next; 
+    }
+};
+
+// Handler in the first node
+class SubHandler : public Handler
 {
 private:
-    string name;
-    double amountDamage;
-
+    double budget; // specific for this example
 public:
-    string getName(){return name;}
-    void setName(string newName) {name = newName;}
-    double getDamage(){return amountDamage;}
-    void setDamage(double _amountDamage) {amountDamage = _amountDamage;}
-
-    // AI to follow the hero as an enemy
-    void followHeroShip()
+    SubHandler() : Handler() { budget = -1;}
+    SubHandler(double _budget) : Handler() 
     {
-        cout << name << " is following hero" << endl;
+        this->budget = _budget;
     }
-
-    void displayEnemyShip()
+    SubHandler(double _budget, Handler* _next) : Handler(_next) 
     {
-        cout << name << " is on the screen" << endl;
+        this->budget = _budget;
     }
-
-    void enemyShipShoots()
+    void handle(double request) 
     {
-        cout << name << " attacks!" << endl;
-    }
-};
-
-class UFOEnemyShip: public EnemyShip
-{
-public:
-    UFOEnemyShip()
-    {
-        setName("UFO Enemy Ship");
-        setDamage(20.0);
-    }
-};
-
-class RocketEnemyShip: public EnemyShip
-{
-public:
-    RocketEnemyShip()
-    {
-        setName("Rocket Enemy Ship");
-        setDamage(10.0);
-    }
-};
-
-class BigUFOShip: public UFOEnemyShip
-{
-public:
-    BigUFOShip()
-    {
-        setName("BIG UFO Enemy Ship");
-        setDamage(50.0);
-    }
-};
-
-// Factory Design Pattern handles decision making
-class EnemyShipFactory
-{
-public:
-    EnemyShip* makeEnemyShip(int newShipType)
-    {
-        EnemyShip* newShip = NULL;
-        if(newShipType == 1)
+        if (request <= this->budget) 
         {
-            return new UFOEnemyShip();
+            cout << "Purchase is made by this handler with budget " << budget << endl;
         }
-        else if(newShipType == 2)
+        else 
         {
-            return new RocketEnemyShip();
+            // Note: Can directly access successor because it is defined as protected
+            if (successor)
+            {
+                // Let the next node process the request
+                successor->handle(request);
+            }
+            else
+            {
+                // Call the default parent behavior
+                Handler::handle(request);
+            }
         }
+    }
+};
+
+int main(void)
+{
+    double purchase = 80.0; // price of requested item
+    Handler * ceo = new SubHandler(100000.0);
+    Handler * manager = new SubHandler(10000.0, ceo);
+    Handler * employee = new SubHandler(1000.0, manager);
+    Handler * intern = new SubHandler(100.0, employee);
+    Handler * a = intern;
+    // MISTAKE: A pointer of a parent class to a parent class object will automatically call the parent's class method!
+    //          Used to have:
+    //          Handler * a = new Handler(); a->setNext(intern);
+    //          Which was wrong cause you default to calling the parent's method in the calls to handle() below
+    a->handle(purchase);
+    purchase = 180.0;
+    a->handle(purchase);
+    purchase = 1180.0;
+    a->handle(purchase);
+    purchase = 11180.0;
+    a->handle(purchase);
+    purchase = 999999.0;
+    a->handle(purchase);
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 6 State Design Pattern
+//-------------------------------
+// To allow an objects behavior to vary based on its state during runtime without too many conditional statements
+// All state specific behavior is in a ConcreteState class, this ease maintenance such as adding a new state 
+// Do not rely on current state based on a variable in the Context class, doing so will require lots of conditional statements in that one class
+// Decentralization of State Classes => Each ConcreteState defines which other Concrete State it transitions to. 
+//      => Advantage: Easy to maintain 
+//      => Disadvantage: A coupling between ConcreteStates, each state must know of each other's existence
+// Classes: 
+//      Context/Machine => Interface for client  (Finite State Machine)
+//              => Maintains an instance of current concreteState using a StateInterface pointer, which identifies what state the Context is currently in
+//              => If implementing decentralization of state classes, need allow a way for ConcreteState to change the current state explicitly
+//              (Uses Strategy Design Pattern)
+//      State Interface => Interface for behavior of current state
+//      ConcreteState => Each individual state and its behavior
+// Applications: Finite State Machine
+//-------------------------------
+/* //
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Finite State Machine
+class Machine
+{
+private:
+    // NOTE: You need the word class here as State is only defined below
+    class State * current; // A pointer to the current state
+    double input; 
+public:
+    Machine();
+    // To set the current state
+    void setCurrent(State *s) 
+    {
+        this->current = s;
+    }
+    double getInput()
+    {
+        return this->input;
+    }
+    void setInput(double in)
+    {
+        this->input = in;
+    }
+    void act();
+};
+
+// State Interface 
+class State
+{
+public:
+    // Method to change state to set Machine m to state s
+    virtual void changeState(Machine *m) = 0; 
+    // A behavior
+    virtual void doAction() = 0 ; 
+};
+
+class ConcreteStateOne : public State
+{
+    void doAction() 
+    {
+        cout << "Action from State One" << endl;
+    }
+    void changeState(Machine *m);
+};
+
+class ConcreteStateTwo : public State
+{
+    void doAction() 
+    {
+        cout << "Action from State Two" << endl;
+    }
+    void changeState(Machine *m);
+};
+
+class ConcreteStateThree : public State
+{
+    void doAction() 
+    {
+        cout << "Action from State Three" << endl;
+    }
+    void changeState(Machine *m);
+};
+
+// Note: Whenever you have circular dependencies, you can only define the implementation after 
+//      providing all header file details (class definitions)
+// Constructor for Machine
+Machine::Machine()
+{
+    input = 0; 
+    // Initialize to first state
+    current = new ConcreteStateOne();
+}
+
+void Machine::act()
+{
+    // Note: Both doAction() and changeState() must be public and not protected for Machine to access them here
+    this->current->doAction();
+    this->current->changeState(this);
+}
+
+// Need only give implementation after including all classes that exist
+void ConcreteStateOne::changeState(Machine *m)
+{
+        m->setCurrent(new ConcreteStateTwo);
+        delete this;
+}
+void ConcreteStateTwo::changeState(Machine *m)
+{
+        if (m->getInput() < 0)
+            m->setCurrent(new ConcreteStateOne);
         else
-        {
-            return new BigUFOShip();
-        }
-    }
-};
-
-// global functions
-
-void doStuffEnemy(EnemyShip* anEnemyShip)
-{
-    anEnemyShip->followHeroShip();
-    anEnemyShip->displayEnemyShip();
-    anEnemyShip->enemyShipShoots();
+            m->setCurrent(new ConcreteStateThree);
+        delete this;
 }
+void ConcreteStateThree::changeState(Machine *m)
+{
+        return;
+        // Always stay at state three
+}
+
 int main(void)
 {
-    //---------------------------------------------------------
-    // Old Method which is terrible
-    //---------------------------------------------------------
-    // Get user input
-    // If user input is 1, create ufoShip
-    int userInput = 0;
-    cout << "Pleas enter 0 or 1" << endl;
-    cin >> userInput;
-    EnemyShip* Ship;
-    // Note: You basically put all these if, else into a class instead
-    if (userInput)
-    {
-        Ship = new UFOEnemyShip();
-    }
-    else
-    {
-        Ship = new RocketEnemyShip();
-    }
-    doStuffEnemy(Ship); // old ways to program a game , but not dynamic!
-    //---------------------------------------------------------
-    // Using Factory Design Method
-    //---------------------------------------------------------
+    Machine* m = new Machine();
+    // Perform action
+    m->act();
+    // Perform action
+    m->act();
+    m->act();
+    m->act();
+    m->act();
+    delete m;
+    cout << "To show next state depends on inputs" << endl;
+    m = new Machine();
+    m->setInput(-1);
+    m->act();
+    m->act();
+    m->act();
+    m->act();
 
-    EnemyShipFactory* shipFactory = new EnemyShipFactory();
-    EnemyShip* enemy = NULL;
-    cout << "Pleas enter 0 or 1 or 2" << endl;
-    cin >> userInput;
-    enemy = shipFactory->makeEnemyShip(userInput); // notice how the code is so much simpler cause you put selection into a class.
-    doStuffEnemy(enemy); // old ways to program a game , but not dynamic!
     return 0;
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-//TODO:
-// 4 Abstract Factory Design Pattern
+// 7 Memento Design Pattern
 //-------------------------------
-// refer to Derek Banas's video on youtube
-// Like a factory, but everything is encapsulated
-// This includes:
-// - Method that orders the object
-// - Factory that builds the object
-// - Final Objects
-// - Final object that contain objects that use the Strategy Pattern
-//-------------------------------
-/*
-#include <iostream> 
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 5 Singleton Design Pattern
-//-------------------------------
-// used when can only instantiate 1 object from a class
-// Examples: File Logging, Global Clock/Counter
-// Logging is acceptable for good design as it doesn't affect execution of code.
-// Basically, if object does not exist yet, create it. If it exist, return the existing object
-// Make sure sconstructor is private so there is no other way to create an object except using the createInstance in the static way
-
-// In this example:
-// Parent Class : SingletonCounter()
-// note: This demonstrates how to implement a global counter for all classes that needs to
-// access a global counter/clock  in a game for example as it should be the same clock.
-//-------------------------------
-/* // 
-#include <iostream>
-using namespace std;
-
-// A Singleton class
-class SingletonCounter
-{
-private:
-    int counterValue;
-    static SingletonCounter* firstInstance;
-    SingletonCounter()
-    {
-        // do nothing, but make it private so main() cannot use the constructor since it is private
-        // and is forced to use getInstance() method below
-        counterValue = 0;
-    }
-public:
-    // To return a static object, need to declare that you are returning a static object here
-    static SingletonCounter* getInstance()
-    {
-        if (firstInstance == NULL)
-        {
-            firstInstance = new SingletonCounter();
-        }
-        return firstInstance;
-    }
-    int getValue() {return counterValue;}
-    void setValue(int _value) {counterValue = _value;}
-};
-
-// To ensure that at start of program, firstInstance is NULL
-SingletonCounter* SingletonCounter::firstInstance = NULL;
-
-
-int main(void)
-{
-    SingletonCounter* uniqueInstance = SingletonCounter::getInstance();
-    cout << uniqueInstance->getValue() << endl;
-    // The below doesn't do anything as it retrieves back the same instace
-    uniqueInstance = SingletonCounter::getInstance();
-    // uniqueInstance2 points to the same object as uniqueInstance
-    SingletonCounter* uniqueInstance2 = SingletonCounter::getInstance();
-    uniqueInstance2->setValue(3);
-    // Note: Both having same value proving they are pointing to same object
-    cout << uniqueInstance2->getValue() << endl;
-    cout << uniqueInstance->getValue() << endl;
-    return 0;
-}
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 6 Builder Design Pattern
-//-------------------------------
-// To create an object made from a bunch of other objects
-// Each creation part is independent of main object
-// Hide creation of parts from user
-// Only builder knows the specifics 
-
-// Use Case 1: Too many Variables
-// Basically, if there is an object that contains a lot of member variables/objects. 
-// Lets say 100. 
-// Problem is: 
-//  Passing all 100 into 1 constructor is tedious
-//  Constructing all 100 variables is not efficient. 
-//  You may only get the variables 1 at a time instead of all 100. Waiting until you have all 100 variables 
-//  before you start constructing anything is a waste of time. 
+// To restore an object to its previous state after applying a temporary change (moment)
+// Classes:
+//      Originator => Object that saves Memento original state and creates a new temporary Memento with current state
+//      Caretaker => Going to modify  Memento but wants to undo the change, it requests Memento from Originator
+//                   It passes Memento back to Originator to revert the Memento back to original state.
+//                   Contains all previous versions of Memento.
+//      Memento => Object requested to Originator by Caretaker, which is later passed back into Originator to revert to original state
+//                 Must have interface for accessing necessary state variables for Originator, so that does not violate encapsulation
+//  Applications: 
+//      Random Number Generator always generates same number sequence with same seed(state)
+//      Saving a game`
+//      Undo and Redo operations in text editors
 //
-//  Thus, you have the Builder class, each time you get 1 variable, you pass it to the Builder class to construct. 
-//  By the time you are done with passing in the 100th variable, the builder class already constructed all 99 other variables, 
-//  this final variable allows constructor class to finish constructing. Only when you are very sure with the 100 variables you pass in, 
-//  you can ask the Builder class to return to you the object that was constructed
-
-// Use Case 2: Similar Complex Design process 
-// Constructing a robot is a similar design proces. You need to make the arms and then make the legs. 
-// However, you can pass it variables so it does a different construction for arms and legs 
-// You can have classes that initialize all 100 variables for you. 
-// Then, you can pass those classes in as a parameter to the Builder, which reads those pre-defined variables and constructs the robot
 //-------------------------------
 /* //
+#include <vector>
 #include <string>
-#include <iostream> 
+#include <iostream>
 using namespace std;
 
-// Interface
-class RobotPlan 
-{
-public:
-    // Each different construction method that accepts each different variable
-    virtual void setRobotArms(string arms) = 0;
-    virtual void setRobotLegs(string legs) = 0;
-    // Imagine there are 100 more of these
-};
-
-// Implement the plan with a specific robot
-class Robot : public RobotPlan
-{
-private: 
-    string robotArms;
-    string robotLegs;
-    // Imagine there are 100 more of these
-public:
-    void setRobotArms(string arms) 
-    {
-        this->robotArms = arms;
-    }
-    void setRobotLegs(string legs) 
-    {
-        this->robotLegs = legs;
-    }
-    string getRobotArms()
-    {
-        return robotArms;
-    }
-    string getRobotLegs()
-    {
-        return robotLegs;
-    }
-};
-
-// Interface For Building
-class RobotBuilder
-{
-public:
-    virtual void buildRobotArms() = 0;
-    virtual void buildRobotLegs() = 0;
-    virtual Robot* getRobot() = 0;
-};
-
-// A special type of robotBuilder that builds the robot with the 'Tamiya' Brand
-// Basically initializes all 100 paramaters for you so you don't have to remember them
-class TamiyaRobotBuilder : public RobotBuilder
+// Object that is to be saved
+class Memento
 {
 private:
-    // The robot to be build
-    // note: can only declare pointers when have abstract classes
-    Robot* robot; // note: Similar to Strategy Design Pattern
+    string state;
 public:
-    // Build the robot
-    TamiyaRobotBuilder() 
-    {
-        this->robot = new Robot();
-    }
-    // Build the arms 
-    void buildRobotArms()
-    {
-        // Arms Version Tamiya is the default value forthe Arms variable for TamiyaRobot
-        robot->setRobotArms("Arms Version Tamiya");
-    }
-    // Build the legs
-    void buildRobotLegs()
-    {
-        // Legs Version Tamiya is the default value forthe Arms variable for TamiyaRobot
-        robot->setRobotLegs("Legs Version Tamiya");
-    }
-    // Return the robot that was build
-    Robot* getRobot() 
-    {
-        return this->robot;
-    }
+    Memento(string s) : state(s) {}
+    string getState() {return state;}
+    void setState(string s) { state = s;}
 };
 
-// 
-class RobotEngineer 
+// Class that saves the current state, or restores a Memento to a saved state
+class Originator
 {
 private:
-    // Has a robot to build the robot
-    RobotBuilder* robotBuilder; // Note: Can only declare pointers for Abstract Classes
+    string savedState;
 public:
-    // Receives a variable robotBuilder, different variable returns the 
-    RobotEngineer(RobotBuilder* _robotBuilder)
+    void save(Memento* m) 
     {
-        this->robotBuilder = _robotBuilder;
+        savedState = m->getState();
     }
-    // Get the robotBuilder to build the robot
-    Robot* getRobot() 
+    Memento* createMemento()
     {
-        return this->robotBuilder->getRobot();
+        Memento* m = new Memento(savedState);
+        return m;
     }
-    // Build the robot
-    void makeRobot() 
+}; 
+
+class CareTaker
+{
+private:
+    vector<Memento *> mementos; // a list of all the saved momentos
+public:
+    void addMemento(Memento * m)
     {
-        // Strategy Design Pattern here
-        this->robotBuilder->buildRobotArms();
-        this->robotBuilder->buildRobotLegs();
+        mementos.push_back(m);
+    }
+    Memento * getMemento(int index)
+    {
+        return mementos[index];
     }
 };
 
 int main(void)
 {
-    // Create the robot using the blueprint defined in TamiyaRobotBuilder()
-    // This blueprint allows you to start passing in variables to start constructing each component
-    // Use the Tamiya Robot Builder brand
-    RobotBuilder* instanceRobot = new TamiyaRobotBuilder();
-    // Pass robot specification (you want it to be a Tamiya Robot) to engineer
-    // The Tamiya Robot class already contains the default values of all 100 parameters to create a Tamiya Robot
-    RobotEngineer* robotEngineer = new RobotEngineer(instanceRobot);
-    // Make engineer build the robot after passing in all specifications and variables
-    robotEngineer->makeRobot();
-    // Get the robot that is completely constructed and made by the engineer
-    Robot* completedRobot = robotEngineer->getRobot();
-    // Use the robot
-    cout << "Robot Built" << endl; 
-    cout << completedRobot->getRobotArms() << " | " << completedRobot->getRobotLegs() << endl;
+    Originator* origin = new Originator(); 
+    CareTaker* care = new CareTaker();
+    Memento * m1 = new Memento("State 1");
+    origin->save(m1);
+    // Add first State
+    care->addMemento(origin->createMemento());
+    Memento * m2 = new Memento("State 2");
+    origin->save(m2);
+    // Add second State
+    care->addMemento(origin->createMemento());
+
+    // Get back first state
+    origin->save(care->getMemento(0));
+    Memento * m3 = origin->createMemento();
+    cout << "First saved state is: " << m3->getState() << endl;
     return 0;
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 7 Prototype Design Pattern
+// 8 Mediator Design Pattern
 //-------------------------------
-// Create new objects by cloning other objects
-// Adding of any subclass instance of known parent class at runtime 
-// A number of potential classes that want to use only if needed during runtime
-// Reduces need for creating subclasses
-// Used whenever you want to clone something instead of creating a new one
-// Clone => Maintains all attributes and properties
-// New => Make a new object with initial attribute and properties
-//
-// Application: 
-//      Bank Operations -> Clone your account information, perform work on clone until succeed
-//                         replace from original account only when done
-//                         You are essentally 'prototyping' on the clone and then releasing once it works
+// Handles communication between objects
+// Reduces dependencies between how objects communicate => loosely coupled
+// Allows many to many relationships, mappings between relationships is easier
+// Classes:
+//      - Mediator Interface => Interface for communication betwee Colleague Objects
+//      - ConcreteMediator > Coordinates communication between Colleague objects 
+//      - Colleague -> Communicates with other Colleague through its Mediator
+//  Applications:
+//      Control Tower => All airplanes communicate via control tower. 
+//      Router => All devices (phone, laptop) communicate via router
+//      Unix Control Groups => A group can have >= 0 users, a user can have >= groups
 //-------------------------------
 /* //
+#include <map>
 #include <string>
 #include <iostream>
 using namespace std;
 
-// Interface
-class Animal
+class Mediator
 {
 public:
-    // All animals must have a way to clone itself
-    // For polymorphism
-    virtual Animal* makeCopy() const = 0;
+    virtual void send(const int id, const string message) = 0;
 };
 
-class Sheep : public Animal 
+class ConcreteMediator : public Mediator
 {
 private:
-    int weight;
+    map<int, class Colleague*> colleagues;
+    bool exist(int id);
 public:
-    Sheep() : weight(20) {};
-    Sheep(int _weight) : weight(_weight) {};
-    Animal* makeCopy() const
-    {
-        // note: NULL can only be passed into pointers
-        Sheep* sheepObj = NULL;
-        // Clone this sheep with same properties
-        sheepObj = new Sheep(this->weight);
-        return  sheepObj;
-    }
-    int getWeight() { return weight; }
+    void setColleague(Colleague * c);
+    void send(int id, const string message);
 };
 
-class CloneFactory
+class Colleague
 {
+private:
+    Mediator * mediator; 
+    int id;
 public:
-    // Get the clone of this animal passed in
-    Animal* getClone(Animal* animal)
+    Colleague(int _id) : id(_id) {}
+    int getId() { return id; }
+    // MISTAKE: Only constructors take the form  className() : mediator(m) {}
+    void setMediator(Mediator * m) 
     {
-        return animal->makeCopy();
+        mediator = m;
+    }
+    void receive (const string  msg)
+    {
+        cout << "Message received by " << id << ": " << msg << endl;
+    }
+    void send (int sendId, string msg)
+    {
+        cout << id << " send message to " << sendId << ": " << msg << endl;
+        mediator->send(sendId, msg);
     }
 };
+
+bool ConcreteMediator::exist(int id)
+{
+    return colleagues.find(id) != colleagues.end();
+}
+void ConcreteMediator::setColleague(Colleague * c)
+{
+    if (!exist(c->getId()))
+    {
+        c->setMediator(this);
+        colleagues[c->getId()] = c;
+    } 
+}
+void ConcreteMediator::send(int id, const string message)
+{
+    if(exist(id))
+    {
+        Colleague *c = colleagues[id];
+        c->receive(message);
+    }
+}
 
 int main(void)
 {
-    CloneFactory* animalMaker = new CloneFactory();
-    Sheep * a = new Sheep();
-    Sheep * clonedSheep = (Sheep *) animalMaker->getClone(a);
-    // Print to show that they are different
-    if (a == clonedSheep)
-        cout << "Both refer to same sheep" << endl;
-    else
-    {
-        cout << "Both refer to different sheep" << endl;
-        cout << " original: " << a->getWeight() << " | cloned: " << clonedSheep->getWeight() << endl;
-    }
-    return 0;
-}
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 8 Decorator Design Pattern
-//-------------------------------
-// Modify an object dynamically 
-// Extend capability of object (similar to inheritance) but do so at runtime. 
-// Add functionality using many simple classes
-// Basically, keep passing each class into each other's constructor and adding properties to its variables as passed into constructors
-
-// Example application: Pizza Toppings, Each different topping you add on a pizza increases its costs. 
-//-------------------------------
-/* //
-#include <string>
-#include <iostream>
-using namespace std;
-
-// Interface 
-class Pizza 
-{
-public:
-    virtual string getDescription() const = 0;
-    virtual double getCost() const = 0;
-};    
-
-// An empty pizza
-class PlainPizza : public Pizza
-{
-private:
-    string description;
-    double cost; 
-public:
-    PlainPizza() 
-    {
-        cost = 0.20;
-        description = "A plain Pizza"; 
-    }
-    string getDescription() const
-    {
-        return description;
-    }
-    double getCost() const
-    {
-        return cost;
-    }
-};
-
-// Toppings implements the interface and contains a pizza 
-class Toppings : public Pizza
-{
-private: 
-    Pizza* abc; 
-public:
-    Toppings(Pizza * a)
-    {
-        this->abc = a; 
-    }
-    string getDescription() const
-    {
-        return this->abc->getDescription();
-    }
-    double getCost() const
-    {
-        return this->abc->getCost();
-    }
-};
-
-class ToppingTypeOne : public Toppings
-{
-public:
-    ToppingTypeOne(Pizza * a) : Toppings(a)
-    {
-        // Call parent constructor above
-    }
-    string getDescription() const
-    {
-        return Toppings::getDescription() + ", Topping One";
-    }
-    double getCost() const
-    {
-        return Toppings::getCost() + 0.50;
-    }
-};
-
-class ToppingTypeTwo : public Toppings
-{
-public:
-    ToppingTypeTwo(Pizza * a) : Toppings(a)
-    {
-        // Call parent constructor above
-    }
-    string getDescription() const
-    {
-        return Toppings::getDescription() + ", Topping Two";
-    }
-    double getCost() const
-    {
-        return Toppings::getCost() + 0.35;
-    }
-};
-
-int main(void) 
-{
-    Pizza* basicPizza = new ToppingTypeTwo(new ToppingTypeOne(new PlainPizza()));
-    cout << "Pizza is: " <<  basicPizza->getDescription() << endl;
-    cout << "Total Cost: " << basicPizza->getCost() << endl;
+    Colleague * peter = new Colleague(1);
+    Colleague * paul = new Colleague(2);
+    ConcreteMediator * m = new ConcreteMediator();
+    m->setColleague(peter);
+    m->setColleague(paul);
+    peter->send(2, "haha");
+    paul->send(1, "lala");
+    // Note: Can also send message to self through mediator
+    paul->send(2, "lala");
     return 0;
 }
 // */
@@ -1174,739 +1690,7 @@ int main(void)
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 10 Adapter Design Pattern
-//-------------------------------
-// To allow 2 incompatible interfaces to work together. 
-// Used when client expects a certain interface
-// All classes must implement every method defined by the shared interface
-// 
-//-------------------------------
-/* //
-#include <string>
-#include <iostream>
-using namespace std;
-
-// Target Interface
-// note: This is what the client expects to see
-class TargetInterface
-{
-public:
-    virtual void attackSwords() const = 0; 
-    virtual void defendShields() const = 0; 
-};
-
-// Implementation of Client Interface
-class OldWeapons : public TargetInterface
-{
-public:
-    void attackSwords() const
-    {
-        cout << "Attack with Swords" << endl;
-    }
-    void defendShields() const 
-    {
-        cout << "Defend with Shields" << endl;
-    }
-};
-
-// Implementation of Actual Interface that exists
-class ActualInterface
-{
-public:
-    void attackBombs() 
-    {
-        cout << "Attack with Bombs" << endl;
-    }
-    void defendTowers()
-    {
-        cout << "Defend with Towers" << endl;
-    }
-};
-
-class Adapter : public TargetInterface
-{
-private:
-    ActualInterface* act; 
-public:
-    Adapter(ActualInterface* a)
-    {
-        act = a;
-    }
-    void attackSwords() const
-    {
-        act->attackBombs();
-    }
-    void defendShields() const
-    {
-        act->defendTowers();
-    }
-};
-
-int main(void)
-{
-    ActualInterface* latest = new ActualInterface;
-    Adapter* adapt = new Adapter(latest);
-    adapt->attackSwords(); // note: It calls the bombs instead of sword
-    adapt->defendShields(); // note: It calls the towers instead of shields
-    return 0;
-}
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 11 Template Method Design Pattern
-//-------------------------------
-// Basically a Template Method will be defined in the mainInterface and how it is gonna work. 
-// Then in template method, it calls a bunch of submethods that are defined differently in different subclasses that implements this Template Method interface
-// Think of template implementation in C++ that allows you to customize the datatypes. 
-// For this, you have a template methods where you can customize the methods inside that template methods
-// You can customize local variables by defining abstract methods that returns different local variables
-//-------------------------------
-/* //
-#include <string>
-#include <iostream>
-using namespace std;
-
-// TemplateMethod Interface
-class TemplateMethod
-{
-public:
-    // These are submethods that needs to be defined in children that implements this method
-    virtual void methodOne() = 0;
-    virtual void methodTwo() = 0;
-    virtual void methodThree() = 0;
-    virtual string getVarStr() = 0;
-    // This is the template method 
-    // It will always be the same, its just the variables inside it may change
-    void mainTemplateMethod() 
-    {
-        cout << "Doing some stuff before calling method 1" << endl;
-        // Call method one
-        methodOne();
-        cout << "Doing some stuff between method 1 and method 2" << endl;
-        methodTwo();
-        cout << "Doing some stuff between method 2 and method 3" << endl;
-        string haha = getVarStr(); 
-        cout << haha << endl;
-        // Call method 3 5 times
-        for(int i = 0; i < 5; i++)
-        {
-            methodThree();
-        }
-        cout << "Done calling method 3" << endl;
-    }
-};
-
-class subClassOne : public TemplateMethod
-{
-    // Override the abstract methods that needs to be implemented
-    void methodOne()
-    {
-        cout << "haha " << endl;
-    }
-    void methodTwo()
-    {
-        cout << "bebe " << endl;
-    }
-    void methodThree()
-    {
-        cout << "kiki " << endl;
-    }
-    string getVarStr() 
-    {
-        return "ChangeVariablesToo!";
-    }
-};
-
-int main(void)
-{
-    TemplateMethod* a = new subClassOne();
-    a->mainTemplateMethod();
-    return 0;
-}
-
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 12 Composite Design Pattern
-//-------------------------------
-// To represent part-whole hierarchies 
-// Can structure data, or represent inner working of every part of an object individually
-// Allows a client on running methods on both single objects and composite objects (composed of many single objects and/or composite objects) the same way
-// Component Interface => Interface for all objects including composite objects. 
-//                      Allows accessing components recursively
-//  Primitive/Leaf => Represent end points of the composition
-//  Composite => Represent a component that may have children
-//  note: Both primitive and composite needs to be handled differently, but on Component Interface, they are called the same
-// Application: e.g. Computer Graphics project where you multiply the matrix recursively along the tree. 
-//-------------------------------
-/* //
-#include <vector> 
-#include <string>
-#include <iostream>
-using namespace std;
-
-// Component Interface
-class Component
-{
-public:
-    virtual void traverse() const = 0;
-};
-
-class Primitive : public Component
-{
-private:
-    int value;
-public: 
-    Primitive(int _value) 
-    {
-        this->value = _value;
-    }
-    void traverse() const
-    {
-        cout << value << " ";
-    }
-};
-
-class Composite : public Component
-{
-private:
-    int value;
-    vector<Component *> vec; // note: It is Component to be able to contain either Primitive or another Composite
-public:
-    Composite(int _value)
-    {
-        value = _value;
-    }
-    void traverse() const
-    {
-        cout << value << " ";
-        for(int i = 0 ; i < vec.size() ; i++)
-        {
-            vec[i]->traverse();
-        }
-    }
-    // Mistake: Used add Composite* instead of add Component * here, then it couldn't add Primitive*
-    void add(Component* a) 
-    {
-        vec.push_back(a);
-    }
-};
-
-
-// Can have further classes defined inside Composite itself
-class Row : public Composite
-{
-public:
-    Row(int val) : Composite(val) {}
-    void traverse() const
-    {
-        cout << "Row:"; 
-        // Call parent's traverse
-        Composite::traverse();
-    }
-};
-
-class Col : public Composite
-{
-public:
-    Col(int val) : Composite(val) {}
-    void traverse() const
-    {
-        cout << "Col:"; 
-        // Call parent's traverse
-        Composite::traverse();
-    }
-};
-
-int main(void)
-{
-    Row * first = new Row(1);
-    Col * second = new Col(2);
-    Col * third = new Col(3);
-    Row * fourth = new Row(4);
-    Row * fifth = new Row(5);
-    first->add(second);
-    first->add(third);
-    third->add(fourth);
-    third->add(fifth);
-    // Add leaves
-    first->add(new Primitive(6));
-    second->add(new Primitive(7));
-    third->add(new Primitive(8));
-    fourth->add(new Primitive(9));
-    fifth->add(new Primitive(10));
-    // note: It does a DFS
-    first->traverse();
-    // 1-6
-    // |\
-    // 2 3-8
-    // | |\
-    // 7 4 5
-    //   |  \
-    //   9   10
-    return 0;
-}
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 13 Flyweight Design Pattern
-//-------------------------------
-// Flyweight object -> Objects that do not contain a lot of data => light weight => can fly
-// To minimize memory use by sharing as much data as possible
-// Share some part of the object state
-// Intrinsic State => State that can be shared
-// Extrinsic State => State that is unique to each object
-// Used when data is constant (intrinsic data) in a lot of different objects
-// A client class for containing extrinsic data and pass the extrinsic data to flyweight objects as necessary 
-// Flyweight object contains intrinsic data
-// note: Flyweight object must be immutable so that sharing of data is safe during concurrency
-// Classes:
-// i) Flyweight Interface: How flyweight object retrieves extrinsic data and act on it
-// ii) ConcreteFlyweight : Implementation of Flyweight interface storing only intrinsic data
-// iii) FlyweightFactory : Create and manage sharing of flyweight objects, garbage collection of flyweight objects
-// iv) Client: Keeps references to flyweight objects needed, stores/computes extrinsic data, can only obtain flyweight objects using FlyweightFactory
-//
-// Application: Text editor, each alphabet's data to draw on a screen is stored in a class
-//              Then, text editor only has to keep track of the position alphabet to be drawn instead of how exactly to draw the alphabet
-// Application: Cache -> Load all images at once and store inside Flyweight objects, refer to Flyweight objects later
-// Problem: Longer runtime as need to compute extrinsic data and retrieve intrinsic data from client
-//-------------------------------
-/* // 
-#include <map> 
-#include <string>
-#include <iostream>
-using namespace std;
-
-// Define external data to pass in to it (in this case, int x and int y)
-class FlyweightInterface
-{
-public:
-    virtual void draw(int x, int y) const = 0;
-};
-
-// Implement FlyweightInterface including intrinsic data
-class ConcreteFlyweight : public FlyweightInterface
-{
-private:
-    string color; // intrinsic data that is shared
-public:
-    ConcreteFlyweight(string _color)
-    {
-        this->color = _color;
-    }
-    void draw(int x, int y) const
-    {
-        cout << "Drawing an object with color: " << color << " and positions x:" << x << " y:" << y << endl;
-    }
-};
-
-class FlyweightFactory
-{
-private:
-    // Maintains existing ConcreteFlyweight objects and returns them as necessary 
-    // Mistake: Must also declare the shared hashtable of objects to be static
-    static map<string, ConcreteFlyweight*> mappings;
-
-    // Needed to initialize static map in C++ 
-    static map<string, ConcreteFlyweight*> initMap()
-    {
-       map<string, ConcreteFlyweight*> temp;
-       temp["none"] =  new ConcreteFlyweight("none");
-       return temp;
-    }
-public:
-    static ConcreteFlyweight* getFlyWeight(string color)
-    {
-        ConcreteFlyweight* flyObj = mappings[color];
-        // If flyObj returns NULL
-        if(!flyObj)
-        {
-            cout << "Creating new flyweight object with color: " << color << endl;
-            flyObj = new ConcreteFlyweight(color);
-            mappings[color] = flyObj;
-        }
-        else 
-        {
-            cout << "Using created flyweight object" << endl;
-        }
-        return flyObj;
-    }
-};
-
-// IMPORTANT!
-// Mistake: Must initialize static members
-// Thus, must define initMap() function privately for initialization of static map
-map<string, ConcreteFlyweight*> FlyweightFactory::mappings = initMap();
-
-int main(void)
-{
-    // Client
-    ConcreteFlyweight* blueRect = FlyweightFactory::getFlyWeight("blue");
-    blueRect->draw(3, 5);
-    blueRect->draw(7, 8);
-    ConcreteFlyweight* redRect = FlyweightFactory::getFlyWeight("red");
-    redRect->draw(1,2);
-    blueRect->draw(4, 6);
-    return 0;
-}
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 14 State Design Pattern
-//-------------------------------
-// To allow an objects behavior to vary based on its state during runtime without too many conditional statements
-// All state specific behavior is in a ConcreteState class, this ease maintenance such as adding a new state 
-// Do not rely on current state based on a variable in the Context class, doing so will require lots of conditional statements in that one class
-// Decentralization of State Classes => Each ConcreteState defines which other Concrete State it transitions to. 
-//      => Advantage: Easy to maintain 
-//      => Disadvantage: A coupling between ConcreteStates, each state must know of each other's existence
-// Classes: 
-//      Context/Machine => Interface for client  (Finite State Machine)
-//              => Maintains an instance of current concreteState using a StateInterface pointer, which identifies what state the Context is currently in
-//              => If implementing decentralization of state classes, need allow a way for ConcreteState to change the current state explicitly
-//              (Uses Strategy Design Pattern)
-//      State Interface => Interface for behavior of current state
-//      ConcreteState => Each individual state and its behavior
-// Applications: Finite State Machine
-//-------------------------------
-/* //
-#include <string>
-#include <iostream>
-using namespace std;
-
-// Finite State Machine
-class Machine
-{
-private:
-    // NOTE: You need the word class here as State is only defined below
-    class State * current; // A pointer to the current state
-    double input; 
-public:
-    Machine();
-    // To set the current state
-    void setCurrent(State *s) 
-    {
-        this->current = s;
-    }
-    double getInput()
-    {
-        return this->input;
-    }
-    void setInput(double in)
-    {
-        this->input = in;
-    }
-    void act();
-};
-
-// State Interface 
-class State
-{
-public:
-    // Method to change state to set Machine m to state s
-    virtual void changeState(Machine *m) = 0; 
-    // A behavior
-    virtual void doAction() = 0 ; 
-};
-
-class ConcreteStateOne : public State
-{
-    void doAction() 
-    {
-        cout << "Action from State One" << endl;
-    }
-    void changeState(Machine *m);
-};
-
-class ConcreteStateTwo : public State
-{
-    void doAction() 
-    {
-        cout << "Action from State Two" << endl;
-    }
-    void changeState(Machine *m);
-};
-
-class ConcreteStateThree : public State
-{
-    void doAction() 
-    {
-        cout << "Action from State Three" << endl;
-    }
-    void changeState(Machine *m);
-};
-
-// Note: Whenever you have circular dependencies, you can only define the implementation after 
-//      providing all header file details (class definitions)
-// Constructor for Machine
-Machine::Machine()
-{
-    input = 0; 
-    // Initialize to first state
-    current = new ConcreteStateOne();
-}
-
-void Machine::act()
-{
-    // Note: Both doAction() and changeState() must be public and not protected for Machine to access them here
-    this->current->doAction();
-    this->current->changeState(this);
-}
-
-// Need only give implementation after including all classes that exist
-void ConcreteStateOne::changeState(Machine *m)
-{
-        m->setCurrent(new ConcreteStateTwo);
-        delete this;
-}
-void ConcreteStateTwo::changeState(Machine *m)
-{
-        if (m->getInput() < 0)
-            m->setCurrent(new ConcreteStateOne);
-        else
-            m->setCurrent(new ConcreteStateThree);
-        delete this;
-}
-void ConcreteStateThree::changeState(Machine *m)
-{
-        return;
-        // Always stay at state three
-}
-
-int main(void)
-{
-    Machine* m = new Machine();
-    // Perform action
-    m->act();
-    // Perform action
-    m->act();
-    m->act();
-    m->act();
-    m->act();
-    delete m;
-    cout << "To show next state depends on inputs" << endl;
-    m = new Machine();
-    m->setInput(-1);
-    m->act();
-    m->act();
-    m->act();
-    m->act();
-
-    return 0;
-}
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 15 Proxy Design Pattern
-//-------------------------------
-// Create a wrapper for high time/space complexity objects, and get them only when needed
-// Defer full cost of creation until we need the actual object. 
-// Proxy => A place holder for an expensive object
-// Application: Copy on write (Copying a large object takes a long time, if its read only, then use flyweight)
-//              Only when you wanna write it (change it to be unique, then you can copy it)
-// Application: Garbage Collection Automation (Reference Counting Pointer)
-//              Proxy keeps a reference count to an actual object being read, when no more pointers 
-//              points to that object, delete it from memory as it is no longer needed
-// Application: Large Files
-//      Images in Webpages, (images in webpages take long time to load, so put a proxy(placeholder) 
-//      first and load them later only when the user has scrolled down to them and it is needed
-// Application: Security
-//      Limit access to actual class based on security
-//  Application: Lock
-//      Ensure current thread has a lock before accessing a resource
-//-------------------------------
-/* //
-#include <string>
-#include <cstdlib>
-#include <iostream>
-using namespace std;
-
-// Interface to Proxy an actual object, known as Subject
-// Need to be implemented by both actual object and proxy object
-class ProxyInterface
-{
-public:
-    virtual void drawImage() = 0;
-};
-
-class ActualImage : public ProxyInterface
-{
-private:    
-    // The actual image
-    double** image; 
-    int N; // specific only for this example
-public:
-    // Creating an actual image is an expensive process
-    ActualImage(string pathToImage)
-    {
-        cout << "Loading image from " << pathToImage << endl;
-        N = 3;
-        image = (double **) malloc(sizeof(double*) * N); 
-        for(int i = 0; i < N; i++)
-        {
-            image[i] = (double *) malloc(sizeof(double) * N);
-        }
-        for(int i = 0; i < N;i++)
-        {
-            for(int j = 0; j < N; j++)
-            {
-                image[i][j] = i-j;
-            }
-        }
-    }
-    void drawImage()
-    {
-        for(int i = 0; i < N;i++)
-        {
-            for(int j = 0; j < N; j++)
-            {
-                cout << image[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-};
-
-class ProxyImage : public ProxyInterface
-{
-private:
-    // ProxyImage must contain a reference to ActualImage
-    ActualImage* placeHolder; 
-    string pathToImage; // ProxyImage need to contain data to load ActualImage only when necessary. This is like temporary small data needed for loading 
-public:
-    ProxyImage(string _pathToImage) 
-    {
-        this->pathToImage = _pathToImage;
-        this->placeHolder = NULL;
-    }
-    void drawImage()
-    {
-        // Now only create image when needed
-        placeHolder = new ActualImage(pathToImage);
-        placeHolder->drawImage();
-        delete placeHolder;
-    }
-};
-
-int main(void)
-{
-    string imagePath = "data/img.jpg";
-    // Create a proxy image, fast operation
-    cout << "Creating Proxy Image" << endl;
-    ProxyInterface* a = new ProxyImage(imagePath);
-    cout << "Drawing Proxy Image" << endl;
-    // Draw proxy image, slow operation as it only creates the actual image as needed now
-    a->drawImage();
-    return 0;
-}    
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 16 Chain Of Responsibility Design Pattern
-//-------------------------------
-// Basically, a request comes to a linked list of objects, 
-// each object take turns to see if it is able to handle the request. 
-// If it does not, it sends the request to the next node in the list
-// If it is, it will handle it. After that, it can either:
-// i) continue to send the request to next node 
-// ii) end the request as it is handled
-// If no nodes are able to handle the request, the last node needs to handle the request the default way defined in the parent
-// used when: Want to set a chain of methods to try out on a request, easily extensible by just adding a new node into the chain
-// Classes: 
-//      Handler: Contains the default handle() if no nodes can process the request
-//      ConcreteHandler: Each node in the handler with its own implemented method to process the request
-//      Request: The class containing information about the request to be handled
-// Applications: Communication Networks where you only respond to a request if it matches your memory address ID. Otherwise, just pass it along the list 
-//-------------------------------
-/* //
-#include <string>
-#include <iostream>
-using namespace std;
-
-// Note: In this example, the Request class is simply a double
-
-// Default handler if none of the node is able to handle
-class Handler 
-{
-protected:
-    Handler * successor; // next handler to call 
-public:
-    Handler() 
-    {
-        successor = NULL;
-    }
-    Handler(Handler * _next) 
-    {
-        successor = _next;
-    }
-    virtual void handle(double request) 
-    {
-        cout << "The cost: " << request << " is too high for any budget" << endl;
-    }
-    void setNext(Handler * _next)
-    {
-        successor = _next; 
-    }
-};
-
-// Handler in the first node
-class SubHandler : public Handler
-{
-private:
-    double budget; // specific for this example
-public:
-    SubHandler() : Handler() { budget = -1;}
-    SubHandler(double _budget) : Handler() 
-    {
-        this->budget = _budget;
-    }
-    SubHandler(double _budget, Handler* _next) : Handler(_next) 
-    {
-        this->budget = _budget;
-    }
-    void handle(double request) 
-    {
-        if (request <= this->budget) 
-        {
-            cout << "Purchase is made by this handler with budget " << budget << endl;
-        }
-        else 
-        {
-            // Note: Can directly access successor because it is defined as protected
-            if (successor)
-            {
-                // Let the next node process the request
-                successor->handle(request);
-            }
-            else
-            {
-                // Call the default parent behavior
-                Handler::handle(request);
-            }
-        }
-    }
-};
-
-int main(void)
-{
-    double purchase = 80.0; // price of requested item
-    Handler * ceo = new SubHandler(100000.0);
-    Handler * manager = new SubHandler(10000.0, ceo);
-    Handler * employee = new SubHandler(1000.0, manager);
-    Handler * intern = new SubHandler(100.0, employee);
-    Handler * a = intern;
-    // MISTAKE: A pointer of a parent class to a parent class object will automatically call the parent's class method!
-    //          Used to have:
-    //          Handler * a = new Handler(); a->setNext(intern);
-    //          Which was wrong cause you default to calling the parent's method in the calls to handle() below
-    a->handle(purchase);
-    purchase = 180.0;
-    a->handle(purchase);
-    purchase = 1180.0;
-    a->handle(purchase);
-    purchase = 11180.0;
-    a->handle(purchase);
-    purchase = 999999.0;
-    a->handle(purchase);
-    return 0;
-}
-// */
-//---------------------------------------------------------------------------------------------------------------------------------
-// 17 Interpreter Design Pattern
+// 10 Interpreter Design Pattern
 //-------------------------------
 // To evaluate sentences in a language 
 // Convert one representation of data into another
@@ -2092,299 +1876,514 @@ int main(void)
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 18 Mediator Design Pattern
+// 1 Decorator Design Pattern
 //-------------------------------
-// Handles communication between objects
-// Reduces dependencies between how objects communicate => loosely coupled
-// Allows many to many relationships, mappings between relationships is easier
-// Classes:
-//      - Mediator Interface => Interface for communication betwee Colleague Objects
-//      - ConcreteMediator > Coordinates communication between Colleague objects 
-//      - Colleague -> Communicates with other Colleague through its Mediator
-//  Applications:
-//      Control Tower => All airplanes communicate via control tower. 
-//      Router => All devices (phone, laptop) communicate via router
-//      Unix Control Groups => A group can have >= 0 users, a user can have >= groups
+// Modify an object dynamically 
+// Extend capability of object (similar to inheritance) but do so at runtime. 
+// Add functionality using many simple classes
+// Basically, keep passing each class into each other's constructor and adding properties to its variables as passed into constructors
+
+// Example application: Pizza Toppings, Each different topping you add on a pizza increases its costs. 
 //-------------------------------
 /* //
-#include <map>
 #include <string>
 #include <iostream>
 using namespace std;
 
-class Mediator
+// Interface 
+class Pizza 
 {
 public:
-    virtual void send(const int id, const string message) = 0;
-};
+    virtual string getDescription() const = 0;
+    virtual double getCost() const = 0;
+};    
 
-class ConcreteMediator : public Mediator
+// An empty pizza
+class PlainPizza : public Pizza
 {
 private:
-    map<int, class Colleague*> colleagues;
-    bool exist(int id);
+    string description;
+    double cost; 
 public:
-    void setColleague(Colleague * c);
-    void send(int id, const string message);
-};
-
-class Colleague
-{
-private:
-    Mediator * mediator; 
-    int id;
-public:
-    Colleague(int _id) : id(_id) {}
-    int getId() { return id; }
-    // MISTAKE: Only constructors take the form  className() : mediator(m) {}
-    void setMediator(Mediator * m) 
+    PlainPizza() 
     {
-        mediator = m;
+        cost = 0.20;
+        description = "A plain Pizza"; 
     }
-    void receive (const string  msg)
+    string getDescription() const
     {
-        cout << "Message received by " << id << ": " << msg << endl;
+        return description;
     }
-    void send (int sendId, string msg)
+    double getCost() const
     {
-        cout << id << " send message to " << sendId << ": " << msg << endl;
-        mediator->send(sendId, msg);
+        return cost;
     }
 };
 
-bool ConcreteMediator::exist(int id)
+// Toppings implements the interface and contains a pizza 
+class Toppings : public Pizza
 {
-    return colleagues.find(id) != colleagues.end();
-}
-void ConcreteMediator::setColleague(Colleague * c)
-{
-    if (!exist(c->getId()))
+private: 
+    Pizza* abc; 
+public:
+    Toppings(Pizza * a)
     {
-        c->setMediator(this);
-        colleagues[c->getId()] = c;
-    } 
-}
-void ConcreteMediator::send(int id, const string message)
-{
-    if(exist(id))
-    {
-        Colleague *c = colleagues[id];
-        c->receive(message);
+        this->abc = a; 
     }
-}
+    string getDescription() const
+    {
+        return this->abc->getDescription();
+    }
+    double getCost() const
+    {
+        return this->abc->getCost();
+    }
+};
 
-int main(void)
+class ToppingTypeOne : public Toppings
 {
-    Colleague * peter = new Colleague(1);
-    Colleague * paul = new Colleague(2);
-    ConcreteMediator * m = new ConcreteMediator();
-    m->setColleague(peter);
-    m->setColleague(paul);
-    peter->send(2, "haha");
-    paul->send(1, "lala");
-    // Note: Can also send message to self through mediator
-    paul->send(2, "lala");
+public:
+    ToppingTypeOne(Pizza * a) : Toppings(a)
+    {
+        // Call parent constructor above
+    }
+    string getDescription() const
+    {
+        return Toppings::getDescription() + ", Topping One";
+    }
+    double getCost() const
+    {
+        return Toppings::getCost() + 0.50;
+    }
+};
+
+class ToppingTypeTwo : public Toppings
+{
+public:
+    ToppingTypeTwo(Pizza * a) : Toppings(a)
+    {
+        // Call parent constructor above
+    }
+    string getDescription() const
+    {
+        return Toppings::getDescription() + ", Topping Two";
+    }
+    double getCost() const
+    {
+        return Toppings::getCost() + 0.35;
+    }
+};
+
+int main(void) 
+{
+    Pizza* basicPizza = new ToppingTypeTwo(new ToppingTypeOne(new PlainPizza()));
+    cout << "Pizza is: " <<  basicPizza->getDescription() << endl;
+    cout << "Total Cost: " << basicPizza->getCost() << endl;
     return 0;
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 19 Memento Design Pattern
+// 2 Flyweight Design Pattern
 //-------------------------------
-// To restore an object to its previous state after applying a temporary change (moment)
+// Flyweight object -> Objects that do not contain a lot of data => light weight => can fly
+// To minimize memory use by sharing as much data as possible
+// Share some part of the object state
+// Intrinsic State => State that can be shared
+// Extrinsic State => State that is unique to each object
+// Used when data is constant (intrinsic data) in a lot of different objects
+// A client class for containing extrinsic data and pass the extrinsic data to flyweight objects as necessary 
+// Flyweight object contains intrinsic data
+// note: Flyweight object must be immutable so that sharing of data is safe during concurrency
 // Classes:
-//      Originator => Object that saves Memento original state and creates a new temporary Memento with current state
-//      Caretaker => Going to modify  Memento but wants to undo the change, it requests Memento from Originator
-//                   It passes Memento back to Originator to revert the Memento back to original state.
-//                   Contains all previous versions of Memento.
-//      Memento => Object requested to Originator by Caretaker, which is later passed back into Originator to revert to original state
-//                 Must have interface for accessing necessary state variables for Originator, so that does not violate encapsulation
-//  Applications: 
-//      Random Number Generator always generates same number sequence with same seed(state)
-//      Saving a game`
-//      Undo and Redo operations in text editors
+// i) Flyweight Interface: How flyweight object retrieves extrinsic data and act on it
+// ii) ConcreteFlyweight : Implementation of Flyweight interface storing only intrinsic data
+// iii) FlyweightFactory : Create and manage sharing of flyweight objects, garbage collection of flyweight objects
+// iv) Client: Keeps references to flyweight objects needed, stores/computes extrinsic data, can only obtain flyweight objects using FlyweightFactory
 //
+// Application: Text editor, each alphabet's data to draw on a screen is stored in a class
+//              Then, text editor only has to keep track of the position alphabet to be drawn instead of how exactly to draw the alphabet
+// Application: Cache -> Load all images at once and store inside Flyweight objects, refer to Flyweight objects later
+// Problem: Longer runtime as need to compute extrinsic data and retrieve intrinsic data from client
 //-------------------------------
-/* //
-#include <vector>
+/* // 
+#include <map> 
 #include <string>
 #include <iostream>
 using namespace std;
 
-// Object that is to be saved
-class Memento
+// Define external data to pass in to it (in this case, int x and int y)
+class FlyweightInterface
 {
-private:
-    string state;
 public:
-    Memento(string s) : state(s) {}
-    string getState() {return state;}
-    void setState(string s) { state = s;}
+    virtual void draw(int x, int y) const = 0;
 };
 
-// Class that saves the current state, or restores a Memento to a saved state
-class Originator
+// Implement FlyweightInterface including intrinsic data
+class ConcreteFlyweight : public FlyweightInterface
 {
 private:
-    string savedState;
+    string color; // intrinsic data that is shared
 public:
-    void save(Memento* m) 
+    ConcreteFlyweight(string _color)
     {
-        savedState = m->getState();
+        this->color = _color;
     }
-    Memento* createMemento()
+    void draw(int x, int y) const
     {
-        Memento* m = new Memento(savedState);
-        return m;
-    }
-}; 
-
-class CareTaker
-{
-private:
-    vector<Memento *> mementos; // a list of all the saved momentos
-public:
-    void addMemento(Memento * m)
-    {
-        mementos.push_back(m);
-    }
-    Memento * getMemento(int index)
-    {
-        return mementos[index];
+        cout << "Drawing an object with color: " << color << " and positions x:" << x << " y:" << y << endl;
     }
 };
+
+class FlyweightFactory
+{
+private:
+    // Maintains existing ConcreteFlyweight objects and returns them as necessary 
+    // Mistake: Must also declare the shared hashtable of objects to be static
+    static map<string, ConcreteFlyweight*> mappings;
+
+    // Needed to initialize static map in C++ 
+    static map<string, ConcreteFlyweight*> initMap()
+    {
+       map<string, ConcreteFlyweight*> temp;
+       temp["none"] =  new ConcreteFlyweight("none");
+       return temp;
+    }
+public:
+    static ConcreteFlyweight* getFlyWeight(string color)
+    {
+        ConcreteFlyweight* flyObj = mappings[color];
+        // If flyObj returns NULL
+        if(!flyObj)
+        {
+            cout << "Creating new flyweight object with color: " << color << endl;
+            flyObj = new ConcreteFlyweight(color);
+            mappings[color] = flyObj;
+        }
+        else 
+        {
+            cout << "Using created flyweight object" << endl;
+        }
+        return flyObj;
+    }
+};
+
+// IMPORTANT!
+// Mistake: Must initialize static members
+// Thus, must define initMap() function privately for initialization of static map
+map<string, ConcreteFlyweight*> FlyweightFactory::mappings = initMap();
 
 int main(void)
 {
-    Originator* origin = new Originator(); 
-    CareTaker* care = new CareTaker();
-    Memento * m1 = new Memento("State 1");
-    origin->save(m1);
-    // Add first State
-    care->addMemento(origin->createMemento());
-    Memento * m2 = new Memento("State 2");
-    origin->save(m2);
-    // Add second State
-    care->addMemento(origin->createMemento());
-
-    // Get back first state
-    origin->save(care->getMemento(0));
-    Memento * m3 = origin->createMemento();
-    cout << "First saved state is: " << m3->getState() << endl;
+    // Client
+    ConcreteFlyweight* blueRect = FlyweightFactory::getFlyWeight("blue");
+    blueRect->draw(3, 5);
+    blueRect->draw(7, 8);
+    ConcreteFlyweight* redRect = FlyweightFactory::getFlyWeight("red");
+    redRect->draw(1,2);
+    blueRect->draw(4, 6);
     return 0;
 }
 // */
 //---------------------------------------------------------------------------------------------------------------------------------
-// 20 Visitor Design Pattern
+// 3 Adapter Design Pattern
 //-------------------------------
-// To add methods to different classes without modifying those classes (honors open-closed principle)
-// Uses double dispatch => Operation depends on: 2 dynamic classes 
-//                          2 receivers are: The type of visitor class and the type element it visits (visitable)
-// Requires Visitable class to have an interface that allows you to add to it by just defining a new Visitor class. 
-// Thus, each time you need to make a new change, as long as your different classes already implements the Visitable Interface, 
-// you just need to make a new concreteVisitor and pass in that as a parameter to the object's accept function.
-// Classes:
-//      - Visitor Interface => A new interface that needs to be implemented by a new concreteClass that handles each different class differently. 
-//      - Concrete Visitor => Implements the Visitor Interface by adding many different visit() function accepting different type of classes (function overloading)
-//                            It implements the visit() method
-//                            Each different class has its own visit() method in ConcreteVisitor class
-//      - Visitable Interface => A new interface that needs to be implemented by the different classes that needs to change. 
-//                              Contains the Visit function. Instead of changing each different class, you just need to add in the method
-//                              accept(Visitor * visitor) { visitor->visit(this); }
-//      - Accept Function() => This is a simple method that is added to each different class that needs to be changed
-//      - Visit Function() => This is a method implemented by ConcreteVisitor
-// Applications: 
-//      Public API - Make new Visitor class for existing class to call the accept(visitor) function)_
+// To allow 2 incompatible interfaces to work together. 
+// Used when client expects a certain interface
+// All classes must implement every method defined by the shared interface
+// 
 //-------------------------------
 /* //
 #include <string>
 #include <iostream>
 using namespace std;
 
-// Visitor Interface
-class Visitor 
+// Target Interface
+// note: This is what the client expects to see
+class TargetInterface
 {
 public:
-    virtual void visit(class TypeA* A) = 0;
-    virtual void visit(class TypeB* B) = 0;
+    virtual void attackSwords() const = 0; 
+    virtual void defendShields() const = 0; 
 };
 
-// Concrete Visitor 1 => Count
-// note: Each type of class needs its own visit() method
-class CountVisitor : public Visitor 
+// Implementation of Client Interface
+class OldWeapons : public TargetInterface
+{
+public:
+    void attackSwords() const
+    {
+        cout << "Attack with Swords" << endl;
+    }
+    void defendShields() const 
+    {
+        cout << "Defend with Shields" << endl;
+    }
+};
+
+// Implementation of Actual Interface that exists
+class ActualInterface
+{
+public:
+    void attackBombs() 
+    {
+        cout << "Attack with Bombs" << endl;
+    }
+    void defendTowers()
+    {
+        cout << "Defend with Towers" << endl;
+    }
+};
+
+class Adapter : public TargetInterface
 {
 private:
-    int numA, numB;
+    ActualInterface* act; 
 public:
-    void visit(TypeA* A); 
-    void visit(TypeB* B);
-};
-
-// Concrete Visitor 2 => print
-class PrintVisitor : public Visitor 
-{
-public:
-    void visit(TypeA* A); 
-    void visit(TypeB* B);
-};
-
-// Visitable Interface
-// Each class that you want to change must implement Visitable Interface
-class Visitable
-{
-public:
-    virtual void accept(Visitor * visitor) = 0;
-    // note: Every class's accept implementation will be the same
-};
-
-class TypeA : public Visitable
-{
-public:
-    void accept(Visitor * visitor) 
+    Adapter(ActualInterface* a)
     {
-        visitor->visit(this);
+        act = a;
     }
-}; 
-
-class TypeB : public Visitable
-{
-public:
-    void accept(Visitor * visitor) 
+    void attackSwords() const
     {
-        visitor->visit(this);
+        act->attackBombs();
     }
-}; 
-
-void CountVisitor::visit(TypeA* A) 
-{
-    numA++;
-    cout << "numA is: " << numA << endl;
-}
-
-void CountVisitor::visit(TypeB* B) 
-{
-    numB--;
-    cout << "numB is: " << numB << endl;
-}
-
-void PrintVisitor::visit(TypeA* A) 
-{
-    cout << "Type A" << endl;
-}
-void PrintVisitor::visit(TypeB* B) 
-{
-    cout << "Type B" << endl;
-}
+    void defendShields() const
+    {
+        act->defendTowers();
+    }
+};
 
 int main(void)
 {
-    TypeA * a = new TypeA();
-    TypeB * b = new TypeB();
-    Visitor * v1 = new CountVisitor();
-    Visitor * v2 = new PrintVisitor();
-    a->accept(v1);
-    a->accept(v2);
-    b->accept(v1);
-    b->accept(v2);
+    ActualInterface* latest = new ActualInterface;
+    Adapter* adapt = new Adapter(latest);
+    adapt->attackSwords(); // note: It calls the bombs instead of sword
+    adapt->defendShields(); // note: It calls the towers instead of shields
+    return 0;
+}
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 4 Proxy Design Pattern
+//-------------------------------
+// Create a wrapper for high time/space complexity objects, and get them only when needed
+// Defer full cost of creation until we need the actual object. 
+// Proxy => A place holder for an expensive object
+// Application: Copy on write (Copying a large object takes a long time, if its read only, then use flyweight)
+//              Only when you wanna write it (change it to be unique, then you can copy it)
+// Application: Garbage Collection Automation (Reference Counting Pointer)
+//              Proxy keeps a reference count to an actual object being read, when no more pointers 
+//              points to that object, delete it from memory as it is no longer needed
+// Application: Large Files
+//      Images in Webpages, (images in webpages take long time to load, so put a proxy(placeholder) 
+//      first and load them later only when the user has scrolled down to them and it is needed
+// Application: Security
+//      Limit access to actual class based on security
+//  Application: Lock
+//      Ensure current thread has a lock before accessing a resource
+//-------------------------------
+/* //
+#include <string>
+#include <cstdlib>
+#include <iostream>
+using namespace std;
+
+// Interface to Proxy an actual object, known as Subject
+// Need to be implemented by both actual object and proxy object
+class ProxyInterface
+{
+public:
+    virtual void drawImage() = 0;
+};
+
+class ActualImage : public ProxyInterface
+{
+private:    
+    // The actual image
+    double** image; 
+    int N; // specific only for this example
+public:
+    // Creating an actual image is an expensive process
+    ActualImage(string pathToImage)
+    {
+        cout << "Loading image from " << pathToImage << endl;
+        N = 3;
+        image = (double **) malloc(sizeof(double*) * N); 
+        for(int i = 0; i < N; i++)
+        {
+            image[i] = (double *) malloc(sizeof(double) * N);
+        }
+        for(int i = 0; i < N;i++)
+        {
+            for(int j = 0; j < N; j++)
+            {
+                image[i][j] = i-j;
+            }
+        }
+    }
+    void drawImage()
+    {
+        for(int i = 0; i < N;i++)
+        {
+            for(int j = 0; j < N; j++)
+            {
+                cout << image[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+class ProxyImage : public ProxyInterface
+{
+private:
+    // ProxyImage must contain a reference to ActualImage
+    ActualImage* placeHolder; 
+    string pathToImage; // ProxyImage need to contain data to load ActualImage only when necessary. This is like temporary small data needed for loading 
+public:
+    ProxyImage(string _pathToImage) 
+    {
+        this->pathToImage = _pathToImage;
+        this->placeHolder = NULL;
+    }
+    void drawImage()
+    {
+        // Now only create image when needed
+        placeHolder = new ActualImage(pathToImage);
+        placeHolder->drawImage();
+        delete placeHolder;
+    }
+};
+
+int main(void)
+{
+    string imagePath = "data/img.jpg";
+    // Create a proxy image, fast operation
+    cout << "Creating Proxy Image" << endl;
+    ProxyInterface* a = new ProxyImage(imagePath);
+    cout << "Drawing Proxy Image" << endl;
+    // Draw proxy image, slow operation as it only creates the actual image as needed now
+    a->drawImage();
+    return 0;
+}    
+// */
+//---------------------------------------------------------------------------------------------------------------------------------
+// 5 Composite Design Pattern
+//-------------------------------
+// To represent part-whole hierarchies 
+// Can structure data, or represent inner working of every part of an object individually
+// Allows a client on running methods on both single objects and composite objects (composed of many single objects and/or composite objects) the same way
+// Component Interface => Interface for all objects including composite objects. 
+//                      Allows accessing components recursively
+//  Primitive/Leaf => Represent end points of the composition
+//  Composite => Represent a component that may have children
+//  note: Both primitive and composite needs to be handled differently, but on Component Interface, they are called the same
+// Application: e.g. Computer Graphics project where you multiply the matrix recursively along the tree. 
+//-------------------------------
+/* //
+#include <vector> 
+#include <string>
+#include <iostream>
+using namespace std;
+
+// Component Interface
+class Component
+{
+public:
+    virtual void traverse() const = 0;
+};
+
+class Primitive : public Component
+{
+private:
+    int value;
+public: 
+    Primitive(int _value) 
+    {
+        this->value = _value;
+    }
+    void traverse() const
+    {
+        cout << value << " ";
+    }
+};
+
+class Composite : public Component
+{
+private:
+    int value;
+    vector<Component *> vec; // note: It is Component to be able to contain either Primitive or another Composite
+public:
+    Composite(int _value)
+    {
+        value = _value;
+    }
+    void traverse() const
+    {
+        cout << value << " ";
+        for(int i = 0 ; i < vec.size() ; i++)
+        {
+            vec[i]->traverse();
+        }
+    }
+    // Mistake: Used add Composite* instead of add Component * here, then it couldn't add Primitive*
+    void add(Component* a) 
+    {
+        vec.push_back(a);
+    }
+};
+
+
+// Can have further classes defined inside Composite itself
+class Row : public Composite
+{
+public:
+    Row(int val) : Composite(val) {}
+    void traverse() const
+    {
+        cout << "Row:"; 
+        // Call parent's traverse
+        Composite::traverse();
+    }
+};
+
+class Col : public Composite
+{
+public:
+    Col(int val) : Composite(val) {}
+    void traverse() const
+    {
+        cout << "Col:"; 
+        // Call parent's traverse
+        Composite::traverse();
+    }
+};
+
+int main(void)
+{
+    Row * first = new Row(1);
+    Col * second = new Col(2);
+    Col * third = new Col(3);
+    Row * fourth = new Row(4);
+    Row * fifth = new Row(5);
+    first->add(second);
+    first->add(third);
+    third->add(fourth);
+    third->add(fifth);
+    // Add leaves
+    first->add(new Primitive(6));
+    second->add(new Primitive(7));
+    third->add(new Primitive(8));
+    fourth->add(new Primitive(9));
+    fifth->add(new Primitive(10));
+    // note: It does a DFS
+    first->traverse();
+    // 1-6
+    // |\
+    // 2 3-8
+    // | |\
+    // 7 4 5
+    //   |  \
+    //   9   10
     return 0;
 }
 // */
