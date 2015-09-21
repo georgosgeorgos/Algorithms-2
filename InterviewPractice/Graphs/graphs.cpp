@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Check if Undirected Graph is Connected, BFS and DFS, T(n) = O(n), S(n) = O(1)
+1. Check if directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
 
 // TODO:
 0. Check
@@ -37,7 +37,7 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
     DFS => Use recursion
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 1 Check if undirected graph is connected
+// 1 Check if directed/undirected graph is connected using BFS/DFS
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
 // Algorithm: 
@@ -74,10 +74,14 @@ public:
     {
         delete [] adj;
     }
-    void addEdge(int v, int w)
+    void addEdgeUndirected(int v, int w)
     {
         adj[v].push_back(w);
         adj[w].push_back(v);
+    }
+    void addEdgeDirected(int v, int w)
+    {
+        adj[v].push_back(w);
     }
     bool isConnectedBFS(); // the main algorithm for this problem using BFS
     bool isConnectedDFS(); // the main algorithm for this problem using DFS
@@ -155,10 +159,11 @@ bool Graph::isConnectedBFS()
 
 int main(void)
 {
+    cout << "Undirected Graph" << endl;
     Graph* g = new Graph(5);
-    g->addEdge(0,1);
-    g->addEdge(0,2);
-    g->addEdge(1,3);
+    g->addEdgeUndirected(0,1);
+    g->addEdgeUndirected(0,2);
+    g->addEdgeUndirected(1,3);
     // Nothing connects to node 4 
     bool answer = g->isConnectedBFS();
     if (answer) cout << "Connected!" << endl;
@@ -166,7 +171,28 @@ int main(void)
     answer = g->isConnectedDFS();
     if (answer) cout << "Connected!" << endl;
     else cout << "Not Connected!" << endl;
-    g->addEdge(2,4);
+    g->addEdgeUndirected(2,4);
+    answer = g->isConnectedBFS();
+    if (answer) cout << "Connected!" << endl;
+    else cout << "Not Connected!" << endl;
+    answer = g->isConnectedDFS();
+    if (answer) cout << "Connected!" << endl;
+    else cout << "Not Connected!" << endl;
+    delete g;
+    cout << endl;
+    cout << "Directed Graph" << endl;
+    g = new Graph(5);
+    g->addEdgeDirected(0,1);
+    g->addEdgeDirected(0,2);
+    g->addEdgeDirected(1,3);
+    // Nothing connects to node 4 
+    answer = g->isConnectedBFS();
+    if (answer) cout << "Connected!" << endl;
+    else cout << "Not Connected!" << endl;
+    answer = g->isConnectedDFS();
+    if (answer) cout << "Connected!" << endl;
+    else cout << "Not Connected!" << endl;
+    g->addEdgeDirected(2,4);
     answer = g->isConnectedBFS();
     if (answer) cout << "Connected!" << endl;
     else cout << "Not Connected!" << endl;
