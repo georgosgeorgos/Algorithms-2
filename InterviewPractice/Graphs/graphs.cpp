@@ -1,9 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-
-1. Check if Undirected Graph is Connected
-
+1. Check if Undirected Graph is Connected, BFS and DFS, T(n) = O(n), S(n) = O(1)
 
 // TODO:
 Adjacency Matrix Representation and Adjacency List Representation
@@ -62,11 +60,15 @@ class Graph
 private:
     list<int> * adj;
     int numNodes; 
+    vector<bool> visited;
+    void DFS(int currNode);
 public:
     Graph(int N)
     {
         this->numNodes = N;
         adj = new list<int>[N];
+        for(int i = 0; i < N;i++)
+            visited.push_back(false);
     }
     ~Graph()
     {
@@ -77,12 +79,49 @@ public:
         adj[v].push_back(w);
         adj[w].push_back(v);
     }
-    bool isConnected(); // the main algorithm for this problem
+    bool isConnectedBFS(); // the main algorithm for this problem using BFS
+    bool isConnectedDFS(); // the main algorithm for this problem using DFS
 };
-
-bool Graph::isConnected()
+bool Graph::isConnectedDFS()
 {
-    bool visited[numNodes];
+    for(int i = 0; i < numNodes; i++)
+    {
+        // reset all visited nodes to false
+        visited[i] = false;
+    }
+    // Start with the first node
+    visited[0] = true;
+    for(auto i = adj[0].begin(); i != adj[0].end(); i++)
+    {
+        if(!visited[*i])
+        {
+            visited[*i] = true;
+            this->DFS(*i);
+        }
+    }
+    // Check all are true
+    for(int i = 0; i < numNodes; i++)
+    {
+        // Graph is not connected fully if any nodes remain unvisited
+        if(!visited[i]) return false;
+    }
+    return true;
+}
+
+void  Graph::DFS(int currNode)
+{
+    for(auto i = adj[currNode].begin(); i != adj[currNode].end(); i++)
+    {
+        if(!visited[*i])
+        {
+            visited[*i] = true;
+            this->DFS(*i);
+        }
+    }
+}
+
+bool Graph::isConnectedBFS()
+{
     for(int i = 0; i < numNodes; i++)
     {
         // reset all visited nodes to false
@@ -121,11 +160,17 @@ int main(void)
     g->addEdge(0,2);
     g->addEdge(1,3);
     // Nothing connects to node 4 
-    bool answer = g->isConnected();
+    bool answer = g->isConnectedBFS();
+    if (answer) cout << "Connected!" << endl;
+    else cout << "Not Connected!" << endl;
+    answer = g->isConnectedDFS();
     if (answer) cout << "Connected!" << endl;
     else cout << "Not Connected!" << endl;
     g->addEdge(2,4);
-    answer = g->isConnected();
+    answer = g->isConnectedBFS();
+    if (answer) cout << "Connected!" << endl;
+    else cout << "Not Connected!" << endl;
+    answer = g->isConnectedDFS();
     if (answer) cout << "Connected!" << endl;
     else cout << "Not Connected!" << endl;
     return 0;
