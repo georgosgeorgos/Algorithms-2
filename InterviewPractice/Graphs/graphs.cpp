@@ -4,6 +4,13 @@ Table of Contents
 1. Check if Undirected Graph is Connected, BFS and DFS, T(n) = O(n), S(n) = O(1)
 
 // TODO:
+0. Check
+1. BFS
+2. DFS
+3. Topological Sort
+4. Djikstra
+5. Given directed graph, find out if there exist ar oute between 2 nodes
+//--------------------------------------------
 Adjacency Matrix Representation and Adjacency List Representation
 Incidence Matrix Representation and Incidence List Representation
 note: Adjacency Matrix is much easier to implement in an interview
@@ -26,34 +33,27 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
     Incidence Matrix is basically Adjacency Matrix nodes at rows and edges at columns, 
     each column only has 2 1's connected by the vertices and everything else 0
     Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
-    
-0. Check
-1. BFS
-2. DFS
-3. Topological Sort
-4. Djikstra
-5. Given directed graph, find out if there exist ar oute between 2 nodes
+    BFS => Must use a queue
+    DFS => Use recursion
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 // 1 Check if undirected graph is connected
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
+// Algorithm: 
+// 1. Mark all nodes as not seen, O(n)
+// 2. Traverse using BFS/DFS from any node O(n)
+// 3. Check that all nodes are marked as seen, if not , it is unconnected, O(n)
+// Use Adjacency List as it is more efficient than Adjacency Matrix in looking at the next edge node
+// 1 = [2,3]    
+// 2 = [1]
+// 3 = [1]
 //--------------------------------------------
 #include <vector> // To hold all nodes that exist and index them quickly
 #include <list> // To search through each adjacent node given a node
 #include <queue> // For BFS traversal
 #include <iostream> 
 using namespace std; 
-
-// Algorithm: 
-// 1. Mark all nodes as not seen, O(n)
-// 2. Traverse using BFS from any node O(n)
-// 3. Check that all nodes are marked as seen, if not , it is unconnected, O(n)
-
-// Use Adjacency List as it is more efficient than Adjacency Matrix in looking at the next edge node
-// 1 = [2,3]    
-// 2 = [1]
-// 3 = [1]
 
 class Graph 
 {
