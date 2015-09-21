@@ -1,9 +1,20 @@
 //----------------------------------------------------------------------------------------------------------------------------------------------
+// 2 Check if graph is weakly connected component
+//
+//--------------------------------------------
+/*
+int main(void)
+{
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Check if directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
+1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
 
 // TODO:
+2. Check if graph is weakly connected component
 0. Check
 1. BFS
 2. DFS
@@ -11,6 +22,7 @@ Table of Contents
 4. Djikstra
 5. Given directed graph, find out if there exist ar oute between 2 nodes
 //--------------------------------------------
+note: Complexity is measured in terms of |V| = number of nodes and |E| = number of edges!
 Adjacency Matrix Representation and Adjacency List Representation
 Incidence Matrix Representation and Incidence List Representation
 note: Adjacency Matrix is much easier to implement in an interview
@@ -33,22 +45,27 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
     Incidence Matrix is basically Adjacency Matrix nodes at rows and edges at columns, 
     each column only has 2 1's connected by the vertices and everything else 0
     Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
-    BFS => Must use a queue
-    DFS => Use recursion
+    BFS => Must use a queue (append to back)
+    DFS => Use recursion, or use a stack (Append to front)
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 1 Check if directed/undirected graph is connected using BFS/DFS
+// 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
 // Algorithm: 
-// 1. Mark all nodes as not seen, O(n)
-// 2. Traverse using BFS/DFS from any node O(n)
+// 1. Mark all nodes as not seen, O(V)
+// 2. Traverse using BFS/DFS from any node
+//          BFS => T(V,E) = O(V+E)
+//                 S(V,E) = O(V) // to maintain the queue of nodes to visit
+//          DFS => T(V,E) = O(V+E)
+//                 S(V,E) = O(
 // 3. Check that all nodes are marked as seen, if not , it is unconnected, O(n)
 // Use Adjacency List as it is more efficient than Adjacency Matrix in looking at the next edge node
 // 1 = [2,3]    
 // 2 = [1]
 // 3 = [1]
 //--------------------------------------------
+ //
 #include <vector> // To hold all nodes that exist and index them quickly
 #include <list> // To search through each adjacent node given a node
 #include <queue> // For BFS traversal
@@ -58,6 +75,7 @@ using namespace std;
 class Graph 
 {
 private:
+    // Uses adjacency list representation
     list<int> * adj;
     int numNodes; 
     vector<bool> visited;
@@ -88,6 +106,7 @@ public:
 };
 bool Graph::isConnectedDFS()
 {
+    // O(V)
     for(int i = 0; i < numNodes; i++)
     {
         // reset all visited nodes to false
@@ -95,6 +114,7 @@ bool Graph::isConnectedDFS()
     }
     // Start with the first node
     visited[0] = true;
+    // O(V)
     for(auto i = adj[0].begin(); i != adj[0].end(); i++)
     {
         if(!visited[*i])
@@ -112,6 +132,7 @@ bool Graph::isConnectedDFS()
     return true;
 }
 
+// O(E)
 void  Graph::DFS(int currNode)
 {
     for(auto i = adj[currNode].begin(); i != adj[currNode].end(); i++)
@@ -126,28 +147,34 @@ void  Graph::DFS(int currNode)
 
 bool Graph::isConnectedBFS()
 {
-    for(int i = 0; i < numNodes; i++)
+    for(int i = 0; i < numNodes; i++) // O(V)
     {
         // reset all visited nodes to false
         visited[i] = false;
     }
     // Traverse the nodes of the first node
     queue<int> q; 
-    q.push(0);
-    while(!q.empty())
+    q.push(0); 
+    while(!q.empty()) // O(E)
     {
         // MISTAKE: For queue, it is q.front(), only stacks are s.top()
         int node = q.front();
         q.pop();
-        // set visited to true
-        visited[node] = true;
-        // auto => A C++11 feature, run with: g++ -std=c++11 fileName.cpp
-        for(auto i = adj[node].begin(); i != adj[node].end(); i++)
+        // only perform operations on this node if it wasn't visited before
+        if(!visited[node])
         {
-            if (!visited[*i])
-                q.push(*i);
+            visited[node] = true;
+            // auto => A C++11 feature, run with: g++ -std=c++11 fileName.cpp
+            for(auto i = adj[node].begin(); i != adj[node].end(); i++)
+            {
+                // note: You may end up inserting the same node twice if it has not been visited yet
+                // therefore, you must check if(!visited[node]) above
+                if (!visited[*i])
+                    q.push(*i); // S(V,E) = O(V), since you only push if it is not visited yet
+            }
         }
     }
+    // O(V)
     for(int i = 0; i < numNodes; i++)
     {
         // Graph is not connected fully if any nodes remain unvisited
