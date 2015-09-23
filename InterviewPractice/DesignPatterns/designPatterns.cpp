@@ -142,7 +142,57 @@ TODO:
 //      - Composite Design Pattern
 //      - Facade Design Pattern => Interface for complicated implementation objects
 //      - Bridge Design Pattern
-//  
+/*
+What are the differences between Interface and Abstract class?
+Abstract Class	Interfaces
+An abstract class can provide complete, default code and/or just the details that have to be overridden.	An interface cannot provide any code at all,just the signature.
+In case of abstract class, a class may extend only one abstract class.	A Class may implement several interfaces.
+An abstract class can have non-abstract methods.	All methods of an Interface are abstract.
+An abstract class can have instance variables.	An Interface cannot have instance variables.
+An abstract class can have any visibility: public, private, protected.	An Interface visibility must be public (or) none.
+If we add a new method to an abstract class then we have the option of providing default implementation and therefore all the existing code might work properly.	If we add a new method to an Interface then we have to track down all the implementations of the interface and define implementation for the new method.
+An abstract class can contain constructors .	An Interface cannot contain constructors .
+Abstract classes are fast.	Interfaces are slow as it requires extra indirection to find corresponding method in the actual class.
+*/
+//Interview Notes:
+/*
+0. DON't JUMP TO SOLVING THE PROBLEM RIGHT AWAY
+1. Understand how product will be used
+    - Target Audience
+    - How will it scale? 
+    - What should the end user experience? 
+2. Break down problem into smaller sub-problems that needs to be handled 
+   - DON'T DESIGN EACH ELEMENT, JUST NOTE THAT THEY EXIST. THEN DESIGN ONE AT A TIME
+3. Don't Be Messy 
+    - Don't jump from initial design the detail to initial to detail and make changes. 
+    - Design from top to bottom, making passes (ignore details of some) if necessary 
+    - Design to be able to adapt to change
+4. Communicate Design Decisions (WHAT & HOW & WHY)
+    WHAT: The current sub-problem you are solving
+    HOW: How you are solving the problem 
+    WHY: Why do you solve the problem this way 
+    - You may know what you are doing, the interview may know why you are doing what you are doing BUT
+     YOU NEED INTERVIEW TO KNOW YOU KNOW WHY YOU ARE DOING WHAT YOU ARE DOING
+    - Communicate assumptions as questions
+        e.g. Can I assume the users are < 100 (WRONG) 
+        e.g. What is the maximum number of applicant the program should expect? (CORRECT)  
+    - Explain how a design decision works
+    - Explain why a design decision is made
+        e.g. Will use SQL instead of No-SQL because ... 
+    - Tradeoffs that are made 
+    - COMPARE DESIGNS, Multiple Design Ideas and TradeOffs are important as they show how you think! 
+5. Design for Scale 
+    - How will software work across multiple machines 
+6. Know how existing things work 
+    - Map Reduce
+    - FileSystem 
+    - Apache Kafka  
+7. Complete Your Design
+    - DESIGN MUST BE COMPLETED TO SOLUTION
+Interviewers will look to ADD REQUIREMENTS:
+    - This will expose how hacky your solution was. Do not implement another hacky solution. 
+    Think carefully on what you are going to do. 
+*/  
 //---------------------------------------------------------------------------------------------------------------------------------
 //TODO:
 // 4 Abstract Factory Design Pattern
