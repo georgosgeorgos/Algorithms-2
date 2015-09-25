@@ -20,7 +20,7 @@ Table of Contents
 2. DFS
 3. Topological Sort
 4. Djikstra
-5. Given directed graph, find out if there exist ar oute between 2 nodes
+5. Given directed graph, find out if there exist a route between 2 nodes
 //--------------------------------------------
 note: Complexity is measured in terms of |V| = number of nodes and |E| = number of edges!
 Adjacency Matrix Representation and Adjacency List Representation
@@ -47,18 +47,32 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
     Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
     BFS => Must use a queue (append to back)
     DFS => Use recursion, or use a stack (Append to front)
+            note: If you use recursion, you may end up visiting the first node in each list of edges of a node first
+                  whereas in stack, you may end up visiting the last node in each list of edges of a node first
+            note: Recursion => Call stack 
+                  Stack => User Stack 
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 // 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
-// Time Complexity, T(n) = O(n)
-// Space Complexity, S(n) = O(1)
+// Time Complexity, T(V,E) = O(V+E)
+// Space Complexity, S(V,E) = O(V)
 // Algorithm: 
 // 1. Mark all nodes as not seen, O(V)
 // 2. Traverse using BFS/DFS from any node
-//          BFS => T(V,E) = O(V+E)
-//                 S(V,E) = O(V) // to maintain the queue of nodes to visit
-//          DFS => T(V,E) = O(V+E)
-//                 S(V,E) = O(
+//                  
+//          BFS => Queue Implementation:
+    //                 T(V,E) = O(V+E)
+    //                 S(V,E) = O(V) // to maintain the queue of nodes to visit
+//          DFS => Stack Implementation:
+//                 T(V,E) = O(V+E)
+//                 S(V,E) = O(V)  = O(bd) // to maintain the queue of nodes to visit, b = branching factor, d = depth of graph
+//                          // note: More space as you push all current branch before recursing
+//                 Recursive (call stack) Implementation:
+//                 T(V,E) = O(V+E)
+//                 S(V,E) = O(d) // d = Longest depth of graph (since program runs sequentially instead of in parallel,
+//                              // it does not go through every node
+//                             // note: use less space as you recursively first node of all branch and then next node later, so save more space
+//                
 // 3. Check that all nodes are marked as seen, if not , it is unconnected, O(n)
 // Use Adjacency List as it is more efficient than Adjacency Matrix in looking at the next edge node
 // 1 = [2,3]    
@@ -152,27 +166,33 @@ bool Graph::isConnectedBFS()
         // reset all visited nodes to false
         visited[i] = false;
     }
-    // Traverse the nodes of the first node
+    // Traverse the nodes of the first node only
     queue<int> q; 
+    visited[0] = true;
     q.push(0); 
     while(!q.empty()) // O(E)
     {
         // MISTAKE: For queue, it is q.front(), only stacks are s.top()
         int node = q.front();
         q.pop();
-        // only perform operations on this node if it wasn't visited before
-        if(!visited[node])
+        // auto => A C++11 feature, run with: g++ -std=c++11 fileName.cpp
+        for(auto i = adj[node].begin(); i != adj[node].end(); i++)
         {
-            visited[node] = true;
-            // auto => A C++11 feature, run with: g++ -std=c++11 fileName.cpp
-            for(auto i = adj[node].begin(); i != adj[node].end(); i++)
-            {
+            // MISTAKE: You only declare visited after popping from queue, should declare visited before popping to save space
                 // note: You may end up inserting the same node twice if it has not been visited yet
                 // therefore, you must check if(!visited[node]) above
-                if (!visited[*i])
-                    q.push(*i); // S(V,E) = O(V), since you only push if it is not visited yet
+                // This also means that the space complexity may be higher than just O(V) 
+                // To prevent this, you have 3 states for each node instead of 2, 
+                // Thus, whenever you push something into the queue, you change its state to the 2nd state and when you pop it, you change its state to 3rd state
+                // OR just have 2 states but declare visited before pushing into queue so you dont push same node twice
+            if (!visited[*i])
+            {
+                // Set node i to visited so you don't push it again in another node
+                visited[*i] = true;
+                q.push(*i); // S(V,E) = O(V), since you only push if it is not visited yet
             }
         }
+        // Perform action on node here
     }
     // O(V)
     for(int i = 0; i < numNodes; i++)
@@ -227,6 +247,8 @@ int main(void)
     if (answer) cout << "Connected!" << endl;
     else cout << "Not Connected!" << endl;
     return 0;
+    // note: If this was a different problem and you need to traverse all nodes, you need to re-run the BFS/DFS algorithm on any nodes that are still unseen
+    // as they were not connected to your starting node
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
