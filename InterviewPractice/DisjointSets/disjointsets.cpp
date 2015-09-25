@@ -184,8 +184,10 @@ public:
         // Make a set for all nodes O(V)
         DisjointSet ds = DisjointSet(numNodes);
         Graph* graph = new Graph(numNodes,numEdges);
+        int numEdgesAdded = 0;
+        // Should only add at most V-1 edges, after that no point traversing anymore
         // O(ElogV)
-        for(int i = 0; i < numEdges; i++) // O(E)
+        for(int i = 0; i < numEdges; i++) // O(min(E, V-1)) 
         {
             // Group into same set if not the same set already O(1) amortized analysis for disjoint set with rank and path compression implementation
             // Worst case would be O(logV) 
@@ -197,6 +199,11 @@ public:
             {
                 ds.mergeSets(node1, node2);
                 graph->addEdge(node1,node2,Edges[i].getWeight());
+                numEdgesAdded++;
+                if (numEdgesAdded == numNodes - 1)
+                {
+                    break;
+                }
             }
         }
         // Return the created graph  with the latest edges
