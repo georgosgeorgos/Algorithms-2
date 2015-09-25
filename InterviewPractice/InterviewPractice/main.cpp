@@ -3,8 +3,20 @@
 // 1. To practce previous programming questions
 // 2. To practice new programming questions before documenting into other files
 // It also contains notes for you to read to practice programming challenges
-//-----------------------------------------------------------------------------------------------]
-
+//-----------------------------------------------------------------------------------------------
+/*
+Testing your code after implementing it
+Don't compile it until you check it! Then add to here when errors are made.
+Check that:
+    - What you pass into each variables is actually type (don't pass in int to double)
+    - Classes are terminated with ; 
+    - Static instances are intialize outside a class, defining an init() private function if necessary for STL 
+    - Constructors are defined in child classes as they are not inherited
+    - Any parent function used in child class must be either public or protected, if used by child class inside main(), it must be public!
+*/
+//-----------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------
+/*
 // Temporary Practice:
 // Maximum Subarray Problem 
 #include <iostream>
@@ -15,6 +27,8 @@ int main(void)
     // O(n) with handling special case of all (-)
     return 0;
 }
+*/
+//-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 // For Interviews online, you need to be able to code it.
 // Thus, you need to use Standard Template Library as copying pasting your own previous code is not acceptable
@@ -25,6 +39,7 @@ int main(void)
 // stable_sort()
 // reverse() // to sort in reverse order
 // binary search()
+// TODO: qsort() with any arbitrary class
 // work with hash tables, stack, queue, linked list, binary tree, heap
 // i) Insert
 // ii) Delete
@@ -32,6 +47,7 @@ int main(void)
 // iv) Search
 // v) Max? Min?
 //-----------------------------------------------------------------------------------------------
+//
 template <class X>
 int binarySearch(X a[], X element, int n);
 
@@ -65,6 +81,7 @@ int binarySearch(X a[], X element, int n)
         return -1;
     }
 }
+
 //-----------------------------------------------------------------------------------------------
 // Longest Common Substring
 // Approach 1: Dynamic Programming
