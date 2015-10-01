@@ -4,9 +4,9 @@ Table of Contents
 // Comparison Sorts 
 1. BubbleSort, T(n) = O(n^2), S(n) = O(1)
 
-2. MergeSort, T(n) = O(nlogn), S(n) = O(nlogn) 
+2. MergeSort Array, T(n) = O(nlogn), S(n) = O(nlogn) 
 
-3. QuickSort, T(n) = O(n^2), S(n) = O(1)
+3. QuickSort Array, T(n) = O(n^2), S(n) = O(1)
 
 4. Randomized Quicksort, T(n) = O(n^2), S(n) = O(1)
 
@@ -19,13 +19,32 @@ Table of Contents
 
 8. Binary Search, T(n) = O(logn), S(n) = O(1)
 
+9. Given a sorted array of integers, find range at which a target value exist. T(n) = O(nlgn), S(n) = O(1)
 //----------------------------------------------------------------------------------------
 // TODO 
-// TODO: Insertion Sort
-// TODO: Selection Sort
-// TODO: TimSort (Make sure you include the bug fixes) 
-// TODO: BucketSort (Improves 
-// TODO: PigeonSort (A special case of Counting Sort with lists) // Note: The one you came up with, but use linked list to make it a stable sort 
+MergeSort LinkedList
+QuickSort LinkedList
+Insertion Sort
+Selection Sort
+TimSort (Make sure you include the bug fixes) 
+BucketSort (Improves 
+PigeonSort (A special case of Counting Sort with lists) // Note: The one you came up with, but use linked list to make it a stable sort 
+
+Given an array with only 3 integers, (0,1,2). sort the entire array using only a single pass => T(n) = O(n) and constant space S(n) = O(1)
+    Note: Not counting sort as not most optimal solution
+    Hints: One pointer at far end left marking non 0's to replace, one pointer at far end right marking non 2's to replace. 
+           One pointer starting from left most to right most and replacing.  
+           Each time swap occurs, the end pointer move inwards whereas the iterating pointer stays the same. 
+            Iterating pointer only increases if it sees a 1
+            Loop terminates when iterating pointer passes a 2
+
+Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+    Integers in each row are sorted from left to right.
+    The first integer of each row is greater than the last integer of the previous row
+    O(log(mn)) (use binary search)
+	
+Given a list  of papers with their number of citations [3,2,5] => Paper 1 has 3 citations, paper 3 has 5 citations, calculate the H-index in O(n)
+    Hint: Use bucket sort
 */
 //----------------------------------------------------------------------------------------
 /* //
@@ -139,7 +158,7 @@ void swap(X ab[], int a, int b)
 // */
 //----------------------------------------------------------------------------------------
 /* //
-// 2 Template Merge Sort
+// 2 MergeSort Array, T(n) = O(nlogn), S(n) = O(nlogn) 
 // Time Complexity, T(n) = O(nlogn)
 // Space Complexity, S(n) = O(nlogn)
 // OMG, it works perfectly on first trial!!
@@ -249,7 +268,7 @@ void mergesort(X a[], int n)
 // */
 //----------------------------------------------------------------------------------------
 /* //
-// 3 QuickSort (A stable sort)
+// 3 QuickSort Array (A stable sort)
 // Time Complexity, T(n) = O(n^2) worst case, O(nlgn) Average case (or as long as constant partition ratio)
 // Space Complexity, S(n) = O(1) note: sorts in place
 #include <iostream>
@@ -305,7 +324,7 @@ int quickSort(int *p, int l, int r)
     }
     swapQuickSort(p, left, pivot);
     quickSort(p, l, left-1);
-    quickSort(p,left+1, pivot);
+    quickSort(p,left+1, pivot); // note: pivot = r
     return 0;
 }
 
@@ -813,4 +832,111 @@ int binarySearch(X a[], X element, int n)
     }
 }
 // */
+//----------------------------------------------------------------------------------------------------
+// 9 Given a sorted array of integers, find range at which a target value exist. 
+// Time Complexity, T(n) = O(nlgn)
+// Space Complexity, S(n) = O(1)
+//---------------------------------
+/*
+Given a sorted array of integers, find the starting and ending position of a given target value.
+Your algorithm's runtime complexity must be in the order of O(log n).
+If the target is not found in the array, return [-1, -1].
+For example,
+Given [5, 7, 7, 8, 8, 10] and target value 8,
+return [3, 4].
+
+Question: 
+
+Can there be (-) values?
+0-indexing or 1-indexing? 
+
+Function Prototype: 
+  	  vector<int> searchRange(vector<int>& nums, int target); 
+
+TEST_VALUE: 
+	[5,8,8,9], 8 => [1,2] 
+	[5], 5 => [0,0]
+	[5,5,7], 7 => [2,2]
+	[], 1 => [-1,-1] 
+
+Algorithm: 
+	binary search once and find the left most point 
+	if found, binary search 2nd time to find right most point
+	else return [-1,-1]
+and return the range. 
+
+Implementation:
+TEST!
+*/
+//---------------------------------
+/* // 
+#include <cstdlib>
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+int binarySearch(vector<int>& nums, int target, int begin, int end, bool left)
+{
+	if(end < begin) return -1; 
+    int mid = (end - begin)/2 + begin; 
+    if(left)
+    {
+        if(nums[mid] == target && (mid == 0 || nums[mid-1] != target))
+        {
+            return mid; 
+        }
+        else if ( nums[mid] >= target)
+        {
+            end = mid - 1;  
+        }
+        else
+        {
+                begin = mid + 1; 
+        }
+        return binarySearch(nums, target, begin, end, left); 
+    }
+    else
+    {
+        if(nums[mid] == target && ((mid == nums.size()-1)  || nums[mid+1] != target))
+        {
+            return mid; 
+        }
+        else if ( nums[mid] <= target)
+        {
+            begin = mid + 1; 
+        }
+        else
+        {
+            end = mid - 1;  
+        }
+        return binarySearch(nums, target, begin, end, left); 
+    }
+}
+
+vector<int> searchRange(vector<int>& nums, int target)
+{
+    vector<int> result(2,-1); 
+	if(nums.size() == 0) return result; 
+    // Search for left most index 
+    int left = binarySearch(nums, target, 0, nums.size()-1, true); 
+    if(left == -1) return result;  
+    result[0] = left; // 1 
+    int right = binarySearch(nums, target, 0, nums.size()-1, false); 
+    result[1] = right; // 2 
+    return result; 
+}
+
+int main(void)
+{
+	vector<int> nums = {5,7,7,8,8,9}; // C++ 11 feature 
+	int target = 8; 
+	vector<int> result = searchRange(nums, target); 
+	for(int i = 0; i < result.size(); i++)
+	{
+        cout << result[i] << " ";
+    }
+    cout << endl; 
+    return 0; 
+}
+// */`
 //----------------------------------------------------------------------------------------------------
