@@ -3,10 +3,10 @@
 /* //
 Table of Contents
 1. Maximum Subarray Problem using Kadane's Algorithm
-2. Sorted Shifted Array with only distinct elements, find the amount array is shifted by = find minimum of sorted shifted array 
 2. Sorted Shifted Array with only distinct elements, find the amount array is shifted by = find minimum of sorted shifted array, T(n) = O(logn) = S(n)
+3. Given an array of integers, find two numbers such that they add up to a specific target number. T(n) = O(nlogn), S(n) = O(1)
 TODO:
-// Sorted Shifted Array with duplicate elements, find the amount array is shifted by =
+// Sorted Shifted Array with duplicate elements, find the amount array is shifted by 
 // Sorted shifted array with only distinct elements, search for an element
 // Sorted shifted array with duplicate elements, search for an element
 
@@ -25,8 +25,6 @@ TODO:
     Time Complexity, T(n) = O(n) single pass, Space Complexity, S(n) = O(1)
     Hint: Use dynamic programming
     
-
-
 // Find the only singular integer in an array of pairs of integers (done in leetcode)
 // Array with n distinct elements and local minimums, find one local min in O(logN)
 e.g. 10, 6, 4, 3, 12, 19, 18, 20, 17 has 3 local mins at : 3, 18, 17
@@ -44,7 +42,7 @@ note: Always check for A[n-1] itself being local min as base case cause
 // TODO: 2. Merge two equally sized integer arrays, the first one   having the capacity to accommodate the result.
             Hint: Merge from end to first so won't overwrite non-merge values
 // TODO 3.   Implement a method for a Fibonacci sequence where instead of adding the last 2 elemenT's you add the last n elements. For n=3. 1 1 1 3 5 9...
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 // Common Hints
 //-------------------------
 - Have 2 pointers, one at each end and move towards the middle 
@@ -64,7 +62,7 @@ note: Always check for A[n-1] itself being local min as base case cause
     (e.g. Product of entire array except itself without using division(/) operator) 
     (e.g. Sum of entire array except itself without using deduct (-) operator) 
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* //
 // 1 Maximum Subarray Problem using Kadane's Algorithm
 // Time Complexity = O(n)
@@ -190,7 +188,7 @@ int maxSubArrayDynamic(int* a, int N)
     else return maxSum; 
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 // 2 Sorted Shifted Array with only distinct elements, find the amount array is shifted by = find minimum of sorted shifted array 
 // Time Complexity, T(n) = O(logn), S(n) = O(logn)
 //------------------------
@@ -208,8 +206,6 @@ Function Prototype
 int getPivot(vector<int>& nums); 
 
 TEST_CASE: 
-
-
 	4567012 => return 4 (indexof 0) 
 	1 => return 0 
 	1,2=> return 0
@@ -273,4 +269,67 @@ int main(void)
 	cout << nums[result] << endl; 
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 Given an array of integers, find two numbers such that they add up to a specific target number.
+// Time Complexity, T(n) = O(nlgn + n) = O(nlgn) , S(n) = O(1)
+/* //
+Questions:
+1. 	Is the array of integers sorted?  
+2. 	Can the numbers be (-) 
+3.  	Can array contain repeated elements? 
+4. 	Can I modify the array? 
+Test Case: 
+	-3, -2 -8 7 5
+// */
+//---------------------------------
+/* // 
+#include <vector> 
+#include <cstdlib> // bool 
+#include <algorithm> // sort()
+#include <iostream> 
+using namespace std; 
+bool targetNumber(vector<int>& vec , int sum, int& first, int& second)
+{
+	sort(vec.begin(), vec.end()); 	
+	int i = 0; 
+	int j = vec.size()-1; 
+	while(i != j)
+	{
+		if (vec[i] + vec[j] == sum)
+		{
+			first = vec[i]; 
+			second = vec[j]; 
+			return true; 
+        }
+        else if (vec[i] + vec[j] < sum)
+        {
+            i++; 
+        }
+        else 
+        {
+            j--;  
+        }
+    }
+    return false; 
+}
+int main(void)
+{
+    vector<int> vec(4, 0);
+    vec[0] = -2; 
+    vec[1] = -8; 
+    vec[2] = 7; 
+    vec[3] = 5; 
+    int first = 0; 
+    int second = 0; 
+    if(targetNumber( vec , -3,  first,second))
+    {
+        cout << "Numbers found are: " << first << " , " << second; 
+    }
+    else
+    {
+        cout << "No numbers found" << endl; 
+    }
+    return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
