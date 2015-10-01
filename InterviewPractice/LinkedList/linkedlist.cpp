@@ -1,4 +1,3 @@
-//
 //----------------------------------------------------------------------------------------
 /* //
 >> g++ -std=c++11 linkedlist.cpp
@@ -9,6 +8,7 @@ Hints:
 - Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
 - If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
 - Can always transfer values of linkedlist instead of the values
+- Always initialize all created linkedlist to NULL! If not may have weird errors
 
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
@@ -17,10 +17,28 @@ Table of Contents
 4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
 5. Delete Node From Middle Of Linked List, Given Access to That Node, T(n) = O(n), S(n) = O(1)
 6. Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
-8. Detect if a Linked List is a palindrome T(n) = O(n) , S(n) = O(n) TODO: INT
+8. Detect if a Linked List is a palindrome T(n) = O(n) , S(n) = O(n)
+9. Given a linked list, swap every two adjacent nodes and return its head.
+   If odd number of elements, ignore the last element. Time Complexity, T(n) = O(n), S(n) = O(1) 
+10. Given a linked list and a value x, partition it such that all nodes less than x come 
+    before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
+//----------------------------------------------------------------------------------------
 TODO: 
 7. Given Circular Linked List, return node at beginning of circular list, T(n) = O(n) , S(n) = O(1) TODO: INT
-9. Insert an element into a sorted circular linked list (Microsoft Round 1)
+19. Insert an element into a sorted circular linked list (Microsoft Round 1)
+21. Partition List: 
+
+    (done in leetCode)
+
+21. Merge K sorted linked list into 1 sorted linked list
+    T(n) = O(nklogk), S(n) = O(1) 
+    Hint: MergeSort
+
+22. Copy List with Random Pointer (Bloomberg Interview) 
+    A linked list has next pointer and random pointers to either NULL or random nodes on this linked list. 
+    Clone this linked list. 
+    Your solution during interview, T(n) = O(n), S(n) = O(n)
+    Optimal Solution to figure out, T(n) = O(n), S(n) = O(1)
 
 #include <forward_list> 
 forward_list<int> listA;
@@ -96,7 +114,7 @@ struct node * getStartNode(struct node * head)
     return head;
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /*
 // 1 Reverse a Linked list
 // Time Complexity, T(n) = O(n)
@@ -180,7 +198,7 @@ struct node* reverseLinkedList(struct node* head)
     return head;
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* //
 // 2 Adding two numbers that are represented by linked lists
 // Time Complexity, T(n) = O(n)
@@ -285,7 +303,7 @@ int main(void)
     }
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* //
 // 3 Remove Duplicates From Linked List
 
@@ -407,7 +425,7 @@ forward_list<int> removeDuplicateWithSort(forward_list<int> dup)
     return dup;
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* //
 // 4 Return Last K Elements of a Linked List 
 // Time Complexity, T(n) = O(n)
@@ -476,7 +494,7 @@ struct node * getLaskK(struct node * head, int k)
     return head;
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* //
 // 5 Delete Node From Middle Of Linked List, Given Access to That Node
 // Time Complexity, T(n) = O(n)
@@ -545,7 +563,7 @@ void deleteThis(struct node * curr)
     }
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* // 
 // 6 Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
 // Time Complexity, T(n) = O(n)
@@ -635,7 +653,7 @@ bool checkCircular(struct node * head)
     return false;
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* // 
 // 8 Detect if a Linked List is a palindrome 
 // Time Complexity, T(n) = O(n) 
@@ -733,4 +751,149 @@ bool isPalindrome(struct node * head)
     return true;
 }
 // */
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
+// 9 Given a linked list, swap every two adjacent nodes and return its head. If odd number of elements, ignore the last element.
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1) 
+//---------------------------------
+/*
+    1->2->3->4->5 => 2->1->4->3->5
+    1->2->3 => 2->1->3
+    1->2 => 2->1
+    1 => 1
+Questions: 
+Is it a singly linked list or doubly linked list? 
+Am i allowed to swap values or I must swap the nodes? 
+FunctionPrototype: 
+	struct node * swapAdjacent(struct node * root); 
+Test Case 
+	1
+	1->2
+	1->2->3 
+	1->2->3->4->5
+Algorithm: 
+	if(!root || !root->next) return root; 
+	recurseRoot= root->next->next; 
+	replaceRoot = root->next; 
+	root->next->next = root; 
+	root->next = recurseRoot; 
+	root = replaceRoot; 
+	swapAdajacent(recurseRoot);
+	return root; 
+Implementation: 
+*/
+//---------------------------------
+/*
+#include <cstdlib> 
+#include <iostream> 
+using namespace std; 
+
+struct node {
+	int value; 
+	struct node * next; 
+};
+
+struct node * swapAdjacent(struct node * root)
+{
+	// Base case 
+	if(!root || !root->next) return root; 
+	struct node* recurseRoot = root->next->next; 
+	struct node* replaceRoot = root->next; 
+	root->next->next = root; 
+	root->next = recurseRoot; 
+	root = replaceRoot; 
+	swapAdjacent(recurseRoot); 
+	return root; 
+}
+
+int main(void)
+{
+	struct node * a = (struct node*) malloc(sizeof(struct node)); 
+	struct node * b = (struct node*) malloc(sizeof(struct node)); 
+	struct node * c = (struct node*) malloc(sizeof(struct node)); 
+	a->value = 1; 
+	b->value = 2; 
+	c->value = 3; 
+	a->next = b; 
+	b->next = c; 
+	c->next = NULL; 
+    struct node * newRoot = swapAdjacent(a); 
+    struct node* curr = newRoot; 
+	while (curr)
+	{
+		cout  <<  curr->value << " "; 
+		curr = curr->next; 
+	}
+	cout << endl; 
+return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 10 Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+// Time Complexity, T(n) = O(n) single pass
+// Space Complexity, S(n) = O(1)
+//---------------------------------
+/* 
+You should preserve the original relative order of the nodes in each of the two partitions.
+For example,
+Given 1->4->3->2->5->2 and x = 3,
+return 1->2->2->4->3->5.
+*/
+//---------------------------------
+/*
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+ListNode* partition(ListNode* head, int x) 
+{
+    if(!head) return head; 
+    
+    ListNode* lastLess = NULL; 
+    ListNode* lastMore = NULL; 
+    ListNode* curr = NULL;
+    if(head->val < x) lastLess = head; 
+    else lastMore = head; 
+    curr = head->next; 
+    while(curr)
+    {
+        if(curr->val < x)
+        {
+            if(!lastLess) //the first element from head is a More swap with that instead
+            {
+                // This can only happen once or none. 
+                lastMore->next  = curr->next; 
+                curr->next = head; 
+                lastLess = curr; 
+                head = curr; 
+                curr = lastMore->next; 
+            }
+            else
+            {
+                if(!lastMore)
+                {
+                    lastLess = curr; // MISTAKE: FORGOT TO REASSIGN LASTLESS HERE
+                    // haven't seen a more. started from less, no swaps needed. 
+                    curr = curr->next; 
+                    continue; 
+                }
+                lastMore->next = curr->next; 
+                curr->next = lastLess->next; 
+                lastLess->next = curr; 
+                lastLess = curr; 
+                curr = lastMore->next; 
+            }
+            // reassign lastLess
+        }
+        else
+        {
+            // this is the latest maximum, update it 
+            lastMore = curr; 
+            curr = curr->next; 
+        }
+    }
+    return head; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
