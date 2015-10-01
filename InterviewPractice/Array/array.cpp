@@ -3,11 +3,10 @@
 /* //
 Table of Contents
 1. Maximum Subarray Problem using Kadane's Algorithm
-2. Sorted Shifted Array with only distinct elements, find the amount array is shifted by = find minimum of sorted shifted array, T(n) = O(logn) = S(n)
+2. Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(n)
 3. Given an array of integers, find two numbers such that they add up to a specific target number. T(n) = O(nlogn), S(n) = O(1)
 TODO:
 // Sorted Shifted Array with duplicate elements, find the amount array is shifted by 
-// Sorted shifted array with only distinct elements, search for an element
 // Sorted shifted array with duplicate elements, search for an element
 
 // Buy and sell stocks as many times. But only 1 transaction at a time (must sell whatever bought before can buy again)
@@ -189,7 +188,7 @@ int maxSubArrayDynamic(int* a, int N)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 2 Sorted Shifted Array with only distinct elements, find the amount array is shifted by = find minimum of sorted shifted array 
+// 2 Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(n)
 // Time Complexity, T(n) = O(logn), S(n) = O(logn)
 //------------------------
 /*
@@ -199,7 +198,7 @@ Can the values be (-)? can the integer be any values?
 what is maximum length of array ?
 Does [-1] indexing work on this rotated array? 
 What if array is empty?  return -1 
-Do i output the minimum value or its index? 
+Do i output the minimum value or its index?  // this is for finding shift that has been updated to find minimum as it depends on shift
 
 Function Prototype 
 
@@ -235,30 +234,65 @@ TEST!
 #include <iostream> 
 using namespace std; 
 
-int binarySearch(vector<int>& nums, int begin, int end)
+int binarySearchGetPivot(vector<int>& nums, int begin, int end)
 {
-	int mid = ((end + begin)/2); 
-	// Base cases
-	if((mid > begin && nums[mid] < nums[mid-1]) || (mid == begin && nums[mid] <= nums[end]))     
-		return mid; 
+    int mid = ((end + begin)/2); 
+    // Base cases
+    if((mid > begin && nums[mid] < nums[mid-1]) || (mid == begin && nums[mid] <= nums[end]))     
+        return mid; 
     // General case 
     if (nums[mid] > nums[end]) 
     {
         begin = mid+1; 
-        return binarySearch(nums, begin, end); 
+        return binarySearchGetPivot(nums, begin, end); 
     }
     else
     {
         end = mid -1; 
-        return binarySearch(nums, begin, end); 
+        return binarySearchGetPivot(nums, begin, end); 
     }	
 } 
 
 int getPivot(vector<int>& nums)
 {
-	if( nums.size() == 0) return -1; 
-	int result = binarySearch(nums, 0, nums.size()-1); 
-	return result; 
+    if( nums.size() == 0) return -1; 
+    int result = binarySearchGetPivot(nums, 0, nums.size()-1); 
+    return result; 
+}
+
+int binarySearchSearch(vector<int>& nums, int begin, int end, int target, int pivot)
+{
+    if (begin > end) return -1; 
+    int mid = (begin+end)/2;
+    int n = nums.size();  
+    if (n <= 0) return -1; 
+    while(begin <= end)
+    {
+        mid = (begin+end)/2; 
+        int midFix = (mid+pivot) % n; 
+        if(nums[midFix] == target) 
+        {
+            return midFix; 
+        }
+        else if (nums[midFix] < target)
+        {
+            begin = mid+1; 
+        }
+        else
+        {
+            end = mid - 1; 
+        }
+    }
+    return -1; 
+}
+
+int search(vector<int>& nums, int target) 
+{
+    int pivot = getPivot(nums); 
+    int begin = 0; 
+    int end = nums.size() - 1; 
+    int result = binarySearchSearch(nums, begin, end, target, pivot); 
+    return result; 
 }
 
 int main(void)
@@ -267,6 +301,9 @@ int main(void)
 	int result = getPivot(nums); 
 	cout << result << endl; 
 	cout << nums[result] << endl; 
+    int target = 6;
+    result = search(nums, target); 
+    cout << result << endl;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
