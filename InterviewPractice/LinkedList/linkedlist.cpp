@@ -1,15 +1,5 @@
 //----------------------------------------------------------------------------------------
 /* //
->> g++ -std=c++11 linkedlist.cpp
->> a.exe
-Hints: 
-- Memory address of linkedlist is unique (pointed to by pointers)
-- Can always break circular linked list, solve the problem, then link it back to become circular again
-- Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
-- If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
-- Can always transfer values of linkedlist instead of the values
-- Always initialize all created linkedlist to NULL! If not may have weird errors
-
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
 2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
@@ -55,6 +45,17 @@ e.g.: int curr = listA.front();
     erase_after()
     resize()
     swap()
+//----------------------------------------------------------------------------------------
+>> g++ -std=c++11 linkedlist.cpp
+>> a.exe
+//----------------------------------------------------------------------------------------
+Hints: 
+- Memory address of linkedlist is unique (pointed to by pointers)
+- Can always break circular linked list, solve the problem, then link it back to become circular again
+- Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
+- If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
+- Can always transfer values of linkedlist instead of the values
+- Always initialize all created linkedlist to NULL! If not may have weird errors
 
 // */
 //----------------------------------------------------------------------------------------
