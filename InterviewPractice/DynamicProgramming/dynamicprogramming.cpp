@@ -4,7 +4,7 @@ Table of Contents
 1. Fibonacci Sequence (Bottom Up)
 2. Rod Cutting Problem (Top Down with Memoization)
 3. Rod Cutting Problem (Bottom Up)
-4. Longest Common Subsequence Between Two Strings (Bottom Up)
+4. Longest Common Subsequence Between Two Strings
 5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------
 TODO: 
@@ -335,110 +335,113 @@ int cut_rod(int *p , int n, int *s, int *r)
     return r[n];
 }
 // */
-//-----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 // 4 Longest Common Subsequence Between Two Strings
-// Approach 1: Dynamic Programming (Bottom Up)
-// Time Complexity, T(n,m) = O(nm)
+// Time Complexity, T(n,m) = O(nm)  
 // Space Complexity, S(n,m) = O(nm)
 //-------------------------------------
 /*
-#include <cstdlib>
-#include <iostream>
-using namespace std;
+Questions
+    1. Maximum length of both strings? 
+    2. Are both strings same length? 
+    3. Can string contain duplicates? 
+    4. If any string is NULL or empty? Return 0? 
+    5. Print length only or sequence as well? 
+Function Prototype 
+    int LCS(char* str1, char* str2);
+Test Case: 
+    "abbc", "abc" = 3 "abc"
+    "aghbklc, "hgalbck" = 3 "abc"
+    "aghbklc", "hgalbckzzyw";
+Algorithm: 
+    initialize a[n][m]; a[i][j] => maximum longest common subsequence that includes str[i] and str[j] 
+    if str[i] == str[j] => and i!=0 or j != 0 => a[i][j] = 1 + LCS[i-1][j-1]
+    else        => a[i][j] = max(LCS[i-1][j], LCS[i][j-1])
+    otherwise, a[i][j] = 0
+Implementation:
+Test!
+// */
+//-------------------------------------
+/* //
+#include <cstring> 
+#include <string> 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
 
-void printLCS(int** C, char** direction, int* x,  int i , int j);
+void printLCS(vector < vector<int> >& dir, const char* s1, int i, int j)
+{
+    if(i < 0 || j < 0) return; 
+    if (dir[i][j] == 2)
+    {
+        printLCS(dir, s1, i-1, j-1);
+        cout << s1[i] << " ";
+    }
+    else if (dir[i][j] == 1)
+    {
+        printLCS(dir, s1, i-1, j);
+    } 
+    else  // dir[i][j] == 0
+    {
+        printLCS(dir, s1, i, j-1);
+    }
+}
+
+int LCS(const char* s1, const char* s2)
+{
+    if (!s1 || !s2) return 0;
+    int n = strlen(s1); 
+    int m = strlen(s2);
+    if (n == 0 || m == 0) return 0;
+    vector < vector <int> > arr(n, vector<int> (m, 0));
+    vector < vector <int> > dir(n, vector<int> (m, 0));
+    int maxSoFar = 0; 
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < m; j++)
+        {
+            if (s1[i] == s2[j])
+            {
+                dir[i][j] = 2; 
+                arr[i][j] = 1; 
+                if (i != 0 && j != 0) // MISTAKE!! USED || instead of &&
+                {
+                    arr[i][j] += arr[i-1][j-1]; 
+                }
+            }
+            else 
+            {
+                if (i!=0)
+                {
+                    dir[i][j] = 1; 
+                    arr[i][j] = arr[i-1][j]; 
+                }
+                if (j!=0)
+                {
+                    if(arr[i][j-1] > arr[i][j])
+                    {
+                        arr[i][j] = arr[i][j-1];
+                        dir[i][j] = 0; 
+                    }
+                }
+            }
+            if (arr[i][j] > maxSoFar) maxSoFar = arr[i][j]; 
+        }
+    }
+    printLCS( dir, s1, n-1, m-1);
+    cout << endl;
+    return maxSoFar; 
+}
 
 int main(void)
 {
-    int N, M;
-    cin >> N >> M;
-    int x[N];
-    int y[M];
-    // Create a 2D array to store values
-    int** C;
-    char** direction; // for backtracing which path was taken later
-        // '0' => backtrack [i-1][j]
-        // '1' => backtrack [i][j-1]
-        // '2' => backtrack [i-1][j-1]
-    C = (int **) malloc(sizeof(int *) * (N+1));
-    direction = (char **) malloc(sizeof(char *) * (N+1));
-
-    for (int i = 0; i <= N; i++)
-    {
-        C[i] = (int *) malloc(sizeof(int) * (M+1));
-        direction[i] = (char *) malloc(sizeof(char) * (M+1));
-    }
-
-    for(int i = 0; i <= N; i++)
-    {
-        if(i != N)
-        {
-            cin >> x[i];
-        }
-        C[i][0] = 0;
-        direction[i][0] = '0';
-    }
-
-    for(int i = 0; i <= M; i++)
-    {
-        if(i != M)
-        {
-            cin >> y[i];
-        }
-        C[0][i] = 0;
-    }
-
-    for(int i = 1; i <= N; i++)
-    {
-        for(int j = 1; j <= M; j++)
-        {
-            if(x[i-1] == y[j-1])
-            {
-                C[i][j] = C[i-1][j-1] + 1;// add one to number of common subsequence in this path
-                direction[i][j] = '2';
-            }
-            else
-            {
-                if(C[i-1][j] >= C[i][j-1])
-                {
-                    C[i][j] = C[i-1][j];
-                    direction[i][j] = '0';
-                }
-                else
-                {
-                    C[i][j] = C[i][j-1];
-                    direction[i][j] = '1';
-                }
-            }
-        }
-    }
-
-    printLCS(C, direction, x, N, M);
-    cout << endl;
-    // Done finding longest subsequence
-    // now print out solution recursively
-}
-
-void printLCS(int** C, char** direction, int* x,  int i , int j)
-{
-    if(i == 0 || j == 0)
-    {
-        return;
-    }
-    if (direction[i][j] == '2')
-    {
-        printLCS(C, direction, x, i-1, j-1);
-        cout << x[i-1] << " ";
-    }
-    else if(direction[i][j] == '0')
-    {
-        printLCS(C, direction, x, i-1, j);
-    }
-    else
-    {
-        printLCS(C, direction, x, i, j-1);
-    }
-    return;
+    string a1 = "aghbklc";
+    string b1 = "hgalbckzzyw";
+    const char* s1 = a1.c_str();
+    const char* s2 = b1.c_str();
+    int maxLCS = LCS(s1, s2); // 3 => "abc"
+    cout << maxLCS << endl;
+    return 0; 
 }
 // */
 //----------------------------------------------------------------------------------------------------
