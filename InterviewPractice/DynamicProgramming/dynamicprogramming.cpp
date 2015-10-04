@@ -1,10 +1,10 @@
 //----------------------------------------------------------------------------------------------------
 /*
 Table of Contents
-1. Fibonacci Sequence (Bottom Up)
-2. Rod Cutting Problem (Top Down with Memoization)
-3. Rod Cutting Problem (Bottom Up)
-4. Longest Common Subsequence Between Two Strings
+1. Fibonacci Sequence (Bottom Up), T(n) = O(n), S(n) = O(n)
+2. Rod Cutting Problem (Top Down with Memoization),T(n) = O(n^2), S(n) = O(n)
+3. Rod Cutting Problem (Bottom Up), T(n) =  O(n^2) ,S(n) =  O(n)
+4. Longest Common Subsequence Between Two Strings, T(n,m) = O(nm), S(n,m) = O(nm)
 5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------
 TODO: 
@@ -111,7 +111,7 @@ Unbounded Knapsack Problem
 */
 //----------------------------------------------------------------------------------------------------
 // 1 Fibonacci Sequence (Bottom Up)
-// Time Complexity: O(n)
+// Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(n)
 //-------------------------------------
 /* //
@@ -164,8 +164,8 @@ int fibonacci(int n, int* p)
 //       For every i > 1, you can decide if you wanna cut, or not cut.
 //  Which means trying everything out will be an exponential time
 // Method 1: Top-Down with memoization
-// Time Complexity: O(n^2) , using dynamic programming
-// Space Complexity: O(n)
+// Time Complexity, T(n) = O(n^2) , using dynamic programming
+// Space Complexity, S(n) = O(n)
 // Note: Use dynamic programming and print the final solution, not just the optimal value
 // TODO: Have not printed the final solution
 //-------------------------------------
@@ -246,8 +246,8 @@ int cut_rod(int *p , int n, int *s, int *r)
 //       For every i > 1, you can decide if you wanna cut, or not cut.
 //  Which means trying everything out will be an exponential time
 // Method 2: Bottom Up Approach
-// Time Complexity: O(n^2) , using dynamic programming
-// Space Complexity: O(n)
+// Time Complexity, T(n) =  O(n^2) , using dynamic programming
+// Space Complexity, S(n) =  O(n)
 // Note: Use dynamic programming and print the final solution, not just the optimal value
 //-------------------------------------
 /* //
