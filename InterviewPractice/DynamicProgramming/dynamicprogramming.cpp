@@ -1,22 +1,20 @@
-Table of Contents
-
-1. Fibonacci Sequence (Bottom Up)
-
-2. Rod Cutting Problem (Top Down with Memoization)
-
-3. Rod Cutting Problem (Bottom Up)
-
-4. Longest Common Subsequence Between Two Strings (Bottom Up)
-
+//----------------------------------------------------------------------------------------------------
 /*
+Table of Contents
+1. Fibonacci Sequence (Bottom Up)
+2. Rod Cutting Problem (Top Down with Memoization)
+3. Rod Cutting Problem (Bottom Up)
+4. Longest Common Subsequence Between Two Strings (Bottom Up)
+5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
+//----------------------------------------------------------------------------------------------------
 TODO: 
-5.Maximum Subarray() (using dynamic instead of kadane's algorithm)
+15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
 
-6.Longest Common Substring Between Two Strings (Bottom Up)
+16.Longest Common Substring Between Two Strings (Bottom Up)
 
-7.Josephus Problem
+17.Josephus Problem
 
-8. Triangle Problem
+18. Triangle Problem
     This is really a great problem. Easy enough. Note: In this problem, the direction you traverse have different complexities. 
     One has O(n^2 + n), the other has O(n^2) 
     Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
@@ -31,21 +29,29 @@ TODO:
 notes: 
 When question says, at each level, you can either move to left or right => Big hint you should try dynamic programming
     1. Find out equation and create recursive function. 
+        - Start by figuring out the base cases
         - Identify optimal substructure (Subproblems can be solved optimally as well)
+        - Note: The optimal substructure may not be the optimal solution to that sub-problem. The optimal substructure may contain restriction such as: 
+            For Longest Increasing Subsequence, the optimal Substructure L[i] requires the optimal solution to i to contain item 'i' itself. 
+            However, the actual optimal solution will need to be iterated from L[0] to L[i] to find the actual optimal solution as 
+            the optimal solution may not contain i
         - Use divide and conquer approach (Top - Down)
         - Start from solving each element individually and combine answers (Down -> Up) , normally saves space of not needing the cache compared to previous (top down)
         - Start cases either from individual to group (bottom up) of tree  OR from left to right (One element to all N elements) and try to form an equation
         - How does including your new individual change the equation? Think in that way. 
         - When moving from left to right, each step i is the solution for the same problem at i. Then at step(n), that is the solution to the problem n given
+        - Find out what base cases are, try out every variable combination. (Knapsack => W, w[i], v[i]) => arr[W] = (v[i], w[i])
+        - Dimensions are prolly the values that can only contain positive integers since thats how you build your array. 
+            - if (-) integers are allowed, just add everything with the abs(lowest (-) integer) and now all you have is (+) integers
+            - if the values aren't (-), you can always build the array by indexing into it. 
+        - An NP-Hard problem may have a pseudo-polynomial solution 
     2. Remove useless arguments from function, the different combinations of arguments are the states of the function. 
     3. If subproblems overlap, memoize them: Save results into cache[n][n] (2 arguments, each can span n different values => n^2 different computations only) 
        - If your function only depends on the last k results, where k is a constant (doesnt change depending on value of n) 
        Then, you can make temporary variables and swap them as necessary instead of making an entire array to store the results. 
        e.g. if k = 2, instead of doing a[i] = max(a[i-1], a[i-2]) 
        you can do,   currMax = max(prev, prevprev), prevprev = prev, prev = currMax; 
-
     e.g. Pasted from comments at: https://www.quora.com/Are-there-any-good-resources-or-tutorials-for-dynamic-programming-besides-the-TopCoder-tutorial
-        
         Imagine you have a collection of N wines placed next to each other on a shelf. For simplicity, let's number the wines from left to right as they are standing 
         on the shelf with integers from 1 to N, respectively. 
         The price of the i-th wine is pi (prices of different wines can be different).
@@ -96,18 +102,19 @@ When question says, at each level, you can either move to left or right => Big h
             return cache[0][N - 1];
         }
     
-
-Given Knapsack Problem 
-I(0), ... I(n-1), I(0) = (V(0), W(0)) with constraint C = Weight. Calculate maximum value that can be gain. 
-Note: can pick duplicates of I(i) for any i. So like 3I(0) + 2I(i)
+Unbounded Knapsack Problem
+    Given Knapsack Problem 
+    I(0), ... I(n-1), I(0) = (V(0), W(0)) with constraint C = Weight. Calculate maximum value that can be gain. 
+    Note: can pick duplicates of I(i) for any i. So like 3I(0) + 2I(i)
+    w[i] > 0 for every i
+    w[i] = Integer, W = integer
 */
-
 //----------------------------------------------------------------------------------------------------
-/* //
 // 1 Fibonacci Sequence (Bottom Up)
 // Time Complexity: O(n)
 // Space Complexity, S(n) = O(n)
-
+//-------------------------------------
+/* //
 #include <iostream>
 #include <stdlib.h>
 
@@ -149,7 +156,6 @@ int fibonacci(int n, int* p)
 // */
 
 //----------------------------------------------------------------------------------------------------
-/* //
 // 2 Rod Cutting Problem ( Dynamic Programming)
 // Top-Down with memoization
 // Given a rod of length n, and a price for rod of length 1, 2, ... n.
@@ -162,6 +168,8 @@ int fibonacci(int n, int* p)
 // Space Complexity: O(n)
 // Note: Use dynamic programming and print the final solution, not just the optimal value
 // TODO: Have not printed the final solution
+//-------------------------------------
+/* //
 #include <iostream>
 #include <stdlib.h>
 #include <limits.h>
@@ -230,7 +238,6 @@ int cut_rod(int *p , int n, int *s, int *r)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-/* //
 // 3 Rod Cutting Problem ( Dynamic Programming)
 // Bottom Up Approach
 // Given a rod of length n, and a price for rod of length 1, 2, ... n.
@@ -242,6 +249,8 @@ int cut_rod(int *p , int n, int *s, int *r)
 // Time Complexity: O(n^2) , using dynamic programming
 // Space Complexity: O(n)
 // Note: Use dynamic programming and print the final solution, not just the optimal value
+//-------------------------------------
+/* //
 #include <iostream>
 #include <stdlib.h>
 #include <limits.h>
@@ -327,12 +336,12 @@ int cut_rod(int *p , int n, int *s, int *r)
 }
 // */
 //-----------------------------------------------------------------------------------------------
-/*
 // 4 Longest Common Subsequence Between Two Strings
 // Approach 1: Dynamic Programming (Bottom Up)
 // Time Complexity, T(n,m) = O(nm)
 // Space Complexity, S(n,m) = O(nm)
-
+//-------------------------------------
+/*
 #include <cstdlib>
 #include <iostream>
 using namespace std;
@@ -430,6 +439,74 @@ void printLCS(int** C, char** direction, int* x,  int i , int j)
         printLCS(C, direction, x, i, j-1);
     }
     return;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 5 Longest Increasing Subsequence
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(n)
+//-------------------------------------
+/* //  
+Questions
+    1. What does the array contain? Integer? Double? 
+    2. Can the integers be any value? Can it be (-) ? 
+    3. What to return if array is empty?  0 
+    4. Do I return the array of longest increasing subsequence or just length 
+    5. Can array have duplicates? Does maintaining on the same number counts as increasing? YES. 
+Function Prototype 
+    int LIS(vector<int>& arr); 
+Test Cases
+    [] = 0
+    [1,-1,3] = 2
+    [1,-1] = 1 
+    [15, 16, 9, 17, 10, 11, 12] = 4 
+Algorithm
+    1. Brute Force => O(2^n) 
+        NOT O(n^2) cause can't simply loop through array once to find out if it works for each element. Need try all possible permutations. 
+    2. Dynamic Programming 
+        Let L[i] = longest increasing subsequence from 0->i but including 'i' with i in the LIS. 
+        L[0] = 1 
+        L[i] = 1, L[i] = max(L[i], L[j] + 1) for every j < i where arr[j] < arr[i]
+        O(n^2), Space O(n)
+TEST!  
+// */ 
+//-------------------------------------
+/* //
+#include <cmath> 
+#include <cstdlib>
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+int LIS(vector<int>& arr)
+{
+    int n = arr.size(); 
+    if ( n <= 0) return 0;
+    vector<int> L(n, 1); // initialize all to 1
+    for(int i = 1; i < n; i++)
+    {
+        for(int j = i-1; j >= 0; j--)
+        {
+            if(arr[j] <= arr[i])
+            {
+                L[i] = max(1 + L[j], L[i]);
+            }
+        }
+    }
+    int maximum = L[0];
+    for(int i = 1; i < n; i++)
+    {
+        maximum = max(maximum, L[i]);
+    }
+    return maximum;
+}
+
+int main(void)
+{
+    vector<int> arr = {15, 16, 9, 17, 10, 11, 12}; // C++ 11
+    int result = LIS(arr); 
+    cout << result << endl;
+    return 0;
 }
 // */
 //-----------------------------------------------------------------------------------------------
