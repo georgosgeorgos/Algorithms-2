@@ -37,64 +37,69 @@ hint: Dynamic Programming/BFS/Math theorem can be used to solve
 
 // */
 //----------------------------------------------------------------------------------------
-/* //
-// 1. Implement pow(double, int)
+// 1. Calculate pow(double, int n), where n can be (-), 0 , (+)
 // Time Complexity: O(logN)
 // Space Complexity: O(1)
-// Calculate pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)
-#include <math.h>
+//-----------------------------------
+/*
+Questions:
+    1. Integers only or double? 
+    2. Can k be (-)? 
+    3. Any limit to the number for k or num?  
+
+Function Prototype: 
+    double powers(double num,int k); 
+
+Test Cases
+    2^0 = 1
+    2^3 = 8
+    2^(-3) = 1/8
+
+Algorithm: 
+    2^4 = 2^2 * 2^2 
+    2^5 = 2^2 * 2^2 * 2
+// */
+//-----------------------------------
+#include <cmath>
 #include <iostream>
 using namespace std;
 
-double power(double a, int n);
+double power(double num, int k)
+{
+    if (k == 0 || num == 1) return 1; 
+    if (k == 1) return num; 
+    if (k == -1) return 1/num;
+    double result = 1; 
+    result = power(num, k/2);
+    result *= result; 
+    if (k&0x1)
+    {
+        if (k > 0)
+            result *= num;
+        else 
+            result *= 1/num;
+    }
+    return result; 
+}
 
 int main(void)
 {
-    int k = 3;
-    double m = 4.0;
-    double result = power(m, k);
+    double num = 2; 
+    double result = power(num, 3); 
     cout << result << endl;
-    k = -3;
-    m = 2.0;
-    result = power(m, k);
+    result = power(num, -3); 
     cout << result << endl;
+    return 0; 
 }
+double power(double a, int n);
 
-double power(double a, int n)
-{
-    if ((n == 0) || (a == 1))
-        return 1;
-    if (n > 0)
-    {
-        double b = power(a, floor(n/2));
-        if (n%2 == 0)
-        {
-            return b*b;
-        }
-        else
-        {
-            return b*b*a;
-        }
-    }
-    else
-    {
-        double b = power(a, -floor(n/2));
-        if (n%2 == 0)
-        {
-            return 1.0/(b*b);
-        }
-        else
-        {
-            return 1.0/(b*b*a);
-        }
-    }
-}
 // */
 //----------------------------------------------------------------------------------------
 // 2 Euclid's Algorithm: Calculate GCD  
 //----------------------------------------------------------------------------------------
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
+/* //
 #include <iostream>
 using namespace std;
 
