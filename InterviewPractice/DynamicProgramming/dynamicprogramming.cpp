@@ -9,11 +9,97 @@ Table of Contents
 4. Longest Common Subsequence Between Two Strings (Bottom Up)
 
 /*
-5. TODO: Maximum Subarray() (using dynamic instead of kadane's algorithm
+TODO: 
+5.Maximum Subarray() (using dynamic instead of kadane's algorithm)
 
-6. TODO: Longest Common Substring Between Two Strings (Bottom Up)
+6.Longest Common Substring Between Two Strings (Bottom Up)
 
-7. TODO: Josephus Problem
+7.Josephus Problem
+
+8. Triangle Problem
+    This is really a great problem. Easy enough. Note: In this problem, the direction you traverse have different complexities. 
+    One has O(n^2 + n), the other has O(n^2) 
+    Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+    For example, given the following triangle
+    [
+         [2],
+        [3,4],
+       [6,5,7],
+      [4,1,8,3]
+    ]
+    Question: 1. what does adjacent mean? It means if you look at the triangle in a diagonal way, it can either go left or right, (NOT array way where its left, right, or middle)
+notes: 
+When question says, at each level, you can either move to left or right => Big hint you should try dynamic programming
+    1. Find out equation and create recursive function. 
+        - Identify optimal substructure (Subproblems can be solved optimally as well)
+        - Use divide and conquer approach (Top - Down)
+        - Start from solving each element individually and combine answers (Down -> Up) , normally saves space of not needing the cache compared to previous (top down)
+        - Start cases either from individual to group (bottom up) of tree  OR from left to right (One element to all N elements) and try to form an equation
+        - How does including your new individual change the equation? Think in that way. 
+        - When moving from left to right, each step i is the solution for the same problem at i. Then at step(n), that is the solution to the problem n given
+    2. Remove useless arguments from function, the different combinations of arguments are the states of the function. 
+    3. If subproblems overlap, memoize them: Save results into cache[n][n] (2 arguments, each can span n different values => n^2 different computations only) 
+       - If your function only depends on the last k results, where k is a constant (doesnt change depending on value of n) 
+       Then, you can make temporary variables and swap them as necessary instead of making an entire array to store the results. 
+       e.g. if k = 2, instead of doing a[i] = max(a[i-1], a[i-2]) 
+       you can do,   currMax = max(prev, prevprev), prevprev = prev, prev = currMax; 
+
+    e.g. Pasted from comments at: https://www.quora.com/Are-there-any-good-resources-or-tutorials-for-dynamic-programming-besides-the-TopCoder-tutorial
+        
+        Imagine you have a collection of N wines placed next to each other on a shelf. For simplicity, let's number the wines from left to right as they are standing 
+        on the shelf with integers from 1 to N, respectively. 
+        The price of the i-th wine is pi (prices of different wines can be different).
+        Because the wines get better every year, supposing today is the year 1, on year y
+        the price of the i-th wine will be y*pi, i.e. y-times the value that current year.You want to sell all the wines you have, but you want to sell exactly one wine per year, starting 
+        on this year. One more constraint - on each year you are allowed to sell only either the leftmost or the rightmost wine on the shelf and you are not allowed 
+        to reorder the wines.
+        (i.e. they must stay in the same order as they are in the beginning).
+        If the prices of the wines are: p1=2, p2=3, p3=5, p4=1, p5=4
+        The greedy strategy would sell them in the order p1, p2, p5, p4, p3 for a total profit 2*1 + 3*2 + 4*3 + 1*4 + 5*5 = 49
+        But we can do better if we sell the wines in the order p1, p5, p4, p2, p3 for a total profit 2*1 + 4*2 + 1*3 + 3*4 + 5*5 = 50
+        Up Down: 
+            int N; // read-only number of wines in the beginning
+            int p[N]; // read-only array of wine prices
+            int cache[N][N]; // all values initialized to -1 (or anything you choose)
+
+            int profit(int be, int en) {
+              if (be > en)
+                return 0;
+
+              // these two lines save the day
+              if (cache[be][en] != -1)
+                return cache[be][en];
+
+              int year = N - (en-be+1) + 1;
+              // when calculating the new answer, don't forget to cache it
+              return cache[be][en] = max(
+                profit(be+1, en) + year * p[be],
+                profit(be, en-1) + year * p[en]);
+            }
+        Down Up: 
+        public int getMaxProfitDP() {
+            // initialize such that each sale is maximized
+            for (int i = 0; i < N; i++) {
+                cache[i][i] = p[i] * N;
+            }
+
+            for (int y = 1; y < N; y++) {
+                for (int x = 0; x < N - y; x++) {
+                    int be = x;
+                    int en = x + y;
+                    int year = N - (en - be);
+
+                    cache[be][en] = max(cache[be + 1][en] + year * p[be],
+                                        cache[be][en - 1] + year * p[en]);
+                }
+            }
+            return cache[0][N - 1];
+        }
+    
+
+Given Knapsack Problem 
+I(0), ... I(n-1), I(0) = (V(0), W(0)) with constraint C = Weight. Calculate maximum value that can be gain. 
+Note: can pick duplicates of I(i) for any i. So like 3I(0) + 2I(i)
 */
 
 //----------------------------------------------------------------------------------------------------
