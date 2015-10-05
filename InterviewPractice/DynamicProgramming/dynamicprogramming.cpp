@@ -6,14 +6,12 @@ Table of Contents
 3. Rod Cutting Problem (Bottom Up), T(n) =  O(n^2) ,S(n) =  O(n)
 4. Longest Common Subsequence Between Two Strings, T(n,m) = O(nm), S(n,m) = O(nm)
 5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
+6. Edit Distance, given 2 strings that are different, find min. number of changes to convert 1 to another, T(n,m) = O(nm), S(n,m) = O(nm)
 //----------------------------------------------------------------------------------------------------
 TODO: 
 15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
-
 16.Longest Common Substring Between Two Strings (Bottom Up)
-
 17.Josephus Problem
-
 18. Triangle Problem
     This is really a great problem. Easy enough. Note: In this problem, the direction you traverse have different complexities. 
     One has O(n^2 + n), the other has O(n^2) 
@@ -512,4 +510,143 @@ int main(void)
     return 0;
 }
 // */
-//-----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+// 6 Edit Distance 
+// Given 2 strings that are different, find min. number of changes to convert 1 to another
+// Operations are equal cost: Replace, Insert, Delete             
+// Time Complexity, T(n,m) = O(nm)
+// Space Complexity, S(n,m) = O(nm)
+//-------------------------------------
+/* 
+Applications: Auto-correct
+OMG YOU SOLVED IT YOURSELF, it is a totally different solution that what's available online, so understand those in future
+Online solution is actually simpler but the fact that you solved it yourself from Longest Common Subsequence is cool! 
+You can actually solve it directly. But your motivation was from LCS. 
+// */
+//-------------------------------------
+/* 
+#include <cstring> 
+#include <string> 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+int getEdit(vector < vector<int> >& dir,vector < vector<int> >& arr, const char* s1, int i, int j)
+{
+    if(i < 0 || j < 0) return 0;  // no need to count out of bounds
+
+    // Pick the direction that results in largest
+    int direc = -1; // initialize to nowhere
+    int currMax = 0;
+
+    // Then just skip to diagonal
+    if (dir[i][j] == 2)
+    {
+        // Check that i and j are both not = 0
+        if (i != 0 && j != 0)
+            return (0 + getEdit(dir, arr, s1, i-1, j-1));
+        else if (i != 0)
+            return (0 + getEdit(dir, arr, s1, i-1, j));
+        else if (j != 0)
+            return (0 + getEdit(dir, arr, s1, i, j-1));
+        else 
+            return 0;
+    }
+    else 
+    {
+        if(i!= 0 && j != 0)
+        {
+            direc = 2;
+            currMax = arr[i-1][j-1];
+        }
+        if (i!= 0)
+        {
+            if (arr[i-1][j] > currMax) 
+            {
+                direc = 1; 
+                currMax = arr[i-1][j];
+            }
+
+        }
+        if(j != 0)
+        {
+            if (arr[i][j-1] > currMax)
+            {
+                direc = 0;
+                currMax = arr[i][j-1];
+            }
+        }
+        // If you didn't update direction
+        if (direc == -1)
+            return 1;  // return 1 for accounting for this node
+        else if (direc == 2)
+            return (1 + getEdit(dir, arr, s1, i-1, j-1));
+        else if (direc == 1)
+            return (1 + getEdit(dir, arr, s1, i-1, j));
+        else
+            return (1 + getEdit(dir, arr, s1, i, j-1));
+    }
+}
+
+int LCSThenEdit(const char* s1, const char* s2)
+{
+    if (!s1 || !s2) return 0;
+    int n = strlen(s1); 
+    int m = strlen(s2);
+    if (n == 0 || m == 0) return 0;
+    vector < vector <int> > arr(n, vector<int> (m, 0));
+    vector < vector <int> > dir(n, vector<int> (m, 0));
+    int maxSoFar = 0; 
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < m; j++)
+        {
+            if (s1[i] == s2[j])
+            {
+                dir[i][j] = 2; 
+                arr[i][j] = 1; 
+                if (i != 0 && j != 0) // MISTAKE!! USED || instead of &&
+                {
+                    arr[i][j] += arr[i-1][j-1]; 
+                }
+            }
+            else 
+            {
+                if (i!=0)
+                {
+                    dir[i][j] = 1; 
+                    arr[i][j] = arr[i-1][j]; 
+                }
+                if (j!=0)
+                {
+                    if(arr[i][j-1] > arr[i][j])
+                    {
+                        arr[i][j] = arr[i][j-1];
+                        dir[i][j] = 0; 
+                    }
+                }
+            }
+            if (arr[i][j] > maxSoFar) maxSoFar = arr[i][j]; 
+        }
+    }
+    maxSoFar = getEdit(dir, arr, s1, n-1, m-1);
+    // Need to know direction to know how far back to go
+    cout << endl;
+    return maxSoFar; 
+}
+
+int main(void)
+{
+    string a1 = "iaebgch";
+    string b1 = "afbcg";
+    //string a1 = "abbc";
+    //string b1 = "abc";
+    const char* s1 = a1.c_str();
+    const char* s2 = b1.c_str();
+    int maxEdit = LCSThenEdit(s1, s2); // 3 => "abc"
+    cout << maxEdit << endl;
+    cout << "OMG, YOU SOLVED IT YOURSELF!" << endl;
+    return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------
