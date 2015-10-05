@@ -7,6 +7,7 @@ Table of Contents
 4. Longest Common Subsequence Between Two Strings, T(n,m) = O(nm), S(n,m) = O(nm)
 5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
 6. Edit Distance, given 2 strings that are different, find min. number of changes to convert 1 to another, T(n,m) = O(nm), S(n,m) = O(nm)
+7. Minimum Cost Path from [0][0] to [m-1][n-1] in a matrix, T(n,m) = O(mn), S(n,m) = O(mn)
 //----------------------------------------------------------------------------------------------------
 TODO: 
 15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
@@ -646,6 +647,96 @@ int main(void)
     int maxEdit = LCSThenEdit(s1, s2); // 3 => "abc"
     cout << maxEdit << endl;
     cout << "OMG, YOU SOLVED IT YOURSELF!" << endl;
+    return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 7 Minimum Cost Path from [0][0] to [m-1][n-1] in a matrix 
+// Time Complexity, T(n,m) = O(mn)
+// Space Complexity, S(n,m) = O(mn)
+//-------------------------------------
+/* 
+Questions: 
+    1. What does the matrix contain? Integers or doubles? 
+    2. Can the values be <= 0? 
+    3. Is it inclusive of starting and ending points? 
+    4. Which direction can I move ? Right, Down, Diagonal Down. 
+    5. Any limitations on the values? Or the size of matrix? 
+    6. Can I modify original matrix passed in to save space? No!
+    7. What to return if array size is empty? 
+Function Prototype:
+    int minCostPath(vector < vector <int> >& arr);
+Test Case:
+    1 2 2
+    2 1 2  => 3
+    2 2 1 
+Algorithm: 
+    Start from top and go from left to right row by row and fill it up with minimum to come from adding its own value
+    Then at the end, you'll get the min cost path.
+    minimum[i][j] = minimum cost to go from [0][0] to [i][j]
+Implementation
+TEST!
+*/
+//-------------------------------------
+/* //
+#include <climits> // for INT_MAX
+#include <vector>
+#include <iostream>
+using namespace std; 
+
+int minCostPath(vector < vector <int> >& arr)
+{
+    int N = arr.size();
+    if (N <= 0) return 0;
+    int M = arr[0].size();
+    if (M <= 0) return 0;
+    vector < vector <int> > minimum(N, vector<int> (M, 0)); 
+    // minimum[i][j] = minimum cost to go from [0][0] to [i][j]
+    minimum[0][0] = arr[0][0]; 
+    int j = 1;
+    for(int i = 0; i < N; i++)
+    {
+        for(; j < M; j++)
+        {
+            int prev = INT_MAX;  // initialize to 0 if no previous since guaranteed all values are > 0. 
+            if (i > 0 && j > 0 && (minimum[i-1][j-1] < prev)) // MISTAKE: USED '<' instead of '>'
+            {
+                prev = minimum[i-1][j-1];
+            }
+            if ( i > 0 && (minimum[i-1][j] < prev))
+            {
+                prev = minimum[i-1][j];
+            }
+            if ( j > 0 && (minimum[i][j-1] < prev))
+            {
+                prev = minimum[i][j-1];
+            }
+            // previous will always be updated except the very first occurence which only occurs once
+            minimum[i][j] = prev + arr[i][j];
+        }
+        // Initialize j, the reason you do this is so you don't have to do the if statement everytime to check if its (i == 0 && j == 0)
+        // beautiful =) , learnt this problem from engineer at bloomberg where if statement only executes once
+        j = 0;
+    }
+    return minimum[N-1][M-1];
+}
+
+int main(void)
+{
+    int N = 3; 
+    int M = 3;
+    vector < vector <int> > arr(N, vector<int> (M, 0));
+    for (int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < M; j++)
+        {
+            arr[i][j]  = (i+1) * (j+1);
+            cout << arr[i][j] << " "; 
+        }
+        cout << endl;
+    }
+    int minimum = minCostPath(arr);
+    cout << minimum << endl;
     return 0; 
 }
 // */
