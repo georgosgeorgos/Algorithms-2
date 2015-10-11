@@ -12,6 +12,7 @@ Table of Contents
 //----------------------------------------------------------------------------------------------------
 TODO: 
 // 9 Matrix Chain Multiplication
+TODO MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
 15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
 16.Longest Common Substring Between Two Strings (Bottom Up)
 17.Josephus Problem
@@ -56,6 +57,14 @@ notes:
      Change the order of computation that covers what you depend on with as little space as possible.
        - Swap the 2 inner and outer for loops and see if that works.  (e.g. Coin Change from S(n,m) = O(nm) to O(n)
        - Make the for loop go from 1->N elements or from N->1 elements
+       - there are prolly 2 different iterations dpeending on what current element depends on in matrix
+            - Depends on (top and left) of matrix 
+                - Loop from (left to right) downwards
+                - Loop from (up to down) rightwards
+            - Depends on (top and right) of matrix  (can easily change to top and left by changing for loop iteration order)
+                - Loop from (right to left) downwards
+                - Loop from (up to down) leftwards
+            - The order of looping can change the space complexity of the algorithm. E.g. (Coin Change)
    - If your function only depends on the last k results, where k is a constant (doesnt change depending on value of n) 
        Then, you can make temporary variables and swap them as necessary instead of making an entire array to store the results. 
        e.g. if k = 2, instead of doing a[i] = max(a[i-1], a[i-2]) 
@@ -771,6 +780,7 @@ Questions
     2. Is N an integer or can be floats? 
     3. Can the values of the coins be (-)
     4. Are the coins sorted? 
+    5. Is it min. number of combination of coins or min. number of coins needed to get value N? 
 Test Case: 
     {1,2,3}, N = 1 => 1 = [(1)]
     {1,2,3}, N = 3 => 3 = [(1,1,1), (1,2), (3)] 
@@ -809,6 +819,73 @@ int main(void)
     vector<int> Coins = {3,1,2}; // to show coin doesn't need to be sorted 
     int numCombinations = CoinChange(N, Coins); 
     cout << numCombinations << endl;
+    return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 9 Matrix Chain Multiplication : Find most efficient way to multiply a chain of matrices together. 
+// Time Complexity, T(n) = O(n^3), Space Complexity, S(n) = O(n^2) 
+/*
+Questions: 
+    1. Return order of multiplication of number of multiplication? 
+    2. How is the matrix given to me? Is matrix guaranteed to be multiplicable ? (row * column)
+    3. What happens if matrix size is less than 3? 
+Function Prototype: 
+    int MatrixChainMultiplication(vector<int>& matrix);
+TestCases:
+    [10,30,5,60] = 10*30*5  + 10*5*60 = 1500 + 3000 = 4500
+    [10,10] = 0
+    [10] = 0
+// */
+//-------------------------------------
+/* // 
+#include <cstdlib> // for min()
+#include <climits> // for INT_MAX
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+int MatrixChainMultiplication(vector<int>& matrix)
+{
+    int N = matrix.size(); 
+    // Initialize a matrix of N^2 with value 0 
+    vector< vector<int> > orders(N, vector<int>(N, INT_MAX));
+    // Let orders[i][j] = matrixChainMultiplication from matrix[i] to matrix[j] inclusive
+    if (N <= 2) return 0;
+    // Compute base cases
+    orders[N-1][N-1] = 0; // extra case outside for loop
+    for(int i = 0; i+1 < N; i++) // O(n)
+    {
+        orders[i][i] = 0;
+        orders[i][i+1] = 0;
+    }
+    for(int i = 0; i+2 < N; i++) // O(n)
+    {
+        orders[i][i+2] = matrix[i] * matrix[i+1] * matrix[i+2];
+    }
+    // Done computing base cases
+    // O(n^3)
+    for(int i = 2; i < N; i++)
+    {
+        for(int j = 0; j+i < N; j++)
+        {
+            // Start from k = 1 since k = 0 does not make sense as you can't have a matrix with rows and no columns
+            for(int k = 1; k < i; k++)
+            {
+                // get value of splitting at current k value
+                int temp = orders[j][j+k] + orders[j+k][j+i] + matrix[j]*matrix[j+k]*matrix[j+i];
+                orders[j][j+i] = min(orders[j][j+i], temp); // update to minimum value found // MISTAKE: Did maximum instead of minimum
+            }
+        }
+    }
+    return orders[0][N-1];
+}
+
+int main(void)
+{
+    vector<int> matrix = {10, 30, 5, 60}; // C++ 11 feature
+    int minMultiplication = MatrixChainMultiplication(matrix);
+    cout << minMultiplication << endl;
     return 0; 
 }
 // */
