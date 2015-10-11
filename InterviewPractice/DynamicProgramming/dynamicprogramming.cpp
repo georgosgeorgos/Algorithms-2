@@ -11,10 +11,11 @@ Table of Contents
 8. Coin Change: Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm], T(n,m) = O(nm), S(n,m) = O(n)
 9. Matrix Chain Multiplication: Find most efficient way to multiply a chain of matrices together, T(n) = O(n^3), S(n) = O(n^2) 
 10. Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
+11. Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break, T(n,k) = O(n(k^2)), S(n,k) = O(nk)
 //----------------------------------------------------------------------------------------------------
 TODO: 
 TODO MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
-TODO MUST DO: Unbounded Knapsack
+TODO MUST DO: Unbounded Knapsack (Easy, just 0-1 knapsack but with O(n) space cause can add itself many times) 
 15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
 16.Longest Common Substring Between Two Strings (Bottom Up)
 17.Josephus Problem
@@ -961,6 +962,59 @@ int main(void)
     vector<int> values = {3,1,6}; 
     int totalValue = Knapsack01(weights, values, W); // totalValue should be 10
     cout << totalValue << endl; 
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 11 Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break. 
+// Time Complexity, T(n,k) = O(n(k^2)), Space Complexity, S(n,k) = O(nk)
+//-------------------------------------
+/*
+Questions
+    1. Is there a limit for value of k? 
+// */
+//-------------------------------------
+/* //
+#include <climits> // INT_MAX
+#include <cstdlib> // min() and max()
+#include <vector> 
+#include <iostream> 
+using namespace std;
+
+int EggDrop(int n, int k)
+{
+    vector< vector<int> > arr(n+1, vector<int> (k + 1,INT_MAX));
+    for(int i = 1; i <= k; i++)
+    {
+        // Can't try anymore if 0 eggs left
+        arr[0][i] = 0;
+        // Need try all k floors if only have 1 
+        arr[1][i] = i; // MISTAKE: Wrote k instead of i here which is wrong!
+    }
+    for(int i = 1; i <= n; i++)
+    {
+        arr[i][0] = 0; // no floors left to try
+        arr[i][1] = 1; // 1 floor left to try
+    }
+    for(int i = 2; i <= n; i++)
+    {
+        for(int j = 2; j <= k;j++)
+        {
+            for(int x = 1; x <= j; x++)
+            {
+                arr[i][j] = min(arr[i][j],1 + max(arr[i][j-x], arr[i-1][x-1]));
+            }
+        }
+    }
+    return arr[n][k];
+}
+
+int main(void)
+{
+    int n = 2;
+    int k = 36;
+    int minTries = EggDrop(n, k); 
+    cout << minTries << endl; // 8 
     return 0;
 }
 // */
