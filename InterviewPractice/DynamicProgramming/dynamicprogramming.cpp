@@ -8,11 +8,13 @@ Table of Contents
 5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
 6. Edit Distance, given 2 strings that are different, find min. number of changes to convert 1 to another, T(n,m) = O(nm), S(n,m) = O(nm)
 7. Minimum Cost Path from [0][0] to [m-1][n-1] in a matrix, T(n,m) = O(mn), S(n,m) = O(mn)
-8. Coin Change : Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm], T(n,m) = O(nm), S(n,m) = O(n)
+8. Coin Change: Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm], T(n,m) = O(nm), S(n,m) = O(n)
+9. Matrix Chain Multiplication: Find most efficient way to multiply a chain of matrices together, T(n) = O(n^3), S(n) = O(n^2) 
+10. Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
 //----------------------------------------------------------------------------------------------------
 TODO: 
-// 9 Matrix Chain Multiplication
 TODO MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
+TODO MUST DO: Unbounded Knapsack
 15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
 16.Longest Common Substring Between Two Strings (Bottom Up)
 17.Josephus Problem
@@ -771,7 +773,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-// 8 Coin Change : Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm]
+// 8 Coin Change: Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm]
 // Time Complexity, T(n,m) = O(nm), Space Complexity, S(n,m) = O(n)
 //-------------------------------------
 /*
@@ -823,7 +825,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-// 9 Matrix Chain Multiplication : Find most efficient way to multiply a chain of matrices together. 
+// 9 Matrix Chain Multiplication: Find most efficient way to multiply a chain of matrices together. 
 // Time Complexity, T(n) = O(n^3), Space Complexity, S(n) = O(n^2) 
 /*
 Questions: 
@@ -887,6 +889,79 @@ int main(void)
     int minMultiplication = MatrixChainMultiplication(matrix);
     cout << minMultiplication << endl;
     return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 10 Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W.
+// Time Complexity, T(W,n) = O(nW), Space Complexity, S(W,n) = O(nW)
+//-------------------------------------
+/* 
+Questions:
+    1. Is there unlimited number of each item? 
+    2. Can weights be < 0 ? Are weights double or integers? 
+    3. How about weight capacity? 
+    4. Can values be < 0 ?  No
+Function Prototype:
+    int Knapsack01(vector<int>& weights, vector<int>& values, int capacity); 
+Test:
+    W=5, [Wi,Vi] = [2,3], [3,1] => 4
+    W=4, [Wi,Vi] = [2,3], [3,1] => 3 
+    W=11, [Wi,Vi] = [2,3], [6,6], [3,1] => 10
+        // To make sure [3,1] doesn't overwrite [5,6] after deciding can overwrite [2,3]
+    W=9, [Wi,Vi] = [2,3], [3,1], [6,6] => 9 
+    W=12, [Wi,Vi] = [2,3], [6,6] => 9 
+        // to make sure do not add same item twice, so in this case, don't add item 5 twice to get 12 
+// */
+//-------------------------------------
+/* //
+#include <vector>
+#include <iostream> 
+using namespace std;
+
+int Knapsack01(vector<int>& weights, vector<int>& values, int capacity)
+{
+    if (capacity < 0) return 0; 
+    int N = values.size();
+    if( N != weights.size()) return 0; // error in inputs given
+    if(N <= 0) return 0; // if no item given, return 0
+    vector< vector<int> > matrix(capacity + 1, vector<int> (N, 0));
+    // matrix[weight,itemIndex] => total value obtainable for this weight capacity with items up to and including itemIndex 
+    // but not necessarily including item at itemIndex itself
+    // Initialize first item
+    for(int i = 0; i <= capacity; i++)
+    {
+        matrix[i][0] =  i >= weights[0] ? values[0] : 0;
+    }
+    // Go through each item other item
+    for(int i = 1; i < N; i++)
+    {
+        for(int j = 0; j <= capacity; j++)
+        {
+            // Initialize to not adding current item
+            matrix[j][i] = matrix[j][i-1];
+            // only if current item weight is less than current total capacity
+            if(j >= weights[i])
+            {
+                // Decide if better to include new item or not include it
+                if((matrix[j-weights[i]][i-1] + values[i]) > matrix[j][i-1])
+                {
+                    // Include this item instead 
+                    matrix[j][i] = matrix[j-weights[i]][i-1] + values[i];
+                }
+            }
+        }
+    }
+    return matrix[capacity][N-1];
+}
+
+int main(void)
+{
+    int W = 12; 
+    vector<int> weights = {2,3,6}; // C++11 Feature
+    vector<int> values = {3,1,6}; 
+    int totalValue = Knapsack01(weights, values, W); // totalValue should be 10
+    cout << totalValue << endl; 
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------
