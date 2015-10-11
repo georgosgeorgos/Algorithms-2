@@ -1,3 +1,4 @@
+
 //----------------------------------------------------------------------------------------------------
 /*
 Table of Contents
@@ -16,10 +17,10 @@ Table of Contents
 TODO: 
 TODO MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
 TODO MUST DO: Unbounded Knapsack (Easy, just 0-1 knapsack but with O(n) space cause can add itself many times) 
-15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
-16.Longest Common Substring Between Two Strings (Bottom Up)
-17.Josephus Problem
-18. Triangle Problem
+25.Maximum Subarray() (using dynamic instead of kadane's algorithm)
+26.Longest Common Substring Between Two Strings (Bottom Up)
+27.Josephus Problem
+28. Triangle Problem
     This is really a great problem. Easy enough. Note: In this problem, the direction you traverse have different complexities. 
     One has O(n^2 + n), the other has O(n^2) 
     Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
@@ -68,6 +69,11 @@ notes:
                 - Loop from (right to left) downwards
                 - Loop from (up to down) leftwards
             - The order of looping can change the space complexity of the algorithm. E.g. (Coin Change)
+            - NOTE: This is only true if you always want to get the latest changes, sometimes, you want the older changes instead of latest changes
+                    Then, this Loop order doesn't hold.     
+                    e.g. Binomial Coefficient Problem (Refer to Mathematics Folder) 
+                    Depends on (top and left) of matrix
+                        Loop from right to left downwards so that you don't replace older changes by looping from left to right
    - If your function only depends on the last k results, where k is a constant (doesnt change depending on value of n) 
        Then, you can make temporary variables and swap them as necessary instead of making an entire array to store the results. 
        e.g. if k = 2, instead of doing a[i] = max(a[i-1], a[i-2]) 

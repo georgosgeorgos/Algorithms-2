@@ -1,4 +1,3 @@
-//
 //----------------------------------------------------------------------------------------
 /*  //
 Table of Contents
@@ -7,6 +6,7 @@ Table of Contents
 
 2. Euclid's Algorithm: Calculate GCD, T(n) = O(n), S(n) = O(1)
 
+3. Binomial Coefficient = Number of ways to choose k out of n objects, T(n,k) = O(nk), S(n,k) = O(k)
 //----------------------------------------------------------------------------------------
 TODO:
 0. Calculate pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(1) Hint: Dynamic Programming
@@ -60,6 +60,7 @@ Algorithm:
     2^5 = 2^2 * 2^2 * 2
 // */
 //-----------------------------------
+/* //
 #include <cmath>
 #include <iostream>
 using namespace std;
@@ -164,4 +165,65 @@ int main(void)
     return 0;
 }
 // */
-//----------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+// 3 Binomial Coefficient = Number of ways to choose k out of n objects
+// Time Complexity, T(n,k) = O(nk)
+// Space Complexity, S(n,k) = O(k)
+//-----------------------------------
+/* 
+#include <vector>
+#include<iostream> 
+using namespace std; 
+
+// T(n,k) = O(n + k) , S(n,k) = O(1)
+// Problem with this solution is that you are multiplying a number by itself to be very huge, so may have overflow.
+// Thus, use dynamic programming instead
+int binomialCoeffOverflow(int n, int k)
+{
+    if (k > n || k < 0 || n < 0) return 0; 
+    if(k == 0 || k == n) return 1;
+    int nFact = 1; 
+    int kFact = 1;
+    for(int i = 1; i <= n; i++)
+        nFact *= i;
+    for(int i = 1; i <= k; i++)
+        kFact *= i;
+    for(int i = 1; i <= n-k; i++)
+        kFact *= i;
+    return nFact/kFact;
+}
+
+// Note: f(n,k) = f(n-1,k-1) + f(n-1,k)
+int binomialCoeffDynamic(int n, int k)
+{
+    if(k > n || k < 0 || n < 0 ) return 0;
+    if(k == 0 || k == n) return 1;
+    vector<int> arr(k+1, 1); // n = 1 => 1 way to choose 0 objects out of n, so initialize all to 1
+    for(int i = 1; i <= n; i++)
+    {
+        // k cannot exceed n
+        for(int j = min(k,i); j >= 0; j--) // j == 0 => 1 way which is already initialize
+        {
+            if(j == i || j == 0)
+                arr[j] = 1;
+            else
+                // arr[j-1] => f(n, k-1)
+                // arr[j] => f(n-1,k-1)
+                arr[j] = arr[j-1] + arr[j];
+        }
+    }
+    return arr[k];
+}
+
+int main(void)
+{
+    int n = 5;
+    int k  = 3; 
+    int result = binomialCoeffOverflow(n,k);  // 10
+    cout << result << endl;
+    result = binomialCoeffDynamic(n,k);  // 10
+    cout << result << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
