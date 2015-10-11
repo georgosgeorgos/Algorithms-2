@@ -8,8 +8,10 @@ Table of Contents
 5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
 6. Edit Distance, given 2 strings that are different, find min. number of changes to convert 1 to another, T(n,m) = O(nm), S(n,m) = O(nm)
 7. Minimum Cost Path from [0][0] to [m-1][n-1] in a matrix, T(n,m) = O(mn), S(n,m) = O(mn)
+8. Coin Change : Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm], T(n,m) = O(nm), S(n,m) = O(n)
 //----------------------------------------------------------------------------------------------------
 TODO: 
+// 9 Matrix Chain Multiplication
 15.Maximum Subarray() (using dynamic instead of kadane's algorithm)
 16.Longest Common Substring Between Two Strings (Bottom Up)
 17.Josephus Problem
@@ -25,81 +27,97 @@ TODO:
       [4,1,8,3]
     ]
     Question: 1. what does adjacent mean? It means if you look at the triangle in a diagonal way, it can either go left or right, (NOT array way where its left, right, or middle)
+//-------------------
 notes: 
-When question says, at each level, you can either move to left or right => Big hint you should try dynamic programming
-    1. Find out equation and create recursive function. 
-        - Start by figuring out the base cases
-        - Identify optimal substructure (Subproblems can be solved optimally as well)
-        - Note: The optimal substructure may not be the optimal solution to that sub-problem. The optimal substructure may contain restriction such as: 
-            For Longest Increasing Subsequence, the optimal Substructure L[i] requires the optimal solution to i to contain item 'i' itself. 
+//-------------------
+0. To know when dynamic programming should be tried: 
+    - At each level, you can either move to left or right
+1. Remove useless arguments from function, the different combinations of arguments are the states of the function. Repeat Step 1
+2. Find out equation and create recursive function.  (Really, what you are doing is trial and error until you find a solution that works from these approaches)
+    - Start by figuring out the base cases
+    - Identify optimal substructure (Subproblems can be solved optimally as well)
+    - When moving from left to right, each step i is the solution for the same problem at i. Then at step(n), that is the solution to the problem n given
+    - Note: The optimal substructure may not be the optimal solution to that sub-problem. The optimal substructure may contain restriction such as: 
+        - Longest Increasing Subsequence, the optimal Substructure L[i] requires the optimal solution to i to contain item 'i' itself. 
             However, the actual optimal solution will need to be iterated from L[0] to L[i] to find the actual optimal solution as 
             the optimal solution may not contain i
-        - Use divide and conquer approach (Top - Down)
-        - Start from solving each element individually and combine answers (Down -> Up) , normally saves space of not needing the cache compared to previous (top down)
-        - Start cases either from individual to group (bottom up) of tree  OR from left to right (One element to all N elements) and try to form an equation
-        - How does including your new individual change the equation? Think in that way. 
-        - When moving from left to right, each step i is the solution for the same problem at i. Then at step(n), that is the solution to the problem n given
-        - Find out what base cases are, try out every variable combination. (Knapsack => W, w[i], v[i]) => arr[W] = (v[i], w[i])
-        - Dimensions are prolly the values that can only contain positive integers since thats how you build your array. 
-            - if (-) integers are allowed, just add everything with the abs(lowest (-) integer) and now all you have is (+) integers
-            - if the values aren't (-), you can always build the array by indexing into it. 
-        - An NP-Hard problem may have a pseudo-polynomial solution 
-    2. Remove useless arguments from function, the different combinations of arguments are the states of the function. 
-    3. If subproblems overlap, memoize them: Save results into cache[n][n] (2 arguments, each can span n different values => n^2 different computations only) 
-       - If your function only depends on the last k results, where k is a constant (doesnt change depending on value of n) 
+        - Coin Change, optimal substructure must contain coin [i] 
+    - Use divide and conquer approach (Top - Down)
+    - Start from solving each element individually and combine answers (Down -> Up) , normally saves space of not needing the cache compared to previous (top down)
+    - Start cases either from individual to group (bottom up) of tree  OR from left to right (One element to all N elements) and try to form an equation
+    - How does including your new individual change the equation? Think in that way. 
+    - Find out what base cases are, try out every variable combination. (Knapsack => W, w[i], v[i]) => arr[W] = (v[i], w[i])
+    - Dimensions are prolly the values that can only contain positive integers since thats how you build your array. 
+        - if (-) integers are allowed, just add everything with the abs(lowest (-) integer) and now all you have is (+) integers
+        - if the values aren't (-), you can always build the array by indexing into it. 
+    - An NP-Hard problem may have a pseudo-polynomial solution 
+3. If subproblems overlap, memoize them: Save results into cache[n][n] (2 arguments, each can span n different values => n^2 different computations only) 
+   - To optimize for space: figure out the solution first, then learn to see what you depend on the get the solution. 
+     Change the order of computation that covers what you depend on with as little space as possible.
+       - Swap the 2 inner and outer for loops and see if that works.  (e.g. Coin Change from S(n,m) = O(nm) to O(n)
+       - Make the for loop go from 1->N elements or from N->1 elements
+   - If your function only depends on the last k results, where k is a constant (doesnt change depending on value of n) 
        Then, you can make temporary variables and swap them as necessary instead of making an entire array to store the results. 
        e.g. if k = 2, instead of doing a[i] = max(a[i-1], a[i-2]) 
        you can do,   currMax = max(prev, prevprev), prevprev = prev, prev = currMax; 
-    e.g. Pasted from comments at: https://www.quora.com/Are-there-any-good-resources-or-tutorials-for-dynamic-programming-besides-the-TopCoder-tutorial
-        Imagine you have a collection of N wines placed next to each other on a shelf. For simplicity, let's number the wines from left to right as they are standing 
-        on the shelf with integers from 1 to N, respectively. 
-        The price of the i-th wine is pi (prices of different wines can be different).
-        Because the wines get better every year, supposing today is the year 1, on year y
-        the price of the i-th wine will be y*pi, i.e. y-times the value that current year.You want to sell all the wines you have, but you want to sell exactly one wine per year, starting 
-        on this year. One more constraint - on each year you are allowed to sell only either the leftmost or the rightmost wine on the shelf and you are not allowed 
-        to reorder the wines.
-        (i.e. they must stay in the same order as they are in the beginning).
-        If the prices of the wines are: p1=2, p2=3, p3=5, p4=1, p5=4
-        The greedy strategy would sell them in the order p1, p2, p5, p4, p3 for a total profit 2*1 + 3*2 + 4*3 + 1*4 + 5*5 = 49
-        But we can do better if we sell the wines in the order p1, p5, p4, p2, p3 for a total profit 2*1 + 4*2 + 1*3 + 3*4 + 5*5 = 50
-        Up Down: 
-            int N; // read-only number of wines in the beginning
-            int p[N]; // read-only array of wine prices
-            int cache[N][N]; // all values initialized to -1 (or anything you choose)
+4. The solution is not always O(n^2)!! Sometimes, it can be O(n^3)! Thus, try every possible n within the for loops. 
+    - If question asks to find minimum of a worst case, use minimax. Iterate through all possibilities 
+    and get the minimum of the worst case. 
+    - Ask yourself, what can you control at each iteration? That's picking the best case. Now after you pick something, 
+    what is the worst case for picking it? thats the worst case. 
+    Thus, you pick the best cases among all the worst cases. 
+    e.g. Egg Dropping Problem
+//-------------------
+e.g. Pasted from comments at: https://www.quora.com/Are-there-any-good-resources-or-tutorials-for-dynamic-programming-besides-the-TopCoder-tutorial
+    Imagine you have a collection of N wines placed next to each other on a shelf. For simplicity, let's number the wines from left to right as they are standing 
+    on the shelf with integers from 1 to N, respectively. 
+    The price of the i-th wine is pi (prices of different wines can be different).
+    Because the wines get better every year, supposing today is the year 1, on year y
+    the price of the i-th wine will be y*pi, i.e. y-times the value that current year.You want to sell all the wines you have, but you want to sell exactly one wine per year, starting 
+    on this year. One more constraint - on each year you are allowed to sell only either the leftmost or the rightmost wine on the shelf and you are not allowed 
+    to reorder the wines.
+    (i.e. they must stay in the same order as they are in the beginning).
+    If the prices of the wines are: p1=2, p2=3, p3=5, p4=1, p5=4
+    The greedy strategy would sell them in the order p1, p2, p5, p4, p3 for a total profit 2*1 + 3*2 + 4*3 + 1*4 + 5*5 = 49
+    But we can do better if we sell the wines in the order p1, p5, p4, p2, p3 for a total profit 2*1 + 4*2 + 1*3 + 3*4 + 5*5 = 50
+    Up Down: 
+        int N; // read-only number of wines in the beginning
+        int p[N]; // read-only array of wine prices
+        int cache[N][N]; // all values initialized to -1 (or anything you choose)
 
-            int profit(int be, int en) {
-              if (be > en)
-                return 0;
+        int profit(int be, int en) {
+          if (be > en)
+            return 0;
 
-              // these two lines save the day
-              if (cache[be][en] != -1)
-                return cache[be][en];
+          // these two lines save the day
+          if (cache[be][en] != -1)
+            return cache[be][en];
 
-              int year = N - (en-be+1) + 1;
-              // when calculating the new answer, don't forget to cache it
-              return cache[be][en] = max(
-                profit(be+1, en) + year * p[be],
-                profit(be, en-1) + year * p[en]);
-            }
-        Down Up: 
-        public int getMaxProfitDP() {
-            // initialize such that each sale is maximized
-            for (int i = 0; i < N; i++) {
-                cache[i][i] = p[i] * N;
-            }
-
-            for (int y = 1; y < N; y++) {
-                for (int x = 0; x < N - y; x++) {
-                    int be = x;
-                    int en = x + y;
-                    int year = N - (en - be);
-
-                    cache[be][en] = max(cache[be + 1][en] + year * p[be],
-                                        cache[be][en - 1] + year * p[en]);
-                }
-            }
-            return cache[0][N - 1];
+          int year = N - (en-be+1) + 1;
+          // when calculating the new answer, don't forget to cache it
+          return cache[be][en] = max(
+            profit(be+1, en) + year * p[be],
+            profit(be, en-1) + year * p[en]);
         }
+    Down Up: 
+    public int getMaxProfitDP() {
+        // initialize such that each sale is maximized
+        for (int i = 0; i < N; i++) {
+            cache[i][i] = p[i] * N;
+        }
+
+        for (int y = 1; y < N; y++) {
+            for (int x = 0; x < N - y; x++) {
+                int be = x;
+                int en = x + y;
+                int year = N - (en - be);
+
+                cache[be][en] = max(cache[be + 1][en] + year * p[be],
+                                    cache[be][en - 1] + year * p[en]);
+            }
+        }
+        return cache[0][N - 1];
+    }
     
 Unbounded Knapsack Problem
     Given Knapsack Problem 
@@ -519,6 +537,9 @@ int main(void)
 // Space Complexity, S(n,m) = O(nm)
 //-------------------------------------
 /* 
+Questions
+    1. Can I Replace,Insert,Delete anywhere in string or at end of string
+    2. Do I have to print the operations? If yes, must I only modify 1 string or can I modify any of the string at any given operation? 
 Applications: Auto-correct
 OMG YOU SOLVED IT YOURSELF, it is a totally different solution that what's available online, so understand those in future
 Online solution is actually simpler but the fact that you solved it yourself from Longest Common Subsequence is cool! 
@@ -737,6 +758,57 @@ int main(void)
     }
     int minimum = minCostPath(arr);
     cout << minimum << endl;
+    return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 8 Coin Change : Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm]
+// Time Complexity, T(n,m) = O(nm), Space Complexity, S(n,m) = O(n)
+//-------------------------------------
+/*
+Questions
+    1. Are the coins integers or can they be floats? 
+    2. Is N an integer or can be floats? 
+    3. Can the values of the coins be (-)
+    4. Are the coins sorted? 
+Test Case: 
+    {1,2,3}, N = 1 => 1 = [(1)]
+    {1,2,3}, N = 3 => 3 = [(1,1,1), (1,2), (3)] 
+    {1,2,3}, N = 6 => 7 = [(1,...,1), (2,2,2), (2,2,1,1), (2,1,..,1), (3,3), (3,2,1), (3,1,1,1)]
+// */
+//-------------------------------------
+/* 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+int CoinChange(int N, vector<int>& Coins)
+{
+    vector<int> currSolution (N+1, 0); // C++ 11 feature
+    // currSolution[0] = 1 always
+    currSolution[0] = 1;
+    // Loop through each coin and include them in the solution
+    for(int i = 0; i < Coins.size(); i++)
+    {
+        for(int j = 1; j <= N; j++)
+        {
+            if(j - Coins[i] >= 0)
+            {
+                // Get the 1*numCombinationAfterDeducting + totalSum for this value of N 
+                currSolution[j] = currSolution[j - Coins[i]] + currSolution[j];
+            }
+            // else, don't do anything as it's just 0*numCombinationAfterDeducting + totalSum for this value of N which is the same
+        }
+    }
+    return currSolution[N]; 
+}
+
+int main(void)
+{
+    int N = 6; 
+    vector<int> Coins = {3,1,2}; // to show coin doesn't need to be sorted 
+    int numCombinations = CoinChange(N, Coins); 
+    cout << numCombinations << endl;
     return 0; 
 }
 // */
