@@ -1045,6 +1045,7 @@ Function Prototype:
 Test Cases: 
     1. "agbdbha" => 5 ("abdba")
     2. "abc" => 1 ("a")
+    3. "aa" => 2 ( "aa")
 Algorithms: 
     1.  T(n) = O(n^2) , S(n) = O(n^2) 
         Loop from down to up, add 2 if equal but not same exist, add 1 if equal but same index
@@ -1089,7 +1090,11 @@ int main(void)
 {
     string ab = "agbdbha";
     const char * str = ab.c_str();
-    int length = LongestPalindromeSubsequence(str); // "abdba => 5"
+    int length = LongestPalindromeSubsequence(str); // "abdba" => 5
+    cout << length << endl;
+    string ba = "aa";
+    const char * str2 = ba.c_str();
+    length = LongestPalindromeSubsequence(str2); // "aa" => 2
     cout << length << endl;
     return 0;
 }
