@@ -1,4 +1,3 @@
-
 //----------------------------------------------------------------------------------------------------
 /*
 Table of Contents
@@ -13,6 +12,7 @@ Table of Contents
 9. Matrix Chain Multiplication: Find most efficient way to multiply a chain of matrices together, T(n) = O(n^3), S(n) = O(n^2) 
 10. Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
 11. Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break, T(n,k) = O(n(k^2)), S(n,k) = O(nk)
+12. Longest Palindrome Subsequence, T(n) = O(n^2), S(n) = O(n^2) 
 //----------------------------------------------------------------------------------------------------
 TODO: 
 TODO MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
@@ -58,22 +58,27 @@ notes:
     - An NP-Hard problem may have a pseudo-polynomial solution 
 3. If subproblems overlap, memoize them: Save results into cache[n][n] (2 arguments, each can span n different values => n^2 different computations only) 
    - To optimize for space: figure out the solution first, then learn to see what you depend on the get the solution. 
-     Change the order of computation that covers what you depend on with as little space as possible.
+     Note: Normally can save more space if depend on a fixed number of previous elements:
+     i) If any number of arbitrary previous elements => Prolly can't save space, but need correct iteration for correct computation
+     ii) If only 1 or a constant number of previous elements => can use that constant number of space to keep track of prevoius contant number of elements
+        e.g. (Binomial Coefficient only needs previous (-1) row of elements, so constant space (only 1 row needed) O(n)
+             On other hand, (Knapsack 0-1) needs anywhere from 0->k previous rows of elements, so need all m rows O(nm)
+     Change the order of computation that covers what you depend on with as little space as possible as well as correct computation.
        - Swap the 2 inner and outer for loops and see if that works.  (e.g. Coin Change from S(n,m) = O(nm) to O(n)
        - Make the for loop go from 1->N elements or from N->1 elements
        - there are prolly 2 different iterations dpeending on what current element depends on in matrix
             - Depends on (top and left) of matrix 
-                - Loop from (left to right) downwards
+                - Loop from (left to right and diagonaltopLeft) downwards
                 - Loop from (up to down) rightwards
-            - Depends on (top and right) of matrix  (can easily change to top and left by changing for loop iteration order)
+            - Depends on (top and right and diagonaltopRight) of matrix  (can easily change to top and left by changing for loop iteration order)
                 - Loop from (right to left) downwards
                 - Loop from (up to down) leftwards
             - The order of looping can change the space complexity of the algorithm. E.g. (Coin Change)
             - NOTE: This is only true if you always want to get the latest changes, sometimes, you want the older changes instead of latest changes
                     Then, this Loop order doesn't hold.     
                     e.g. Binomial Coefficient Problem (Refer to Mathematics Folder) 
-                    Depends on (top and left) of matrix
-                        Loop from right to left downwards so that you don't replace older changes by looping from left to right
+                    Depends on (top and diagonalTopLeft) of matrix
+                        Loop from right to left downwards so that you don't (replace older changes if looping from left to right)
    - If your function only depends on the last k results, where k is a constant (doesnt change depending on value of n) 
        Then, you can make temporary variables and swap them as necessary instead of making an entire array to store the results. 
        e.g. if k = 2, instead of doing a[i] = max(a[i-1], a[i-2]) 
@@ -796,7 +801,7 @@ Test Case:
     {1,2,3}, N = 6 => 7 = [(1,...,1), (2,2,2), (2,2,1,1), (2,1,..,1), (3,3), (3,2,1), (3,1,1,1)]
 // */
 //-------------------------------------
-/* 
+/* //
 #include <vector> 
 #include <iostream> 
 using namespace std; 
@@ -813,10 +818,10 @@ int CoinChange(int N, vector<int>& Coins)
         {
             if(j - Coins[i] >= 0)
             {
-                // Get the 1*numCombinationAfterDeducting + totalSum for this value of N 
+                // Get the 1*numCombinationAfterDeducting + originalTotalSum for this value of N without this coin
                 currSolution[j] = currSolution[j - Coins[i]] + currSolution[j];
             }
-            // else, don't do anything as it's just 0*numCombinationAfterDeducting + totalSum for this value of N which is the same
+            // else, don't do anything as it's just 0*numCombinationAfterDeducting + originalTotalSum for this value of N without this coin, which remains the same
         }
     }
     return currSolution[N]; 
@@ -1021,6 +1026,71 @@ int main(void)
     int k = 36;
     int minTries = EggDrop(n, k); 
     cout << minTries << endl; // 8 
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 12 Longest Palindrome Subsequence 
+// Time Complexity, T(n) = O(n^2), Space Complexity, S(n) = O(n^2) 
+//-------------------------------------
+// note: Possible to change S(n) = O(2n) but complicated, do later. 
+/*
+Questions
+    1. Is it any character  or integers? 
+    2. Can there be duplicates in the Longest Palindrome Subsequence? 
+    3. Do I return the palindrome or do I return the length? 
+    4. What happens if string is now? or string is ""? 
+Function Prototype: 
+    int LongestPalindromeSubsequence(char* str);
+Test Cases: 
+    1. "agbdbha" => 5 ("abdba")
+    2. "abc" => 1 ("a")
+Algorithms: 
+    1.  T(n) = O(n^2) , S(n) = O(n^2) 
+        Loop from down to up, add 2 if equal but not same exist, add 1 if equal but same index
+        move diagonal downwards if equal, move max (horizontal,vertical) if not equal
+        Only use half the matrix, but complicated logic. In fact, better to just reduce to O(2n)
+        Can possible reduce S(n) = O(2n) = O(n) if want to but complicated logic, possible cause only depend on latest 2 rows 
+    2.  T(n) = O(n^2 + n) , S(n) = O(n^2 + n) 
+        Create a new string as the reversed of the original string. 
+        Return the longest common subsequence of the original string and its reversed string.
+*/
+//-------------------------------------
+/* //
+#include <cstring> 
+#include <string> 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+int LongestPalindromeSubsequence(const char* str)
+{
+    if(!str) return 0; 
+    int n = strlen(str);
+    if (n <= 0) return 0;
+    vector< vector<int> > arr(n, vector<int> (n,0)); //initialize all elements to be 0
+    // arr[i][j] => Longest palindrome subsequence from substring[i][j] inclusive
+    // the case where j < i is always 0 so ignore
+    for(int j = 0; j < n; j++) // first string to compare
+    {
+        for(int i = j; i >= 0; i--)
+        {
+            if (i == j)
+                arr[i][j] = 1; 
+            else if(str[i] == str[j]) // MISTAKE: used 'if' instead of 'else if', also used arr[i] INSTEAD OF str[i]
+                arr[i][j] = 2 + arr[i+1][j-1];
+            else
+                arr[i][j] = max(arr[i+1][j], arr[i][j-1]);
+        }
+    }
+    return arr[0][n-1];
+}
+int main(void)
+{
+    string ab = "agbdbha";
+    const char * str = ab.c_str();
+    int length = LongestPalindromeSubsequence(str); // "abdba => 5"
+    cout << length << endl;
     return 0;
 }
 // */
