@@ -2,8 +2,8 @@
 /*
 Table of Contents
 1. Fibonacci Sequence (Bottom Up), T(n) = O(n), S(n) = O(n)
-2. Rod Cutting Problem: Given a rod of length n, and a price for each length of rod, find ways to cut the rod to have maximum value, T(n) = O(n^2), S(n) = O(n)
-// TODO: 3
+2. Rod Cutting: Given a rod of length n, and a price for each length of rod, find ways to cut the rod to have maximum value, T(n) = O(n^2), S(n) = O(n)
+3. Maximum Sum Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
 4. Longest Common Subsequence Between Two Strings, T(n,m) = O(nm), S(n,m) = O(nm)
 5. Longest Increasing Subsequence, T(n) = O(n^2), S(n) = O(n)
 6. Edit Distance, given 2 strings that are different, find min. number of changes to convert 1 to another, T(n,m) = O(nm), S(n,m) = O(nm)
@@ -195,7 +195,7 @@ int fibonacci(int n, int* p)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-// 2 Rod Cutting Problem: Given a rod of length n, and a price for each length of rod, find ways to cut the rod to have maximum value
+// 2 Rod Cutting: Given a rod of length n, and a price for each length of rod, find ways to cut the rod to have maximum value
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(n)
 //-------------------------------------
@@ -237,6 +237,58 @@ int main(void)
     vector<int> rodPrices2 = {5};
     maxValue = RodCutting(rodPrices2); 
     cout << maxValue << endl; // 5 
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 3 Maximum Sum Increasing Subsequence
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(n)
+//-------------------------------------
+/* 
+Questions:
+    1. If I have {1,2,2} is the max sum 5 or 3? does same value count as increasing? yes
+    2. Can there be (-) numbers? 
+    3. What if all numbers are negative? 
+*/
+//-------------------------------------
+/* //
+#include <vector> 
+#include <iostream> 
+using namespace std;
+
+int MaxSumIncreaseSubsequence(vector<int>& arr)
+{
+    int n = arr.size();
+    if (n <= 0) return 0;
+    vector<int> L (n, 0);
+    for(int i = 0; i < n; i++)
+        L[i] = arr[i];
+    for(int i = 0; i < n; i ++)
+    {
+        for(int j = 0; j < i; j++)
+        {
+            // if the value is less than current value
+            if((arr[j] <= arr[i]) && (L[j] + arr[i] > L[i]))
+            {
+                L[i] = L[j] + arr[i];
+            }
+        }
+    }
+    // Now get the maximum sum
+    int maxSum = L[0];
+    for(int i = 0; i < n; i++)
+    {
+        if(L[i] > maxSum)
+            maxSum = L[i];
+    }
+    return maxSum;
+}
+int main(void)
+{
+    vector<int> arr = { 5, 1, 2, 1, 3, 2}; // 6 = 1 + 2 + 3
+    int maxSum = MaxSumIncreaseSubsequence(arr); 
+    cout << maxSum << endl;
     return 0;
 }
 // */
