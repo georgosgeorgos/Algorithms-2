@@ -1,18 +1,18 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Given a binary tree, return the preorder traversal of its nodes' values recursively. T(n) = O(n), S(n) = O(n)
-2. Given a binary tree, return the preorder traversal of its nodes' values iteratively. T(n) = O(n), S(n) = O(n)
-3. Given a binary tree, return the inorder traversal of its nodes' values recursively. T(n) = O(n), S(n) = O(n)
-4. Given a binary tree, return the inorder traversal of its nodes' values iteratively. T(n) = O(n), S(n) = O(n)
-5. Given a binary tree, populate next pointers. T(n) = O(n), S(n) = O(n)
+1. Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
+2. Preorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
+3. Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
+4. Inorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
+5. Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
 6. Invert a binary tree side ways, T(n) = O(n), S(n) = O(n)
-7. Given n integers, all which are distinct, how many configurations can a binary search tree have? T(n) = O(n), S(n) = O(n)
+7. Output number of configurations of binary search tree given n distinct integers. T(n) = O(n), S(n) = O(n)
 8. Find kth smallest element in BST, assuming k's value is valid (1->N), T(n) = O(n), S(n) = O(n)
 9. Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
    Find total sum of all root-to-leaf numbers. T(n) = O(n), S(n) = O(n)
-10. Flatten a binary tree into a linkedlist ordered using preorder
-11. Print binary tree as seen from right side of tree. 
+10. Flatten binary tree into linkedlist using preorder
+11. Print binary tree as seen from right side of tree, T(n) = O(n), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
 21. Print all nodes in a binary tree at level k
@@ -124,7 +124,7 @@ Questions:
 // Is it a complete binary tree, all leaves are same level, and all leaves exist
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 1 Given a binary tree, return the preorder traversal of its nodes' values.
+// 1 Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
 // T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /* 
@@ -201,7 +201,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 2 Given a binary tree, return the preorder traversal of its nodes' values iteratively.  
+// 2 Preorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 // T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /*
@@ -288,7 +288,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 3 Given a binary tree, return the inorder traversal of its nodes' values recursively.
+// 3 Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
 // Time Complexity, T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /*
@@ -369,7 +369,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 4 Given a binary tree, return the inorder traversal of its nodes' values iteratively
+// 4 Inorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 // Time Complexity, T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /*
@@ -496,7 +496,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 5 Given a binary tree, populate next pointers. 
+// 5 Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
 // T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /*
@@ -574,7 +574,7 @@ struct node * invertTree(struct node * root)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 7 Given n integers, all which are distinct, how many configurations can a binary search tree have? 
+// 7 Output number of configurations of binary search tree given n distinct integers. T(n) = O(n), S(n) = O(n)
 // T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /*
@@ -680,7 +680,7 @@ void sumNumberHelper(TreeNode* root, int & totalSum, int accumulated)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 10 Flatten a binary tree into a linkedlist ordered using preorder
+// 10 Flatten binary tree into linkedlist using preorder
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 void flatten(TreeNode* root) {
@@ -733,6 +733,7 @@ getMostRight(root)
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 11 Print binary tree as seen from right side of tree. 
+// Time Complexity, T(n) = O(n), Space Complexity, S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 /*
 Given a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
