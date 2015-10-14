@@ -1,12 +1,13 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
+TODO: Some of the space complexities below is really O(lgn) instead of O(n) if recursive iteration, update them later
 1. Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
 2. Preorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 3. Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
 4. Inorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 5. Levelorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
-6. Invert a binary tree side ways, T(n) = O(n), S(n) = O(n)
+6. ZigZag Traversal binary tree iteratively, T(n) = O(n), S(n) = O(n)
 7. Output number of configurations of binary search tree given n distinct integers. T(n) = O(n), S(n) = O(n)
 8. Find kth smallest element in BST, assuming k's value is valid (1->N), T(n) = O(n), S(n) = O(n)
 9. Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
@@ -14,21 +15,19 @@ Table of Contents
 10. Flatten binary tree into linkedlist using preorder
 11. Print binary tree as seen from right side of tree, T(n) = O(n), S(n) = O(n)
 12. Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
-13. Balanced Binary Tree: Return true if difference in child's height is <= 1, false otherwise, T(n) = O(n), S(n) = O(n)
+13. Balanced Binary Tree: Return true if difference in child's height is <= 1, false otherwise, T(n) = O(n), S(n) = O(n) 
 14. Lowest Common Ancestor of Binary Tree, T(n) = O(n), S(n) = O(n)
+15. Invert a binary tree side ways, T(n) = O(n), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
-21. Print all nodes in a binary tree at level k
 22. Invert binary tree up to down 
 23. Given an array where elements are sorted in ascending order, convert it to a height balanced BST. (ECE345 Assignment)  
 24. Validate if a binary tree is a Binary Search Tree. T(n) = O(n), S(n) = O(n)
-25. Calculate Maximum Depth of a Binary Tree, T(n) = O(n), S(n) = O(logn)
-print(tree root , int level)
 27. Given a sorted array in increasing order, write algorithm to create balanced binary search tree with minimal height 
     T(n) = O(n), S(n) = O(logn)
 28. Given a sorted linkedlist in increasing order, write algorithm to create balanced binary search tree with minimal height
     T(n) = O(n), S(n) = O(logn)
-29. Binary Tree Maximum Path Sum, all nodes contains integer values that may be (-)
+29. Binary Tree Maximum Path Sum, all nodes contains integer values that may be (-) (HARD!)
     Find maximum sum between a path. 
     e.g. 
             1
@@ -37,24 +36,18 @@ print(tree root , int level)
          / \
         2   3
     if all are(-), max path => Minimum (-) value => biggest value and NOT 0
-
 30. Implement a Binary Tree
     Note: Making recursive inserts (if no need balancing and transfer by values to delete instead of actual node makes implementation a lot easier) 
 31. Serializing a Tree
 32. Given a binary tree, create linked list of all nodes at each depth
 (if have a tree with depth D, will have D linked list!)
 33. Write algorithm to find the next node of a given node in a BST where each node has a link to the parent
-35. Design algorithm to find first common ancestor in a binary tree (not necessarily BST!)
-Avoid storing additional nodes in data structure.
 36. Given 2 binary tree, where  BT1 > BT2 , decide if BT2 is a subtree of BT1.
 37. Given a binary tree where each node contains a value. Design an algorithm to print all paths which sum up
 to that value. Note: It can be any path in the tree and does not have to start at root (refer to coding interview)
 38. Given the root of a binary tree and a node, return array of path from root to that node or NULL if that node is not in the tree
     Hint: Use stack, go down till find it, then push to stack once found and just keep pushing to stack if one of child found it
-39. ZigZag Traversal of Binary Tree
-        1
-      2   3
-    4  5 6  7 => outputs 1, 3, 2, 4, 5, 6, 7. 
+21. Print all nodes in a binary tree at level k (Easy, just make sure height k, and then output, otherwise, dont output)
 //----------------------------------------------------------------------------------------------------------------------------------
 Notes:
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -564,32 +557,88 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 6 Invert a binary tree side ways
-// T(n) = O(n), S(n) = O(n) 
+// 6 ZigZag Traversal binary tree iteratively.
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n)
 //---------------------------------
 /*
+Questions: 
+Function Prototype: 
+	vector<int> ZigZagTraversal(struct node* root); 
+Test_Cases: 
+        1
+      2   3
+    4  5   6 => outputs 1, 3, 2, 4, 5, 6, 8, 7 
+      7   8 
+Algorithm: 
+    Use 2 stacks, push into 1st, and keep popping from 1st and push into 2nd 
+    One push left,then right, the other push right then left
+Implement!
+Test!
+// */
+//---------------------------------
+/* //
+#include <vector> 
+#include <stack> 
+#include <iostream> 
+using namespace std; 
+
 struct node {
-    int value; 
-    struct node * left;
-    struct node * right;
+    int val; 
+    struct node * left; 
+    struct node * right; 
+    node(int _val, struct node* _left, struct node* _right) : val(_val), left(_left), right(_right) {} 
 };
 
-struct node * invertTree(struct node * root) 
+vector<int> ZigZagTraversal(struct node* root)
 {
-    if(root)
+    vector<int> orders; 
+    stack<struct node *> first; 
+    stack<struct node *> second; 
+    // Base Case
+    if(root) first.push(root); 
+    while(!first.empty() || !second.empty())
     {
-        TreeNode* curr = root->right; 
-        if(root->left) 
+        if(!first.empty())
         {
-            root->right = invertTree(root->left); 
+            while(!first.empty())
+            {
+                struct node * curr = first.top(); first.pop();
+                orders.push_back(curr->val);
+                if(curr->left) second.push(curr->left);
+                if(curr->right) second.push(curr->right);
+            }
         }
-        if(curr) 
+        // second is not empty
+        else
         {
-            
-            root->left = invertTree(curr);  
+            while(!second.empty())
+            {
+                struct node * curr = second.top(); second.pop();
+                orders.push_back(curr->val);
+                if(curr->right) first.push(curr->right);
+                if(curr->left) first.push(curr->left);
+            }
         }
     }
-    return root; 
+    return orders; 
+}
+
+int main(void)
+{
+    struct node a8(8, NULL, NULL); 
+    struct node a7(7, NULL, NULL); 
+    struct node a6(6, NULL, &a8); 
+    struct node a5(5, &a7, NULL); 
+    struct node a4(4, NULL, NULL); 
+    struct node a3(3, NULL, &a6); 
+    struct node a2(2, &a4, &a5); 
+    struct node a1(1, &a2, &a3);
+    vector<int> arr = ZigZagTraversal(&a1); 
+    // Output: 1, 3, 2, 4, 5, 6, 8, 7 
+    for(int i = 0; i < arr.size() ; i++) cout << arr[i] << " "; 
+    cout << endl;
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -1078,6 +1127,35 @@ int main(void)
     result = LowestCommonAncestor(&b1, &b6, &b7, leftFound, rightFound);  // 3
     if(leftFound && rightFound) cout << result->val << endl;
     return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 15 Invert a binary tree side ways
+// T(n) = O(n), S(n) = O(n) 
+//---------------------------------
+/* // 
+struct node {
+    int value; 
+    struct node * left;
+    struct node * right;
+};
+
+struct node * invertTree(struct node * root) 
+{
+    if(root)
+    {
+        TreeNode* curr = root->right; 
+        if(root->left) 
+        {
+            root->right = invertTree(root->left); 
+        }
+        if(curr) 
+        {
+            
+            root->left = invertTree(curr);  
+        }
+    }
+    return root; 
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
