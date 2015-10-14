@@ -15,6 +15,7 @@ Table of Contents
 11. Print binary tree as seen from right side of tree, T(n) = O(n), S(n) = O(n)
 12. Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
 13. Balanced Binary Tree: Return true if difference in child's height is <= 1, false otherwise, T(n) = O(n), S(n) = O(n)
+14. Lowest Common Ancestor of Binary Tree, T(n) = O(n), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
 21. Print all nodes in a binary tree at level k
@@ -48,6 +49,12 @@ Avoid storing additional nodes in data structure.
 36. Given 2 binary tree, where  BT1 > BT2 , decide if BT2 is a subtree of BT1.
 37. Given a binary tree where each node contains a value. Design an algorithm to print all paths which sum up
 to that value. Note: It can be any path in the tree and does not have to start at root (refer to coding interview)
+38. Given the root of a binary tree and a node, return array of path from root to that node or NULL if that node is not in the tree
+    Hint: Use stack, go down till find it, then push to stack once found and just keep pushing to stack if one of child found it
+39. ZigZag Traversal of Binary Tree
+        1
+      2   3
+    4  5 6  7 => outputs 1, 3, 2, 4, 5, 6, 7. 
 //----------------------------------------------------------------------------------------------------------------------------------
 Notes:
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -104,9 +111,15 @@ Applications: For operating on disk = Each node is the size of a disk page
 //----------------------------------------------------------------------------------------------------------------------------------
 Questions:
 //----------------------------------------------------------------------------------------------------------------------------------
-// Is binary tree balanced? O(logn) worst case
-// Is binary tree a BST? 
-// Is it a complete binary tree, all leaves are same level, and all leaves exist
+    // Is binary tree balanced? O(logn) worst case
+    // Is binary tree a BST? 
+    // Is it a complete binary tree, all leaves are same level, and all leaves exist
+    // Are there parent pointers? (Doubly linked or singly linked)
+    // Are all values unique? (useful for BST)
+    // What value type does it store? 
+    // How to return values? In vector or print them out or? 
+    // What happens if root is NULL? 
+    // What happens if node being searched for doesn't exist? 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
@@ -934,6 +947,136 @@ int main(void)
     balanced = isBalanced(&a1); 
     if(balanced) cout << "Balanced" << endl;
     else cout << "Not Balanced" << endl; 
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 14 Lowest Common Ancestor of Binary Tree
+// Time Complexity, T(n) = O(n), Space Complexity, S(n) = O(n)
+//---------------------------------
+/* 
+Questions: 
+    1. Is it a BST? If it is, are all the values unique? 
+    2. What happens if both nodes doesn't exist in tree?  Or if 1 node doesnt exist? 
+Function Prototype: 
+    struct node * LowestCommanAncestor(struct node * root, struct node * left, struct node * right);
+Test Cases: 
+    For Binary Tree Case
+            1
+        2       3
+      4   5   6   7
+    (2,7) => 1
+    (6,7) => 3
+    (4,2) => 2
+    For Binary Search Tree Case
+            4 
+        1       6a 
+      2   3   5   6b 
+    (2,6b) => 4 
+    (5, 6b) => 6a
+    (1,3) => 1
+Algorithm: 
+    Method 1: Assume BST  T(n) = O(n), S(n) = O(n)
+        Return first node that is within the values of left and right, if within values, return current node
+        At each recursion, if its not within values, recurse left if lower than both, recurse right if bigger than both
+    Method 2: Not BST, compare paths T(n) = O(3n), S(n) = O(3n)
+        Find path to first node and store into array, find path to 2nd node and store into array
+        Then, loop through both paths till values are not equal anymore (or end of one array), then the last equal value is the lowest common ancestor
+        T(n) = O(3n) 2n for finding paths, n for comparing paths , S(n) = O(3n) n for recursion, 2n for keeping both arays
+    Method 3: Not BST, T(n) = O(n) , S(n) = O(n)
+        Pre-order traversal
+            If currNode contains either node, return it
+            else if both left and right node contains 1 node each, return curr node
+            else if left node or right node contains either node, return that node 
+            pass in 2 booleans by reference to check if both nodes are present or only 1 node is present
+Implement
+Test!
+// */ 
+//---------------------------------
+/* //
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int val; 
+    struct node * left; 
+    struct node * right; 
+    node(int _val, struct node * _left, struct node * _right) : val(_val), left(_left), right(_right) {}
+};
+
+struct node * LowestCommonAncestorBST(struct node * root, struct node * first, struct node * second)
+{
+    if(!root || !first || !second) return NULL;
+    struct node * big = first->val >= second->val ? first: second; 
+    struct node * small = first->val >= second->val ? second: first;  
+    if((root->val >= small->val) && (root->val <= big->val)) return root; 
+    // Check if recurse left or right in BST
+    if (root->val <= small ->val) return LowestCommonAncestorBST(root->right, first, second);  // MISTAKE: Recursed root->left instead of root->right
+    else return LowestCommonAncestorBST(root->left, first, second); 
+}
+
+struct node * LowestCommonAncestor(struct node * root, struct node * first, struct node * second, bool& firstFound, bool& secondFound)
+{
+    if(!root || !first || !second) return NULL;
+    if(root == first || root == second)  // Mistake: Used | instead of || 
+    {
+        if (root == first) firstFound = true;
+        else secondFound = true;
+        // note: Can't return here as need to check of the other found node as found if it exist in the tree
+    }
+    struct node * leftNode = LowestCommonAncestor(root->left, first, second, firstFound, secondFound);
+    struct node * rightNode = LowestCommonAncestor(root->right, first, second, firstFound, secondFound);
+    // This root is the first time to have both nodes
+    if(leftNode && rightNode || (root==first  || root == second))
+    {
+        return root;
+    }
+    // Here, one of them must be the found node, otherwise, the booleans will let us know none was found when return to main function below
+    // Return this root as the node found
+    if(leftNode) 
+    {
+        return leftNode;
+    }
+    else
+    {
+        return rightNode;
+    }
+}
+
+int main(void)
+{
+    // BST Lowest Common Ancestor
+    struct node a6b(6, NULL, NULL); 
+    struct node a5(5, NULL, NULL); 
+    struct node a3(3, NULL, NULL); 
+    struct node a2(2, NULL, NULL); 
+    struct node a6a(6, &a5, &a6b); 
+    struct node a1(1, &a2, &a3);
+    struct node a4(4, &a1, &a6a); 
+    struct node * result = LowestCommonAncestorBST(&a4, &a2, &a6b); // 4
+    cout << result->val << endl;
+    result = LowestCommonAncestorBST(&a4, &a1, &a3);  // 1 
+    cout << result->val << endl;
+    result = LowestCommonAncestorBST(&a4, &a5, &a6b);  // 6
+    cout << result->val << endl;
+
+    // BT Lowest Common Ancestor
+    struct node b7(7, NULL, NULL); 
+    struct node b6(6, NULL, NULL); 
+    struct node b5(5, NULL, NULL); 
+    struct node b4(4, NULL, NULL); 
+    struct node b3(3, &b6, &b7); 
+    struct node b2(2, &b4, &b5); 
+    struct node b1(1, &b2, &b3);
+    bool leftFound = false; bool rightFound = false; // to check to make sure both nodes exist
+    result = LowestCommonAncestor(&b1, &b2, &b7, leftFound, rightFound);  // 1 
+    if(leftFound && rightFound) cout << result->val << endl;
+    leftFound = false; rightFound = false;
+    result = LowestCommonAncestor(&b1, &b2, &b4, leftFound, rightFound);  // 2 
+    if(leftFound && rightFound) cout << result->val << endl;
+    leftFound = false; rightFound = false;
+    result = LowestCommonAncestor(&b1, &b6, &b7, leftFound, rightFound);  // 3
+    if(leftFound && rightFound) cout << result->val << endl;
     return 0;
 }
 // */
