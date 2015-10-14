@@ -13,6 +13,7 @@ Table of Contents
    Find total sum of all root-to-leaf numbers. T(n) = O(n), S(n) = O(n)
 10. Flatten binary tree into linkedlist using preorder
 11. Print binary tree as seen from right side of tree, T(n) = O(n), S(n) = O(n)
+12. Levelorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
 21. Print all nodes in a binary tree at level k
@@ -129,7 +130,7 @@ Questions:
 //---------------------------------
 /* 
 Questions: 
-How to return nodesâ€™ values? In array? vector? 
+How to return nodes€™ values? In array? vector? 
 
 Function Prototype: 
 	vector<int> preorderTraversal(struct node * root); 
@@ -208,7 +209,7 @@ int main(void)
 Given a binary tree, return the preorder traversal of its nodes' values.
 Iterative! 
 Questions: 
-How to return nodesâ€™ values? In array? vector? 
+    How to return nodes€™ values? In array? vector? 
 
 Function Prototype: 
 	vector<int> preorderTraversal(struct node * root); 
@@ -294,8 +295,8 @@ int main(void)
 /*
 Iterative! 
 Questions: 
-How to return nodesâ€™ values? In array? vector? 
-What happen if root is NULL? 
+    How to return nodes€™ values? In array? vector? 
+    What happen if root is NULL? 
 
 Function Prototype: 
 	vector<int> inorderTraversal(struct node * root); 
@@ -374,8 +375,8 @@ int main(void)
 //---------------------------------
 /*
 Questions: 
-How to return nodesâ€™ values? In array? vector? 
-What happen if root is NULL? 
+    How to return nodes€™ values? In array? vector? 
+    What happen if root is NULL? 
 
 Function Prototype: 
 	vector<int> inorderTraversal(struct node * root); 
@@ -744,8 +745,8 @@ Given a binary tree, imagine yourself standing on the right side of it, return t
   4            <---
 Returns [1,3,4]
 Questions: 
-Doubly linked or singly linked? 
-Need pointer to parents? 
+    Doubly linked or singly linked? 
+    Need pointer to parents? 
 Function Prototype:
 	vector<int> rightSideView(struct TreeNode* root); 
 TEST: 
@@ -821,6 +822,72 @@ int main(void)
 	}
 	cout << endl; 
 	return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 12 Levelorder traversal binary tree iteratively.
+// Time Complexity, T(n) = O(n), Space Complexity, S(n) = O(n)
+//---------------------------------
+/*
+Questions: 
+    1. Do you mean Breadth First Search on Binary Tree ? 
+    2. Values binary tree hold? 
+    3. Just output values to stdout or return in an array or 2-dimensional array with levels? 
+Function Prototype: 
+	vector<int> LevelOrderTraversal(struct node* root); 
+Test Case: 
+	    1
+ 	2      3
+  4   5     7
+     8
+    Output: 1, 2,3,4,5,7,8
+Algorithm: 
+	Think similarly to BFS of graph. put into queue and pop first in first out 
+	O(n) time and space 
+Implement: 
+Test!
+// */
+//---------------------------------
+/* //
+#include <queue> 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int val; 
+    struct node * left; 
+    struct node * right; 
+    node(int _val, struct node* _left, struct node* _right) : val(_val), left(_left), right(_right) {} 
+};
+
+vector<int> LevelOrderTraversal(struct node* root)
+{
+    vector<int> orders; 
+    queue<struct node *> q;  // MISTAKE: queue<int> instead of queue<struct node *>`
+    q.push(root); // base case 
+    while(!q.empty())
+    {
+        struct node * curr = q.front(); q.pop();
+        orders.push_back(curr->val); // MISTAKE: orders.push() instead of orders.push_back()
+        if(curr->left) q.push(curr->left); 
+        if(curr->right) q.push(curr->right);  
+    }
+    return orders; 
+} 
+
+int main(void)
+{
+    struct node a8(8, NULL, NULL); 
+    struct node a7(7, NULL, NULL); 
+    struct node a5(5, &a8, NULL); 
+    struct node a4(4, NULL, NULL); 
+    struct node a3(3, NULL, &a7); 
+    struct node a2(2, &a4, &a5); 
+    struct node a1(1, &a2, &a3);
+    vector<int> arr = LevelOrderTraversal(&a1); 
+    for(int i = 0; i < arr.size() ; i++) cout << arr[i] << " "; 
+    cout << endl;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
