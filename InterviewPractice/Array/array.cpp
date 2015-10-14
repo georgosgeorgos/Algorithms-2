@@ -1,10 +1,10 @@
-//
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
 1. Maximum Subarray Problem using Kadane's Algorithm
 2. Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(n)
 3. Given an array of integers, find two numbers such that they add up to a specific target number. T(n) = O(nlogn), S(n) = O(1)
+4. Rotate Array : Rotate an array of n elements to the right by k units, T(n,k) = O(n), S(n,k) = O(1) 
 TODO:
 // Sorted Shifted Array with duplicate elements, find the amount array is shifted by 
 // Sorted shifted array with duplicate elements, search for an element
@@ -41,6 +41,8 @@ note: Always check for A[n-1] itself being local min as base case cause
 // TODO: 2. Merge two equally sized integer arrays, the first one   having the capacity to accommodate the result.
             Hint: Merge from end to first so won't overwrite non-merge values
 // TODO 3.   Implement a method for a Fibonacci sequence where instead of adding the last 2 elemenT's you add the last n elements. For n=3. 1 1 1 3 5 9...
+
+Determine if there is a number in a sorted array that may contain duplicates that is duplicated at least N/4 times. (G Interview) 
 //----------------------------------------------------------------------------------------------------------------------------------
 // Common Hints
 //-------------------------
@@ -50,6 +52,7 @@ note: Always check for A[n-1] itself being local min as base case cause
 - Solve for 1, then recursively solve the remainders  
 - Have 2 pointers, one at each end, have third pointer moving from one end to another and swapping elements in and out from both end pointers. 
 - Partition values to left and right of middle element (quicksort) 
+- If a number isn't in the array, and -1 is a valid number, you need to create a new Integer class and return NULL instead. 
 //-------------------------
 // Common Questions
 //-------------------------
@@ -367,6 +370,111 @@ int main(void)
         cout << "No numbers found" << endl; 
     }
     return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 4 Rotate Array : Rotate an array of n elements to the right by k units
+// Time Complexity, T(n,k) = O(n)
+// Space Complexity, S(n,k) = O(1) 
+//---------------------------------
+/*
+Questions: 
+    1. What if k is < 0 ? Is allowed and just means go more
+    2. What if k is > n ? Is allowed and just means go more 
+    3. Rotate left (clockwise) or right (counterclockwise) by k ?
+Function Prototype
+	void RotateArray(vector<int>& arr, int k); 
+Test case: 
+	1 2 3 4 , k=2 => 3 4 1 2
+	1 2 3 4 5, k = -3 => 4 5 1 2 3
+	1 , k=anything => 1
+Algorithm: 
+    1. Worst case: Shift by O(nk) time, O(1) space, just shift by 1 for all n elements, k times. It doesnt work when n%k = 0, 2*3*4*5 = 120 => if k = 4, 
+    2. Put it all in new array. then put back O(2n) time and O(n) space
+    3. O(n) => Must shift a constant number of times only 
+    Let d = gcd(n,k)
+    Juggling Algorithm: Shift by k until find original from start point, move to next point and repeat. Do this d times!  O(n) since only touch each element once 
+        arr[(i+k)%n] = arr[i]
+Notes:
+can’t simply deduct and shift by (k-1) and later shift by (1) as well. cause if
+Failed: 1. Shift by (k-1), then shift by 1
+    Counter Example n = 2*3*4*5 = 120, k = 4, then shift by k and shift by k-1 will both end up not covering everything. 
+Failed: 2.  Shift by k steps till reach original, then move to next element and repeat. Do this for k times
+    If n%(k)> 0 => just shift by k till original 
+    If n%(k) == 0 => Just shift by k till original, then move next and shift by k till original, and do this (k) times, at each time, you’ll cover n/k . 
+    therefore, as a total, you will only cover n times! thus, O(n)
+    Counter Example: n = 10, k = 6
+    From
+    1 2 3 4 5 6 7 8 9 10
+    Output will be:
+    5 2 7 4 9 6 1 8 3 10 which is wrong!
+    Fix by using gcd(n,k) instead of n%(k) 
+Implement!
+*/
+//---------------------------------
+/* //
+#include <cstdlib> 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+// assumes n >= k
+int gcd(int n, int k)
+{
+    int temp = k; 
+    while (n != k)
+    {
+        temp = k; 
+        n -= k;
+        k = n; 
+        n = temp;
+    }
+    return n;
+
+}
+
+void rotateCounterClockwise(vector<int>& arr, int k)
+{
+    bool negative = false;
+    if (k < 0) negative = true;
+    int n = arr.size();
+    if (n <= 1) return;
+    int divisor = abs(k)/n;
+    if (negative) k += (divisor * n) + n; // add n more to make it rotate right instead of left
+    else  k %= n; 
+    int d = gcd(n, k);
+    for(int i = 0; i < d; i++)
+    {
+        int prevVal = arr[i]; 
+        int currIndex = i ; 
+        currIndex = (currIndex + k)%n ; 
+        while (currIndex != i) // while not equal to starting point for this iteration
+        {
+            int temp = arr[currIndex]; // needed for swap
+            arr[currIndex] = prevVal;
+            prevVal = temp; 
+            currIndex = (currIndex + k)%n ; 
+        }
+        arr[currIndex] = prevVal;
+    }
+    return; 
+}
+
+int main(void)
+{   
+    vector<int> arr (10, 0); // n1 = 10
+    for(int i = 0; i < arr.size(); i++) arr[i] = i+1; 
+    vector<int> arr2 (6, 0); // n2 = 6
+    for(int i = 0; i < arr2.size(); i++) arr2[i] = i+1; 
+    rotateCounterClockwise(arr,6); // k1 = 6
+    rotateCounterClockwise(arr2,10); // k2 = 10
+    // After rotating n1 = 10 by k1 = 6
+    for(int i = 0; i < arr.size(); i++) cout << arr[i] << " ";
+    cout << endl;
+    // after rotating n2 = 6 by k2 = 10
+    for(int i = 0; i < arr2.size(); i++) cout << arr2[i] << " ";
+    cout << endl;
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
