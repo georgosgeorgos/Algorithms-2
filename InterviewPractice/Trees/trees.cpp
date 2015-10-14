@@ -5,7 +5,7 @@ Table of Contents
 2. Preorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 3. Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
 4. Inorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
-5. Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
+5. Levelorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 6. Invert a binary tree side ways, T(n) = O(n), S(n) = O(n)
 7. Output number of configurations of binary search tree given n distinct integers. T(n) = O(n), S(n) = O(n)
 8. Find kth smallest element in BST, assuming k's value is valid (1->N), T(n) = O(n), S(n) = O(n)
@@ -13,7 +13,8 @@ Table of Contents
    Find total sum of all root-to-leaf numbers. T(n) = O(n), S(n) = O(n)
 10. Flatten binary tree into linkedlist using preorder
 11. Print binary tree as seen from right side of tree, T(n) = O(n), S(n) = O(n)
-12. Levelorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
+12. Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
+13. Balanced Binary Tree: Return true if difference in child's height is <= 1, false otherwise, T(n) = O(n), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
 21. Print all nodes in a binary tree at level k
@@ -21,24 +22,7 @@ TODO:
 23. Given an array where elements are sorted in ascending order, convert it to a height balanced BST. (ECE345 Assignment)  
 24. Validate if a binary tree is a Binary Search Tree. T(n) = O(n), S(n) = O(n)
 25. Calculate Maximum Depth of a Binary Tree, T(n) = O(n), S(n) = O(logn)
-26. Check if a binary tree is balanced T(n) = O(n), S(n) = O(n)
-        // 1 Check if a binary tree is balanced
 print(tree root , int level)
-Method1: BFS.
-Method2:
-    We can also do a simple post-order traversal.
-    void printNodesAtGivenLevel(Node node, final int requiredLevel, int currLevel){
-        if(node != null){
-            if(currLevel < requiredLevel){
-                printNodesAtGivenLevel(node.left, requiredLevel, currLevel + 1);
-                printNodesAtGivenLevel(node.right, requiredLevel, currLevel + 1);
-            }
-            else if(currLevel == requiredLevel){
-                System.out.println(node.data);
-            }
-        }
-    }
-//call the function as printNodesAtGivenLevel(root, n, 1);
 27. Given a sorted array in increasing order, write algorithm to create balanced binary search tree with minimal height 
     T(n) = O(n), S(n) = O(logn)
 28. Given a sorted linkedlist in increasing order, write algorithm to create balanced binary search tree with minimal height
@@ -497,52 +481,73 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 5 Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
-// T(n) = O(n), S(n) = O(n)
+// 5 Levelorder traversal binary tree iteratively.
+// Time Complexity, T(n) = O(n), Space Complexity, S(n) = O(n)
 //---------------------------------
 /*
-e.g. 
-Convert from all next pointing at NULL 
-            1     
-          /   \
-         2     3
-        / \   / \
-       4  5   6  7
-TO: 
-            1     
-          /   \
-         2  -  3
-        / \   / \
-       4- 5- 6- 7
+Questions: 
+    1. Do you mean Breadth First Search on Binary Tree ? 
+    2. Values binary tree hold? 
+    3. Just output values to stdout or return in an array or 2-dimensional array with levels? 
+Function Prototype: 
+	vector<int> LevelOrderTraversal(struct node* root); 
+Test Case: 
+	    1
+ 	2      3
+  4   5     7
+     8
+    Output: 1, 2,3,4,5,7,8
+Algorithm: 
+    1. 
+	Think similarly to BFS of graph. put into queue and pop first in first out 
+	O(n) time and space 
+    2. 
+    Find max depth O(n) , then for height from 0 to maxdepth, traverse tree and print all nodes at that level. 
+    O(n^2) time and space since maxDepth = n in worst case (linkedlist) and need traverse O(n^2) time 
+Implement: 
+Test!
 // */
-//----------------------------------------------------------------------------------------------------------------------------------
-/*
+//---------------------------------
+/* //
+#include <queue> 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
 struct node {
-    int value;
-    struct node* left; 
-    struct node* right; 
-    struct node* next;
+    int val; 
+    struct node * left; 
+    struct node * right; 
+    node(int _val, struct node* _left, struct node* _right) : val(_val), left(_left), right(_right) {} 
 };
 
-void connect(struct node * root) 
+vector<int> LevelOrderTraversal(struct node* root)
 {
-    if(!root) return; 
-    if(root->left) helper(root->left, root, false); 
-    if(root->right) helper(root->right, root, true);         
-}
-void helper(struct node * root, struct node * parent, bool right)
-{
-    if(!right) root->next = parent->right; 
-    else 
+    vector<int> orders; 
+    queue<struct node *> q;  // MISTAKE: queue<int> instead of queue<struct node *>`
+    q.push(root); // base case 
+    while(!q.empty())
     {
-        if(parent->next)
-        {
-            root->next = parent->next->left; 
-        }
+        struct node * curr = q.front(); q.pop();
+        orders.push_back(curr->val); // MISTAKE: orders.push() instead of orders.push_back()
+        if(curr->left) q.push(curr->left); 
+        if(curr->right) q.push(curr->right);  
     }
-    if(root->left) helper(root->left, root, false); 
-    if(root->right) helper(root->right, root, true); 
-    return; 
+    return orders; 
+} 
+
+int main(void)
+{
+    struct node a8(8, NULL, NULL); 
+    struct node a7(7, NULL, NULL); 
+    struct node a5(5, &a8, NULL); 
+    struct node a4(4, NULL, NULL); 
+    struct node a3(3, NULL, &a7); 
+    struct node a2(2, &a4, &a5); 
+    struct node a1(1, &a2, &a3);
+    vector<int> arr = LevelOrderTraversal(&a1); 
+    for(int i = 0; i < arr.size() ; i++) cout << arr[i] << " "; 
+    cout << endl;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -825,32 +830,60 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 12 Levelorder traversal binary tree iteratively.
-// Time Complexity, T(n) = O(n), Space Complexity, S(n) = O(n)
+// 12 Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
+// T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /*
-Questions: 
-    1. Do you mean Breadth First Search on Binary Tree ? 
-    2. Values binary tree hold? 
-    3. Just output values to stdout or return in an array or 2-dimensional array with levels? 
-Function Prototype: 
-	vector<int> LevelOrderTraversal(struct node* root); 
-Test Case: 
-	    1
- 	2      3
-  4   5     7
-     8
-    Output: 1, 2,3,4,5,7,8
-Algorithm: 
-	Think similarly to BFS of graph. put into queue and pop first in first out 
-	O(n) time and space 
-Implement: 
-Test!
+e.g. 
+Convert from all next pointing at NULL 
+            1     
+          /   \
+         2     3
+        / \   / \
+       4  5   6  7
+TO: 
+            1     
+          /   \
+         2  -  3
+        / \   / \
+       4- 5- 6- 7
 // */
 //---------------------------------
+/*
+struct node {
+    int value;
+    struct node* left; 
+    struct node* right; 
+    struct node* next;
+};
+
+void connect(struct node * root) 
+{
+    if(!root) return; 
+    if(root->left) helper(root->left, root, false); 
+    if(root->right) helper(root->right, root, true);         
+}
+void helper(struct node * root, struct node * parent, bool right)
+{
+    if(!right) root->next = parent->right; 
+    else 
+    {
+        if(parent->next)
+        {
+            root->next = parent->next->left; 
+        }
+    }
+    if(root->left) helper(root->left, root, false); 
+    if(root->right) helper(root->right, root, true); 
+    return; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 13 Balanced Binary Tree: Return true if difference in child's height is <= 1, false otherwise
+// Time Complexity, T(n) = O(n), Space Complexity, S(n) = O(n)
+//---------------------------------
 /* //
-#include <queue> 
-#include <vector> 
+#include <cmath> // abs()
 #include <iostream> 
 using namespace std; 
 
@@ -861,33 +894,47 @@ struct node {
     node(int _val, struct node* _left, struct node* _right) : val(_val), left(_left), right(_right) {} 
 };
 
-vector<int> LevelOrderTraversal(struct node* root)
+int balancedHelper(struct node * root, int height)
 {
-    vector<int> orders; 
-    queue<struct node *> q;  // MISTAKE: queue<int> instead of queue<struct node *>`
-    q.push(root); // base case 
-    while(!q.empty())
-    {
-        struct node * curr = q.front(); q.pop();
-        orders.push_back(curr->val); // MISTAKE: orders.push() instead of orders.push_back()
-        if(curr->left) q.push(curr->left); 
-        if(curr->right) q.push(curr->right);  
-    }
-    return orders; 
-} 
+    if(!root) return height - 1; // return original root's height
+    int leftHeight = balancedHelper(root->left, height + 1);
+    if (leftHeight == -1) return -1; // if left tree is unbalanced, return right away before recursing to right for better complexity  
+    int rightHeight = balancedHelper(root->right, height + 1); // MISTAKE: called on root->left instead of root->right
+    if (rightHeight== -1) return -1; // if right tree is unbalanced, return right away 
+    // Here, none of the child nodes are unbalanced, check if this node is balanced
+    int diff = abs(rightHeight - leftHeight);
+    if(diff > 1) return -1; 
+    return max(rightHeight, leftHeight); // return the maxHeight of this node since it is balanced
+}
+
+bool isBalanced(struct node * root)
+{
+    int totalHeight = balancedHelper(root, 1);  // initialize to height of 1 for root, since if root is null, tree is still balanced and returns 0 
+    if(totalHeight == -1) return false;
+    return true;
+}
 
 int main(void)
 {
-    struct node a8(8, NULL, NULL); 
-    struct node a7(7, NULL, NULL); 
-    struct node a5(5, &a8, NULL); 
-    struct node a4(4, NULL, NULL); 
-    struct node a3(3, NULL, &a7); 
-    struct node a2(2, &a4, &a5); 
+    // Only 1 node
+    struct node a4(4, NULL, NULL);
+    bool balanced = isBalanced(&a4);
+    if(balanced) cout << "Balanced" << endl;
+    else cout << "Not Balanced" << endl; 
+    // Balanced 
+    struct node a3(3, NULL, NULL); 
+    struct node a2(2, &a4, NULL); 
     struct node a1(1, &a2, &a3);
-    vector<int> arr = LevelOrderTraversal(&a1); 
-    for(int i = 0; i < arr.size() ; i++) cout << arr[i] << " "; 
-    cout << endl;
+    balanced = isBalanced(&a1);
+    if(balanced) cout << "Balanced" << endl;
+    else cout << "Not Balanced" << endl; 
+    // Unbalanced
+    struct node a5(5, NULL, NULL); 
+    a4.left = &a5; 
+    balanced = isBalanced(&a1); 
+    if(balanced) cout << "Balanced" << endl;
+    else cout << "Not Balanced" << endl; 
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
