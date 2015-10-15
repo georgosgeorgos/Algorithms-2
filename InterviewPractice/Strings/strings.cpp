@@ -6,13 +6,10 @@ Table of Contents
 3. Determine if every ('a' to 'z') character in string is unique using Bit Manipulation, T(n) = O(n), S(n) = O(1)
 4. Remove Duplicated characters of strings in place, T(n) = O(n^2), S(n) = O(1)
 5. Implement Compression of a string (aabbbc->a2b3c1), T(n) = O(n), S(n) = O(n) (Amazon Round 1)
+6. Longest Substring With Distinct Characters, T(n) = O(n) (single pass), S(n) = O(1)
 //-------------------------
 TODO:
 note: these are not special cases of longest COMMON substring since it's substring of a single string and not multiple
-11. Longest Substring Without Repeating Characters 
-    "abcabcbb" => "abc" 
-    "bbbbb" => "b"
-    T(n) = O(n) single pass, S(n) = O(1)
 12. Longest Substring with at most 2 distinct characters 
     "eceba" => "ece" 
     T(n) = O(n), S(n) = O(1)
@@ -55,10 +52,14 @@ Questions:
 //-------------------------
 - What is a white space? How bout '\n' and '\t'
 - What is a word? 
-- ASCII only or A-Z? 
+- ASCII only or A-Z, or entire character space (Mandarin, English etc.)? 
 - Does upper-case, lower-case matter? 
 - Is there trailing white space? 
 - Can there be multiple consecutive white spaces? 
+- Can there string have repeated characters or all distinct? 
+- Return position of string, or length or an entire new string itself? 
+- Can the original string be modified? 
+- What happens if string is empty "", or NULL, or contains 1 character only? 
 //---------------------------------------------------------------------------------------------------
 /* //
 // Bloomberg Interview Round 1
@@ -477,3 +478,95 @@ char* compress(char* inputStr)
     return compressed; 
 }
 // */
+//----------------------------------------------------------------------------------------
+// 6 Longest Substring With Distinct Characters
+// Time Complexity, T(n) = O(n) (single pass)
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/*
+Questions: 
+    1. Return length or position of substring or substring itself? 
+    2. What can the string contain? ASCII only or a-z or? Does upper/lower cases matter?
+Function Prototype:
+    int LongestSubstringDistinctCharacters(string str); 
+TestCase:
+    "abcabcbb" => "abc"  = 3
+    "bbbbb" => "b" = 1
+    "abcdb" => "abcd" = 4
+    "abcdbefg" => "cdbefg" = 6
+Algorithm:
+    Algorithm 1: 2 pointers, 1 ascii array, T(n) = O(2n), S(n) = O(256) = O(1)
+        Loop from beginning to end in 1 pass, keeping track of number of characters, 
+        whenever same character is met, move start point to 1 after same character. 
+        Keep track of maximum everytime you have to move and at end of string 
+        To know if detected same character, use bits (if < 64), or bool arr[256] if ASCII 
+        Assume only ASCII 
+            use bool arr[256] to store space => O(1) space 
+            move start pointer until meet duplicate, and move 1 after duplicate
+            => 2 passes since both pointers need move entire string in worst-case
+    Algorithm 2: 2 pointers, 1 map of character to index array, T(n) = O(n), S(n) = O(256) = O(1)
+        Here, instead of storing whether a character exist by count in the bool arr[256], 
+        you store index of the character using int arr[256]
+        therefore, if you meet it and the index != [-1] which is the initial value, 
+        you know you found a duplicate, then you just jump your first pointer to that index, and update the index to be the later position
+        Thus, first pointer jumps around, whereas 2nd pointer moves to end
+        Therefore, only 1 pass needed
+Implement!
+*/
+//-------------------------
+/* //
+#include <cstring>
+#include <string> 
+#include <vector>
+#include <iostream> 
+using namespace std;
+int LongestSubstringDistinctCharacters(string str)
+{
+    const char * newStr = str.c_str();
+    int n = strlen(newStr);
+    vector<int> arr(256, -1);
+    // Initialize pointers to loop
+    int i = 0;
+    int j = 0;
+    int longestSub = 0;
+    while (j < n)
+    {
+        if(arr[newStr[j]] == -1)
+        {
+            arr[newStr[j]] = j;  // initialize the first index
+        }
+        else
+        {
+            // Update longest Substring
+            if (longestSub < (j-i)) longestSub = (j-i);
+            i = arr[newStr[j]] + 1;  // move i to 1 after old index 
+            arr[newStr[j]]  = j;  // update index for this character
+        }
+        j++; // MISTAKE: Forget to increment j!
+    }
+    // Handle end of string case
+    if (longestSub < (j-i)) longestSub = (j-i);
+    return longestSub;
+}
+
+int main(void)
+{
+    string a = "abcabcbb"; 
+    string b = "bbbbb"; 
+    string c = "abcdb"; 
+    string d = "abcdbefg"; 
+    string e = "a"; 
+    int answer = LongestSubstringDistinctCharacters(a);
+    cout << a << " " << answer << endl;
+    answer = LongestSubstringDistinctCharacters(b);
+    cout << b << " " << answer << endl;
+    answer = LongestSubstringDistinctCharacters(c);
+    cout << c << " " << answer << endl;
+    answer = LongestSubstringDistinctCharacters(d);
+    cout << d << " " << answer << endl;
+    answer = LongestSubstringDistinctCharacters(e);
+    cout << e << " " << answer << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
