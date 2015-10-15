@@ -1,8 +1,76 @@
 //----------------------------------------------------------------------------------------
 /*
 1. Kruskal's Algorithm, T(V,E) = O(ElgV), S(V,E) = O(V)
+//-------------------------
 TODO: 
-2. 
+12.  Subset: Given an array of distinct integers of size n, return all possible subsets. Solution Set cannot contain duplicates
+    e.g. [1,2,3] 
+    => Solution Set = [[],[1],[2],[3],[1,2],[1,3],[2,3],[1,2,3]]
+    hint Method1: Use bit manipulation ==" it was so easy, i was so dumb
+    hint Method2: Use DFS
+    sol.add(path); // add if statement up here if only want full paths
+    for(int i = index; i < n; i++)
+    {
+        path.add(arr[i]);
+        recurseFunc(i, arr, path, sol);
+        path.remove(arr[i]);
+    }
+13.  Subset: Given an array of integers (can be repeated) of size n, return all possible subsets. Solution Set cannot contain duplicates
+    e.g. [1,2,2] 
+    => Solution Set = [[],[1],[2],[1,2],[2,2],[1,2,2]]
+14. 
+    Longest Consecutive SubSequence
+    Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+    Given [100, 4, 200, 1, 3, 2],
+    The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
+    Your algorithm should run in O(n) complexity.
+    Questions: 
+        can the array contain duplicates? yes
+        Can array contain (-) ? Yes 
+    Function Prototype: 
+        int longestConsecutiveSubSequence(vector<int>& nums);
+    Test Case:
+        [100,4,200,1,3,2] = 4 (1,2,3,4)
+        [0] = 1 (0)
+        [1,2,0,5] = 3 (0,1,2)
+        [1,2,0,1,2,0] = 3 (0,1,2)
+    note: Can't just use Hash Table and add 1 if max and min cause consider
+        [1,2,0] => 1 => 1 + 0 + 0 = 1
+                   2 => 1 + 0 + 1 = 2
+                   0 => 1 + 1 + 0 = 2
+                   at the end, algorithm outputs 2 but answer should be 3 
+    Algorithm: 
+        You can use disjoint set to map them, each time you see a new number, you check if number+1, or number-1 already in set. 
+        If it is, then you add 1 to that set's maximum. So all consecutive will remain in the same set. 
+        You need to do if(number+1) , then if(number-1) NOT if(number+1), else if(number -1) cause both cases need to be handled separately
+        Each time you merge the sets, you check for longest consecutive number
+        T(n) = O(n) since mergeset stuff are all O(1) 
+        S(n) = O(n) since you need 1 set for each number
+        I figured out the solution that you came up and realize it was O(n^2) , so i thought a little more. 
+            Disjoint Set is the proper way to go. Merging disjoint set takes O(1) on average. 
+            Note: You need to understand how disjoint sets work to understand my explanation. 
+            So at each step, you merge the number with any number above or below it by 1
+            If no such set exist, you add 0 
+            Then, you add them up to the the value for that set. 
+            E.g. [1,2,0,1] 
+            Initialize maximum = 0
+            Iterate: 
+            i = 0
+                Create set(1) = 1 + set(1-1) + set(1+1) = 1 + 0 + 0  = 1 
+                Update maximum = 1 
+            i = 1
+                Create set(2) = 1 + set(2-1) + set(2+1) = 1 + 1 + 0 = 2 
+               You will then merge set(1) and set(2) together to = 2
+            i = 2
+               Create set(0)  = 1 + set(0-1) + set(0+1) = 1 + 0 + 2 = 3
+              Then you merge set(0) with set(1). 
+               As a result, 0,1,2 are all in the same set now with value 3
+            i = 3
+                Since set(1) already exist, skip this value. 
+            At each iteration, you update maximum  with the value in the mergeSet
+            No time to code the entire disjoint set solution but it's easy. 
+            Therefore, total time complexity , T(n) (single pass) 
+            Space complexity , S(n) since each element in array has 1 set by itself before merging the nodes together. 
 */
 //
 //----------------------------------------------------------------------------------------
@@ -200,8 +268,10 @@ public:
                 ds.mergeSets(node1, node2);
                 graph->addEdge(node1,node2,Edges[i].getWeight());
                 numEdgesAdded++;
+                // If already a Minimum Spanning Tree 
                 if (numEdgesAdded == numNodes - 1)
                 {
+                    // Get out of adding anymore edges
                     break;
                 }
             }
