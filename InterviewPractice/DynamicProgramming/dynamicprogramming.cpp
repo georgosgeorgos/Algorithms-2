@@ -14,11 +14,11 @@ Table of Contents
 11. Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break, T(n,k) = O(n(k^2)), S(n,k) = O(nk)
 12. Longest Palindrome Subsequence, T(n) = O(n^2), S(n) = O(n^2) 
 13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right)at any time, T(n,m) = O(n), S(n,m) = O(min(n,m)) 
+14. Minimum Number Coin Change: Find min. number of coins from a set of coin values to get a particular value, T(V,n) = O(Vn), S(V,n) = O(V)
 //----------------------------------------------------------------------------------------------------
-TODO:MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
-13.Longest Common Substring Between Two Strings (Bottom Up)
+15.Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
-14. Longest Palindromic Substring 
+16. Longest Palindromic Substring 
     Note: Optimal solution is not dynamic programming but try dynamic programming for learning, similar to maxContiguousSumSubArray
     Note: Must pass this case: str = abacdfgdcaba
     There are 4 solutions:  (refer to LeetCode textbook)
@@ -28,6 +28,7 @@ TODO:MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3
     4. Manacher Algorithm O(n) & O(n)
 TODO MUST DO: Unbounded Knapsack (Easy, just your solution for 0-1 knapsack but with O(n) space cause can add itself many times) 
 25.Maximum Contiguous Sum Subarray() (using dynamic instead of kadane's algorithm) (noting that dynamic isn't the optimal solution)
+23. Unique Paths with Obstacles given 
 27.Josephus Problem
 28. Triangle Problem
     This is really a great problem. Easy enough. Note: In this problem, the direction you traverse have different complexities. 
@@ -1083,6 +1084,64 @@ int main(void)
     n = 5; m = 3;  // 15
     result = uniquePaths(n,m);
     cout << n << ", " << m <<": " << result << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 14 Minimum Number Coin Change: Find min. number of coins from a set of coin values to get a particular value
+// Time Complexity, T(V,n) = O(Vn)
+// Space Complexity, S(V,n) = O(V)
+//-------------------------------------
+/*
+Questions: 
+    1. Output the actual coins used or just min. number of coins? 
+    2. What happens if no way to get the values?  Return INT_MAX
+Function Prototype: 
+    int minimumNumCoins(vector<int>& coins, int V);
+Test Case: 
+    [7,3,6,1], V = 9 => 2 (6,3) 
+Implement!
+*/
+//-------------------------------------
+/* //
+#include <climits> // INT_MAX
+#include <vector>
+#include <iostream> 
+using namespace std; 
+
+int minimumNumCoins(vector<int>& coins, int V)
+{
+    int n = coins.size(); 
+    vector<int> arr(V+1, INT_MAX);
+    arr[0] = 0; // V = 0 => 0 coins needed
+    // Loop through each coin
+    for(int i = 0; i < n; i++)
+    {
+        // Loop through each value for coin from 1 to V
+        for(int j = 1; j <= V; j++)
+        {
+            int currMin = INT_MAX; // initialize currMin to INT_MAX
+            // If there may be possible ways to get this coin
+            if((j - coins[i] >= 0) && (arr[j-coins[i]] != INT_MAX))
+            {
+                currMin = 1 + arr[j-coins[i]];
+            }
+            // current array value is minimum of the coin itself + previous combinations, or without using the coin itself from previous coins
+            arr[j] = min(currMin, arr[j]);
+        }
+    }
+    return arr[V];
+}
+
+int main(void)
+{
+    int V = 9;
+    vector<int> arr = {7, 3, 6, 1};
+    int result = minimumNumCoins(arr, V); 
+    cout << result << endl;
+    vector<int> arr2 = {1, 6, 3, 7};
+    result = minimumNumCoins(arr2, V); 
+    cout << result << endl;
     return 0;
 }
 // */
