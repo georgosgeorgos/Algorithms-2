@@ -1,14 +1,15 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Maximum Subarray Problem using Kadane's Algorithm
+1. Maximum Contiguous Sum Subarray using Kadane's Algorithm, T(n) = O(n), S(n) = O(1)
 2. Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(n)
 3. Given an array of integers, find two numbers such that they add up to a specific target number. T(n) = O(nlogn), S(n) = O(1)
 4. Rotate Array : Rotate an array of n elements to the right by k units, T(n,k) = O(n), S(n,k) = O(1) 
+5. Maximum Contiguous Product Subarray, T(n) = O(n), S(n) = O(1)
+//-------------------------
 TODO:
-// Sorted Shifted Array with duplicate elements, find the amount array is shifted by 
-// Sorted shifted array with duplicate elements, search for an element
-
+// Sorted Shifted Array with DUPLICATE elements, find the amount array is shifted by 
+// Sorted shifted array with DUPLICATE elements, search for an element
 // Buy and sell stocks as many times. But only 1 transaction at a time (must sell whatever bought before can buy again)
    Max profit? buy and sell stock at most k times. Max profit? (k's base case is 1, k = 1)
     - For many times, just do it recursively. Solve for k = 1, then divide left and right to 2 recursions 
@@ -16,32 +17,26 @@ TODO:
     - Sorting takes O(n) since it's the merge step in merge sort at each recursion. 
     - Then just pick the first k. 
     (DONE IN LEETCODE)
-
-
 // CIRCULAR ARRAY: 
     HouseRobberIIFromLeetCode: Find the maximum sum of non-adjacent elements in a circular array. 
     e.g. [2,6,5,7,8] = 6+8 = 14 (can't pick both 2 and 8 in the sum as it is circular array and so 2 and 8 will be adjacent)
     Time Complexity, T(n) = O(n) single pass, Space Complexity, S(n) = O(1)
     Hint: Use dynamic programming
-    
 // Find the only singular integer in an array of pairs of integers (done in leetcode)
 // Array with n distinct elements and local minimums, find one local min in O(logN)
 e.g. 10, 6, 4, 3, 12, 19, 18, 20, 17 has 3 local mins at : 3, 18, 17
-// ADD Array questions implemented in RandomDecision for ECE345 assignments here, where you find intersection of 2 different arrays etc. 
+    Easy, just prove that if A[n-1] < A[n] , there must exist local min in A[1] -> A[n-1]
+    Similarly for A[n-1] < A[n-2] => There must exist local min in A[n-1] -> A[n]
+    note: Always check for A[n-1] itself being local min as base case cause
+     you must always set top or bottom to not include it. If not may end up with infinite
+     loop in certain cases. basically must always exclude the middle element that you checked itself
+     so that don't end up checking it again in any way.
+// ADD Array questions implemented in RandomDecision folder for ECE345 assignments here, where you find intersection of 2 different arrays etc. 
 // Given circular array with reference indexing, return if it is a complete circular array.T(n) = O(n), S(n) = O(1) , (Google Practice Interview) note: Use a single pass only
         // hint: Just check if nth element is the starting element. If it is not, then error, if you reach starting element before n, then error
-    
-Easy, just prove that if A[n-1] < A[n] , there must exist local min in A[1] -> A[n-1]
-Similarly for A[n-1] < A[n-2] => There must exist local min in A[n-1] -> A[n]
-note: Always check for A[n-1] itself being local min as base case cause
- you must always set top or bottom to not include it. If not may end up with infinite
- loop in certain cases. basically must always exclude the middle element that you checked itself
- so that don't end up checking it again in any way.
-
 // TODO: 2. Merge two equally sized integer arrays, the first one   having the capacity to accommodate the result.
             Hint: Merge from end to first so won't overwrite non-merge values
 // TODO 3.   Implement a method for a Fibonacci sequence where instead of adding the last 2 elemenT's you add the last n elements. For n=3. 1 1 1 3 5 9...
-
 Determine if there is a number in a sorted array that may contain duplicates that is duplicated at least N/4 times. (G Interview) 
 //----------------------------------------------------------------------------------------------------------------------------------
 // Common Hints
@@ -65,10 +60,11 @@ Determine if there is a number in a sorted array that may contain duplicates tha
     (e.g. Sum of entire array except itself without using deduct (-) operator) 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
+// 1 Maximum Contiguous Sum Subarray using Kadane's Algorithm, T(n) = O(n), S(n) = O(1)
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//---------------------------------
 /* //
-// 1 Maximum Subarray Problem using Kadane's Algorithm
-// Time Complexity = O(n)
-// Space Complexity = O(1)
 #include <stdlib.h> // for rand()
 #include <time.h>
 #include <limits.h> // INT_MAX
@@ -192,7 +188,8 @@ int maxSubArrayDynamic(int* a, int N)
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 2 Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(n)
-// Time Complexity, T(n) = O(logn), S(n) = O(logn)
+// Time Complexity, T(n) = O(logn)
+// Space Complexity, S(n) = O(logn)
 //------------------------
 /*
 Questions: 
@@ -311,7 +308,9 @@ int main(void)
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 3 Given an array of integers, find two numbers such that they add up to a specific target number.
-// Time Complexity, T(n) = O(nlgn + n) = O(nlgn) , S(n) = O(1)
+// Time Complexity, T(n) = O(nlgn + n) = O(nlgn)
+// Space Complexity, S(n) = O(1)
+//---------------------------------
 /* //
 Questions:
 1. 	Is the array of integers sorted?  
@@ -475,6 +474,110 @@ int main(void)
     for(int i = 0; i < arr2.size(); i++) cout << arr2[i] << " ";
     cout << endl;
     return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 5 Maximum Contiguous Product Subarray
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/*  
+Questions: 
+    1. Is array filled with integers or doubles? 
+    2. Can there be (-) values ? 
+    3. Can there be a 0 in the array? 
+    4. What to return when it is only 1 element and (-) ? 
+    5. What to return if array is empty? 
+Function Prototype: 
+    int maxProductSubArray(vector<int> arr);
+Test_Case:
+    [2,3,0,3,4] = 12
+    [2,-3,0,3,-2] = 3
+    [-3,2,-2,3] = 36
+    [-3,-2,-4,5] = 40
+    [-3] = -3
+    [2] = 2
+    [0,-2] = 0
+Algorithm: 
+    Initialize to 1 
+    Everytime see a 0, re-initialize to 1, and restart algorithm, but don't reset maxProduct. Check maxProduct even for case of 0
+    Initialize maxProduct to INT_MIN
+    Keep track of : 
+        1. Max product for current iteration
+    At each iteration, calculate:
+        i) MaxCurrent * curr 
+        ii) MinCurrent * curr
+        iii) curr
+       Then assign maxCurrent to max of the 3 choices .  
+       Then assign minCurrent to min of the 3 choices .  
+       Update MaxProduct if possible from maxCurrent
+    T(n) = O(n), S(n) = O(1)
+    Solved!!=D
+
+*/
+//-------------------------
+/* //
+#include <climits> // INT_MIN
+#include <vector> 
+#include <iostream> 
+using namespace std;
+int maxProductSubArray(vector<int> arr)
+{
+    int n = arr.size();
+    if (n <= 0) return 0;
+    int maxProduct = INT_MIN;
+    int maxCurr = 1; // initialize to 1
+    int minCurr = 1; // initialize to 1
+    int curr = arr[0]; // 
+    for(int i = 0; i < n; i++)
+    {
+        // Base case to reinitialize
+        if(arr[i] == 0)
+        {
+            if(maxProduct < arr[i]) maxProduct = arr[i]; // to handle case where 0 is the maximum you can get
+            maxCurr = 1; 
+            minCurr = 1;
+            curr = arr[i];
+        }
+        else
+        {
+            // Calculate all possible 3 choices
+            curr = arr[i]; 
+            int a = curr*maxCurr;  
+            int b = curr*minCurr; 
+            // Get the max of all 3 elements
+            maxCurr = max(a,b); 
+            maxCurr = max(maxCurr, curr);
+            // Get the min of all 3 elements
+            minCurr = min(a,b); 
+            minCurr = min(minCurr, curr);
+            if (maxProduct < maxCurr) maxProduct = maxCurr; 
+        }
+    }
+    return maxProduct;
+}
+
+int main(void)
+{
+    vector<int> arr1 = {2,3,0,3,4}; // 12 , C++ 11 Feature
+    int result = maxProductSubArray(arr1);
+    cout << result << endl;
+    vector<int> arr2 = {2,-3,0,3,-2}; // 3
+    result = maxProductSubArray(arr2);
+    cout << result << endl;
+    vector<int> arr3 = {-3, 2, -2,3}; // 36
+    result = maxProductSubArray(arr3);
+    cout << result << endl;
+    vector<int> arr4 = {-3, -2, -4, 5}; // 40
+    result = maxProductSubArray(arr4);
+    cout << result << endl;
+    vector<int> arr5 = {-3}; // -3
+    result = maxProductSubArray(arr5);
+    cout << result << endl;
+    vector<int> arr6 = {0,-2}; // 0 
+    result = maxProductSubArray(arr6);
+    cout << result << endl;
+    return 0; 
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
