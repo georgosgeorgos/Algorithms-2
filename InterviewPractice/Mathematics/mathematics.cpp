@@ -1,14 +1,14 @@
 //----------------------------------------------------------------------------------------
-/*  //
+/* 
 Table of Contents
-
-1. Calculate pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)
-
+1. Implement Pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)
 2. Euclid's Algorithm: Calculate GCD, T(n) = O(n), S(n) = O(1)
-
 3. Binomial Coefficient = Number of ways to choose k out of n objects, T(n,k) = O(nk), S(n,k) = O(k)
-//----------------------------------------------------------------------------------------
+//-----------------------------------
 TODO:
+11. 
+    Implement sqrt(x)
+        Hint: Binary Search, sqrt(x) = x^(1/2)
 0. Calculate pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(1) Hint: Dynamic Programming
 
 1. Create rand()
@@ -27,17 +27,16 @@ hint: Dynamic Programming/BFS/Math theorem can be used to solve
     -321 => -123
     T(n) = O(n) S(n) = O(1)
 
-10. Determine whether an integer is a paindrome 
+10. Determine whether an integer is a palindrome 
     12321 => True
     -12321 => False
     T(n) = O(n) S(n) = O(1)
 
-11. 
 
 
 // */
 //----------------------------------------------------------------------------------------
-// 1. Calculate pow(double, int n), where n can be (-), 0 , (+)
+// 1 Implement Pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)
 // Time Complexity: O(logN)
 // Space Complexity: O(1)
 //-----------------------------------
@@ -97,9 +96,9 @@ double power(double a, int n);
 // */
 //----------------------------------------------------------------------------------------
 // 2 Euclid's Algorithm: Calculate GCD  
-//----------------------------------------------------------------------------------------
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
+//-----------------------------------
 /* //
 #include <iostream>
 using namespace std;
@@ -223,6 +222,67 @@ int main(void)
     cout << result << endl;
     result = binomialCoeffDynamic(n,k);  // 10
     cout << result << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 4 SquareRoot(int x), where x > 0 
+// Time Complexity, T(n) = O(logn)
+// Space Complexity, S(n) = O(1)
+//-----------------------------------
+/* //
+Questions: 
+    1. Do I need to return both (+) and (-) solutions ? 
+    2. Do I return a double or integer? If integer, then x = 8 should return 2 or 3? 
+Function Prototype: 
+    double SquareRoot(int x);
+Test_case: 
+    9 => 3,-3
+    144 => 12, -12
+    8 => 2.828
+Algorithm: 
+    a*a = a^2, thus, do binary search to search for the solution 
+Implement!
+Test!
+*/
+//-----------------------------------
+/* //
+#include <cmath> // for abs()
+#include <iostream> 
+using namespace std;
+double SquareRoot(int x)
+{
+    double low = 0; 
+    double high = x; 
+    double mid = (low+high)/2;
+    double midSqr = mid*mid; 
+    while ( abs((midSqr) - x) >= 0.001)
+    {
+        if(midSqr > x)
+        {
+            high = mid; 
+        }
+        else
+        {
+            low = mid;
+        }
+        mid = (low+high)/2;
+        midSqr = mid*mid; 
+    }
+    return mid; 
+}
+
+int main(void)
+{
+    int x = 9; 
+    double result = SquareRoot(x); 
+    cout << "Square Root of " << x << " is: " << result << endl; // 3
+    x = 144; 
+    result = SquareRoot(x); 
+    cout << "Square Root of " << x << " is: " << result << endl; // 12
+    x = 8;
+    result = SquareRoot(x); 
+    cout << "Square Root of " << x << " is: " << result << endl; // 
     return 0;
 }
 // */
