@@ -1,15 +1,41 @@
 //----------------------------------------------------------------------------------------
-/*
->> g++ main.cpp
->> a.exe
+/* //
 Table of Contents
-1. Reverse a string In-Place
-2. Determine if every character in string is unique
-3. Determine if every character in string is unique using Bit Manipulation (only from 'a' to 'z')
+1. Reverse a string In-Place, T(n) = O(n), S(n) = O(1)
+2. Determine if every ASCII character in a string is unique, T(n) = O(n), S(n) = O(1)
+3. Determine if every ('a' to 'z') character in string is unique using Bit Manipulation, T(n) = O(n), S(n) = O(1)
 4. Remove Duplicated characters of strings in place, T(n) = O(n^2), S(n) = O(1)
-5. Implement Compression of a string (aabbbc->a2b3c1), T(n) = O(n), S(n) = O(n) 
-
-Note: To work between <cstring> and <string> 
+5. Implement Compression of a string (aabbbc->a2b3c1), T(n) = O(n), S(n) = O(n) (Amazon Round 1)
+//-------------------------
+TODO:
+note: these are not special cases of longest COMMON substring since it's substring of a single string and not multiple
+11. Longest Substring Without Repeating Characters 
+    "abcabcbb" => "abc" 
+    "bbbbb" => "b"
+    T(n) = O(n) single pass, S(n) = O(1)
+12. Longest Substring with at most 2 distinct characters 
+    "eceba" => "ece" 
+    T(n) = O(n), S(n) = O(1)
+13. Finding longest palindromes substring 
+    a) Hint: Manacher algorithm T(n) = O(n), S(n) = O(n) // fastest
+    b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
+    c) T(n) = O(n^2), S(n) = O(1) // least space
+    d) Brute Force
+14. Reverse Words in a Sentence (Bloomberg Interview Round 1)
+21. Longest Duplicated substring in a string.
+30. Split a string by delimiter in  C++ using <string> 
+31. Reading an input string of arbitrary size.
+// Refer to hackerrank problem 6 "Alternating Characters" for solution. But code yourself first that was from online
+32. A sentence has additional spaces between words, remove the additional spaces in place
+eg: "hi  i     am paul" -> "hi i am paul"
+Hint: 2 pointers, 1 to point to replace, one to search for more
+33. Longest Common Substring Using Suffix Trees for > 2 strings
+34. Exact Matching using Suffix Trees (location of each substring)
+35. Dictionary (Check if a string is found in the dictionary)
+36. Implement strspn function
+//-------------------------
+To work between <cstring> and <string> 
+//-------------------------
     string bigString = "aabccccaaa";
     char* temp2; 
     cin >> bigString; // if needed
@@ -20,53 +46,148 @@ Note: To work between <cstring> and <string>
     // Must always malloc if changing an old cString
     char* compressed = (char *) malloc(strlen(inputStr));
     // Must also always null terminate the string! 
+//-------------------------
+Common Hints
+//-------------------------
+- Reversing entire sentence, then reversing each word string => Reversing words in a sentence
+//-------------------------
+Questions: 
+//-------------------------
+- What is a white space? How bout '\n' and '\t'
+- What is a word? 
+- ASCII only or A-Z? 
+- Does upper-case, lower-case matter? 
+- Is there trailing white space? 
+- Can there be multiple consecutive white spaces? 
+//---------------------------------------------------------------------------------------------------
+/* //
+// Bloomberg Interview Round 1
+Ahmed Bloomberg  (Indian??)
+#include <string.h>  // for strlen(), strcpy()
+#include <stdlib.h> //
+#include <iostream>
+using namespace std;
+int main() {
+    return 0;
+}
+Questions: 
+Q: What constitutes a word?
+A: A sequence of non-space characters constitutes a word.
+Q: Does tab or newline character count as space characters?
+A: Assume the input does not contain any tabs or newline characters.
+Q: Could the input string contain leading or trailing spaces?
+A: Yes. However, your reversed string should not contain leading or trailing spaces.
+Q: How about multiple spaces between two words?
+A: Reduce them to a single space in the reversed string.
+
+// Returns number of words allocated
+// Parameters:
+//      @)
+// Assume strArray is allocated
+int seperateString(char* string, char** strArray)
+{
+    int n = strlen(string);
+    // Allocating memory for strArray Maximum of n/2 words
+    // Maximum number of words is n/2 " a b c "
+    strArray = malloc(sizeof(char*) * (n/2)); // to point to each word
+    int count = 0;  // number of words in string
+    // To check for last word without spaces
+    bool haveWord = false; // new character part of a word that is not saved yet
+    int i = 0;
+    // Get rid of initial spaces in beginning
+    while(string[i] == ' ')
+    {
+        i++; // go to the first word and skip all the initial spaces
+    }
+
+    string = &string[i]; // repoint string to after spaces
+    for( ; i < n; i++)
+    {
+        // " abc  "
+        // one space
+        if(string[i] == ' ')
+        {
+            string[i] = '/0'; // close this into a word
+
+            // Get the length of the word just made
+            int lenWord = strlen(string); // this will be a shorter length due to closing string
+
+            strArray[count] = (char *)  malloc(sizeof(char) * lenWord);
+            strcpy(strArray[count], string);
+            string = &string[i+1]; // point it to the next word
+
+            // "quick     brown"
+            while(string[i] == ' ')
+            {
+                i++; // go to the next word and skip all the spaces
+            }
+            string = &string[i]; // repoint string to after spaces
+            count++; // increment number of words
+            haveWord = false;
+        }
+        // Case where it is not a space
+        else
+        {
+            haveWord = true;
+
+        }
+    }
+    // " hello   "
+    // " hello'\0'    "
+    // "  hello"
+
+    // To handle case for final word " hello"
+    if(haveWord) // string[n] will already be '\0' by definition of the string
+    {
+        int lenWord = strlen(string); // this will be a shorter length due to closing string
+        strArray[count] = (char *)  malloc(sizeof(char) * lenWord);
+        strcpy(strArray[count], string);
+        count++;
+
+    }
+    return count;
+}
+
+void reverseSentence(char* string)
+{
+    char** strArray;
+
+
+    // Returns number of words that was separated
+    int n = seperateString(string, strArray);
+    for(int i = 0; i < n/2; i++)
+    {
+        // Swap it
+        swap(strArray[i], strArray[n-i-1]);
+    }
+    // It just basically merges all the array of strings
+    // into a single string, separated by a " "
+    mergeString(strArray, string);
+    // Separate and swap
+    // T(n) = O(n + k ) = O(n) , n = length of string
+                                // k = number of words in string
+    // merging takes
+    // T(n) = O(n);
+    // S(n) = O(n);
+
+    // " a boy is good "
+    // " " -> delimiter
+    // "a" "boy" "is" "good"
+    // "good"
+
+}
+//Examples
+//" the quick      brown fox jumps over the lazy dog " becomes "dog lazy the over jumps fox brown quick the".
+//"hello world" becomes "world hello".
+//“ Hi! ” is trimmed to “Hi!”.
+//“” stays as “”.
 */
-//----------------------------------------------------------------------------------------
-/*
-TODO:
-
-
-
-	0. Reading an input string of arbitrary size.
-	// Refer to hackerrank problem 6 "Alternating Characters" for solution. But code yourself first that was from online
-
-	0. A sentence has additional spaces between words, remove the additional spaces in place
-	eg: "hi  i     am paul" -> "hi i am paul"
-	Hint: 2 pointers, 1 to point to replace, one to search for more
-
-	1. Longest Common Substring Using Dynamic Programming
-	Note: This requires you to implement nested for loops in the form of a recursion
-	Which is a new skill to learn!
-
-	3. Longest Common Substring Using Suffix Trees for > 2 strings
-
-	4. Exact Matching using Suffix Trees (location of each substring)
-
-	5. Dictionary (Check if a string is found in the dictionary)
-
-	6. Finding all maximal palindromes in a String. (longest palindrome in a string)
-	a) Hint: Manacher algorithm T(n) = O(n), S(n) = O(n) // fastest
-	b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
-	c) Dynamic Programming noting mirros center T(n) = O(n^2), S(n) = O(1) // least space
-
-
-	7. Longest Increasing Subsequence
-
-	8. Longest Duplicated substring in a string.
-
-
-	9. Implement strspn function
-
-	10. Reverse a Sentence (Bloomberg Round 1)
-
-	11.
-
-*/
-
-//----------------------------------------------------------------------------------------
-/*
-// 1 Reverse a string in place
-// Takes O(n) time
+//---------------------------------------------------------------------------------------------------
+// 1 Reverse a string In-Place
+// Time Complexity, T(n) = O(n) 
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/* //
 #include <stdio.h>
 #include <string.h>
 void reverseStr(char* word);
@@ -108,18 +229,23 @@ void reverseStrMethod2(char* word)
     }
     return;
 }
-*/
+// */
 //----------------------------------------------------------------------------------------
+// 2 Determine if every ASCII character in a string is unique 
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//-------------------------
 /*
-// 2 Determine if every character in a string is unique ( can be any character in ASCII)
-// Below takes O(n) time
-// Put into array, increment when found string, if that increment is > 1, that means string not unique.
-
-// If can't use extra space, can
-// 1. Loop through one by one and compare => O(n^2)
-// 2. Destroy the string, sort it, and it takes O(nlgn + n) = O(nlgn)
-            // nlgn to sort, n to loop and compare
-
+Algorithm:
+    Put into array, increment when found string, if that increment is > 1, that means string not unique.
+    Constant size array since limited # of ASCII characters
+    If can't use extra space, can
+        1. Loop through one by one and compare => O(n^2)
+        2. Destroy the string, sort it, and it takes O(nlgn + n) = O(nlgn)
+           nlgn to sort, n to loop and compare
+// */
+//-------------------------
+/* //
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -189,14 +315,19 @@ int main(void)
     cout << "UNIQUE" << endl;
     return 0;
 }
-
 // */
 //----------------------------------------------------------------------------------------
-/*
-// 3 Determine if every character in a string is unique
-// Simplification: only characters 'a' to 'z'
-/ Takes O(n) time and saves a tonne of space but only works of from 'a' to 'z'
-
+// 3 Determine if every ('a' to 'z') character in string is unique using Bit Manipulation
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/* 
+Algorithm:
+    Simplification: only characters 'a' to 'z'
+    Takes O(n) time and saves a tonne of space but only works of from 'a' to 'z'
+*/
+//-------------------------
+/* //
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -221,8 +352,11 @@ bool uniqueStr(const char* word)
     int i = 0;
     for (i = 0; i < n ; i++)
     {
+        // Calculate the amount to shift by
         unsigned int shift = word[i] - 'a';
-        unsigned int compare = 1 << shift;
+        unsigned int compare = 1 << shift; // initialize 1 bit and shift by the shift amount
+        // If it existed, will and to a 1 here
+        // Since compare will only have 1 bit set to 1
         if (storage&compare)
         {
             printf(" I am false\n");
@@ -233,13 +367,18 @@ bool uniqueStr(const char* word)
     printf("TRUE\n");
     return true;
 }
-*/
+// */
 //----------------------------------------------------------------------------------------
-/*
 // 4. Remove Duplicated characters of strings in place
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(1)
-
+//-------------------------
+/*
+TestCase: 
+    haakele => hakel
+*/
+//-------------------------
+/*
 #include <string>
 #include <iostream>
 using namespace std;
@@ -272,16 +411,19 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------
-/*
-// 5. Implement Compression of a string
+// 5 Implement Compression of a string (Amazon Round 1)
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(n)
-// e.g. aabcccccaaa
-// With this function call 
-// char* compress(char* inputStr);
-	// Note: You made the mistake of using arrays of characters and integers instead of outputting char *!!
-	// should have done: a3b5c3d1e3f1a2b1c1 instead!
-
+//-------------------------
+/* 
+e.g. aabcccccaaa
+With this function call 
+char* compress(char* inputStr);
+Note: You made the mistake of using arrays of characters and integers instead of outputting char *!!
+should have done: a3b5c3d1e3f1a2b1c1 instead!
+*/
+//-------------------------
+/* //
 #include <iostream> 
 #include <string> 
 #include <cstring> 
