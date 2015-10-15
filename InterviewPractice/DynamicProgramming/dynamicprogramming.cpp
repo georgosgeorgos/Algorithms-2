@@ -13,12 +13,21 @@ Table of Contents
 10. Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
 11. Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break, T(n,k) = O(n(k^2)), S(n,k) = O(nk)
 12. Longest Palindrome Subsequence, T(n) = O(n^2), S(n) = O(n^2) 
+13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right)at any time, T(n,m) = O(n), S(n,m) = O(min(n,m)) 
 //----------------------------------------------------------------------------------------------------
-TODO: 
-TODO MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
-TODO MUST DO: Unbounded Knapsack (Easy, just 0-1 knapsack but with O(n) space cause can add itself many times) 
-25.Maximum Subarray() (using dynamic instead of kadane's algorithm)
-26.Longest Common Substring Between Two Strings (Bottom Up)
+TODO:MUST DO: MIN NUMBER OF COINS so like if 6 => 3,3 instead of 4,1,1 since 3,3 is 2 coins only
+13.Longest Common Substring Between Two Strings (Bottom Up)
+    Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
+14. Longest Palindromic Substring 
+    Note: Optimal solution is not dynamic programming but try dynamic programming for learning, similar to maxContiguousSumSubArray
+    Note: Must pass this case: str = abacdfgdcaba
+    There are 4 solutions:  (refer to LeetCode textbook)
+    1. Brute Force O(n^3) & O(1)
+    2. Dynamic O(n^2) & O(n)
+    3. Array  O(n^2) & O(1) (hint: There are only (2n-1) centers and expanding takes O(n)
+    4. Manacher Algorithm O(n) & O(n)
+TODO MUST DO: Unbounded Knapsack (Easy, just your solution for 0-1 knapsack but with O(n) space cause can add itself many times) 
+25.Maximum Contiguous Sum Subarray() (using dynamic instead of kadane's algorithm) (noting that dynamic isn't the optimal solution)
 27.Josephus Problem
 28. Triangle Problem
     This is really a great problem. Easy enough. Note: In this problem, the direction you traverse have different complexities. 
@@ -1013,6 +1022,67 @@ int main(void)
     const char * str2 = ba.c_str();
     length = LongestPalindromeSubsequence(str2); // "aa" => 2
     cout << length << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 13 Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right)at any time
+// Time Complexity, T(n,m) = O(n) 
+// Space Complexity, S(n,m) = O(min(n,m)) 
+//-------------------------------------
+/* 
+Questions: 
+    1.  What happens if n || m <= 0 ? 
+Function Prototype: 
+    int uniquePaths(int n, int m);
+Test_Cases: 
+    (1,1) = 1
+    (2,3) = 3
+    (5,3) = 15
+Algorithm: 
+    Dynamic programming O(nm)
+    Each element depends only on top or left by 1 step => Can use  S(n,m) = O(min(n,m)) space instead of O(nm) 
+    Move from up to down from left to right. Can skip first element at each column since it remains the same always (1 way only to move horizontal)
+    T(n,m)  = O(mn) time 
+Implement!
+// */
+//-------------------------------------
+/* //
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+int uniquePaths(int n, int m)
+{
+    if( n <= 0 || m <= 0) return 0;
+    // Make n1 <= m1
+    int n1 = min(n,m);
+    int m1 = max(n,m); 
+    // Initialize all to 1
+    vector<int> arr(n1, 1);
+    for(int i = 1; i < m1; i++) // can skip the first column since will always be 1
+    {
+        // Inner loop is n1 so that space required is only n1
+        for(int j = 1; j < n1; j++) // can skip the first row of every column since will always be 1
+        {
+            arr[j] = arr[j] + arr[j-1];
+        }
+    }
+    return arr[n1-1];
+}
+
+int main(void)
+{
+    int n = 1; 
+    int m = 1; 
+    int result = uniquePaths(n,m); // 1
+    cout << n << ", " << m <<": " << result << endl;
+    n = 2; m = 3; 
+    result = uniquePaths(n,m); // 3
+    cout << n << ", " << m <<": " << result << endl;
+    n = 5; m = 3;  // 15
+    result = uniquePaths(n,m);
+    cout << n << ", " << m <<": " << result << endl;
     return 0;
 }
 // */
