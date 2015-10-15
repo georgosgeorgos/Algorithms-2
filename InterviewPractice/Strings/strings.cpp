@@ -7,12 +7,9 @@ Table of Contents
 4. Remove Duplicated characters of strings in place, T(n) = O(n^2), S(n) = O(1)
 5. Implement Compression of a string (aabbbc->a2b3c1), T(n) = O(n), S(n) = O(n) (Amazon Round 1)
 6. Longest Substring With Distinct Characters, T(n) = O(n) (single pass), S(n) = O(1)
+7. Longest Substring With At Most K Distinct Characters, T(n) = O(n), S(n) = O(n)
 //-------------------------
 TODO:
-note: these are not special cases of longest COMMON substring since it's substring of a single string and not multiple
-12. Longest Substring with at most 2 distinct characters 
-    "eceba" => "ece" 
-    T(n) = O(n), S(n) = O(1)
 13. Finding longest palindromes substring 
     a) Hint: Manacher algorithm T(n) = O(n), S(n) = O(n) // fastest
     b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
@@ -47,6 +44,7 @@ To work between <cstring> and <string>
 Common Hints
 //-------------------------
 - Reversing entire sentence, then reversing each word string => Reversing words in a sentence
+- Assume ascii => char arr[256]; => Constant space, otherwise use Hash Table which is O(n)
 //-------------------------
 Questions: 
 //-------------------------
@@ -566,6 +564,85 @@ int main(void)
     cout << d << " " << answer << endl;
     answer = LongestSubstringDistinctCharacters(e);
     cout << e << " " << answer << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 7 Longest Substring With At Most K Distinct Characters 
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n)
+//-------------------------
+/*
+Questions: 
+    1. Does upper/lower cases matter? 
+    2. What if string is empty "", or NULL?
+    3. Return length or substring itself? Can original string be modified? 
+FunctionPrototype:
+    int LongestSubstringAtMostKDistinct(string str, int k);
+TestCases:
+    "eceba", k = 2 => "ece" = 3
+    "a", k >= 1 => "a" = 1 
+Algorithm:
+*/
+//-------------------------
+/* //
+#include <unordered_map> // C++ 11 Feature: Mistake: Included <map> instead of <unordered_map>, only multimap<int,int> requires <map> instead of <multimap>
+#include <cstring>
+#include <string>
+#include <iostream> 
+using namespace std;
+
+int LongestSubstringAtMostKDistinct(string str, int k)
+{
+    const char * newStr = str.c_str();
+    int n = strlen(newStr);
+    if (n <= 0 || k < 1) return 0;
+    int longestSub = 0;
+    // Create hashtable to store count
+    unordered_map <char, int> m; // note: Replace with vector<int> arr[256] if ASCII only
+    // To keep track of number of distinct characters
+    int numDistinct = 0;
+    int j = 0;
+    for(int i = 0; i < n; i++)
+    {
+        // If character doesn't exist, initialize it and increment numDistinct
+        if(!m.count(newStr[i]))
+        {
+            m[newStr[i]] = 1; 
+            numDistinct++;
+        }
+        // If character exist, add to it
+        else
+        {
+            m[newStr[i]] += 1;
+        }
+        while(numDistinct > k)
+        {
+            m[newStr[j]] -= 1;
+
+            if (m[newStr[j]] == 0)
+            {
+                // erase this from hashTable
+                m.erase(newStr[j]);
+                numDistinct--; // Decrement numDistinct
+            }
+            j++;
+        }
+        // Only calculate accounting for no new characters
+        longestSub = max(longestSub, i - j + 1);
+    }
+    return longestSub;
+}
+
+int main(void)
+{
+    string a = "eceba"; 
+    int k = 2;
+    int result = LongestSubstringAtMostKDistinct(a,k); // 5
+    cout << a << " " << result << endl;
+    string b = "a"; 
+    result = LongestSubstringAtMostKDistinct(b, k); // 1
+    cout << b << " " << result << endl;
     return 0;
 }
 // */
