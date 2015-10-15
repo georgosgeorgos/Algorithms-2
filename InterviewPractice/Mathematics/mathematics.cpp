@@ -4,6 +4,7 @@ Table of Contents
 1. Implement Pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)
 2. Euclid's Algorithm: Calculate GCD, T(n) = O(n), S(n) = O(1)
 3. Binomial Coefficient = Number of ways to choose k out of n objects, T(n,k) = O(nk), S(n,k) = O(k)
+4. SquareRoot(int x), where x > 0, T(n) = O(logn), S(n) = O(1)
 //-----------------------------------
 TODO:
 11. 
