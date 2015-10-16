@@ -6,6 +6,8 @@ Table of Contents
 3. Given an array of integers, find two numbers such that they add up to a specific target number. T(n) = O(nlogn), S(n) = O(1)
 4. Rotate Array : Rotate an array of n elements to the right by k units, T(n,k) = O(n), S(n,k) = O(1) 
 5. Maximum Contiguous Product Subarray, T(n) = O(n), S(n) = O(1)
+6. Buy and sell stocks as many times. Max profit?, T(n) = O(n), S(n) = O(1)
+7. Buy and sell stock one time. Max Profit? T(n) = O(n), S(n) = O(1)
 //-------------------------
 TODO:
 // Sorted Shifted Array with DUPLICATE elements, find the amount array is shifted by 
@@ -577,6 +579,102 @@ int main(void)
     vector<int> arr6 = {0,-2}; // 0 
     result = maxProductSubArray(arr6);
     cout << result << endl;
+    return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 6 Buy and sell stocks as many times. Max profit?
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//----------------------------------------------------------------------------------------------------------------------------------
+/*
+Buy and sell stock many times. But only 1 transaction at a time. (buy, and sell before can buy again)
+k = 1 
+Questions: 
+What does 1 transaction at a time mean? 
+How do I buy and sell a stock? 
+How are the stock data stored? 
+Allowed to sell then buy on the same day? 
+Yes 
+Function Prototype: 
+	int maxProfit(int * arr, int n) 
+	int maxProfit(vector<int>& arr) 
+Test_Cases 
+	1 5 -3 2 9 7 5  => 12 + 4 + 0 = 16
+	1->5 
+	-3->2 
+	2->9 
+	O(n)  = 9 + 7 = 16
+	-1 3 
+Algorithm: 
+	For k = 1, one time. 
+	Loop through array, keep track of maxDiff. 
+	Each time update maxDiff, I update minIndex and maxIndex
+To do many times, 
+Loop through once and solve in O(n) 
+IMPLEMENT: `	
+*/
+//---------------------------------
+/*
+#include <cstdlib> 
+#include <vector> 
+#include<iostream> 
+using namespace std; 
+
+int maxProfit(int * arr, int n) 
+{
+	if(n <= 1) return 0; 
+	unsigned int maxProfit = 0; 
+	int curr = arr[0]; // 1
+	for(int i = 1; i < n; i++) 
+	{
+		if (arr[i] > curr) 
+		{
+			maxProfit += (arr[i] - curr); 
+			curr = arr[i]; // buy back on same day 
+		}
+		else 
+		{
+			curr = arr[i]; // update smaller value 
+		}
+	}
+	return maxProfit; 
+}
+
+int main(void) 
+{
+	int a[7] = {1, 5, -3, 2, 9, 7, 5};
+	int profit = maxProfit(a, 7); 
+	cout << profit << endl;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 7 Buy and sell stock one time. Max Profit? 
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//----------------------------------------------------------------------------------------------------------------------------------
+/* // 
+#include <cstdlib> 
+#include <iostream> 
+using namespace std; 
+int oneTransactionMaxProfit(int * arr, int n)
+{
+    if (n <= 0) return 0; 
+    int maxDiff = 0; // initialize to don’t buy or sell at all 
+    int currMin = arr[0]; 
+    for(int i = 1; i < n; i++)
+    {
+        maxDiff = max(maxDiff, arr[i] - currMin ); 
+        currMin = min(currMin , arr[i]); 
+    }
+    return maxDiff; 
+}
+
+int main(void)
+{
+    int a[10] = {2, 5, 1, 5, 2, 8, 9, 1, 3, 2}; 
+    int maxProfit = oneTransactionMaxProfit(a, 10); 
+    cout << maxProfit << endl; 
     return 0; 
 }
 // */
