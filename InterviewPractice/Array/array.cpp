@@ -12,13 +12,6 @@ Table of Contents
 TODO:
 // Sorted Shifted Array with DUPLICATE elements, find the amount array is shifted by 
 // Sorted shifted array with DUPLICATE elements, search for an element
-// Buy and sell stocks as many times. But only 1 transaction at a time (must sell whatever bought before can buy again)
-   Max profit? buy and sell stock at most k times. Max profit? (k's base case is 1, k = 1)
-    - For many times, just do it recursively. Solve for k = 1, then divide left and right to 2 recursions 
-    - For k times, do similarly as many times, but use O(n) space by returning linked list of all the components of many times in sorted order
-    - Sorting takes O(n) since it's the merge step in merge sort at each recursion. 
-    - Then just pick the first k. 
-    (DONE IN LEETCODE)
 // CIRCULAR ARRAY: 
     HouseRobberIIFromLeetCode: Find the maximum sum of non-adjacent elements in a circular array. 
     e.g. [2,6,5,7,8] = 6+8 = 14 (can't pick both 2 and 8 in the sum as it is circular array and so 2 and 8 will be adjacent)
@@ -607,11 +600,18 @@ Test_Cases
 	O(n)  = 9 + 7 = 16
 	-1 3 
 Algorithm: 
+    1.
 	For k = 1, one time. 
 	Loop through array, keep track of maxDiff. 
 	Each time update maxDiff, I update minIndex and maxIndex
-To do many times, 
-Loop through once and solve in O(n) 
+    To do many times, 
+    Loop through once and solve in O(n) 
+    2.
+   Max profit? buy and sell stock at most k times. Max profit? (k's base case is 1, k = 1)
+    - For many times, just do it recursively. Solve for k = 1, then divide left and right to 2 recursions 
+    - For k times, do similarly as many times, but use O(n) space by returning linked list of all the components of many times in sorted order
+    - Sorting takes O(n) since it's the merge step in merge sort at each recursion. 
+    - Then just pick the first k. 
 IMPLEMENT: `	
 */
 //---------------------------------
