@@ -1,3 +1,4 @@
+// TODO: Code Threads in C++ Kali Linux or Java
 // Interview Practice
 // This file is like a rough paper
 // 1. To practce previous programming questions
@@ -7,6 +8,7 @@
 /*
 Testing your code after implementing it
 Don't compile it until you check it! Then add to here when errors are made.
+With practice comes confidence. Account for errors as you code to try to write perfect code the first time without checking. 
 Check that:
     - What you pass into each variables is actually type (don't pass in int to double)
     - Classes are terminated with ; 
@@ -15,18 +17,8 @@ Check that:
     - Any parent function used in child class must be either public or protected, if used by child class inside main(), it must be public!
 */
 //-----------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
 /*
 // Temporary Practice:
-// Maximum Subarray Problem 
-#include <iostream>
-using namespace std; 
-int main(void)
-{
-    // Approach 1: Dynamic Programming 
-    // O(n) with handling special case of all (-)
-    return 0;
-}
 */
 //-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
@@ -41,6 +33,7 @@ int main(void)
 // binary search()
 // TODO: qsort() with any arbitrary class
 // work with hash tables, stack, queue, linked list, binary tree, heap
+// lower_bound(), upper_bound(), bsearch(), find()
 // i) Insert
 // ii) Delete
 // iii) Traverse
@@ -60,115 +53,51 @@ int binarySearch(X a[], X element, int n)
 {
     int first = 0;
     int last = n - 1;
-    while (first != last)
+    int mid = (first + last)/2
+    while (first <= last)
     {
-        if (element <= a[(first+last)/2])
+        if (element == a[mid])
         {
-            last  = (first+last)/2 ;
+            return mid;
+        }
+        else if (element < a[mid])
+        {
+            last = mid-1;
         }
         else // element >= a[(first+last)/2]
         {
-            first = (first+last)/2 +  1;
+            first = mid +  1;
         }
     }
-    // Here, either the value is found or it doesn't exist
-    if(element == a[first])
-    {
-        return first;
-    }
-    else
-    {
-        return -1;
-    }
+    return -1;
 }
 
-//-----------------------------------------------------------------------------------------------
-// Longest Common Substring
-// Approach 1: Dynamic Programming
-// Time Complexity, T(n,m) = O(nm)
-// Space Complexity, S(n,m) = S(nm)
-//------------------------------------------------------------------------------------------------
-/*
-Add to numerical methods or mathematics
-#include <iostream>
-using namespace std;
-#include <stdio.h>
-double sqrtEstimate(double no)
-{
-    #define PRECISION 0.00001
-    double l = 1, h = no, m = 0;
-    while(h - l > PRECISION)
-        {
-        m = l + (h - l) / 2;
-        if(m * m - no > PRECISION)
-            h = m;
-        else
-            l = m;
-    }
-    return m;
-}
-int main(void)
-{
-    double a = sqrtH(9);
-    cout << a << endl;
-        return 0;
-}
-*/
+// use bsearch () from C or lower_bound() from C++ 
+// use qsort() from C or sort() from C++ 
 
 /*
-
-1. Find largest gap between 2 numbers in an unsorted array
-where index of max is greater than min.
 2.Find average of an array after removing min and max
--Loop and add and keep track of min and max
--deduct both and divide by n-2
-
+    -Loop and add and keep track of min and max
+    -deduct both and divide by n-2
 3. Find number of zeroes in a number factorial
-4. Reverse a string in place in C
-
 5. Default constructor
 6. Catching and Exception
 7. *string  (*string+4 ) and type
-8. Validate if tree is a binary search tree
-- inorder traversal and make sure never decreases
-9. Check if 2 tree are the same by
-in order traversal and making sure
-each value outputted is the same, need termination.
-10.
 
 Array and Linked List
-1. Find Nth Element of LinkedList
-2. Check if an array of int contains
-2 numbers that sum equal to target number
 Pointers and Strings in C
 4. add last n elements for new fibonacci instead of 2
-6. Josephus problem
 7. Find all anagrams of a given word
-8. Reverse a linked list
-9.
 Constructor, Destructor, Multithreading
 C++ questions!
-10. An array,
-loop through it and tell when to buy and
-sell for largest profit,
-buy has to come before sell
-11. Detect when 2 singly linked list converge
-12.
 Difference between
 const char *
 &
 char* const
 
-13. Rotate string by k elements
-to right in place
-14. Longest palindrome in string
-15.
 Given 2 large numbers
 that cannot be stored in 64 bit,
 how to calculate final product?
-16.
-print 2d matrix spirally
-
 */
 
 // Let N = range of values given
@@ -195,7 +124,7 @@ int main(void)
 
     // If only manipulate 1 variable
     i <<= 2; // shift bits of i to left by 2
-    i >>= 2; // fhits bits of i to right by 2
+    i >>= 2; // shift bits of i to right by 2
     j = ~i; // bitwise NOT
     j = i ^ i; // xor
     j = i | i; // or
@@ -230,14 +159,13 @@ void swap(int ab[], int a, int b)
     ab[a] = ab[b];
     ab[b] = temp;
 }
+void swap(int*a, int*b)
+{
+    int temp = *a; 
+    *a = *b; 
+    *b = temp;
+}
 // */
-
-//----------------------------------------------------------------------------------------
-// Practice 4: Template
-
-
-
-
 //----------------------------------------------------------------------
  //
 /*
@@ -252,13 +180,17 @@ void swap(int ab[], int a, int b)
 
 // 2. Algorithms (All Companies)
     // - all the usual algorithms questions
+    // Note: It's not similar to programming challenges as it won't ask you to program Prim's algorithm or implement a Red Black Tree in 30 minutes. 
+    // However, it's more of understanding the tricks to a problem (IQ based) and solving it. 
+
 // 3. C++ Language Specific (Bloomberg)
-    // - what does static, const, volatile, virtual, mutable, explicit, friend  keywords do?
+    // - what does static, const, volatile, virtual, mutable, explicit, friend keywords do?
     // - Perform multiple inheritance, its problems, and when it is used?
     // - Perform operator overloading
     // - Implement copy constructor
     // - What are the constructors initialize if none is defined by user?
     // - Reference vs Pointers
+
 // 4. Product Design (Microsoft, PM Roles) 
     // - Who are the users? What are their needs? 
     // - What conditions & Scenarios is it used? 
@@ -269,7 +201,7 @@ void swap(int ab[], int a, int b)
     // - State user design 
     // - Design specification to solve problem 
     // - Evaluate whether design fulfills requirements to enable scenarios to meet goals to solve problem
-// 5. Testing 
+// 5. Testing (Microsoft) 
     // e.g. Test Soda Machine
     // Questions - Where is the soda can? Who is it being used by? 
     // Stress testing - Keep using it 1000 times to see if it breaks. put many coins at once 
@@ -278,21 +210,15 @@ void swap(int ab[], int a, int b)
     // Global - 
     // Accessibility - 
     // Usability - 
-    //
-
 
 1) Object Oriented Design Principles
 //----------------------------------------------------------------------
 DESIGN PROCESS
 //----------------------------------------------------------------------
-QUESTIONS, THINK, DO, TEST
-
+QUESTIONS, TEST CASES, THINK, DO, TEST
 //----------------------------------------------------------------------
 A) QUESTIONS
 //----------------------------------------------------------------------
-// What extra/specific functionalities?
-// What is the problem I am trying to solve?
-// What do I need to implement
 
 //----------------------------------------------------------------------
 B) THINK
@@ -300,13 +226,8 @@ B) THINK
 // What is general? What is specific?  (general=> base class, specific => child class
 // Is A? Has A?
 // Design Top-Down approach!
-
 // Run through list of design principles to see which fit:
-    // - Singleton
-    // - Observer (with Subscribers)
-    // - Factory (which class to instantiate objects)
-    // - Strategy (methods that are shared across many class and can be changed)
-    // - Iterator
+// note: List is at GitHub
 
 //----------------------------------------------------------------------
 C) DO
@@ -319,86 +240,93 @@ C) DO
 //----------------------------------------------------------------------
 DESIGN PROCESS
 //----------------------------------------------------------------------
-QUESTIONS, THINK, DO, TEST
+QUESTIONS, FUNCTION PROTOTYPE, TEST_CASES, ALGORITHM, IMPLEMENT, TEST
 QUESTIONS
 - Clarify with example problem and the final solution
 - Clarify with function prototype, Clarify Return Value!! (IBM Round 1 compress string)
 - Clarify what it is used for.
 - For programming competitions: Read the question properly!
-THINK => TEST_CASES, DESIGN, COMPLEXITY
-- Come up with test cases, does it work for +, -, 0? (VERY IMPORTANT STEP)
+- EVEN IF IT'S NOT INTERVIEWS, YOU NEED TO ASK QUESTIONS TO: BETTER UNDERSTAND PROBLEM AND IDENTIFY CORNER CASES
+    JUST ASK QUESTIONS AND ASSUME ALL ANSWERS ARE WHAT LEAD TO A MORE GENERAL SOLUTION
+FUNCTION PROTOYTPE 
+- Clarify return value 
+- Clarity type of return value put into it
+- Make sure have meaningful names 
+TEST_CASES
+- Come up with test cases, does it work for +, -, 0? (VERY IMPORTANT STEP), and their expected output
+ALGORITHM 
 - Come up with a solution, test for complexity
 - Come up with a better solution, test for complexity and compare
 - Share both good and bad solution and why. 
 - Can you do this recursively? Can you do this iteratively?
 - Check solution with all the test cases
-- Methods to THINK:
+- Methods to come up with algorithm:
 	i) Specific example solution -> General Rule solution
 	ii) Find similar problems and match 
 	iii) Simplify problem and solve. Then Generalize
 	iv) Start with base case then build 
 	v) Brainstorm data structures
-DO
+- DON'T INTERRUPT INTERVIEWER WHEN HE/SHE SPEAKS!
+IMPLEMENT
 - Implement solution
 - Write code in detail 
 - Write neatly & organize space 
 TEST
 - Check solution again
 - Run example on code
+- Check all lines to make sure ends with ';' 
+- Check to make sure functions used in function is defined above it and not below it. 
+- Check to make sure variable parameters are actually used, and all variables used are defined? Also, are the scoping of variables correct? 
+- Ensure type passed into function is actual type defined, ensure type returned from function is same as actual type collecting
+- Ensure vector is push_back() NOT push(), ensure stack is push() and top() with pop() NOT JUST pop() 
 - Fix any possible bugs 
+- Check that in Binary Tree traversals, you pass in root->left into function instead of root->left! 
+- Always use pointers for structs to prevent mistakes! Do constructor in structs to initialization in main is simpler! 
 //----------------------------------------------------------------------
-A) QUESTIONS
+A) QUESTIONS & Function Prototype
 //----------------------------------------------------------------------
-
-1. Is there a maximum limit to the sequence?
-- If there is, can do logN solution by always looking at middle element and dividing by 2
-- If the number is too large but less than 2^64, use unsigned long long int instead of just int
-
-2. How large are the values?
-- If anything more than x (determine later)
-use unsigned long long int so that computation is correct for large values
-
-Refer to below for exact value ranges
-http://www.cplusplus.com/reference/climits/
-
-
-3. Will the integers ever be negative?
-If it doesn't , use unsigned int!
-
-4. If given multiple input values, what happens if the input were given the same values?
-(e.g. for questions that relies on combination and permutation of inputs)
-
-5. If given a binary number as an input (string), will the binary ever be more than 64 bits?
-
+What extra/specific functionalities?
+What is the problem I am trying to solve?
+What does the sentence '...' mean exactly? 
+Can there be (-) values? Can there be (-) indices for circular arrays? 
+    If doesn't, then use unsigned int 
+    If (-) indices, need to add a large enough value to bring it back to positive, can determine it using  (-x) + (abs(-x)/modValue + 1)*modValue
+    If (-) => Can only use 32 bit for bit manipulation, otherwise 64 bits
+Is there a limit to the number of values? (If small then bubble sort is better) 
+    If the number is too large but less than 2^64, use unsigned long long int instead of just int
+    Refer to below for exact value ranges
+    http://www.cplusplus.com/reference/climits/
+Is there a limit to the values the numbers can have? 
+    If small then counting sort is better
+    If < 64 bits, then can use bit representation, 32 bit for signed, 64 bit for unsigned
+Are the values unique or can they be repeated? 
+Are the inputs sorted? 
+    If it is not, sort them at cost of O(nlgn), if it is, then you just reduced your complexity by a lot
+Is it a singly linked is or doubly linked list?
+A-Z only or can have special characters? 
+Does upper/lower cases matter ? 
 //----------------------------------------------------------------------
-B) THINK
+B) FUNCTION PROTOTYPE 
 //----------------------------------------------------------------------
-1. Integer Handling
-- Works with positive numbers?
-- Works with negative numbers?
-- Works with 1 digit?
-- Works with 0?
-- Works with multiple digits? unsigned
-
-2. Array Handling
-- Does sorting help make the algorithm better?
-
-3. Bit Manipulation
-- If I have a Bit Manipulation algorithm, does it require more than 32/64 bits?
-    If it does, I cannot use bit manipulation.
-- Is the signed bit important ? Yes => 32 bits only, No => declare unsigned => 64 bits
-- Can result be larger than what 32(signed)/64(unsigned) bits can hold?
-
-4. Strings
-- A-Z only or can have specific characters? 
-- Should upper lower case matter? 
-
-5. Linked List
-- Single ended (one pointer) or bi-directional (nodes point to each other) ? 
-- Circular? 
+Clarify function prototype is correct. Create multiple if flexible. 
+Make sure check function prototype has return value, for C's array, make sure pass in length of array as well. 
 //----------------------------------------------------------------------
-C) DO
+C) TEST_CASES
 //----------------------------------------------------------------------
+Come up with a short enough test case that covers all the required corner cases 
+Came up with more than 1 test case, maybe 2 or 3. Each testing specifics like what if n = 1, n = even, n = odd
+From test case, you may notice pattern in data. 
+FOr each test case, come up with expected output 
+//----------------------------------------------------------------------
+D) ALGORITHM 
+//----------------------------------------------------------------------
+Come up with the design for the algorithm. Must come up with multiple solutions and not just one. 
+Improve time complexity? Improve space complexity? Tradeoff one for the other? 
+Compare solutions and make sure they work with your 2-3 test cases
+//----------------------------------------------------------------------
+E) IMPLEMENT 
+//----------------------------------------------------------------------
+Implement your algorithms!
 - Don't assume your variables / arrays are initialize to 0 , initialize them yourself!
 - For loop iterator, (i or j etc.) must be same type as condition being compared to (N)
     // if N is unsigned int, for loop i has to be unsigned int as well
@@ -408,6 +336,11 @@ C) DO
     // for loop => O(n^2), add previous => O(n)
 - When working with unsigned, the value can never be < 0!! So cannot terminate when j < 0 cause j will never be < 0!!
     // also careful with starting loops with N-2, cause if N is 1 then value will be 1-2 = very large (+) number!
+//----------------------------------------------------------------------
+F) TEST
+//----------------------------------------------------------------------
+Run through test cases with the algorithm. 
+Make sure to actually run step by step with the conditions and code! Assume you are the compiler. 
 // */
 //----------------------------------------------------------------------
 /* //
@@ -434,6 +367,9 @@ You need to prove to yourself and the world that you are the best by winning com
 2. Compete in programming challenges
 	- Based on: 
 		- Algorithms => Knowledge on time space complexity 
+        - Data Structures => How well do you know all existing data structures and their implementation and their details in implementation differences. 
+        - Math => How well can you solve a math problem
+        - IQ => How well do you detect special cases for this problem
 3. Kaggle Competitions 
 	- Based on: 
 		- Proficiency in Analyzing Existing Data
@@ -443,6 +379,7 @@ You need to prove to yourself and the world that you are the best by winning com
 	- Based on: 
 		- How often do other programmers use your work? 
 		- How easy are you able to understand large amount of code and improve it
+        - Can you parallelize code and build robust, scalable, efficient systems.
 5. Start Ups (Compete in Life) 
 	- Based on: 
 		- Creating a solution that is: 
@@ -531,169 +468,56 @@ gcc -g -Wall -o programName main.c // Note: -g command is needed to store symbol
 
 /*
 //----------------------------------------------------------------------
+// If super lost for any combination, math type question, try everything
+//----------------------------------------------------------------------
+1. Code brute force solution (BFS,DFS), use A* search if needed. Basically A.I. is all about trying everything
+2. Code dynamic programming solution, come up with 1. 
+3. Code greedy solution. 
+4. Find out optimal solution with math if needed
+5. Assume that you have some function available that already works, how can you use that to solve current problem
+    (Google Interview: where you assume you have function to find a range of a duplicated number in sorted array and solved the bigger problem)
+Just trial and error and see which works
+//----------------------------------------------------------------------
+// When do you look at solution  
+//----------------------------------------------------------------------
+1. After you are making no progress even after coming back to problem later. 
+2. After you have tried every single approach (dynamic, greedy, bit manipulation, every single data structure (graph, heap, trie, disjointset), sort, search algo you know) 
+3. After you have accounted for all assumptions and every possible corner cases. 
+4. After you try dynamic programming on every single dimension and variable combination.
+5. However, if you feel you are learning more about problem even if it fails, you can't look at solution. 
+6. Only after you have tried everything, and you are sure you made no progress at all. Then you look at solution a little and work from the hints. 
+Then finally, when you solved it with helps from hint or copying solution, you add to your notes. What approach did you not account for
+that did not get you to that solution. 
+//----------------------------------------------------------------------
 // Lessons Learnt
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
-// Note:
-This file is where you code things temporarily again from whatever you have coded before
-
-1. Can only use sizeof(ab)/sizeof(ab[0]) when ab is a variable, NOT a parameter
-
+1. Can only use sizeof(ab)/sizeof(ab[0]) when ab is a variable, NOT a parameter (must pass in value of n to a function for arrays)
 int main(void)
 {
     int a[10] = {1,2,3,4,5,6,7,8,9,10};
     int n = sizeof(a)/ sizeof(a[0]) ; // correct this gives you 10,
     someFunction(a);
-
 }
-
 // inside someFunction();
 someFunction(int a[])
 {
     //WRONG!!!!!!!!! CAN'T USE SIZEOF from AN ARRAY PARAMETER
     int n = sizeof(a)/ sizeof(a[0]) ;
 }
-
 Solution:
 // inside main
 someFunction(a, sizeof(a)/sizeof(a[0]));
-someFunction(int a[], int n)
-{
-
-}
+someFunction(int a[], int n) { }
 //----------------------------------------------------------------------
 Notes:
 1. Remember to write: using namespace std; // with #include <iostream>
 2. Remember to check for correct output in main() after calling the function!
-3. It's swap(arrayVar, j, j+1) NOT swap(arrayVar, arrayVar[j], arrayVar[j+1])
+3. It's swap(arrayVar, j, j+1) NOT swap(arrayVar, arrayVar[j], arrayVar[j+1]) OR just (arrayVar[j], arrayVar[j+1]) if passing by pointer for integers
 4. if define, int main(void), always remember to return 0!! or any integer
 5. In forloop, it's (int j = 0; j< something; j++) NOT (int j = 0; something; j++)!!!
 6. When have nested for loops and while loops, make sure remember to close and open curly braces properly!
 7. set an entire array to 0 using  memset(arrayName,0,sizeof(arrayName)); // to set an array to 0
     // memset() is defined in <string.h>
 */
-
-//----------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------------
-/* //
-// Bloomberg Interview Round 1
-
-Ahmed Bloomberg  (Indian??)
-
-#include <string.h>  // for strlen(), strcpy()
-#include <stdlib.h> //
-#include <iostream>
-using namespace std;
-
-int main() {
-    return 0;
-}
-
-// Returns number of words allocated
-// Parameters:
-//      @)
-// Assume strArray is allocated
-int seperateString(char* string, char** strArray)
-{
-    int n = strlen(string);
-    // Allocating memory for strArray Maximum of n/2 words
-    // Maximum number of words is n/2 " a b c "
-    strArray = malloc(sizeof(char*) * (n/2)); // to point to each word
-    int count = 0;  // number of words in string
-    // To check for last word without spaces
-    bool haveWord = false; // new character part of a word that is not saved yet
-    int i = 0;
-    // Get rid of initial spaces in beginning
-    while(string[i] == ' ')
-    {
-        i++; // go to the first word and skip all the initial spaces
-    }
-
-    string = &string[i]; // repoint string to after spaces
-    for( ; i < n; i++)
-    {
-        // " abc  "
-        // one space
-        if(string[i] == ' ')
-        {
-            string[i] = '/0'; // close this into a word
-
-            // Get the length of the word just made
-            int lenWord = strlen(string); // this will be a shorter length due to closing string
-
-            strArray[count] = (char *)  malloc(sizeof(char) * lenWord);
-            strcpy(strArray[count], string);
-            string = &string[i+1]; // point it to the next word
-
-            // "quick     brown"
-            while(string[i] == ' ')
-            {
-                i++; // go to the next word and skip all the spaces
-            }
-            string = &string[i]; // repoint string to after spaces
-            count++; // increment number of words
-            haveWord = false;
-        }
-        // Case where it is not a space
-        else
-        {
-            haveWord = true;
-
-        }
-    }
-    // " hello   "
-    // " hello'\0'    "
-    // "  hello"
-
-    // To handle case for final word " hello"
-    if(haveWord) // string[n] will already be '\0' by definition of the string
-    {
-        int lenWord = strlen(string); // this will be a shorter length due to closing string
-        strArray[count] = (char *)  malloc(sizeof(char) * lenWord);
-        strcpy(strArray[count], string);
-        count++;
-
-    }
-    return count;
-}
-
-void reverseSentence(char* string)
-{
-    char** strArray;
-
-
-    // Returns number of words that was separated
-    int n = seperateString(string, strArray);
-    for(int i = 0; i < n/2; i++)
-    {
-        // Swap it
-        swap(strArray[i], strArray[n-i-1]);
-    }
-    // It just basically merges all the array of strings
-    // into a single string, separated by a " "
-    mergeString(strArray, string);
-    // Separate and swap
-    // T(n) = O(n + k ) = O(n) , n = length of string
-                                // k = number of words in string
-    // merging takes
-    // T(n) = O(n);
-    // S(n) = O(n);
-
-    // " a boy is good "
-    // " " -> delimiter
-    // "a" "boy" "is" "good"
-    // "good"
-
-}
-
-//Examples
-//" the quick      brown fox jumps over the lazy dog " becomes "dog lazy the over jumps fox brown quick the".
-//"hello world" becomes "world hello".
-//“ Hi! ” is trimmed to “Hi!”.
-//“” stays as “”.
-
-
-//---------------------------------------------------------------------------------------------------
 // */
-
