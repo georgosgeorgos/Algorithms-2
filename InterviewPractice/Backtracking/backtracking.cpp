@@ -24,6 +24,14 @@ TODO:
 //---------------------------------
 Subsets => Order/Permutation doesn't matter. 
 Duplicates harder than Distinct, since Distinct is just all permutations, whereas duplicates, if need prevent duplicates, need to account for that
+
+Every Backtracking Algorithm can be broken down into these steps: 
+    Step1. Goal Test: Append to solution or return true if reach goal
+    Step2. Iterate Possible Moves: Iterate through the list of possible moves
+    Step3. Check Legal Move: Check if current move is legal 
+    Step4. Add Move: Add new legal move
+    Step5. Search Next Move: Repeat Step 1 to 5 for next move
+    Step6. Backtrack: Remove move as current move doesn't work
 */
 //----------------------------------------------------------------------------------------------------------------------------------
 // TODO:3 N Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other
@@ -65,18 +73,19 @@ using namespace std;
 
 void subsetHelper(vector<int>&nums, vector<vector<int>>& solution, vector<int>& currSubset, int index)
 {
-    // Add to solution when meet condition
-    // in this case, add to solution at each node of DFS 
+    // Step1: Goal Test: add to solution at each node of DFS 
     solution.push_back(currSubset); // note: also handles base case of pushing empty set
     
     // Special DFS that iteratives over everything (many starting points for DFS) 
     // as well as recursively dfs to adjacent nodes
     // in this case, the adjacent nodes are always to the right of the array. 
-    for(int i = index; i < nums.size(); i++)
+    for(int i = index; i < nums.size(); i++) // Step2: Iterate Possible Moves
     {
-        currSubset.push_back(nums[i]); 
-        subsetHelper(nums, solution, currSubset, i+1); 
-        currSubset.pop_back(); 
+        // Step3: Check Legal Move: It is always legal in this case
+        currSubset.push_back(nums[i]);  // Step4: Add Move
+        // PERMUTE TO NEXT STEP
+        subsetHelper(nums, solution, currSubset, i+1); // Step5: Search Next Move 
+        currSubset.pop_back(); // Step6: Backtrack
     }
     return; 
 }
@@ -126,14 +135,17 @@ void swap(vector<int> & arr, int i, int j)
 
 void permuteHelper(vector<int>& arr, vector< vector<int> >& solution, int index)
 {
-    // Only push solution when done permuting
-    if(index == arr.size())
-        solution.push_back(arr);
+    // Step1: Goal Test: Only push solution when done permuting
+    if(index == arr.size()) 
+        solution.push_back(arr); 
+
+    // Step2: Iterate Possible Moves: List of possible moves are those ahead of index
     for(int j = index; j < arr.size(); j++)
     {
-        swap(arr, index, j);
-        permuteHelper(arr, solution, index+1);
-        swap(arr, index, j); 
+        // Step3: Check Legal Move: Every move is legal in this case
+        swap(arr, index, j); // Step4: Add Move
+        permuteHelper(arr, solution, index+1); // Step5: Search Next Move
+        swap(arr, index, j); // Step6: Backtrack 
     }
     return;
 }
