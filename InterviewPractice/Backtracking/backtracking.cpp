@@ -1,3 +1,4 @@
+// 
 //----------------------------------------------------------------------------------------------------------------------------------
 /*
 Table of Contents
@@ -68,9 +69,6 @@ void subsetHelper(vector<int>&nums, vector<vector<int>>& solution, vector<int>& 
     // in this case, add to solution at each node of DFS 
     solution.push_back(currSubset); // note: also handles base case of pushing empty set
     
-    // sort the nums array first 
-    sort(nums.begin(), nums.end()); 
-    
     // Special DFS that iteratives over everything (many starting points for DFS) 
     // as well as recursively dfs to adjacent nodes
     // in this case, the adjacent nodes are always to the right of the array. 
@@ -87,6 +85,8 @@ vector<vector<int>> subsets(vector<int>& nums)
 {
     vector<vector<int>> solution; 
     vector<int> currSubset; 
+    // sort the nums array first 
+    sort(nums.begin(), nums.end()); 
     // start with index of 0 
     subsetHelper(nums, solution, currSubset, 0); 
     return solution; 
