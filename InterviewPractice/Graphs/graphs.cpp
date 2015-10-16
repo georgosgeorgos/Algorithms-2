@@ -4,6 +4,8 @@ Table of Contents
 1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
 
 // TODO:
+2 Djikstra Algorithm: Find single-source shortest path for non-negative edges
+// Time Complexity, T(V,E) = O(V + ElogV), S(V,E) = O
 2. Check if graph is weakly connected component
 0. Check
 1. BFS
@@ -46,6 +48,7 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
 // 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
 // Time Complexity, T(V,E) = O(V+E)
 // Space Complexity, S(V,E) = O(V)
+//--------------------------------------------
 // Algorithm: 
 // 1. Mark all nodes as not seen, O(V)
 // 2. Traverse using BFS/DFS from any node
@@ -69,7 +72,7 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
 // 2 = [1]
 // 3 = [1]
 //--------------------------------------------
- //
+/* //
 #include <vector> // To hold all nodes that exist and index them quickly
 #include <list> // To search through each adjacent node given a node
 #include <queue> // For BFS traversal
@@ -119,14 +122,7 @@ bool Graph::isConnectedDFS()
     // Start with the first node
     visited[0] = true;
     // O(V)
-    for(auto i = adj[0].begin(); i != adj[0].end(); i++)
-    {
-        if(!visited[*i])
-        {
-            visited[*i] = true;
-            this->DFS(*i);
-        }
-    }
+    this->DFS(0);
     // Check all are true
     for(int i = 0; i < numNodes; i++)
     {
