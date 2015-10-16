@@ -6,7 +6,7 @@ Table of Contents
 2. Permutation: Generate all permutation for n distinct integers, T(n) = O(n!), S(n) = O(n!) 
 //---------------------------------
 TODO: 
-12. N Queen
+3. N Queen (Started below)
 13. Knight's Tour
 14. M Coloring
 15. Subset Sum 
@@ -57,6 +57,14 @@ Algorithms:
     Therefore, need O(n^2) space for  checking diagonals, but updating/checking diagonal takes O(n) each placement
     Better to just check if clashes at each step you put a queen down rather than mark every time you place a queen 
     as you can't guarantee that 2 queens that marked the same spot will maintain that spot if 1 queen is removed
+    Step 1: If Numassign = N, append to solution 
+    Step 2: Iterate through all possible columns for current row(index) 
+    Spte 3: Check Safe by checking existing queens that were assigned values 
+        if ( (x1 == x2) || (y1 == y2) || (abs(x1-x2) == abs(y1-y2))) return false =D came up with this yourself
+        otherwise return true 
+    Step 4: Assign to row and index
+    Step 5: Increment row and recursively call function
+    Step 6: Backtrack by un-assigning this queen
 Implement!
 */
 //---------------------------------
