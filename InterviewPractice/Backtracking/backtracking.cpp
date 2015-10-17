@@ -5,9 +5,9 @@ Table of Contents
 2. Permutation: Generate all permutation for n distinct integers, T(n) = O(n!), S(n) = O(n!) 
 3. N-Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other, T(n) = O(n!), S(n) = O(n)
 4. Knight's Tour: N*M board, touch each cell exactly once, false if impossible, T(n,m) = O(8^(nm)), S(n,m) = O(nm)
+5. M-Coloring : Given an undirected graph, check if every node can be colored from M colors such that no 2 adjacent have same colors, T(V,E,M) = O(M^(V+E)), S(V,E,M) = O(V+E)
 //---------------------------------
 TODO: 
-14. M Coloring
 15. Subset Sum 
 16. Given n distinct integers, list all k subsets that exist, k <= n, easy just, only add to solution when length of subset is k. (Similar to 1.
 17. Make Valid Equation
@@ -331,6 +331,120 @@ int main(void)
         }
         cout << endl;
     }
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 5 M-Coloring : Given an undirected graph, check if every node can be colored from M colors such that no 2 adjacent have same colors
+// Time Complexity, T(V,E,M) = O(M^(V+E)) (note: Not sure if this is right but it is definitely exponential)
+// Space Complexity, S(V,E,M) = O(V+E)
+//---------------------------------
+/*
+Question:
+    1. Must I use all colors in my graph?
+TestCase: 
+    a---b
+    |   |
+    c---d
+    =>  M = 2 => True
+Algorithm:
+    note; if M == k is true, then M = k + i must be true since doesn't have to use all colors, i >= 0
+    Since need to check for every adjacent node (edge) instead of whether 2 nodes have an edge, 
+    Adjacency List will be a better representation than Adjacency Matrix
+*/
+//---------------------------------
+/* //
+#include <vector> // for colors
+#include <list>
+#include <iostream> 
+using namespace std; 
+
+class Graph {
+private:
+    list<int>* adj; // a pointer to a list of integers
+    int numNodes;
+    vector<int> colors; 
+    bool isSafe(int index, int color) // MISTAKE: Named local variable to be same as member variable 'colors'
+    {
+        // Check each adjacent node to current vertex index isn't the same color
+        for(auto i = adj[index].begin(); i != adj[index].end(); i++) // MISTAKE: Used 'int i' instead of 'auto i'
+        {
+            // check that the adjacent node hasn't been assign color or not same color by checking if it is same color
+            if(this->colors[*i] == color)
+                return false;
+        }
+        return true;
+    }
+    bool searchForSolution(int M, int index) // O(V)
+    {
+        // Step 1: Goal Test
+        if(index == this->numNodes) return true; // MISTAKE: Made index==M instead of index==V
+        // Step 2: Check assigning current node to each color
+        for(int i = 0; i < M; i++) // O(M)
+        {
+            // Step 3: Check no adjacent node has this color
+            if(this->isSafe(index,i)) // O(E) for isSafe and total for all checking
+            {
+                this->colors[index] = i; // Step 4: Assign Valid Color
+                if(searchForSolution(M,index+1)) // Step 5: Serach for solution
+                    return true;
+                this->colors[index] = -1; // Step 6: Backtrack
+            }
+        }
+        // Didn't find any color that fits
+        return false;
+    }
+
+public:
+    Graph(int V)
+    {
+        this->numNodes = V;
+        this->adj = new list<int>[V]; 
+        for(int i = 0; i < V; i++)
+            this->colors.push_back(-1); // initialize all to be uncolored (-1)
+    }
+    void addEdge(int v, int w)
+    {
+        this->adj[v].push_back(w);
+        this->adj[w].push_back(v); // undirected, unweighted since weight doesn't matter
+    }
+    bool mColoring(int M)
+    {
+        return this->searchForSolution(M,0);
+    }
+    void printColors()
+    {
+        for(int i = 0; i < this->numNodes; i++)
+        {
+            cout << colors[i] << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main(void)
+{
+    Graph* g = new Graph(4);
+    g->addEdge(0,1);
+    g->addEdge(0,2);
+    g->addEdge(1,3);
+    g->addEdge(2,3);
+    int M = 2;
+    bool result = g->mColoring(M);
+    if(result) 
+    {
+        cout << M << " colors is possible" << endl;
+        g->printColors();
+    }
+    else cout << M << " colors is NOT possible" << endl;
+    M = 1;
+    result = g->mColoring(M);
+    if(result) 
+    {
+        cout << M << " colors is possible" << endl;
+        g->printColors();
+    }
+    else cout << M << " colors is NOT possible" << endl;
     return 0;
 }
 // */
