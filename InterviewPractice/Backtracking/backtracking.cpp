@@ -4,9 +4,9 @@ Table of Contents
 1. Given a set of distinct integers, nums, return all possible subsets, T(n) = O(2^n), S(n) = O(n) 
 2. Permutation: Generate all permutation for n distinct integers, T(n) = O(n!), S(n) = O(n!) 
 3. N-Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other, T(n) = O(n!), S(n) = O(n)
+4. Knight's Tour: N*M board, touch each cell exactly once, false if impossible, T(n,m) = O(8^(nm)), S(n,m) = O(nm)
 //---------------------------------
 TODO: 
-13. Knight's Tour
 14. M Coloring
 15. Subset Sum 
 16. Given n distinct integers, list all k subsets that exist, k <= n, easy just, only add to solution when length of subset is k. (Similar to 1.
@@ -239,6 +239,98 @@ int main(void)
     int N = 8; 
     int result = nQueens(N); // 92
     cout << result << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 4 Knight's Tour: N*M board, touch each cell exactly once, false if impossible
+// Time Complexity, T(n,m) = O(8^(nm))
+// Space Complexity, S(n,m) = O(nm)
+//---------------------------------
+/*
+Questions: 
+    1. Do I print one solution or all solution? (first solution found is enough, there's too many possible solutions)
+Function Prototype: 
+    
+TestCase:
+Algorithm: 
+    Backtracking 
+    Time Complexity = 8^(nm-1), (-1 because first move will never be backtracked
+                The total number of orders are 8*8*8... for nm times. 
+Implement!
+*/
+//---------------------------------
+/* //
+#include <vector>
+#include <iostream> 
+using namespace std; 
+
+bool isSafe(int x, int y, vector< vector<int> >& matrix, int move, int N, int M, vector<int>& xAdd, vector<int>& yAdd)
+{
+    // Check for out of bounds or explored cells
+    if ( ((x + xAdd[move]) < 0) || ((x+xAdd[move]) >= N) || ((y + yAdd[move]) < 0) || ((y + yAdd[move]) >= M) || (matrix[x + xAdd[move]][y + yAdd[move]] != -1))
+        return false;
+    return true;
+}
+
+bool backtrack(int N, int M, vector< vector<int> >& matrix, int index, int x, int y, vector<int>& xAdd, vector<int>& yAdd)
+{
+    // Step 1: Goal Test: All cells filled when current step is legal and it is 1 more than total space available on board
+    if (index == N*M) return true;
+
+    // Step 2: Iterate through possible moves
+    for(int i = 0; i < 8; i++)
+    {
+        // Step 3: Check if current move assignment is safe
+        if(isSafe(x, y, matrix, i, N, M, xAdd, yAdd))
+        {
+            // Step 5: Assign Legal Move
+            x += xAdd[i]; y += yAdd[i];
+            matrix[x][y] = index;
+            if(backtrack(N, M, matrix, index + 1, x, y, xAdd, yAdd))
+                return true; // return first solution found
+            // Step 6: Backtrack
+            matrix[x][y] = -1;
+            x -= xAdd[i]; y -= yAdd[i];
+        }
+    }
+    return false;
+}
+
+vector< vector<int> > knightTour(int N, int M)
+{
+    // Let -1 represented unrepresented cell
+    vector< vector<int> > matrix(N, vector<int> (M, -1));
+    // Initialize all possible moves 
+    vector<int> xAdd = {2,1,-2,1,-1,2,-1,-2};
+    vector<int> yAdd = {1,2,1,-2,2,-1,-2,-1};
+    // Try every possible starting point until a solution is found
+    for(int i = 0; i < N; i++)
+    {
+        for(int j = 0; j < M; j++)
+        {
+            matrix[i][j] = 0; 
+            if (backtrack(N,M,matrix,1,i,j, xAdd, yAdd)) // MISTAKE: Passed in wrong values as step = i, x = j, y = 1 instead so failed!
+                    return matrix;
+            matrix[i][j] = -1; // backtrack
+        }
+    }
+    return matrix;
+}
+
+int main(void)
+{
+    int N = 5; 
+    int M = 5; 
+    vector< vector<int> > arr = knightTour(N,M); // Should terminate with solution immediately for  (5*5)
+    for(int i = 0; i < arr.size(); i++)
+    {
+        for(int j = 0; j < arr[i].size(); j++)
+        {
+            cout << arr[i][j] << " ";
+        }
+        cout << endl;
+    }
     return 0;
 }
 // */
