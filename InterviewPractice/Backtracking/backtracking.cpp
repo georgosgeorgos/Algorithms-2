@@ -1,12 +1,11 @@
-// 
 //----------------------------------------------------------------------------------------------------------------------------------
 /*
 Table of Contents
 1. Given a set of distinct integers, nums, return all possible subsets, T(n) = O(2^n), S(n) = O(n) 
 2. Permutation: Generate all permutation for n distinct integers, T(n) = O(n!), S(n) = O(n!) 
+3. N-Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other, T(n) = O(n!), S(n) = O(n)
 //---------------------------------
 TODO: 
-3. N Queen (Started below)
 13. Knight's Tour
 14. M Coloring
 15. Subset Sum 
@@ -34,45 +33,10 @@ Every Backtracking Algorithm can be broken down into these steps:
     Step6. Backtrack: Remove move as current move doesn't work
 */
 //----------------------------------------------------------------------------------------------------------------------------------
-// TODO:3 N Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other
-// Time Complexity, T(n) = O()
-// Space Complexity, S(n) = O(n)
-//---------------------------------
-/*
-Questions: 
-    1. The board is represented as vector< vector<int> > ? 
-    2.  Print one solution or all solution? 
-    3. Return true if any configuration or all configurations? 
-Function Prototype: 
-    int NQueens(int numQueen); 
-TestCase: 
-    1. N=4 => 2
-    2. N=6 => 8
-    3. N=8 => 92
-Algorithms: 
-    Each row can have N choices, there are N rows. Therefore, Brute Force takes O(n^n)
-    Space can be O(n), since only store position of queen at each row which is 1 position.
-    Backtrack when solution is impossible. 
-    Have a row and column to mark as can't for each row and column a queen is in, however, must also mark diagonals
-    Therefore, need O(n^2) space for  checking diagonals, but updating/checking diagonal takes O(n) each placement
-    Better to just check if clashes at each step you put a queen down rather than mark every time you place a queen 
-    as you can't guarantee that 2 queens that marked the same spot will maintain that spot if 1 queen is removed
-    Step 1: If Numassign = N, append to solution 
-    Step 2: Iterate through all possible columns for current row(index) 
-    Spte 3: Check Safe by checking existing queens that were assigned values 
-        if ( (x1 == x2) || (y1 == y2) || (abs(x1-x2) == abs(y1-y2))) return false =D came up with this yourself
-        otherwise return true 
-    Step 4: Assign to row and index
-    Step 5: Increment row and recursively call function
-    Step 6: Backtrack by un-assigning this queen
-Implement!
-*/
-//---------------------------------
-//----------------------------------------------------------------------------------------------------------------------------------
 // 1 Given a set of distinct integers, nums, return all possible subsets.
 // Time Complexity, T(n) = O(2^n) as need to visit all possible subsets
 // Space Complexity, S(n) = O(n) as push and pop each number
-//----------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------
 /* //
 #include<vector>
 #include<algorithm> // sort()
@@ -179,6 +143,102 @@ int main(void)
         }
         cout << endl;
     }
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 N-Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other
+// Time Complexity, T(n) = O(n!)
+// Space Complexity, S(n) = O(n)
+//---------------------------------
+/*
+Questions: 
+    1. The board is represented as vector< vector<int> > ? 
+    2.  Print one solution or all solution? 
+    3. Return true if any configuration or all configurations? 
+Function Prototype: 
+    int nQueens(int N);
+TestCase: 
+    1. N=4 => 2
+    2. N=6 => 8
+    3. N=8 => 92
+Algorithms: 
+    Each row can have N choices, there are N rows. Therefore, Brute Force takes O(n^n)
+    Space can be O(n), since only store position of queen at each row which is 1 position.
+    Backtrack when solution is impossible. 
+    Have a row and column to mark as can't for each row and column a queen is in, however, must also mark diagonals
+    Therefore, need O(n^2) space for  checking diagonals, but updating/checking diagonal takes O(n) each placement
+    Better to just check if clashes at each step you put a queen down rather than mark every time you place a queen 
+    as you can't guarantee that 2 queens that marked the same spot will maintain that spot if 1 queen is removed
+    Step 1: If Numassign = N, append to solution 
+    Step 2: Iterate through all possible columns for current row(index) 
+    Spte 3: Check Safe by checking existing queens that were assigned values
+        if ( (x1 == x2) || (y1 == y2) || (abs(x1-x2) == abs(y1-y2))) return false =D came up with this yourself
+        otherwise return true 
+    Step 4: Assign to row and index
+    Step 5: Increment row and recursively call function
+    Step 6: Backtrack by un-assigning this queen
+    Chances of backtrack is when queens collide, for 2 rows, the chances are slim, but at the last row chances are high, 
+    so going to be close to n*(n-1)*...*1 = n!
+Implement!
+*/
+//---------------------------------
+/* //
+#include <cmath> // abs()
+#include <vector>
+#include <iostream> 
+using namespace std; 
+
+bool isSafe(int index, int col, vector<int>& state)
+{
+    // Check vertical, horizontal and diagonal with previous
+    for(int i = 0; i < index; i++)
+    {
+        // note: Will never be in same row based on how solution is constructed
+        // Check if assigned same row or diagonal with a previous queen
+        if(state[i] == col || (abs(i-index) == abs(state[i]-col)))
+            return false;
+    } 
+    return true;
+}
+
+void searchSolutions(int N, int& numConfigurations,vector<int>& state, int index)
+{
+    // Step 1: Goal Test: All Queens assigned legally
+    if(index == N) numConfigurations++;
+
+    // Step 2: Loop through each possible column for current row
+    for(int i = 0; i < N; i++) 
+    {
+        // Step 3: Check Legal Moves
+        if(isSafe(index, i, state))
+        {
+            // Step 4: Assign Move
+            state[index] = i; 
+            // Step 5: Search for solution
+            searchSolutions(N, numConfigurations, state, index + 1);
+            // Step 6: Backtrack
+            state[index] = -1; 
+        }
+    }
+    return;
+}
+
+int nQueens(int N)
+{
+    // Keep track of total number of configurations
+    int numConfigurations = 0;
+    // To store that state of each queen
+    vector<int> state (N, -1); // initialize all queens to not be assigned to any position. 
+    searchSolutions(N, numConfigurations,state, 0);
+    return numConfigurations; 
+}
+
+int main(void)
+{
+    int N = 8; 
+    int result = nQueens(N); // 92
+    cout << result << endl;
     return 0;
 }
 // */
