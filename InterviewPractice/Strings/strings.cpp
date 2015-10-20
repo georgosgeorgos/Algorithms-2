@@ -1,4 +1,36 @@
 //----------------------------------------------------------------------------------------
+// 8 Exact Matching: Z-Algorithm
+// Time Complexity, T(n,m) = O(n + m)
+// Space Complexity, S(n,m) = O(n + m)
+//-------------------------
+/*
+Algorithm: 
+    Z-array = number of exact matching of a string with its own prefix 
+    Z[0] = strlen(str), redundant case 
+    Then, let newStr = strcat(pattern,text) 
+    After computing Z[i], 
+    T(n,m)  = O(m+n) => To find indices of exact matching
+    For every Z[i] >= strlen(pattern), there is an exact matching at that location, i >= strlen(pattern)
+    S(n,m) = O(m+n) => To hold the z-array
+    Computing Z[i] also takes T(n,m) = O(m+n)
+    Let R[i] = the furthest Z[j] can reach from j = 2,...,i
+    Let L[i] be the corresponding j for R[i] where L[i] can be any of them if multiple Z[j]'s reachest the same furthest
+    Z[1] is basically all m comparisons.
+    Assuming computed R[i-1], L[i-1] and Z[i-1] properly, 
+    Case 1: i > R[i-1]
+        Z[i] = compute from scratch again  as well as R[i] and L[i]
+    Case 2: i <= R[i-1]
+        Z[i] =
+*/
+//-------------------------
+#include <iostream> 
+using namespace std; 
+int main(void)
+{
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
 /* //
 Table of Contents
 1. Reverse a string In-Place, T(n) = O(n), S(n) = O(1)
@@ -10,12 +42,12 @@ Table of Contents
 7. Longest Substring With At Most K Distinct Characters, T(n) = O(n), S(n) = O(n)
 //-------------------------
 TODO:
+14. Reverse Words in a Sentence (Bloomberg Interview Round 1)
 13. Finding longest palindromes substring 
     a) Hint: Manacher algorithm T(n) = O(n), S(n) = O(n) // fastest
     b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
     c) T(n) = O(n^2), S(n) = O(1) // least space
     d) Brute Force
-14. Reverse Words in a Sentence (Bloomberg Interview Round 1)
 21. Longest Duplicated substring in a string.
 30. Split a string by delimiter in  C++ using <string> 
 31. Reading an input string of arbitrary size.
@@ -25,6 +57,9 @@ eg: "hi  i     am paul" -> "hi i am paul"
 Hint: 2 pointers, 1 to point to replace, one to search for more
 33. Longest Common Substring Using Suffix Trees for > 2 strings
 34. Exact Matching using Suffix Trees (location of each substring)
+35. Exact Matching: Knuth Morris Pratt
+35. Exact Matching: Rabin Karp
+35. Exact Matching: Boyer-Moore
 35. Dictionary (Check if a string is found in the dictionary)
 36. Implement strspn function
 //-------------------------
@@ -40,11 +75,31 @@ To work between <cstring> and <string>
     // Must always malloc if changing an old cString
     char* compressed = (char *) malloc(strlen(inputStr));
     // Must also always null terminate the string! 
+
+//-------------------------
+<string> 
+//-------------------------
+char* cStr, cStr2;
+string str, str2;
+
+strlen(cStr); == str.length(); // returns length of string 
+strcat(cStr,cStr2); == str.append(str2);
+strcpy(cStr,cStr2); == str.assign(str2);
+strcmp(cStr,cStr2); == str.compare(str2);
+cStr[2] = 'k'; == str[2]  = 'k';
+
+str.erase(startIndex,amountToErase); 
 //-------------------------
 Common Hints
 //-------------------------
 - Reversing entire sentence, then reversing each word string => Reversing words in a sentence
 - Assume ascii => char arr[256]; => Constant space, otherwise use Hash Table which is O(n)
+- Loop through entire string with more than just 1 pointer, the first pointer moves faster, the 2nd pointer follows
+//-------------------------
+notes:
+//-------------------------
+"k" != 'k'
+"k" is a char * whereas 'k' is a char
 //-------------------------
 Questions: 
 //-------------------------
