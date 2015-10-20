@@ -1,69 +1,8 @@
 //----------------------------------------------------------------------------------------
-/* //
-Table of Contents
-1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
-2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
-3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
-4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
-5. Delete Node From Middle Of Linked List, Given Access to That Node, T(n) = O(n), S(n) = O(1)
-6. Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
-8. Detect if a Linked List is a palindrome T(n) = O(n) , S(n) = O(n)
-9. Given a linked list, swap every two adjacent nodes and return its head.
-   If odd number of elements, ignore the last element. Time Complexity, T(n) = O(n), S(n) = O(1) 
-10. Given a linked list and a value x, partition it such that all nodes less than x come 
-    before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
-//----------------------------------------------------------------------------------------
-TODO: 
-7. Given Circular Linked List, return node at beginning of circular list, T(n) = O(n) , S(n) = O(1) TODO: INT
-19. Insert an element into a sorted circular linked list (Microsoft Round 1)
-21. Partition List: 
-
-    (done in leetCode)
-
-21. Merge K sorted linked list into 1 sorted linked list
-    T(n) = O(nklogk), S(n) = O(1) 
-    Hint: MergeSort
-
-22. Copy List with Random Pointer (Bloomberg Interview) 
-    A linked list has next pointer and random pointers to either NULL or random nodes on this linked list. 
-    Clone this linked list. 
-    Your solution during interview, T(n) = O(n), S(n) = O(n)
-    Optimal Solution to figure out, T(n) = O(n), S(n) = O(1)
-
-#include <forward_list> 
-forward_list<int> listA;
-e.g.: int curr = listA.front(); 
-    push_front() // insert element to beginning
-    pop_front() // removes first element
-    front() // get first element
-    unique() // remove duplicates (only works if list is sorted)
-    sort()
-    clear()
-    insert_after()
-    emplace_after()
-    emplace_front()
-    erase_after()
-    resize()
-    swap()
-//----------------------------------------------------------------------------------------
->> g++ -std=c++11 linkedlist.cpp
->> a.exe
-//----------------------------------------------------------------------------------------
-Hints: 
-- Memory address of linkedlist is unique (pointed to by pointers)
-- Can always break circular linked list, solve the problem, then link it back to become circular again
-- Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
-- If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
-- Can always transfer values of linkedlist instead of the values
-- Always initialize all created linkedlist to NULL! If not may have weird errors
-
-// */
-//----------------------------------------------------------------------------------------
-/* //
 // 7 Given Circular Linked List, return node at beginning of circular list
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
-
+//---------------------------------
 #include <cstdio> 
 #include <cstdlib> 
 #include <iostream> 
@@ -74,7 +13,10 @@ struct node {
     struct node * next;
 };
 
-struct node * getStartNode(struct node * head);
+struct node * getStartNode(struct node * head)
+{
+    return head;
+}
 
 int main(void)
 {
@@ -109,17 +51,71 @@ int main(void)
     cout << endl; 
     return 0;
 }
+// */
+//----------------------------------------------------------------------------------------
+/* //
+Table of Contents
+1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
+2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
+3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
+4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
+5. Delete Node From Middle Of Linked List, Given Access to That Node, T(n) = O(n), S(n) = O(1)
+6. Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
+8. Detect if a Linked List is a palindrome T(n) = O(n) , S(n) = O(n)
+9. Given a linked list, swap every two adjacent nodes and return its head.
+   If odd number of elements, ignore the last element. Time Complexity, T(n) = O(n), S(n) = O(1) 
+10. Given a linked list and a value x, partition it such that all nodes less than x come 
+    before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
+//----------------------------------------------------------------------------------------
+TODO: 
+7. Given circular Linked List, return node at beginning of circular list, T(n) = O(n) , S(n) = O(1) TODO: INT
+11. Insert an element into a sorted circular linked list (Microsoft Round 1)
 
-struct node * getStartNode(struct node * head)
-{
-    return head;
-}
+21. Partition List: 
+    (done in leetCode)
+21. Merge K sorted linked list into 1 sorted linked list
+    T(n) = O(nklogk), S(n) = O(1) 
+    Hint: MergeSort
+
+22. Copy List with Random Pointer (Bloomberg Interview) 
+    A linked list has next pointer and random pointers to either NULL or random nodes on this linked list. 
+    Clone this linked list. 
+    Your solution during interview, T(n) = O(n), S(n) = O(n)
+    Optimal Solution to figure out, T(n) = O(n), S(n) = O(1)
+
+//----------------------------------------------------------------------------------------
+#include <forward_list> 
+//----------------------------------------------------------------------------------------
+forward_list<int> listA;
+e.g.: int curr = listA.front(); 
+    push_front() // insert element to beginning
+    pop_front() // removes first element
+    front() // get first element
+    unique() // remove duplicates (only works if list is sorted)
+    sort()
+    clear()
+    insert_after()
+    emplace_after()
+    emplace_front()
+    erase_after()
+    resize()
+    swap()
+//----------------------------------------------------------------------------------------
+Hints: 
+//----------------------------------------------------------------------------------------
+- Memory address of linkedlist is unique (pointed to by pointers)
+- Can always break circular linked list, solve the problem, then link it back to become circular again
+- Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
+- If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
+- Can always transfer values of linkedlist instead of the values
+- Always initialize all created linkedlist to NULL! If not may have weird errors
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-/*
 // 1 Reverse a Linked list
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
+//---------------------------------
+/* //
 #include <stdlib.h>
 #include <iostream>
 using namespace std;
@@ -200,12 +196,17 @@ struct node* reverseLinkedList(struct node* head)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-/* //
 // 2 Adding two numbers that are represented by linked lists
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(n)
-// 5->4 + 8->7  = 1->4->1
-// Simply perform reverse  linked list algorithm on both lists first, then you can add from the back 
+//---------------------------------
+/*
+Algorithm:
+    5->4 + 8->7  = 1->4->1
+    Simply perform reverse  linked list algorithm on both lists first, then you can add from the back 
+*/
+//---------------------------------
+/* //
 #include <forward_list> // singly linked list
 #include <iostream>
 using namespace std;
@@ -293,7 +294,6 @@ int main(void)
             if (list2.empty()) break;
         }
     }
-
     if(carry > 0)
     {
         result.push_front(carry);
@@ -305,29 +305,66 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-/* //
 // 3 Remove Duplicates From Linked List
-
-// Method 1: Sort, Then Remove Duplicates 
 // Time Complexity, T(n) = O(nlogn) 
 // Space Complexity, S(n) = O(1) 
-// Method 2: Remove Duplicates Directly
-// Time Complexity, T(n) = O(n^2) 
-// Space Complexity, S(n) = O(1) 
-// note: Can reduce T(n) to O(1) by sacrificing space using hash table
-
+//---------------------------------
+/* 
+Algoritm:
+    Method 1: Sort, Then Remove Duplicates 
+    Time Complexity, T(n) = O(nlogn) 
+    Space Complexity, S(n) = O(1) 
+    Method 2: Remove Duplicates Directly
+    Time Complexity, T(n) = O(n^2) 
+    Space Complexity, S(n) = O(1) 
+    note: Can reduce T(n) to O(1) by sacrificing space using hash table
+*/
+//---------------------------------
+/* //
 #include <cstdio>
 #include <cstdlib> 
 #include <iostream> 
 #include <forward_list> // singly linked list
 using namespace std; 
 
-forward_list<int> removeDuplicateWithSort(forward_list<int> dup);
-struct node* removeDuplicate(struct node* head);
 struct node {
     int value; 
     struct node* next; 
 };
+
+struct node* removeDuplicate(struct node* head)
+{
+    struct node * curr; 
+    struct node * check; 
+    if(!head) return head; 
+    curr = head; 
+    check = curr; 
+    while(curr)
+    {
+        while(check->next)
+        {
+            if (check->next->value == curr->value)
+            {
+                check->next = check->next->next;
+            }
+            else 
+            {
+                check = check->next; 
+            }
+        }
+        curr = curr->next; 
+        check = curr; 
+    }
+
+    return head;
+}
+
+forward_list<int> removeDuplicateWithSort(forward_list<int> dup)
+{
+    dup.sort(); // sort using mergesort(), T(n) = O(nlgn)
+    dup.unique(); // remove duplicate elements in 1 run across linkedlist, T(n) = O(n)
+    return dup;
+}
 
 int main(void)
 {
@@ -392,46 +429,13 @@ int main(void)
     return 0; 
 }
 
-struct node* removeDuplicate(struct node* head)
-{
-    struct node * curr; 
-    struct node * check; 
-    if(!head) return head; 
-    curr = head; 
-    check = curr; 
-    while(curr)
-    {
-        while(check->next)
-        {
-            if (check->next->value == curr->value)
-            {
-                check->next = check->next->next;
-            }
-            else 
-            {
-                check = check->next; 
-            }
-        }
-        curr = curr->next; 
-        check = curr; 
-    }
-
-    return head;
-}
-
-forward_list<int> removeDuplicateWithSort(forward_list<int> dup)
-{
-    dup.sort(); // sort using mergesort(), T(n) = O(nlgn)
-    dup.unique(); // remove duplicate elements in 1 run across linkedlist, T(n) = O(n)
-    return dup;
-}
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-/* //
 // 4 Return Last K Elements of a Linked List 
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
-
+//---------------------------------
+/* //
 #include <cstdio> 
 #include <cstdlib> 
 #include <iostream> 
@@ -496,12 +500,17 @@ struct node * getLaskK(struct node * head, int k)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-/* //
 // 5 Delete Node From Middle Of Linked List, Given Access to That Node
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
-// Note: Doesn't work if last node given
-
+//---------------------------------
+/*
+Question:  
+    1. What happens if last node given? Ignore
+        Algorithm doesn't work if last node given
+*/
+//---------------------------------
+/* //
 #include <cstdio> 
 #include <cstdlib> 
 #include <iostream> 
@@ -565,11 +574,11 @@ void deleteThis(struct node * curr)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-/* // 
 // 6 Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
-
+//---------------------------------
+/* // 
 #include <cstdio> 
 #include <cstdlib> 
 #include <iostream> 
@@ -580,7 +589,29 @@ struct node {
     struct node * next;
 };
 
-bool checkCircular(struct node * head);
+bool checkCircular(struct node * head)
+{
+    if (!head) return false;
+    struct node * slow = head; 
+    struct node * fast = head->next; 
+    while (fast)
+    {
+        fast = fast->next;
+        if (fast == slow) return true;
+        slow = slow->next; 
+        // MISTAKE: Forgot to check fast has a next value here! If fast has no next, will result in segmentation fault
+        if(fast)
+        {
+            fast = fast->next;
+            if (fast == slow) return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    return false;
+}
 
 int main(void)
 {
@@ -629,37 +660,13 @@ int main(void)
     else cout << "No Circular Linked List Detected" << endl;
     return 0;
 }
-
-bool checkCircular(struct node * head)
-{
-    if (!head) return false;
-    struct node * slow = head; 
-    struct node * fast = head->next; 
-    while (fast)
-    {
-        fast = fast->next;
-        if (fast == slow) return true;
-        slow = slow->next; 
-        // MISTAKE: Forgot to check fast has a next value here! If fast has no next, will result in segmentation fault
-        if(fast)
-        {
-            fast = fast->next;
-            if (fast == slow) return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-    return false;
-}
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-/* // 
 // 8 Detect if a Linked List is a palindrome 
 // Time Complexity, T(n) = O(n) 
 // Space Complexity, S(n) = O(n) 
-
+//---------------------------------
+/* // 
 #include <cstdio> 
 #include <cstdlib> 
 #include <iostream> 
@@ -784,7 +791,7 @@ Algorithm:
 Implementation: 
 */
 //---------------------------------
-/*
+/* //
 #include <cstdlib> 
 #include <iostream> 
 using namespace std; 
