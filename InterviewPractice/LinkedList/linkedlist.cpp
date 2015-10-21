@@ -1,58 +1,4 @@
 //----------------------------------------------------------------------------------------
-// 7 Given Circular Linked List, return node at beginning of circular list
-// Time Complexity, T(n) = O(n)
-// Space Complexity, S(n) = O(1)
-//---------------------------------
-#include <cstdio> 
-#include <cstdlib> 
-#include <iostream> 
-using namespace std; 
-
-struct node {
-    int value; 
-    struct node * next;
-};
-
-struct node * getStartNode(struct node * head)
-{
-    return head;
-}
-
-int main(void)
-{
-    struct node * head = (struct node *) malloc(sizeof(struct node));
-    head->value = 15;
-    head->next = NULL;
-    struct node * last = head;
-    struct node * curr;
-    for (int i = 0; i < 5; i++)
-    {
-        struct node * temp = (struct node *) malloc(sizeof(struct node));
-        temp->value = i;
-        temp->next = head;
-        head = temp;
-        if (i == 3) curr = head;
-    }
-    last->next = curr;
-    curr = head;
-    for(int i = 0; i < 12; i++)
-    {
-        cout << curr->value << " ";
-        curr = curr->next;
-    }
-    cout << endl; 
-    curr = getStartNode(head);
-    curr = head;
-    for(int i = 0; i < 12; i++)
-    {
-        cout << curr->value << " ";
-        curr = curr->next;
-    }
-    cout << endl; 
-    return 0;
-}
-// */
-//----------------------------------------------------------------------------------------
 /* //
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
@@ -61,6 +7,7 @@ Table of Contents
 4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
 5. Delete Node From Middle Of Linked List, Given Access to That Node, T(n) = O(n), S(n) = O(1)
 6. Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
+7. Given Circular Linked List, return node at beginning of circular list, T(n) = O(n), S(n) = O(1) TODO: INT
 8. Detect if a Linked List is a palindrome T(n) = O(n) , S(n) = O(n)
 9. Given a linked list, swap every two adjacent nodes and return its head.
    If odd number of elements, ignore the last element. Time Complexity, T(n) = O(n), S(n) = O(1) 
@@ -68,21 +15,17 @@ Table of Contents
     before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
 //----------------------------------------------------------------------------------------
 TODO: 
-7. Given circular Linked List, return node at beginning of circular list, T(n) = O(n) , S(n) = O(1) TODO: INT
 11. Insert an element into a sorted circular linked list (Microsoft Round 1)
-
 21. Partition List: 
     (done in leetCode)
 21. Merge K sorted linked list into 1 sorted linked list
     T(n) = O(nklogk), S(n) = O(1) 
     Hint: MergeSort
-
 22. Copy List with Random Pointer (Bloomberg Interview) 
     A linked list has next pointer and random pointers to either NULL or random nodes on this linked list. 
     Clone this linked list. 
     Your solution during interview, T(n) = O(n), S(n) = O(n)
     Optimal Solution to figure out, T(n) = O(n), S(n) = O(1)
-
 //----------------------------------------------------------------------------------------
 #include <forward_list> 
 //----------------------------------------------------------------------------------------
@@ -658,6 +601,87 @@ int main(void)
     circle = checkCircular(curr);
     if (circle) cout << "Circular Linked List Detected" << endl;
     else cout << "No Circular Linked List Detected" << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 7 Given Circular Linked List, return node at beginning of circular list
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//---------------------------------
+/*
+Questions:
+    1. What happens if there is no cycle? return NULL
+    2. What happens if node is empty? return NULL
+*/
+//---------------------------------
+#include <cstdio> 
+#include <cstdlib> 
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int value; 
+    struct node * next;
+};
+
+struct node * getStartNode(struct node * head)
+{
+    if(!head) return NULL; 
+    struct node * curr = head; 
+    struct node * fast = head->next; 
+    while(curr != fast)
+    {
+        curr = curr->next; 
+        if(fast)
+            fast = fast->next; 
+        else
+            return NULL;
+        if(fast)
+            fast = fast->next; 
+        else
+            return NULL;
+    }
+    curr = head; 
+    fast = fast->next;
+    while(curr != fast) // here, it is confirmed there is a cycle, so no null checking needed
+    {
+        curr = curr->next;
+        fast = fast->next;
+    }
+    return curr;
+}
+
+int main(void)
+{
+    struct node * head = (struct node *) malloc(sizeof(struct node));
+    head->value = 15;
+    head->next = NULL;
+    struct node * last = head;
+    struct node * curr;
+    for (int i = 0; i < 8; i++)
+    {
+        struct node * temp = (struct node *) malloc(sizeof(struct node));
+        temp->value = i;
+        temp->next = head;
+        head = temp;
+        if (i == 5) curr = head;
+    }
+    last->next = curr;
+    curr = head;
+    for(int i = 0; i < 20; i++)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl; 
+    curr = getStartNode(head);
+    for(int i = 0; i < 20; i++)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl; 
     return 0;
 }
 // */
