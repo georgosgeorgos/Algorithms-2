@@ -5,16 +5,12 @@ Table of Contents
 2. Euclid's Algorithm: Calculate GCD, T(n) = O(n), S(n) = O(1)
 3. Binomial Coefficient = Number of ways to choose k out of n objects, T(n,k) = O(nk), S(n,k) = O(k)
 4. SquareRoot(int x), where x > 0, T(n) = O(logn), S(n) = O(1)
+5. Replace every # x with # y given an integer, T(n) = O(n), S(n) = O(1)
 //-----------------------------------
 TODO:
-11. 
-    Implement sqrt(x)
-        Hint: Binary Search, sqrt(x) = x^(1/2)
 0. Calculate pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(1) Hint: Dynamic Programming
-
 1. Create rand()
 2. Create 16by 9 => 16by10 or 16 by 8 cannot, 17by9 or 15by 9 cannot, returns true if 16b9 and false otherwise
-
 3. Generate prime numbers up to N efficiently: Sieve of Eratosthenes
 4. Look up sorting integers in O(logN) time on some Youtube MIT video on advanced data structures
 5. Given numbers 0,1,2,...,N inserted into an array. Now exactly 1 number is removed from this array. Find that one number. 
@@ -23,17 +19,15 @@ TODO:
 7. Given numbers 0,1,2,...,N inserted into an array. Now exactly k numbers are removed from this array. Find these k numbers, k <= n 
 8. Given a value N, find the minimum number perfect squares sums to reach n. e.g. f(13) = 2 (2*2 + 3*3 = 4 + 9)
 hint: Dynamic Programming/BFS/Math theorem can be used to solve
-
 9. Reverse Integer 
     -321 => -123
     T(n) = O(n) S(n) = O(1)
-
 10. Determine whether an integer is a palindrome 
     12321 => True
     -12321 => False
     T(n) = O(n) S(n) = O(1)
-
-
+11. Add 'x' between 10^k,  (Bloomberg Round 1)
+    e.g. k = 3 , x = ',', input = 12300987 (int) => output 12,300,987 (string)
 
 // */
 //----------------------------------------------------------------------------------------
@@ -235,6 +229,7 @@ int main(void)
 Questions: 
     1. Do I need to return both (+) and (-) solutions ? 
     2. Do I return a double or integer? If integer, then x = 8 should return 2 or 3? 
+    3. For double, what is the precision needed
 Function Prototype: 
     double SquareRoot(int x);
 Test_case: 
@@ -243,6 +238,8 @@ Test_case:
     8 => 2.828
 Algorithm: 
     a*a = a^2, thus, do binary search to search for the solution 
+    Solved!=D 
+    T(n)= O(lgn), S(n) = O(1) , lgN only if  final result is integer, otherwise, depends on precision needed
 Implement!
 Test!
 */
@@ -284,6 +281,55 @@ int main(void)
     x = 8;
     result = SquareRoot(x); 
     cout << "Square Root of " << x << " is: " << result << endl; // 
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 5 Replace every # x with # y given an integer
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//-----------------------------------
+/*
+Questions: 
+    1. Can integer be (-) ? 
+Function Prototype:
+    int replaceNum(int input, int x, int y); 
+TestCases:
+    input = 1003405, x = 0, y = 6 => output = 1663465
+    input = 0, x = 0, y = 6 => 6;
+*/
+//-----------------------------------
+/* //
+#include <iostream> 
+using namespace std; 
+
+int replaceNum(int input, int x, int y)
+{
+    // Base Case
+    if(input == 0 && input == x) return y; 
+    int copyInput = input;
+    int output = 0;
+    int multiple = 1;
+    if(input < 0) input *= -1; // MISTAKE: Must always convert to (+) in order to use % operator properly
+    while(input)
+    {
+        int curr = input%10; 
+        if(curr == x) curr = y;
+        output += curr * multiple;
+        input /= 10;
+        multiple *= 10;
+    }
+    if (copyInput < 0) output *= -1;
+    return output;
+}
+
+int main(void)
+{
+    int input = -1003405; 
+    int x = 0; 
+    int y = 6; 
+    int result = replaceNum(input, x, y);
+    cout << result << endl;
     return 0;
 }
 // */
