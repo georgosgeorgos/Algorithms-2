@@ -13,9 +13,9 @@ Table of Contents
    If odd number of elements, ignore the last element. Time Complexity, T(n) = O(n), S(n) = O(1) 
 10. Given a linked list and a value x, partition it such that all nodes less than x come 
     before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
+11. Insert an element into a sorted circular linked list (Microsoft Round 1), T(n) = O(n) (single pass), S(n) = O(1) TODO: INT
 //----------------------------------------------------------------------------------------
 TODO: 
-11. Insert an element into a sorted circular linked list (Microsoft Round 1)
 21. Partition List: 
     (done in leetCode)
 21. Merge K sorted linked list into 1 sorted linked list
@@ -50,8 +50,15 @@ Hints:
 - Can always break circular linked list, solve the problem, then link it back to become circular again
 - Use while(curr->next) instead of while(curr) to be able to use less pointers and reduce logic complexity
 - If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
-- Can always transfer values of linkedlist instead of the values
+- Can always transfer values of linkedlist instead of the nodes themselves
 - Always initialize all created linkedlist to NULL! If not may have weird errors
+- REMEMBER TO SET HEAD TO LATEST ACTUAL HEAD and ANY OTHER RELEVANT NODES TO POINT TO NULL
+- Consider these cases into logic: 
+    > curr, > next
+    < curr, < next
+    == curr, == next
+    next > curr? next < curr ? next == curr
+ if circularLinkedList, next == head? 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Reverse a Linked list
@@ -615,6 +622,7 @@ Questions:
     2. What happens if node is empty? return NULL
 */
 //---------------------------------
+/* //
 #include <cstdio> 
 #include <cstdlib> 
 #include <iostream> 
@@ -926,6 +934,164 @@ ListNode* partition(ListNode* head, int x)
         }
     }
     return head; 
+}
+// */
+//----------------------------------------------------------------------------------------
+// 11 Insert an element into a sorted circular linked list (Microsoft Round 1)
+// Time Complexity, T(n) = O(n) (single pass)
+// Space Complexity, S(n) = O(1)
+//----------------------------------------------------------------------------------------
+/*
+Questions: 
+    1. Sorted increasing order or decreasing order? 
+    2. Can the linked list contain duplicates? 
+    3. If contain duplicates, and get duplicate, does it matter where in duplicate i append it? or must it be before the duplicate, after or doesn't matter? 
+    4. Does the head always point to smallest/largest element? 
+    5. After I insert, does the head maintain where it was or point to new element? 
+Function Prototype: 
+TestCases: 
+    1 => A node by itself
+    NULL => No nodes
+    1 1 1 2 2 3 -4 -4 -3 -2 => Loop back with duplicates (add biggest of all)
+    -4 -3 0 1 1 2 => start from smallest (add smaller than all, add bigger than all, add equal to duplicates)
+Algorithm:
+    Break into 3 cases: (refer to code for exact implementation, was basically accounting for all corner cases)
+        < head
+        > head 
+        == head 
+            whenever == curr => just append there  (newnode->next= curr->next; curr->next = newNode);
+        account for reaching back into head after a loop
+        next is >, < , == current? 
+*/
+//---------------------------------
+/* //
+#include <cstdlib>
+#include <vector>
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int value; 
+    struct node * next; 
+};
+
+void insertHere(struct node * here, struct node * newNode)
+{
+    newNode->next = here->next; 
+    here->next = newNode; 
+    return;
+}
+
+void insertCircularLinkedList(struct node * head, int value)
+{
+    // Handle base case
+    struct node * newNode = (struct node *) malloc(sizeof(struct node));
+    newNode->value = value; 
+    newNode->next = NULL;
+    if(!head) head = newNode; 
+    bool more = false; // initialize to value is < current value
+    // Check if less than or more than
+    struct node * curr = head; 
+    if(value > head->value)
+    {
+        more = true;
+    }
+    while(curr->next != head)
+    {
+        // If ever equal, just append it right away
+        if(value == curr->value) 
+        {
+            return insertHere(curr, newNode); // MISTAKE: Forgot to return after inserting
+        }
+        // Handle the < case
+        else if(!more)
+        {
+            // If pass maximum and still less than 
+            if(curr->next->value < curr->value && value < curr->next->value)
+            {
+                return insertHere(curr, newNode); 
+            }
+            // else if starts to get bigger, treat as bigger case
+            else if( value > curr->next->value)
+            {
+                more = true; 
+            }
+        }
+        else
+        {
+            // If it has been more than curr node, insert if it is now less than next node or next node is the crossing of the loop, which means this element is biggest than all
+            if(value < curr->next->value || curr->next->value < curr->value)
+            {
+                return insertHere(curr, newNode);
+            }
+        }
+        curr = curr->next;
+    }
+    // here, curr->next is equal to head
+    // If it was smaller all along, appending to 
+    return insertHere(curr, newNode);
+}
+
+void printCircularLinkedList(struct node * head)
+{
+    struct node * curr = head;
+    cout << curr->value << " ";
+    curr = curr->next;
+    cout << curr->value << " ";
+    curr = curr->next;
+    while(curr != head->next)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl;
+    return;
+}
+
+int main(void)
+{
+    int N = 20; 
+    struct node * head = NULL;
+    struct node * last = NULL;
+    for(int i = N-1; i >= 0; i--)
+    {
+        struct node * newNode = (struct node*) malloc(sizeof(struct node));
+        newNode->value = i & 0x1 ? i*2 - 2 - N/2 : i*2 - N/2;
+        newNode->next = head; 
+        head = newNode;
+        if(!last) last = newNode;
+    }
+    last->next = head;
+    printCircularLinkedList(head);
+    for (int i = 0; i < 2; i++)
+    {
+        // Start inserting
+        int val = -30 + 2*i;
+        // Head points to smallest at first, but will no longer point to smallest once inserting starts
+        // i) Insert smaller than head
+        insertCircularLinkedList(head , val);
+        cout << "Inserting value: " << val << endl;
+        printCircularLinkedList(head);
+        val = 30 + 2*i;
+        // ii) Insert biggest
+        insertCircularLinkedList(head , val);
+        cout << "Inserting value: " << val << endl;
+        printCircularLinkedList(head);
+        // iii) Insert middle
+        val = 5 + 2*i;
+        insertCircularLinkedList(head , val);
+        cout << "Inserting value: " << val << endl;
+        printCircularLinkedList(head);
+        // iii) Insert duplicate
+        val = 6 + 2*i;
+        insertCircularLinkedList(head , val);
+        cout << "Inserting value: " << val << endl;
+        printCircularLinkedList(head);
+        // move the head and insert again
+        head  = head->next->next->next; 
+    }
+    // Head points to middle 
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
