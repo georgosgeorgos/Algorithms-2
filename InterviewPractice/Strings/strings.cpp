@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------------
-// 8 Exact Matching: Z-Algorithm
+// TODO: 9 Exact Matching: Z-Algorithm TODO: INT
 // Time Complexity, T(n,m) = O(n + m)
 // Space Complexity, S(n,m) = O(n + m)
 //-------------------------
@@ -15,14 +15,23 @@ Algorithm:
     Computing Z[i] also takes T(n,m) = O(m+n)
     Let R[i] = the furthest Z[j] can reach from j = 2,...,i
     Let L[i] be the corresponding j for R[i] where L[i] can be any of them if multiple Z[j]'s reachest the same furthest
-    Z[1] is basically all m comparisons.
+    Z[1] is basically all m comparisons., start computing from Z[2] since needed for Case 2 below
     Assuming computed R[i-1], L[i-1] and Z[i-1] properly, 
     Case 1: i > R[i-1]
         Z[i] = compute from scratch again  as well as R[i] and L[i]
     Case 2: i <= R[i-1]
-        Z[i] =
+        // note: +1 cause inclusive deduction
+        Calculate a = Z[i - L[i-1] + 1], b = R[i-1] - i 
+        case (A):
+            if a < b, Z[i] = Z[i - L[i-1] + 1, L[i] = L[i-1], R[i] = R[i-1] 
+        case {B}: 
+            else (a >= b), 
+                start comparing from str[R[i-1]+1] with str[i - L[i-1] + 1 + b]
+                and compute from scratch again for Z[i]. R[i], and L[i]
+    TODO: Implement and check corner cases above (-1 or +1 etc.)
 */
 //-------------------------
+/* //
 #include <iostream> 
 using namespace std; 
 int main(void)
@@ -40,6 +49,7 @@ Table of Contents
 5. Implement Compression of a string (aabbbc->a2b3c1), T(n) = O(n), S(n) = O(n) (Amazon Round 1)
 6. Longest Substring With Distinct Characters, T(n) = O(n) (single pass), S(n) = O(1)
 7. Longest Substring With At Most K Distinct Characters, T(n) = O(n), S(n) = O(n)
+8. Isomorphic Strings, T(n,m) = O(n), S(n,m) = O(n)
 //-------------------------
 TODO:
 14. Reverse Words in a Sentence (Bloomberg Interview Round 1)
@@ -62,6 +72,28 @@ Hint: 2 pointers, 1 to point to replace, one to search for more
 35. Exact Matching: Boyer-Moore
 35. Dictionary (Check if a string is found in the dictionary)
 36. Implement strspn function
+37.Given an array of strings e.g. ["the", "quick", "brown", "fox", "quick"] and 2 strings, return minimum distance between 2 strings
+"the", "fox" =>  3 
+"quick", "fox" => 1
+    Easy, 2 pointers, one to wordA, one to wordB, 
+    move from left to right, each time find a new one, match with left. 
+    "quick" (no match) => currMin = infinity
+    "fox' (match with left 'quick') => currMin = 3
+    "quick" (match with left 'fox') => currMin = 1 
+    Done =) 
+
+39. Minimum Window Substring: Find minimum window in S that contains all characters from T. 
+    In other words, find minimum substring in S such that it contains all characters from T.  (From LeetCode)
+    Return "" if none exist. 
+    Assume only 1 minimum substring if multiple substrings exist.
+    e.g. 
+    S = abcdednfe , n = 8
+    T = fdde, m = 4 
+    => min. substring is dednf
+    https://leetcode.com/problems/minimum-window-substring/
+    Optimal Solution, T(n,m) = O(2n) time, O(n) space 
+
+40.
 //-------------------------
 To work between <cstring> and <string> 
 //-------------------------
@@ -89,6 +121,7 @@ strcmp(cStr,cStr2); == str.compare(str2);
 cStr[2] = 'k'; == str[2]  = 'k';
 
 str.erase(startIndex,amountToErase); 
+str.insert(startIndex, str2); // insert str2 from startIndex position in str, if want to append in front, do str.insert(0,str2)
 //-------------------------
 Common Hints
 //-------------------------
@@ -698,6 +731,58 @@ int main(void)
     string b = "a"; 
     result = LongestSubstringAtMostKDistinct(b, k); // 1
     cout << b << " " << result << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 8 Isomorphic Strings
+// Time Complexity, T(n,m) = O(n)
+// Space Complexity, S(n,m) = O(n)
+//-------------------------
+/* Given 2 words, return if they are isomorphic. Isomorphic means one word can map to the other by assigning each of its alphabet to another alphabet. 
+However, no 2 alphabet can map to the same alphabet. An alphabet can map to itself. Ordering of letters must remain the same
+
+TestCases:
+    foo, app => true cause f=a, o->p
+    bat, loo => false since  b=l, a=o, but t!=o since a=o already 
+    ab, ca => true since a=c, b=a
+Algorithms:
+    Will only take O(n) complexity as length of strings needs to be the same
+    
+*/
+//-------------------------
+/* //
+#include <unordered_map> // C++ 11 feature
+#include <string>
+#include <iostream> 
+using namespace std; 
+
+bool isIsomorphic(string str1, string str2)
+{
+    if(str1.length() != str2.length()) return false;
+    unordered_map<char, int> hashStr1, hashStr2;
+    int n = str1.length();
+    for(int i = 0; i < n; i++)
+    {
+        // assign hashes if not yet already
+        if(!hashStr1.count(str1[i]))
+           hashStr1[str1[i]] = i; 
+        if(!hashStr2.count(str2[i]))
+           hashStr2[str2[i]] = i; 
+        if(hashStr1[str1[i]] != hashStr2[str2[i]]) return false;
+    }
+    return true;
+}
+
+int main(void)
+{
+    string str1 = "foo";
+    string str2 = "app";
+    if (isIsomorphic(str1, str2)) cout << str1 << " and " << str2 << " are isomorphic" << endl;
+    else cout << str1 << " and " << str2 << " NOT isomorphic" << endl;
+    str1.assign("bat"); str2.assign("loo");
+    if (isIsomorphic(str1, str2)) cout << str1 << " and " << str2 << " are isomorphic" << endl;
+    else cout << str1 << " and " << str2 << " NOT isomorphic" << endl;
     return 0;
 }
 // */
