@@ -14,6 +14,7 @@ Table of Contents
 10. Given a linked list and a value x, partition it such that all nodes less than x come 
     before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
 11. Insert an element into a sorted circular linked list (Microsoft Round 1), T(n) = O(n) (single pass), S(n) = O(1) TODO: INT
+12. Find intersection point of 2 singly linked list, T(n,m) = O(n + m + max(n,m)), S(n,m) = O(1)
 //----------------------------------------------------------------------------------------
 TODO: 
 21. Partition List: 
@@ -24,8 +25,8 @@ TODO:
 22. Copy List with Random Pointer (Bloomberg Interview) 
     A linked list has next pointer and random pointers to either NULL or random nodes on this linked list. 
     Clone this linked list. 
-    Your solution during interview, T(n) = O(n), S(n) = O(n)
-    Optimal Solution to figure out, T(n) = O(n), S(n) = O(1)
+    Your solution during interview, T(n) = O(n), S(n) = O(n) (hash table)
+    Optimal Solution to figure out, T(n) = O(n), S(n) = O(1) (if allowed to modify original linked list)
 //----------------------------------------------------------------------------------------
 #include <forward_list> 
 //----------------------------------------------------------------------------------------
@@ -940,7 +941,7 @@ ListNode* partition(ListNode* head, int x)
 // 11 Insert an element into a sorted circular linked list (Microsoft Round 1)
 // Time Complexity, T(n) = O(n) (single pass)
 // Space Complexity, S(n) = O(1)
-//----------------------------------------------------------------------------------------
+//---------------------------------
 /*
 Questions: 
     1. Sorted increasing order or decreasing order? 
@@ -987,7 +988,7 @@ void insertCircularLinkedList(struct node * head, int value)
     // Handle base case
     struct node * newNode = (struct node *) malloc(sizeof(struct node));
     newNode->value = value; 
-    newNode->next = NULL;
+    newNode->next = newNode; // point to itself originally
     if(!head) head = newNode; 
     bool more = false; // initialize to value is < current value
     // Check if less than or more than
@@ -1034,9 +1035,11 @@ void insertCircularLinkedList(struct node * head, int value)
 
 void printCircularLinkedList(struct node * head)
 {
+    if(!head) return;
     struct node * curr = head;
     cout << curr->value << " ";
     curr = curr->next;
+    if(head->next == head) return;
     cout << curr->value << " ";
     curr = curr->next;
     while(curr != head->next)
@@ -1091,6 +1094,103 @@ int main(void)
         head  = head->next->next->next; 
     }
     // Head points to middle 
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 12 Find intersection point of 2 singly linked list
+// Time Complexity, T(n,m) = O(n + m + max(n,m))
+// Space Complexity, S(n,m) = O(1)
+//---------------------------------
+/*
+Questions:
+    1. What if no intersection? return NULL
+*/
+//---------------------------------
+/* //
+#include <cstdlib> // malloc()
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int value; 
+    struct node* next; 
+};
+
+struct node * findIntersectionLinkedList(struct node * head1, struct node * head2)
+{
+    if(!head1 || !head2) return NULL; // no intersection if any list is NULL
+    int lengthOne = 0, lengthTwo = 0;
+    struct node * curr = head1;
+    while(curr)
+    {
+        lengthOne++;
+        curr = curr->next;
+    }
+    curr = head2;
+    while(curr)
+    {
+        lengthTwo++;
+        curr = curr->next;
+    }
+    struct node * bigHead = lengthOne >= lengthTwo ? head1 : head2;
+    struct node * smallHead = lengthOne >= lengthTwo ? head2 : head1;
+    int bigLength = lengthOne >= lengthTwo ? lengthOne : lengthTwo;
+    int smallLength = lengthOne >= lengthTwo ? lengthTwo : lengthOne;
+    curr = bigHead;
+    while(bigLength > smallLength)
+    {
+        bigHead = bigHead->next;
+        bigLength--;
+    }
+    while(bigHead)
+    {
+        if(bigHead == smallHead) return bigHead;
+        bigHead = bigHead->next;
+        smallHead = smallHead->next;
+    }
+    // here means no intersection
+    return NULL; 
+}
+
+void printLinkedList(struct node* head)
+{
+    struct node* curr = head; 
+    while(curr)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl;
+}
+
+int main(void)
+{
+    int N = 8;
+    int M = 5; 
+    struct node * head2 = NULL;
+    struct node * last2 = NULL;
+    for(int i = 1; i < 3; i++)
+    {
+        struct node* newNode = (struct node *) malloc(sizeof(struct node));
+        newNode->value = -i; // doesn't matter here
+        newNode->next = head2; 
+        head2 = newNode;
+        if(!last2) last2 = newNode;
+    }
+    struct node * head1 = NULL;
+    for(int i = 0; i < N; i++)
+    {
+        struct node* newNode = (struct node *) malloc(sizeof(struct node));
+        newNode->value = i; // doesn't matter here
+        newNode->next = head1; 
+        head1 = newNode;
+        if(N-M-1 == i) last2->next = newNode;
+    }
+    printLinkedList(head1);
+    printLinkedList(head2);
+    struct node * newHead = findIntersectionLinkedList(head1, head2);
+    printLinkedList(newHead);
     return 0;
 }
 // */
