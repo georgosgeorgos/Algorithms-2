@@ -8,21 +8,25 @@ TODO: Some of the space complexities below is really O(lgn) instead of O(n) if r
 4. Inorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 5. Levelorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 6. ZigZag Traversal binary tree iteratively, T(n) = O(n), S(n) = O(n)
-7. Output number of configurations of binary search tree given n distinct integers. T(n) = O(n), S(n) = O(n)
+7. Output number of configurations of binary search tree given n distinct integers. T(n) = O(n), S(n) = O(n) (Dynamic Programming)
 8. Find kth smallest element in BST, assuming k's value is valid (1->N), T(n) = O(n), S(n) = O(n)
 9. Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
    Find total sum of all root-to-leaf numbers. T(n) = O(n), S(n) = O(n)
 10. Flatten binary tree into linkedlist using preorder
 11. Print binary tree as seen from right side of tree, T(n) = O(n), S(n) = O(n)
-12. Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
+12. Populate next(sibling) pointers binary tree. T(n) = O(n), S(n) = O(n)
 13. Balanced Binary Tree: Return true if difference in child's height is <= 1, false otherwise, T(n) = O(n), S(n) = O(n) 
 14. Lowest Common Ancestor of Binary Tree, T(n) = O(n), S(n) = O(n)
 15. Invert a binary tree side ways, T(n) = O(n), S(n) = O(n)
+16. Serializing & De-Serializing a Binary Tree, T(n) = O(n), S(n) = O(n) 
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
+25. Determine if 2 binary trees are equal
+    Question: 
+        1. Are 2 trees which have totally equal structure and data equal? Or only if both trees point to exact same tree in memory?  
 22. Invert binary tree up to down 
 23. Given an array where elements are sorted in ascending order, convert it to a height balanced BST. (ECE345 Assignment)  
-24. Validate if a binary tree is a Binary Search Tree. T(n) = O(n), S(n) = O(n)
+24. Validate if a binary tree is a Binary Search Tree. T(n) = O(n), S(n) = O(n) (Easy, just inorder traversal making sure more than previous
 27. Given a sorted array in increasing order, write algorithm to create balanced binary search tree with minimal height 
     T(n) = O(n), S(n) = O(logn)
 28. Given a sorted linkedlist in increasing order, write algorithm to create balanced binary search tree with minimal height
@@ -38,7 +42,6 @@ TODO:
     if all are(-), max path => Minimum (-) value => biggest value and NOT 0
 30. Implement a Binary Tree
     Note: Making recursive inserts (if no need balancing and transfer by values to delete instead of actual node makes implementation a lot easier) 
-31. Serializing a Tree
 32. Given a binary tree, create linked list of all nodes at each depth
 (if have a tree with depth D, will have D linked list!)
 33. Write algorithm to find the next node of a given node in a BST where each node has a link to the parent
@@ -47,7 +50,8 @@ TODO:
 to that value. Note: It can be any path in the tree and does not have to start at root (refer to coding interview)
 38. Given the root of a binary tree and a node, return array of path from root to that node or NULL if that node is not in the tree
     Hint: Use stack, go down till find it, then push to stack once found and just keep pushing to stack if one of child found it
-21. Print all nodes in a binary tree at level k (Easy, just make sure height k, and then output, otherwise, dont output)
+21. Print all nodes in a binary tree at level k (Easy, just make sure height k, and then output, otherwise, dont output) (Bloomberg First Round)
+22. Serialize & De-Serialize a N-ary Tree
 //----------------------------------------------------------------------------------------------------------------------------------
 Notes:
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -199,7 +203,7 @@ int main(void)
 Given a binary tree, return the preorder traversal of its nodes' values.
 Iterative! 
 Questions: 
-    How to return nodes€™ values? In array? vector? 
+    1. How to return nodes€ Print values? In array? vector? 
 
 Function Prototype: 
 	vector<int> preorderTraversal(struct node * root); 
@@ -214,8 +218,6 @@ Test_cases:
 
 Algorithm: 9
 Recursively print myself, then print left, then print right. 
-
-	
       2. Iteratively Print 
 push myself into stack 
 	while stack not empty 
@@ -673,6 +675,7 @@ int numTreesHelper(int n, vector<unsigned long long> & compute)
     compute[n] = sum; 
     return sum; 
 }
+
 int numTrees(int n) 
 {
     vector<unsigned long long> compute(n+1,-1);  
@@ -808,7 +811,7 @@ Given a binary tree, imagine yourself standing on the right side of it, return t
   1            <---
  /   \
 2     3         <---
- \     
+ \
   4            <---
 Returns [1,3,4]
 Questions: 
@@ -892,7 +895,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 12 Populate next pointers binary tree. T(n) = O(n), S(n) = O(n)
+// 12 Populate next(sibling) pointers binary tree. T(n) = O(n), S(n) = O(n)
 // T(n) = O(n), S(n) = O(n)
 //---------------------------------
 /*
@@ -1156,6 +1159,112 @@ struct node * invertTree(struct node * root)
         }
     }
     return root; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 16 Serializing & De-Serializing a Binary Tree
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n) 
+//---------------------------------
+/*
+Questions:
+    1. Is it a Binary Search Tree? 
+Function Prototype:
+    vector<string> serialize(struct node * root);
+    struct node * deSerialize(vector<string> serialTree);
+TestCase:
+    i) Empty Tree <=> ["#"]
+    ii) one Node, 1 <=> ["1", "#", "#"]
+    iii) 
+        1
+     2     4
+      3   25
+       <=> 
+    ["1","2","#","3","#", "#", "4", "25", "#","#", "#"]
+    Can't store as string since value can be > 9! Means may have more than 1 character for each value Means may have more than 1 character for each value
+Algorithm:
+    1. O(2n + 1) space, O(2n + 1) time since need to go through all space to de-serialize, and make all space to serialize`
+        Store all NULL nodes with a special marker '#' => All node values need to be stored as char type as well and re-convert back to original type
+*/
+//---------------------------------
+/* //
+#include <cstdlib> // for malloc(), itoa(), atoi() Note: itoa() and atoi() only works for char * and NOT string
+#include <vector>
+#include <string> // To store serialize tree into a string before outputting to a file
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int value; 
+    struct node * left; 
+    struct node * right;
+    node(int _value, struct node * _left, struct node * _right) : value(_value), left(_left), right(_right) {};
+};
+
+void serializeHelper(struct node * root, vector<string>& result)
+{
+    if(!root) 
+    {
+        result.push_back("#");
+        return;
+    }
+    char buffer[33]; 
+    itoa(root->value, buffer, 10); // base 10
+    string newValue = buffer;
+    result.push_back(newValue);
+    serializeHelper(root->left, result);
+    serializeHelper(root->right, result);
+    return;
+}
+vector<string> serialize(struct node * root)
+{
+    vector<string> result;
+    serializeHelper(root, result);
+    return result;
+}
+
+struct node * deSerialize(vector<string>& serialTree)
+{
+    if(serialTree.size() <= 0) return NULL;
+    if(serialTree[0].compare("#") == 0)
+    {
+        serialTree.erase(serialTree.begin(),serialTree.begin() + 1); // remove first string
+        return NULL;
+    }
+    struct node * newNode = (struct node *) malloc(sizeof(struct node));
+    newNode->value = atoi(serialTree[0].c_str()); 
+    serialTree.erase(serialTree.begin(),serialTree.begin() + 1); // remove first string
+    newNode->left = deSerialize(serialTree);
+    newNode->right = deSerialize(serialTree);
+    return newNode;
+}
+
+int main(void)
+{
+    struct node a5(25, NULL, NULL);
+    struct node a3(3, NULL, NULL);
+    struct node a4(4, &a5, NULL);
+    struct node a2(2, NULL, &a3);
+    struct node a1(1, &a2, &a4);
+    vector<string> serialForm = serialize(&a1);
+    string outputSerialForm = "";
+    for(int i = 0; i < serialForm.size(); i++)
+    {
+        outputSerialForm.append(serialForm[i]);
+        outputSerialForm.append(" ");
+    }
+    cout << outputSerialForm << endl; // ["1","2","#","3","#", "#", "4", "25", "#","#", "#"]
+    struct node * newRoot = deSerialize(serialForm);
+    // try to serialize whatever that was deserialize to see if it is still equal
+    serialForm = serialize(newRoot);
+    outputSerialForm.assign("");
+    for(int i = 0; i < serialForm.size(); i++)
+    {
+        outputSerialForm.append(serialForm[i]);
+        outputSerialForm.append(" ");
+    }
+    cout << outputSerialForm << endl; // ["1","2","#","3","#", "#", "4", "25", "#","#", "#"]
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
