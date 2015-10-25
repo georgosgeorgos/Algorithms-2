@@ -1,45 +1,4 @@
 //----------------------------------------------------------------------------------------
-// TODO: 9 Exact Matching: Z-Algorithm TODO: INT
-// Time Complexity, T(n,m) = O(n + m)
-// Space Complexity, S(n,m) = O(n + m)
-//-------------------------
-/*
-Algorithm: 
-    Z-array = number of exact matching of a string with its own prefix 
-    Z[0] = strlen(str), redundant case 
-    Then, let newStr = strcat(pattern,text) 
-    After computing Z[i], 
-    T(n,m)  = O(m+n) => To find indices of exact matching
-    For every Z[i] >= strlen(pattern), there is an exact matching at that location, i >= strlen(pattern)
-    S(n,m) = O(m+n) => To hold the z-array
-    Computing Z[i] also takes T(n,m) = O(m+n)
-    Let R[i] = the furthest Z[j] can reach from j = 2,...,i
-    Let L[i] be the corresponding j for R[i] where L[i] can be any of them if multiple Z[j]'s reachest the same furthest
-    Z[1] is basically all m comparisons., start computing from Z[2] since needed for Case 2 below
-    Assuming computed R[i-1], L[i-1] and Z[i-1] properly, 
-    Case 1: i > R[i-1]
-        Z[i] = compute from scratch again  as well as R[i] and L[i]
-    Case 2: i <= R[i-1]
-        // note: +1 cause inclusive deduction
-        Calculate a = Z[i - L[i-1] + 1], b = R[i-1] - i 
-        case (A):
-            if a < b, Z[i] = Z[i - L[i-1] + 1, L[i] = L[i-1], R[i] = R[i-1] 
-        case {B}: 
-            else (a >= b), 
-                start comparing from str[R[i-1]+1] with str[i - L[i-1] + 1 + b]
-                and compute from scratch again for Z[i]. R[i], and L[i]
-    TODO: Implement and check corner cases above (-1 or +1 etc.)
-*/
-//-------------------------
-/* //
-#include <iostream> 
-using namespace std; 
-int main(void)
-{
-    return 0;
-}
-// */
-//----------------------------------------------------------------------------------------
 /* //
 Table of Contents
 1. Reverse a string In-Place, T(n) = O(n), S(n) = O(1)
@@ -50,13 +9,14 @@ Table of Contents
 6. Longest Substring With Distinct Characters, T(n) = O(n) (single pass), S(n) = O(1)
 7. Longest Substring With At Most K Distinct Characters, T(n) = O(n), S(n) = O(n)
 8. Isomorphic Strings, T(n,m) = O(n), S(n,m) = O(n)
+9. Exact Matching: Z-Algorithm, T(n,m) = O(n + m), Space Complexity, S(n,m) = O(n + m) TODO:INT
 //-------------------------
 TODO:
 14. Reverse Words in a Sentence (Bloomberg Interview Round 1)
 13. Finding longest palindromes substring 
     a) Hint: Manacher algorithm T(n) = O(n), S(n) = O(n) // fastest
     b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
-    c) T(n) = O(n^2), S(n) = O(1) // least space
+    c) T(n) = O(n^2), S(n) = O(1) // least space, checking takes O(n), and (2n-1) centers
     d) Brute Force
 21. Longest Duplicated substring in a string.
 30. Split a string by delimiter in  C++ using <string> 
@@ -783,6 +743,117 @@ int main(void)
     str1.assign("bat"); str2.assign("loo");
     if (isIsomorphic(str1, str2)) cout << str1 << " and " << str2 << " are isomorphic" << endl;
     else cout << str1 << " and " << str2 << " NOT isomorphic" << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 9 Exact Matching: Z-Algorithm
+// Time Complexity, T(n,m) = O(n + m)
+// Space Complexity, S(n,m) = O(n + m)
+//-------------------------
+/*
+Algorithm: 
+    Z-array = number of exact matching of a string with its own prefix 
+    Z[0] = strlen(str), redundant case 
+    Then, let newStr = strcat(pattern,text) 
+    After computing Z[i], 
+    T(n,m)  = O(m+n) => To find indices of exact matching
+    For every Z[i] >= strlen(pattern), there is an exact matching at that location, i >= strlen(pattern)
+    S(n,m) = O(m+n) => To hold the z-array
+    Computing Z[i] also takes T(n,m) = O(m+n)
+    Let R[i] = the furthest Z[j] can reach from j = 2,...,i
+    Let L[i] be the corresponding j for R[i] where L[i] can be any of them if multiple Z[j]'s reachest the same furthest
+    Z[1] is basically all m comparisons., start computing from Z[2] since needed for Case 2 below
+    Assuming computed R[i-1], L[i-1] and Z[i-1] properly, 
+    Case 1: i > R[i-1]
+        Z[i] = compute from scratch again  as well as R[i] and L[i]
+    Case 2: i <= R[i-1]
+        // note: +1 cause inclusive deduction
+        Calculate a = Z[i - L[i-1] + 1], b = R[i-1] - i 
+        case (A):
+            if a < b, Z[i] = Z[i - L[i-1] + 1, L[i] = L[i-1], R[i] = R[i-1] 
+        case {B}: 
+            else (a >= b), 
+                start comparing from str[R[i-1]+1] with str[i - L[i-1] + 1 + b]
+                and compute from scratch again for Z[i]. R[i], and L[i]
+    TODO: Implement and check corner cases above (-1 or +1 etc.)
+*/
+//-------------------------
+/* //
+#include <string> 
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+vector<int> zAlgorithm(string text, string pattern)
+{
+    vector<int> solution;  
+    string concat = "";
+    concat.assign(pattern);
+    concat.append(text);
+    vector<int> zArray (concat.length(), 0); // MISTAKE: initialize as (0, length) instead of (length, 0)
+
+    int left = 0;  // Since only depend on L[i-1], can just use left, will be initialize to 1 at first iteration
+    int right = 0; // Since only depend on R[i-1], can just use right
+    // note: Base case is already handled since R[0] = 0, and i = 1 at first iteration
+    for(int i = 1; i < zArray.size(); i++)
+    {
+        // Re-count everything since passed the last matched character 
+        if(i > right)
+        {
+            left = i; 
+            int matchLength = 0; 
+            while(((i + matchLength) < zArray.size()) && (concat[i + matchLength] == concat[matchLength]))
+            {
+                matchLength++;
+            }
+            zArray[i] = matchLength; // number of index that match for Z[i]
+            right = i + matchLength - 1; // Since 0 indexing, need  to - 1
+        }
+        // This is part of an exact matching position 
+        else
+        {
+            // Check if string at position of i - L[i-1] is more than or less than R[i-1]
+            if( zArray[i - left] < right - left)
+            {
+                zArray[i] = zArray[i-left];
+                // right and left remains the same
+            }
+            // Otherwise, begin matching from (right-left) onwards
+            else
+            {
+                // new maximum is found (may maintain same right) 
+                left = i; 
+                int matchLength = right - i + 1; // skip to compare from right+1 onwards
+                while(((i + matchLength) < zArray.size()) && (concat[i + matchLength] == concat[matchLength]))
+                {
+                    matchLength++;
+                }
+                // update right and zArray[i]
+                zArray[i] = matchLength; // number of index that match for Z[i], MISTAKE: FORGOT TO UPDATE zArray[i]
+                right = i + matchLength - 1; // Since 0 indexing, need  to - 1
+            }
+        }
+        // Check if current i matches the pattern completely
+        if ((zArray[i] >= pattern.length()) && (i >= pattern.length())) // MISTAKE: Forgot to make sure i is out of pattern's indices
+        {
+            solution.push_back(i-pattern.length()); // Mistake: Forgot to deduct the original pattern.length() to get position in original text
+        }
+    }
+    cout << endl;
+    return solution;
+}
+
+int main(void)
+{
+    string text = "I am a boy amto bilamd"; 
+    string pattern = "am";
+    vector<int> solution = zAlgorithm(text, pattern); // 2, 11, 19
+    for(int i = 0; i < solution.size(); i++)
+    {
+        cout << solution[i] << " ";
+    }
+    cout << endl;
     return 0;
 }
 // */
