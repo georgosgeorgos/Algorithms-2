@@ -12,9 +12,9 @@ Table of Contents
 7. Radix Sort, T(n,k,d) = O(d(k + n)), S(n,k) = O(k + n) 
 8. Binary Search, T(n) = O(logn), S(n) = O(1)
 9. Given a sorted array of integers, find range at which a target value exist. T(n) = O(nlgn), S(n) = O(1)
+10. MergeSort LinkedList, T(n) = O(nlogn), S(n) = O(logn)
 //----------------------------------------------------------------------------------------
 // TODO 
-MergeSort LinkedList
 QuickSort LinkedList
 Insertion Sort
 Selection Sort
@@ -37,12 +37,15 @@ Write an efficient algorithm that searches for a value in an m x n matrix. This 
 	
 Given a list  of papers with their number of citations [3,2,5] => Paper 1 has 3 citations, paper 3 has 5 citations, calculate the H-index in O(n)
     Hint: Use bucket sort
+
+Find longest increasing subsequence O(nlgn) hint: Use binary search
 */
 //----------------------------------------------------------------------------------------
-/* //
 // 1 Bubble sort
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(1)
+//---------------------------------------
+/* //
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -101,11 +104,11 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------
-/*
 // Practice 2: Template Bubble Sort
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(1)
-
+//---------------------------------------
+/* //
 #include <iostream>
 using namespace std;
 
@@ -149,10 +152,10 @@ void swap(X ab[], int a, int b)
 }
 // */
 //----------------------------------------------------------------------------------------
-/* //
 // 2 MergeSort Array, T(n) = O(nlogn), S(n) = O(nlogn) 
 // Time Complexity, T(n) = O(nlogn)
 // Space Complexity, S(n) = O(nlogn)
+//---------------------------------------
 // OMG, it works perfectly on first trial!!
 // only 1 mistake of not closing curly braces properly due to nested else and for =D =D =D
 // Note: Update: Fixed small mistake that q is either n/2 or n/2+1 depending on whether n is odd or even
@@ -170,24 +173,83 @@ void swap(X ab[], int a, int b)
 // take O(3n) as explained above.
 // n * (n/2)+(n/2) * (n/4)+(n/4)+(n/4)+(n/4) * ... * (1)*n  = n+n+...+n = n(logn)
 // Space complexity is also O(nlgn)
-
-
-#include <iostream>
-using namespace std;
-
-template <class X>
-void mergesort(X a[], int n);
-
+//---------------------------------------
+/* //
+#include <vector> 
+#include <algorithm>
+#include <iostream> 
+using namespace std; 
+void mergeSort(vector<int>& arr)
+{
+    int n = arr.size();
+    if(n == 1) return;
+    int n1 = n/2;
+    int n2 = n/2;
+    if(n & 0x1) 
+        n2 += 1;
+    vector<int> arr1 (n1, 0);
+    for(int i = 0; i < n1; i++)
+    {
+        arr1[i] = arr[i];
+    }
+    // Call mergesort on first
+    mergeSort(arr1);
+    // To save space, only create n2 once done calling on n1 
+    vector<int> arr2 (n2, 0);
+    for(int i = 0; i < n2; i++)
+    {
+        arr2[i] = arr[i+n1];
+    }
+    // Call mergesort on second
+    mergeSort(arr2);
+    // Now merge the 2 together
+    int p = 0; int q = 0;
+    int i = 0;
+    while(p < n1 && q < n2)
+    {
+        if (arr1[p] <= arr2[q])
+        {
+            arr[i] = arr1[p];
+            p++;
+        }
+        else
+        {
+            arr[i] = arr2[q];
+            q++;
+        }
+        i++;
+    }
+    if(p < n1)
+    {
+        while(p < n1)
+        {
+            arr[i] = arr1[p];
+            p++;
+            i++;
+        }
+    }
+    else
+    {
+        while(q < n2)
+        {
+            arr[i] = arr2[q];
+            q++;
+            i++;
+        }
+    }
+    return;
+}
 int main(void)
 {
-    int ab[5] = {4,3,2,6,9};
-    mergesort(ab, 5);
-    for (int i = 0; i < 5; i++)
-    {
-        cout <<ab[i] <<endl;
-    }
-    return 0;
+    vector<int> arr = {5,4,2,3,1};
+    mergeSort(arr);
+    for(int i = 0; i < arr.size();i++)
+        cout << i << " "; 
+    return 0; 
 }
+//---------------------------------------
+#include <iostream>
+using namespace std;
 
 template <class X>
 void mergesort(X a[], int n)
@@ -257,44 +319,35 @@ void mergesort(X a[], int n)
     }
     return;
 }
-// */
-//----------------------------------------------------------------------------------------
-/* //
-// 3 QuickSort Array (A stable sort)
-// Time Complexity, T(n) = O(n^2) worst case, O(nlgn) Average case (or as long as constant partition ratio)
-// Space Complexity, S(n) = O(1) note: sorts in place
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-
-using namespace std;
-
-void swapQuickSort(int *p, int l, int r);
-int quickSort(int *p, int l, int r);
 
 int main(void)
 {
-    int n = 5;
-    int *p = (int*) malloc(sizeof(int)*n);
-    p[0] = 5;
-    p[1] = 4;
-    p[2] = 3;
-    p[3] = 2;
-    p[4] = 1;
-    int i = 0;
-    cout <<"Before Sorting"<<endl;
-    for(i = 0; i < n; i++)
+    int ab[5] = {4,3,2,6,9};
+    mergesort(ab, 5);
+    for (int i = 0; i < 5; i++)
     {
-        cout<< p[i] << " ";
+        cout <<ab[i] <<endl;
     }
-    cout << endl;
-    quickSort(p, 0, n-1);
-    cout <<"After Sorting"<<endl;
-    for(i = 0; i < n; i++)
-    {
-        cout<< p[i] << " ";
-    }
-    cout << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 3 QuickSort Array (A stable sort)
+// Time Complexity, T(n) = O(n^2) worst case, O(nlgn) Average case (or as long as constant partition ratio)
+// Space Complexity, S(n) = O(1) note: sorts in place
+//---------------------------------------
+/* //
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+using namespace std;
+
+void swapQuickSort(int *p, int l, int r)
+{
+    int temp = p[l];
+    p[l] = p[r];
+    p[r] = temp;
+    return;
 }
 
 // Note: l >= r for this to work
@@ -320,19 +373,37 @@ int quickSort(int *p, int l, int r)
     return 0;
 }
 
-void swapQuickSort(int *p, int l, int r)
+int main(void)
 {
-    int temp = p[l];
-    p[l] = p[r];
-    p[r] = temp;
-    return;
+    int n = 5;
+    int *p = (int*) malloc(sizeof(int)*n);
+    p[0] = 5;
+    p[1] = 4;
+    p[2] = 3;
+    p[3] = 2;
+    p[4] = 1;
+    int i = 0;
+    cout <<"Before Sorting"<<endl;
+    for(i = 0; i < n; i++)
+    {
+        cout<< p[i] << " ";
+    }
+    cout << endl;
+    quickSort(p, 0, n-1);
+    cout <<"After Sorting"<<endl;
+    for(i = 0; i < n; i++)
+    {
+        cout<< p[i] << " ";
+    }
+    cout << endl;
 }
 // */
 //----------------------------------------------------------------------------------------------------
-/* //
 // 4 Randomized QuickSort (A stable sort) (higher chance to get average case than worst case)
 // Time Complexity: O(n^2) worst case, O(nlgn) Average case (or as long as constant partition ratio)
 // Space Complexity: O(1) note: sorts in place
+//---------------------------------------
+/* //
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -404,10 +475,11 @@ void swapRandomizedQuickSort(int *p, int l, int r)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-/* // 
 // 5 HeapSort
 // Time Complexity, T(n) = O(nlogn)
 // Space Complexity, S(n) = O(1)
+//---------------------------------------
+/* // 
 #include <cmath> // for log2()
 #include <iostream> 
 using namespace std; 
@@ -567,12 +639,12 @@ void swap(int* a, int* b)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-/* //
 // 6 Counting Sort (A stable sort)
-// Requirement: All numbers are integers in range 0 to k
 // Time Complexity, T(n,k) = O(k+n)
 // Space Complexity: T(n,k) = O(k+n)
-
+// Requirement: All numbers are integers in range 0 to k
+//---------------------------------------
+/* //
 #include <stdio.h>
 #include <stdlib.h> // for malloc
 #include <time.h> // for time()
@@ -653,13 +725,13 @@ void countingSort(int* p, int n, int k)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-/* //
 // 7 Radix Sort
-// Counting Sort (A stable sort)
-// Requirement: All numbers are integers in range 0 to k
 // Time Complexity, T(n,k,d) = O(d(k+n))
 // Space Complexity, S(n,k,d) O(k+n)
-
+// Counting Sort (A stable sort)
+// Requirement: All numbers are integers in range 0 to k
+//---------------------------------------
+/* //
 #include <stdio.h>
 #include <stdlib.h> // for malloc
 #include <time.h> // for time()
@@ -784,11 +856,11 @@ void countingSortForRadixSort(int* p, int n, int k, int d)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-/* //
 // 8 Binary Search
 // Time Complexity, T(n) = O(logn)
 // Space Complexity, S(n) = O(1)
-
+//---------------------------------------
+/* //
 template <class X>
 int binarySearch(X a[], X element, int n);
 
@@ -930,5 +1002,122 @@ int main(void)
     cout << endl; 
     return 0; 
 }
-// */`
+// */
+//----------------------------------------------------------------------------------------
+// 10 MergeSort LinkedList
+// Time Complexity, T(n) = O(nlogn)
+// Space Complexity, S(n) = O(logn)
+//---------------------------------------
+/*
+Function Prototype:
+    void mergeSortLinkedList(struct node * head);
+Algorithm:
+    Just sort it as usual but use O(1) space instead by moving nodes around instead of creating new ones.
+    Break the original linked list up by half until all the nodes by themselves, then recursively merge sort them together. 
+    note: Need return head to point to smallest element
+    uses O(lgN) space for recursion stack
+*/
+//---------------------------------------
+/* //
+#include <iostream> 
+using namespace std;
+
+struct node {
+    int value; 
+    struct node * next; 
+    node(int _value, struct node * _next) : value(_value), next(_next) {};
+};
+
+// Note: Only the head node needs to be double pointer, everything else can remain the same, 
+// since the function in C++/C only copies the parameter passed in as value but everything else remains the same
+struct node * mergeSortLinkedList(struct node ** head) // MISTAKE: To change where pointer points to, must either pass by double pointer or pass by reference pointer
+{
+    // Return if no nodes or only 1 node
+    if(!*head || !(*head)->next) return *head;
+    // Get middle of Linked List
+    struct node * middle = *head;
+    struct node * end = (*head)->next; 
+    while(end)
+    {
+        end = end->next;
+        if(end)
+        {
+            end = end->next;
+            middle = middle->next;
+        }
+    }
+    // Here, middle points to the middle node
+    struct node * firstList = *head;
+    //struct node ** secondList = &((*middle)->next); // MISTAKE: this points to next pointer, but it is later then set to NULL from (*middle)->NULL
+    struct node * secondList = middle->next; // thus, need create a new pointer for this double pointer to point to 
+    // Break both lists apart
+    middle->next = NULL;
+    // Recursively sort each individual list
+    firstList = mergeSortLinkedList(&firstList);
+    secondList = mergeSortLinkedList(&secondList); // note: Must passed in by reference, if not it will just modify a copy of secondList
+    // Now, merge both lists back together
+    head = NULL; // initialize head to NULL 
+    struct node * tempHead = NULL; // need new pointer for head to point to
+    // Initialize new head to point to smallest element
+    if(firstList->value <= secondList->value)
+    {
+        tempHead = firstList;
+        firstList = firstList->next;
+    }
+    else
+    {
+        tempHead = secondList;
+        secondList = secondList->next;
+    }
+    head = &tempHead;
+    // MISTAKE: You are re-assigning the copy of double pointer head, not the original head pointer that was passed in
+    struct node * curr = *head; // to append to sortedList
+    while(firstList || secondList)
+    {
+        if (!firstList)
+        {
+            curr->next = secondList;
+            secondList = secondList->next;
+        }
+        else if(!secondList || (firstList->value <= secondList->value))
+        {
+            curr->next = firstList;
+            firstList = firstList->next;
+        }
+        else
+        {
+            curr->next = secondList;
+            secondList = secondList->next;
+        }
+        curr = curr->next; // move curr to the new node just added
+    }
+    curr->next = NULL; // NUll terminate final node
+    return *head;
+}
+
+int main(void)
+{
+    struct node a5(1, NULL);
+    struct node a4(5, &a5);
+    struct node a3(4, &a4);
+    struct node a2(2, &a3);
+    struct node a1(3, &a2);
+    struct node * curr = &a1; 
+    while(curr)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl;
+    curr = &a1;
+    curr = mergeSortLinkedList(&curr);  // note: Must passed by reference if not it will just modify a copy of it
+    while(curr)
+    {
+        cout << curr->value << " ";
+        curr = curr->next;
+    }
+    cout << endl;
+    return 0;
+}
+// */
 //----------------------------------------------------------------------------------------------------
