@@ -1,20 +1,20 @@
 //----------------------------------------------------------------------------------------------------------------------------------------------
-/* //
+/* // 
 Table of Contents
 1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
-
-// TODO:
-2 Djikstra Algorithm: Find single-source shortest path for non-negative edges
+2. Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0, T(V,E) = O(ElogV), S(V,E) = O(V + E)
+//-------------------------
+TODO:
 // Time Complexity, T(V,E) = O(V + ElogV), S(V,E) = O
-2. Check if graph is weakly connected component
-0. Check
-1. BFS
-2. DFS
-3. Topological Sort
-4. Djikstra
-5. Given directed graph, find out if there exist a route between 2 nodes
-//--------------------------------------------
+22. Check if graph is weakly connected component
+11. BFS
+12. DFS
+13. Topological Sort
+14. Given directed graph, find out if there exist a route between 2 nodes
+15. Djikstra using Fibonacci Heap
+//-------------------------
 note: Complexity is measured in terms of |V| = number of nodes and |E| = number of edges!
+//-------------------------
 Adjacency Matrix Representation and Adjacency List Representation
 Incidence Matrix Representation and Incidence List Representation
 note: Adjacency Matrix is much easier to implement in an interview
@@ -48,7 +48,7 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
 // 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
 // Time Complexity, T(V,E) = O(V+E)
 // Space Complexity, S(V,E) = O(V)
-//--------------------------------------------
+//-------------------------
 // Algorithm: 
 // 1. Mark all nodes as not seen, O(V)
 // 2. Traverse using BFS/DFS from any node
@@ -71,7 +71,7 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
 // 1 = [2,3]    
 // 2 = [1]
 // 3 = [1]
-//--------------------------------------------
+//-------------------------
 /* //
 #include <vector> // To hold all nodes that exist and index them quickly
 #include <list> // To search through each adjacent node given a node
@@ -235,6 +235,188 @@ int main(void)
     return 0;
     // note: If this was a different problem and you need to traverse all nodes, you need to re-run the BFS/DFS algorithm on any nodes that are still unseen
     // as they were not connected to your starting node
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 2 Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0
+// Time Complexity, T(V,E) = O(ElogV)
+// Space Complexity, S(V,E) = O(V + E)
+//-------------------------
+/*
+Note: Best implementation is using Fibonacci Heap which is
+T(V,E) = O(E + VlogV) as E >> V => O(E + VlogV) < O(ElogV)
+*/
+//-------------------------
+/* //
+#include <climits> // for INT_MAX
+#include <vector> // to store distance for each node in minHeap
+#include <list>  // to store the adjacency list
+#include <iostream> 
+using namespace std; 
+
+// the minHeap class that stores the vertex
+class MinHeap
+{
+private:
+    vector<int> verToPos; // a map of the vertex[i] with its actual position for distance in the heap distance 
+    vector<int> distance; // minHeap
+    vector<int> posToVer; // a map of the actual position in the heap distance to vertex number in graph
+    int numNodes; // current number of nodes in minHeap
+    void swap(int posI, int posJ)
+    {
+        // Swap the distance value
+        int temp = this->distance[posI]; 
+        this->distance[posI] = this->distance[posJ];
+        this->distance[posJ] = temp;
+
+        // Swap the vertex positions as indicated
+        this->verToPos[this->posToVer[posI]] = posJ; 
+        this->verToPos[this->posToVer[posJ]] = posI; 
+
+        // Swap the positionToVertex 
+        temp = this->posToVer[posI]; 
+        this->posToVer[posI] = this->posToVer[posJ];
+        this->posToVer[posJ] = temp;
+        return;
+    }
+public:
+    MinHeap(int _numNodes)
+    {
+        this->numNodes = _numNodes; 
+        for(int i = 0; i < numNodes; i++)
+        {
+            this->distance.push_back(INT_MAX);
+            this->posToVer.push_back(i); 
+            this->verToPos.push_back(i);
+        }
+    }
+    // Extracts the current minimum Vertex
+    int extractMinVertex(void)
+    {
+        // int minValue = this->distance[this->numNodes-1]; // need return the minimumVertex, not the minimum distance value
+        int minVertex = this->posToVer[0]; // MISTAKE: accidentally got minVertex after swapping which wouldn't be minimum anymore
+        // swap the first element with last
+        this->swap(0, this->numNodes-1);
+        // Decrement number of nodes
+        this->numNodes--;
+        // Bubble down till found proper placement
+        int i = 0;
+        while (i < this->numNodes)
+        {
+            int smallest = i;
+            if (((2*i + 1) < numNodes) && (this->distance[smallest] > this->distance[2*i + 1]))
+            {
+                smallest = 2*i + 1;
+            }
+            if (((2*i + 2) < numNodes) && (this->distance[smallest] > this->distance[2*i + 2]))
+            {
+                smallest = 2*i + 2;
+            }
+            if(smallest != i)
+            {
+                swap(i, smallest);
+                i = smallest;
+            }
+            // Already in proper position
+            else 
+            {
+                break;
+            }
+        }
+        return minVertex;
+    }
+    int getDistance(int vertex)
+    {
+        return this->distance[this->verToPos[vertex]];
+    }
+    void updateMinDistance(int vertex, int dist)
+    {
+        // no changes if already out of heap  or already having an equal or lower distance value
+        if((this->verToPos[vertex] >= numNodes) || (this->distance[this->verToPos[vertex]] <= dist)) return; 
+        // Update it
+        this->distance[this->verToPos[vertex]] = dist;
+        // Update MinHeap
+        // get Parent position of this vertex
+        int parentPos = (this->verToPos[vertex]-1)/2; // Mistake: Used (pos/2) - 1 instead of (pos-1)/2
+        while(parentPos >= 0)
+        {
+            if(this->distance[this->verToPos[vertex]] < this->distance[parentPos]) // Mistake: Accidentally used '>' instead of '<'
+            {
+                this->swap(verToPos[vertex], parentPos);
+                parentPos = (this->verToPos[vertex]-1)/2;
+            }
+            // Break if already at right position
+            else
+            {
+                break;
+            }
+        }
+        return;
+    }
+};
+
+class Edge 
+{
+private:
+    int node;
+    int weight; 
+public:
+    Edge(int _node, int _weight) : node(_node), weight(_weight) {};
+    int getNode() { return this->node; }
+    int getWeight() { return this->weight; }
+};
+
+// Adjacency List Representation
+class Graph 
+{
+private:
+    int numNodes;
+    list<Edge *>* adj; // a pointer to lists of weighted Edges
+public:
+    Graph(int num)
+    {
+        this->numNodes = num; 
+        this->adj = new list<Edge *>[numNodes];
+    } 
+    // Directed Acyclic Graph, weighted
+    void addEdgeDirected(int src, int dest, int weight)
+    {
+        Edge * newEdge = new Edge(dest, weight); 
+        this->adj[src].push_back(newEdge);
+    }
+    // Execute Djikstra Algorithm using Binary Heap
+    void DjikstraBinaryHeap(int src)
+    {
+        // First, create a MinHeap
+        MinHeap mH(this->numNodes);
+        mH.updateMinDistance(src, 0); // initialize source node to have a distance of 0
+        // Extract the minimum for all |V| nodes and update adjacent distances
+        for(int i = 0; i < this->numNodes; i++)
+        {
+            int currVertex = mH.extractMinVertex();
+            // Do a BFS to update all adjacent
+            for(auto i = this->adj[currVertex].begin(); i != this->adj[currVertex].end(); i++) // C++ 11 feature
+            {
+                Edge * currEdge = *i; 
+                // update the distance to currVertex with its weight
+                mH.updateMinDistance(currEdge->getNode(), mH.getDistance(currVertex) + currEdge->getWeight());
+            } 
+            cout << "Vertex: " << currVertex << " has Distance: " << mH.getDistance(currVertex) << endl;
+        }
+        return;
+    }
+};
+
+ // initialize all position to point to its original position
+int main(void)
+{
+    int V = 5;
+    Graph g(V);
+    g.addEdgeDirected(0,1,2);
+    g.addEdgeDirected(0,2,4);
+    g.addEdgeDirected(1,2,1);
+    g.DjikstraBinaryHeap(0);
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
