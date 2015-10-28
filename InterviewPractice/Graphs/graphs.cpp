@@ -3,6 +3,10 @@
 Table of Contents
 1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
 2. Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0, T(V,E) = O(ElogV), S(V,E) = O(V + E)
+3. Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph, T(V,E) = O(ElogV), S(V,E) = O(V + E)
+
+Graph Algorithms in other folders:
+    - Kruskal (Disjoint Set)
 //-------------------------
 TODO:
 // Time Complexity, T(V,E) = O(V + ElogV), S(V,E) = O
@@ -43,6 +47,15 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
                   whereas in stack, you may end up visiting the last node in each list of edges of a node first
             note: Recursion => Call stack 
                   Stack => User Stack 
+
+note: Implementation for Djikstra Algorithm and Prim's Algorithm is very similar. The difference is that:
+    - Djikstra Algorithm updates the minimum value to the shortest path from source to current node whereas
+          if(curr.val + edge.weight < adj.val) adj.val = curr.val + edge.weight;
+    - Djikstra is >= 0 weight, directed
+
+    - Prim's Algorithm updates the minimum value based on the edges connecting the vertex to a current vertex already included in the MST.
+          if(edge.weight < adj.val) adj.val = edge.weight;
+    - Must be undirected for greedy approach of picking vertex with current minimum surrounding edges to make sense
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 // 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
@@ -416,6 +429,176 @@ int main(void)
     g.addEdgeDirected(0,2,4);
     g.addEdgeDirected(1,2,1);
     g.DjikstraBinaryHeap(0);
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 3 Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph
+// Time Complexity, T(V,E) = O(ElogV)
+// Space Complexity, S(V,E) = O(V + E)
+//-------------------------
+/* 
+Finds minimum spanning tree of weighted undirected graph. Note: Must be undirected if not greedy approach won't make sense
+Note: Best implementation is using Fibonacci Heap which is
+T(V,E) = O(E + VlogV) as E >> V => O(E + VlogV) < O(ElogV)
+*/
+//-------------------------
+/* //
+#include <climits> // for INT_MAX
+#include <vector> // For MinHeap
+#include <list> // Adjacency list representation of graph
+#include <iostream> 
+using namespace std;
+
+// MinHeap class for Prim's Algorithm
+class MinHeap
+{
+private:
+    int numNodes;
+    vector<int> verToPos;
+    vector<int> posToVer;
+    vector<int> minWeight; // minimum weight edges connecting currNode to node already in Minimum Spanning Tree
+    // Swap nodes in posI and posJ
+    void swap(int posI, int posJ)
+    {
+        // Swap the weight values 
+        int temp = this->minWeight[posI]; 
+        this->minWeight[posI] = this->minWeight[posJ];
+        this->minWeight[posJ] = temp;
+        // swap the verToPos
+        this->verToPos[posToVer[posI]] = posJ;
+        this->verToPos[posToVer[posJ]] = posI;
+        // Swap the posToVer
+        temp = this->posToVer[posI]; 
+        this->posToVer[posI] = this->posToVer[posJ];
+        this->posToVer[posJ] = temp;
+        return;
+    }
+public:
+    MinHeap(int _numNodes) // Constructor
+    {
+        this->numNodes = _numNodes;
+        for(int i = 0; i < numNodes; i++)
+        {
+            this->minWeight.push_back(INT_MAX);
+            this->posToVer.push_back(i);
+            this->verToPos.push_back(i);
+        }
+    }
+    int getMinWeight(int vertex) { return this->minWeight[verToPos[vertex]]; }
+    // Returns current minimum Vertex in MinHeap and pops it out from MinHeap
+    int popMinimumVertex() 
+    {
+        int minVertex = this->posToVer[0]; 
+        // Swap to final element
+        this->swap(0, this->numNodes-1);
+        this->numNodes--;
+        // Bubble down first element
+        int currIndex = 0;
+        while(currIndex < this->numNodes)
+        {
+            int minPos = currIndex; 
+            if(((currIndex*2 + 1) < this->numNodes) && (this->minWeight[currIndex] > this->minWeight[currIndex*2 + 1]))
+            {
+                minPos = currIndex*2 + 1;
+            }
+            else if(((currIndex*2 + 2) < this->numNodes) && (this->minWeight[currIndex] > this->minWeight[currIndex*2 + 2]))
+            {
+                minPos = currIndex*2 + 2;
+            }
+            // Update if needed
+            if(minPos != currIndex)
+            {
+                this->swap(minPos, currIndex);
+                currIndex = minPos; 
+            }
+            else // break if already at right position
+            {
+                break;
+            }
+        }
+        return minVertex;
+    }
+    void setWeight(int numVertex, int weight)
+    {
+        // Return if no longer in heap or already minimum
+        if((this->verToPos[numVertex] >= this->numNodes) || (this->minWeight[this->verToPos[numVertex]] <= weight)) return; // no changes
+        // Set to new value 
+        this->minWeight[this->verToPos[numVertex]] = weight;
+        // Push it upwards the heap only if able
+        int parentPos = (this->verToPos[numVertex]-1)/2;
+        while(parentPos >= 0)
+        {
+            if(this->minWeight[verToPos[numVertex]] < this->minWeight[parentPos])
+            {
+                this->swap(this->verToPos[numVertex], parentPos);
+                parentPos = (this->verToPos[numVertex]-1)/2;
+            }
+            else break; // break if no changes
+        }
+    }
+};
+
+class Edge {
+private:
+    int dest; // destination node
+    int weight; // weight of this edge
+public:
+    Edge(int _dest, int _weight) : dest(_dest), weight(_weight) {};
+    int getWeight() { return this->weight; }
+    int getNode() { return this->dest; }
+};
+
+class Graph {
+private:
+    list<Edge *> * adj; // a pointer to lists of Edges
+    int numNodes; // number of nodes in this graph
+public:
+    Graph(int _numNodes) 
+    {
+        this->numNodes = _numNodes; 
+        this->adj = new list<Edge *>[numNodes];
+    }
+    void addUndirectedEdge(int vertexA, int vertexB, int weight)
+    {
+        Edge * edgeAB = new Edge(vertexB, weight);
+        adj[vertexA].push_back(edgeAB);
+        Edge * edgeBA = new Edge(vertexA, weight);
+        adj[vertexB].push_back(edgeBA);
+        return;
+    }
+    // Executes prim algorithm by creating MinHeaps
+    void Prim(int srcVertex)
+    {
+        int totalWeight = 0; 
+        // Create a minHeap
+        MinHeap mh(this->numNodes);
+        mh.setWeight(srcVertex,0); // initialize sourceVertex to have weight of 0
+        for(int i = 0; i < numNodes; i++)
+        {
+            int currMinNode = mh.popMinimumVertex(); 
+            totalWeight += mh.getMinWeight(currMinNode); cout << "CurrWeight picked is: " << mh.getMinWeight(currMinNode) << endl;
+            for(auto i = this->adj[currMinNode].begin(); i != this->adj[currMinNode].end(); i++) // C++ 11 feature
+            {
+                Edge * currEdge = *i;
+                // Update the weight on that node in minHeap if it is in minHeap
+                mh.setWeight(currEdge->getNode(), currEdge->getWeight());
+            }
+        }
+        cout << "Total weight of edges for Minimum Spanning Tree is: " << totalWeight << endl;
+        return; 
+    }
+};
+int main(void)
+{
+    int V = 4;  // Number of nodes in graph
+    Graph* graph = new Graph(V);
+    graph->addUndirectedEdge(0,1,10);
+    graph->addUndirectedEdge(0,2,6);
+    graph->addUndirectedEdge(0,3,5);
+    graph->addUndirectedEdge(1,3,15);
+    graph->addUndirectedEdge(2,3,4);
+    graph->Prim(0); // 19 = 10 + 5 + 4 (note: First weight of 0 doesn't mean anything as the source node has no edges connected to it at first)
     return 0;
 }
 // */
