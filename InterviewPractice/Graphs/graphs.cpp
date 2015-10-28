@@ -4,6 +4,7 @@ Table of Contents
 1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
 2. Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0, T(V,E) = O(ElogV), S(V,E) = O(V + E)
 3. Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph, T(V,E) = O(ElogV), S(V,E) = O(V + E)
+4. Bellman Ford Algorithm: Single-source cshortest path for Directed, Weighted Graphs, T(V,E) = O(VE), S(V,E) = O(V + E)
 
 Graph Algorithms in other folders:
     - Kruskal (Disjoint Set)
@@ -599,6 +600,102 @@ int main(void)
     graph->addUndirectedEdge(1,3,15);
     graph->addUndirectedEdge(2,3,4);
     graph->Prim(0); // 19 = 10 + 5 + 4 (note: First weight of 0 doesn't mean anything as the source node has no edges connected to it at first)
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 4 Bellman Ford Algorithm: Single-source cshortest path for Directed, Weighted Graphs
+// Time Complexity, T(V,E) = O(VE)
+// Space Complexity, S(V,E) = O(V + E)
+//-------------------------
+/* 
+AdjacencyList => O(V^2 + VE) = O(VE), E <= V^2
+AdjacencyMatrix => O(V^3) since need V^2 time to find all E at each iteration 
+Objects and Pointers => O(VE) since can iterate through Edges directly
+Objects and Pointers is the best representation in this case, however you did AdjacencyList already, same Big O complexity regardless though its slightly slower
+*/
+//-------------------------
+/* //
+#include <climits> // For INT_MAX
+#include <vector> // For BellmanFord to store current distance from dest node to src node
+#include <list> // Adjacency List representation
+#include <iostream> 
+using namespace std; 
+class Edge 
+{
+private:
+    int dest; 
+    int weight;
+public:
+    Edge(int _dest, int _weight) : dest(_dest), weight(_weight) {};
+    int getDest() {return this->dest;}
+    int getWeight() {return this->weight;}
+};
+class Graph
+{
+private:
+    int numNodes; 
+    list<Edge *> * adj; // a pointer to lists of Edges
+public: 
+    Graph(int _numNodes) 
+    {
+        this->numNodes = _numNodes;
+        adj = new list<Edge *>[this->numNodes];
+    }
+    void addDirectedEdge(int src, int dest, int weight)
+    {
+        Edge * newEdge = new Edge(dest, weight);
+        adj[src].push_back(newEdge);
+    }
+    bool BellmanFord(int src)
+    {
+        // Initialize the distance from every node to src node
+        vector<int> distance (this->numNodes, INT_MAX);
+        distance[src] = 0; // set the src node to be no distance to itself
+        for(int i = 0; i < this->numNodes - 1; i++) // execute V-1 times O(V ( V+E)) = O(V^2 + VE) = O(VE), E <= V^2
+        {
+            for(int j = 0; j < this->numNodes; j++) // to get all edges, O(V + E)
+            {
+                for(auto k = adj[j].begin(); k != adj[j].end(); k++)
+                {
+                    Edge * currEdge = *k;
+                    // MISTAKE: Didn't account for overflow (Need distance[j] != INT_MAX)
+                    if (distance[j] != INT_MAX && (distance[currEdge->getDest()] > distance[j] + currEdge->getWeight()))
+                        distance[currEdge->getDest()] = distance[j] + currEdge->getWeight();
+                }
+            }
+        }
+        // Repeat again to make sure no changes to check for negative cycles
+        for(int j = 0; j < this->numNodes; j++) // to get all edges, O(V + E)
+        {
+            for(auto k = adj[j].begin(); k != adj[j].end(); k++)
+            {
+                Edge * currEdge = *k;
+                if (distance[j] != INT_MAX && (distance[currEdge->getDest()] > distance[j] + currEdge->getWeight()))
+                    return false;
+            }
+        }
+        for(int i = 0; i < distance.size(); i++)
+        {
+            cout << "Node " << i << ": " << distance[i] << endl;
+        }
+        return true; // No negative cycles
+    }
+};
+int main(void)
+{
+    Graph g(4); 
+    g.addDirectedEdge(1,0,5);
+    g.addDirectedEdge(2,1,-6);
+    g.addDirectedEdge(3,2,3);
+    g.addDirectedEdge(0,3,2);
+    int solved = g.BellmanFord(0);  // 0, -1, 5, 2
+    if(!solved) cout << "Negative cycles" << endl;
+    else cout << "No negative cycle" << endl;
+    g.addDirectedEdge(0,1,-6); // forms negative cycle
+    solved = g.BellmanFord(0);  // negative cycle
+    if(!solved) cout << "Negative cycles" << endl;
+    else cout << "No negative cycle" << endl;
     return 0;
 }
 // */
