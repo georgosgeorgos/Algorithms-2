@@ -4,7 +4,8 @@ Table of Contents
 1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
 2. Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0, T(V,E) = O(ElogV), S(V,E) = O(V + E)
 3. Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph, T(V,E) = O(ElogV), S(V,E) = O(V + E)
-4. Bellman Ford Algorithm: Single-source cshortest path for Directed, Weighted Graphs, T(V,E) = O(VE), S(V,E) = O(V + E)
+4. Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs, T(V,E) = O(VE), S(V,E) = O(V + E)
+5. Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles, T(V,E) = O(V^3), Space Complexity, T(V,E) = O(V^2)
 
 Graph Algorithms in other folders:
     - Kruskal (Disjoint Set)
@@ -17,6 +18,8 @@ TODO:
 13. Topological Sort
 14. Given directed graph, find out if there exist a route between 2 nodes
 15. Djikstra using Fibonacci Heap
+16. Prim using Fibonacci Heap
+17. Knapsack Problem using Graph and Topological Sort
 //-------------------------
 note: Complexity is measured in terms of |V| = number of nodes and |E| = number of edges!
 //-------------------------
@@ -37,6 +40,8 @@ note: Undirected is much easier than directed, since you don't need to store wei
     for:
     - space requirements (less space if no edge)
     - Traversing through the nodes connected to the current node  O(V) only in worst case where a node is connected to all other nodes
+
+note: If you find yourself ever adding INT_MAX (e.g. BellmanFord), make sure to account for integer overflow!
 
 Note: Both incidence Matrix and Incidence list are terrible and should never be used
     Incidence Matrix is basically Adjacency Matrix nodes at rows and edges at columns, 
@@ -604,7 +609,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 4 Bellman Ford Algorithm: Single-source cshortest path for Directed, Weighted Graphs
+// 4 Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs
 // Time Complexity, T(V,E) = O(VE)
 // Space Complexity, S(V,E) = O(V + E)
 //-------------------------
@@ -696,6 +701,103 @@ int main(void)
     solved = g.BellmanFord(0);  // negative cycle
     if(!solved) cout << "Negative cycles" << endl;
     else cout << "No negative cycle" << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 5 Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles
+// Time Complexity, T(V,E) = O(V^3)
+// Space Complexity, T(V,E) = O(V^2)
+//----------------------------------------------------------------------------------------------------------------------------------------------
+/*
+Questions:
+    1. Can weights be (-) ? 
+    2. Can there be (-) cycles?  No, if yes, then need use a different algorithm
+    3. Can more than 1 edge point from one edge to the other? Directed/Undirected? 
+Algorithm: 
+    Floyd-Warshall
+        T(V,E) = O(V^3), S(V,E) = O(V^2) 
+        Can solve this dynamically. 
+        Let d(m)[i][j] = the shortest path between vertex i and vertex j passing through m specific vertex not including vertex i and vertex j
+        d(0)[i][j] = W[i][j]  (the weight matrix of edges from i to j)
+        d(k)[i][j] = min (d(k-1)[i][j], d(k-1)[i][k] + d(k-1)[k][j])
+*/
+//----------------------------------------------------------------------------------------------------------------------------------------------
+/* //
+#include <climits> // INT_MAX to initialize adjacency matrix where no edges are connected
+#include <vector> // Adjacency Matrix Representation
+#include <iostream> 
+using namespace std; 
+
+class Graph 
+{
+private:
+    int numNodes;
+    vector< vector<int> > adj; // a pointer to an adjacencency Matrix 
+public:
+    Graph(int _numNodes)
+    {
+        this->numNodes = _numNodes; 
+        // Initialize a vector for adj to be equal to
+        vector< vector<int> > a(numNodes, vector<int> (numNodes, INT_MAX)); 
+        this->adj = a; // make it equal to the vector
+    }
+    void print()
+    {
+        for(int i = 0; i < adj.size(); i++)
+        {
+            for(int j = 0; j < adj[i].size(); j++)
+            {
+                if(adj[i][j] == INT_MAX) cout << "INF ";
+                else cout << adj[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+    void setDirectedEdge(int vertexA, int vertexB, int weight)
+    {
+        adj[vertexA][vertexB] = weight;
+    }
+    vector< vector<int> > FloydWarshall(int src) 
+    {
+        // initialize shortest directed distance between each node to be the actual weight
+        vector< vector <int> > shortest = this->adj;  
+        for(int i = 0; i < this->numNodes; i++)
+        {
+            for(int j = 0; j < shortest.size(); j++)
+            {
+                for(int k = 0; k < shortest[j].size(); k++)
+                {
+                    // only add if there is an edge between the two
+                    if(shortest[j][i] != INT_MAX && shortest[i][k] != INT_MAX)
+                        shortest[j][k] = min(shortest[j][k], shortest[j][i] + shortest[i][k]);
+                }
+            }
+        }
+        return shortest;
+    }
+};
+
+int main(void)
+{
+    Graph g = Graph(5);
+    g.setDirectedEdge(0,1,5);
+    g.setDirectedEdge(1,2,3);
+    g.setDirectedEdge(0,3,10);
+    g.setDirectedEdge(2,3,1);
+    g.print();
+    vector< vector<int> > shortest = g.FloydWarshall(0);
+    cout << "Shortest Distances Are: " << endl;
+    // print the solution
+    for(int i = 0; i < shortest.size(); i++)
+    {
+        for(int j = 0; j < shortest[i].size(); j++)
+        {
+            if(shortest[i][j] == INT_MAX) cout << "INF ";
+            else cout << shortest[i][j] << " ";
+        }
+        cout << endl;
+    }
     return 0;
 }
 // */
