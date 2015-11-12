@@ -1,26 +1,61 @@
 //----------------------------------------------------------------------------------------
+// 4 Prim's Algorithm
+// TODO: THIS IS TOO MUCH IMPLEMENTATION, DON'T THINK CAN FIT IN 1 INTERVIEW SLOT, YES YOU CAN! JUST PRACTICE IMPLEMENTING 10 TIMES
+//       CAN IF YOU USE STL's PRIORITY_QUEUE 
+//----------------------------------------------------------------------------------------
 /* 
 1. BuildHeap, converts an unsorted array into a Binary Heap, T(n) = O(n), S() = O(1)
 2. HeapSort, T(n) = O(nlogn), S(n) = O(1)
-
+//-------------------------
 TODO:
-3. Find kth largest elements from an array , T(n) = O(klogk), S(n) = O(k) 
-
-
+4. Prims Algorithm
+3. Find the kth largest elements from a heap, T(n) = O(klogk), S(n) = O(k) 
 Binary Heap
 Binomial Heap 
 B-Heap 
 Fibonacci Heap 
 Treap 
+5. A* search (you maintain the next best node in the queue using a heap)
 etc. (refer to wikipedia)
+
+//-------------------------
+// priority_queue
+//-------------------------
+#include <iostream> // cout
+#include <vector> // for vector<int>
+#include <functional> // for greater<int>
+#include <queue> // for priority_queue<int>
+using namespace std; 
+int main(void)
+{
+    priority_queue<int> maxHeap; 
+    maxHeap.push(20);
+    maxHeap.push(10);
+    maxHeap.push(40);
+    while(!maxHeap.empty()) // outputs 40,20,10 since it's maxHeap
+    {
+        cout << maxHeap.top() << endl;
+        maxHeap.pop();
+    }
+
+    priority_queue<int, vector<int>, greater<int> > minHeap;
+    minHeap.push(20);
+    minHeap.push(10);
+    minHeap.push(40);
+    while(!minHeap.empty()) // outputs 10,20,40 since it's maxHeap
+    {
+        cout << minHeap.top() << endl;
+        minHeap.pop();
+    }
+    return 0;
+}
 // */
-// 
 //----------------------------------------------------------------------------------------
-/* 
 // 1 BuildHeap, converts an unsorted array into a Binary Heap 
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
-
+//-------------------------
+/* //
 #include <cmath> // for log2()
 #include <iostream> 
 using namespace std; 
@@ -63,8 +98,6 @@ int main(void)
     cout << endl;
     return 0; 
 }
-
-
 // O(n) 
 // Note: The reason that the complexity is O(n) instead of O(NlogN) is because 
 // only at the node that you traverse O(logN) nodes in the worst case whereas the finalIndex you will traverse only 1 node
@@ -172,10 +205,11 @@ void swap(int* a, int* b)
 }
 // */
 //----------------------------------------------------------------------------------------
-/* //
 // 2 HeapSort
 // Time Complexity, T(n) = O(nlogn)
 // Space Complexity, S(n) = O(1)
+//-------------------------
+/* //
 #include <cmath> // for log2()
 #include <iostream> 
 using namespace std; 
