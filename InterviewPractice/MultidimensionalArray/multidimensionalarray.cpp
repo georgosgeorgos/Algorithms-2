@@ -2,7 +2,7 @@
 /* //
 Table of Contents
 1. Rotate 2D Image (N x N) 90 Degrees In Place, T(n) = O(n^2), S(n) = O(1)
-2. Traverse (NxN) array spirally, T(n) =  O(n^2), S(n) = O(1), (Bloomberg Interview) 
+2. Traverse (NxN) array spirally, T(n) =  O(n^2), S(n) = O(n), (Bloomberg Interview) 
 3. Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0, T(n,m) = O(nm), S(n,m) = O(n + m)
 //-------------------------------------------
 TODO:
@@ -16,7 +16,6 @@ vector< vector<int> > arr(N, vector<int> (M, 0)); // initialize arr[N][M] with a
 // Rotate an image 90 degrees in place. Can create constant memory but not an entire array
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(1)
-// TODO: Do this again, too many mistakes
 //-------------------------------------------
 /* //
 #include <stdlib.h>
@@ -109,7 +108,11 @@ void rotate90InPlace(int** image, int n)
 // 2 Traverse (NxN) array spirally
 // Traverse array Spirally
 // Time Complexity O(n^2) , if array is size a[n][n]
-// Space Complexity O(1)
+// Space Complexity O(n)
+//-------------------------------------------
+/*
+Recursive calls can take a maximum depth of O(n)
+*/
 //-------------------------------------------
 /* //
 #include <stdlib.h>
