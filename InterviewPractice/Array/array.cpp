@@ -10,6 +10,10 @@ Table of Contents
 7. Buy and sell stock one time. Max Profit? T(n) = O(n), S(n) = O(1)
 //-------------------------
 TODO:
+    (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
+        Done in LeetCode
+    (e.g. Sum of entire array except itself without using deduct (-) operator)  Leetcode: O(2n) time and O(1) space (not counting output array) 
+        Done in LeetCode
 // Sorted Shifted Array with DUPLICATE elements, find the amount array is shifted by 
 // Sorted shifted array with DUPLICATE elements, search for an element
 // CIRCULAR ARRAY: 
@@ -43,6 +47,8 @@ Determine if there is a number in a sorted array that may contain duplicates tha
 - Have 2 pointers, one at each end, have third pointer moving from one end to another and swapping elements in and out from both end pointers. 
 - Partition values to left and right of middle element (quicksort) 
 - If a number isn't in the array, and -1 is a valid number, you need to create a new Integer class and return NULL instead. 
+- Greatest Common Divisor might be helpful
+- First find number of rotation, but do a binary seach, creating a mapping from rotation index to 0->n-1 index
 //-------------------------
 // Common Questions
 //-------------------------
@@ -59,78 +65,36 @@ Determine if there is a number in a sorted array that may contain duplicates tha
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
 //---------------------------------
+/*
+Questions:
+*/
+//---------------------------------
 /* //
-#include <stdlib.h> // for rand()
-#include <time.h>
-#include <limits.h> // INT_MAX
+#include <climits> // INT_MAX
+#include <vector>
 #include <iostream>
 using namespace std;
 
-int maxSubArray(int* a, int N, int &startIndex, int &endIndex);
-int maxSubArrayDynamic(int* a, int N);
-int main(void)
-{
-    int N = 10;
-    int * a;
-    a = (int*) malloc(sizeof(int) * N);
-    int i = 0;
-    srand (time(NULL));
-    for(i = 0; i < N; i++)
-    {
-        a[i] = rand()%20;
-        if((rand()%20) > 10)
-        {
-            a[i] *= -1;
-        }
-    }
-    for(i = 0; i < N; i++)
-    {
-        cout << a[i] << " ";
-    }
-    cout << endl;
-    int k,l;
-    int maximum = maxSubArray(a, N, k, l);
-    int maximum2 = maxSubArrayDynamic(a, N);
-    cout<<"Start: "<< k<<" to End: " << l <<" is maximum: "<< maximum << endl;
-    cout<<"maximum: "<< maximum2 << endl;
-    int b[5] = { -4, -2, -3, -1, -5};
-    maximum = maxSubArray(b, 5, k, l);
-    maximum2 = maxSubArrayDynamic(b, 5);
-    cout<<"Start: "<< k<<" to End: " << l <<" is maximum: "<< maximum << endl;
-    cout<<"maximum: "<< maximum2 << endl;
-    return 0;
-}
-
-int maxSubArray(int* a, int N, int &startIndex, int &endIndex)
+int maxSubArray(vector<int>& arr, int& startIndex, int& endIndex)
 {
     startIndex = 0;
     endIndex = 0;
-    int currStartIndex = 0;
-    int currEndIndex = 0;
-    int i = 0;
-    int cumulativeSum = -1*INT_MAX;
-    int maxSum = cumulativeSum;
-    for(i = 0; i < N; i++)
+    int currStartIndex = 0; int currEndIndex = 0;
+    int cumulativeSum= -1*INT_MAX;  
+    int tempSum = 0;
+    int n = arr.size(); 
+    for(int i = 0; i < arr.size(); i++)
     {
-        if(cumulativeSum < 0)
+        currStartIndex = tempSum < 0 ? i : currStartIndex;
+        tempSum = tempSum < 0 ? arr[i] : tempSum + arr[i];
+        if (tempSum > cumulativeSum) 
         {
-            cumulativeSum = a[i];
-            currStartIndex = i;
-            currEndIndex = i;
-        }
-        else
-        {
-            cumulativeSum += a[i];
-            currEndIndex = i;
-        }
-        if (cumulativeSum >= maxSum)
-        {
-            maxSum = cumulativeSum;
+            cumulativeSum= tempSum; 
             startIndex = currStartIndex;
-            endIndex = currEndIndex;
+            endIndex = i;
         }
     }
-    return maxSum;
+    return cumulativeSum;
 }
 
 // or another implementation which is easier to understand
@@ -146,30 +110,31 @@ int maxSubArray(int* a, int N, int &startIndex, int &endIndex)
 // Time Complexity, T(n) = O(n) // one pass only 
 // Space Complexity, S(n) = O(1) 
 // Note: Haven't accounted for start and end index yet
-int maxSubArrayDynamic(int* a, int N)
+int maxSubArrayDynamic(vector<int>& arr)
 {
+    int N = arr.size();
     bool notAllNegative = false; // initialize to all are negative
-    int minNegative = a[0]; // initialize minNegative to first element assuming there exist a first element
-    int maxSum = a[0]; // initialize maximumSum to be first element
+    int minNegative = arr[0]; // initialize minNegative to first element assuming there exist a first element
+    int maxSum = arr[0]; // initialize maximumSum to be first element
     int currSum = 0; // initialize to 0 for a[-1] 
     for(int i = 0; i <N; i++)
     {
-        currSum = max(0, currSum + a[i]);
+        currSum = max(0, currSum + arr[i]);
         if(currSum > maxSum) 
         {
             maxSum = currSum; 
         }
         if(!notAllNegative)
         {
-            if(a[i] >= 0)
+            if(arr[i] >= 0)
             {
                 notAllNegative = true; // there is a positive value, so don't need to evaluate this anymore 
             }
             else 
             {
-                if(minNegative < a[i])
+                if(minNegative < arr[i])
                 {
-                    minNegative = a[i]; 
+                    minNegative = arr[i]; 
                 }
             }
         }
@@ -179,6 +144,22 @@ int maxSubArrayDynamic(int* a, int N)
     if(!notAllNegative) return minNegative;
     // Otherwise, return the maximumSum from dynamic programming solution 
     else return maxSum; 
+}
+
+int main(void)
+{
+    vector<int> arr = {1, 3, -3, 4, -5, 3};  // Test normal: 5
+    int startIndex, endIndex;
+    int maximum = maxSubArray(arr, startIndex, endIndex);
+    int maximum2 = maxSubArrayDynamic(arr);
+    cout<<"Start: "<< startIndex <<" to End: " << endIndex <<" is maximum: "<< maximum << endl;
+    cout<<"maximum: "<< maximum2 << endl;
+    vector<int> arr2 = { -4, -2, -3, -1, -5}; // Test All Negative: -1
+    maximum = maxSubArray(arr2, startIndex, endIndex);
+    maximum2 = maxSubArrayDynamic(arr2);
+    cout<<"Start: "<< startIndex <<" to End: " << endIndex <<" is maximum: "<< maximum << endl;
+    cout<<"maximum: "<< maximum2 << endl;
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -238,12 +219,12 @@ int binarySearchGetPivot(vector<int>& nums, int begin, int end)
     // General case 
     if (nums[mid] > nums[end]) 
     {
-        begin = mid+1; 
+        begin = mid + 1; 
         return binarySearchGetPivot(nums, begin, end); 
     }
     else
     {
-        end = mid -1; 
+        end = mid - 1; 
         return binarySearchGetPivot(nums, begin, end); 
     }	
 } 
