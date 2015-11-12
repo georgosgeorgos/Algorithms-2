@@ -1,104 +1,24 @@
 //----------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Rotate 2D Image (N x N) 90 Degrees, T(n) = O(n^2), S(n) = O(n^2)
-2. Rotate 2D Image (N x N) 90 Degrees In Place, T(n) = O(n^2), S(n) = O(1)
-3. Traverse (NxN) array spirally, T(n) =  O(n^2), S(n) = O(1), (Bloomberg Interview) 
-4. Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0, T(n,m) = O(nm), S(n,m) = O(n + m)
+1. Rotate 2D Image (N x N) 90 Degrees In Place, T(n) = O(n^2), S(n) = O(1)
+2. Traverse (NxN) array spirally, T(n) =  O(n^2), S(n) = O(1), (Bloomberg Interview) 
+3. Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0, T(n,m) = O(nm), S(n,m) = O(n + m)
+//-------------------------------------------
+TODO:
+Find maximum sum rectangle 
+//-------------------------------------------
+// Notes
+vector< vector<int> > arr(N, vector<int> (M, 0)); // initialize arr[N][M] with all elements equal 0
 // */
 //----------------------------------------------------------------------------------------
-/*
-// 1 Rotate 2D Image (N x N) 90 Degrees
-// Rotate an image 90 degrees, allowed to create new array
-// TODO: REDO THIS!!!!! TOO MUCH MISTAKES AT FIRST
-// Time Complexity, T(n) = (n^2)
-// Space Complexity, S(n) = (n^2)
-
-#include <stdlib.h>
-#include <stdio.h>
-
-void rotate90(int** image, int row, int col);
-
-int main(void)
-{
-    //int image[3][3] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-    int** image = (int**) malloc(sizeof(int*) * 3);
-    int i = 0;
-    int j = 0;
-
-    for ( i =0; i < 3; i++)
-    {
-        image[i] = (int*) malloc(sizeof(int) * 3);
-    }
-
-    int count = 1;
-
-    for ( i =0; i < 3; i++)
-    {
-        for( j = 0; j < 3; j++)
-        {
-            image[i][j] = count;
-            count++;
-        }
-    }
-
-    for ( i = 0; i < 3; i++)
-    {
-        for(j = 0; j < 3; j++)
-        {
-            printf("%d ", image[i][j]);
-        }
-        printf("\n");
-    }
-
-    rotate90(image, 3, 3);
-    printf("after rotating\n");
-
-    for ( i = 0; i < 3; i++)
-    {
-        for(j = 0; j < 3; j++)
-        {
-            printf("%d ", image[i][j]);
-        }
-        printf("\n");
-    }
-    return 0;
-}
-
-void rotate90(int** image, int row, int col)
-{
-    int copyImage[row][col];
-    int i = 0;
-    int j = 0;
-    for (i = 0; i < row; i++)
-    {
-            for(j = 0; j< col; j++)
-            {
-                copyImage[col-j-1][i] = image[i][j];
-            }
-    }
-
-    for (i = 0; i < row; i++)
-    {
-            for(j = 0; j< col; j++)
-            {
-                image[i][j] = copyImage[i][j];
-            }
-    }
-    return;
-}
-
-// */
-
-//----------------------------------------------------------------------------------------
-/* //
-// 2 Rotate 2D Image (N x N) 90 Degrees In Place
+// 1 Rotate 2D Image (N x N) 90 Degrees In Place
 // Rotate an image 90 degrees in place. Can create constant memory but not an entire array
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(1)
 // TODO: Do this again, too many mistakes
-
+//-------------------------------------------
+/* //
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -186,11 +106,12 @@ void rotate90InPlace(int** image, int n)
 }
 // */
 //----------------------------------------------------------------------------------------
-/* //
-// 3 Traverse (NxN) array spirally
+// 2 Traverse (NxN) array spirally
 // Traverse array Spirally
 // Time Complexity O(n^2) , if array is size a[n][n]
 // Space Complexity O(1)
+//-------------------------------------------
+/* //
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -290,10 +211,11 @@ void traverseSpiralBottomLeft(int** a, int x1, int x2, int y1, int y2,void (*fun
 }
 // */
 //----------------------------------------------------------------------------------------
-/* //
-// 4 Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0
+// 3 Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0
 // Time Complexity, T(n,m) = O(nm)
 // Space Complexity, S(n,m) = O(n + m)
+//-------------------------------------------
+/* //
 #include <cstdlib> 
 #include <cstdio>
 #include <iostream> 
