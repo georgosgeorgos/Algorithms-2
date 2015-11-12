@@ -313,29 +313,32 @@ TEST!
 #include <iostream> 
 using namespace std; 
 
-int binarySearchGetPivot(vector<int>& nums, int begin, int end)
+int binarySearchGetPivot(vector<int>& nums)
 {
-    int mid = ((end + begin)/2); 
-    // Base cases
-    if((mid > begin && nums[mid] < nums[mid-1]) || (mid == begin && nums[mid] <= nums[end]))     
-        return mid; 
-    // General case 
-    if (nums[mid] > nums[end]) 
+    int begin = 0; int end = nums.size() - 1;
+    while(begin <= end)
     {
-        begin = mid + 1; 
-        return binarySearchGetPivot(nums, begin, end); 
+        int mid = ((end + begin)/2); 
+        // Base cases
+        if((mid > begin && nums[mid] < nums[mid-1]) || (mid == begin && nums[mid] <= nums[end]))     
+            return mid; 
+        // General case 
+        if (nums[mid] > nums[end]) 
+        {
+            begin = mid + 1; 
+        }
+        else
+        {
+            end = mid - 1; 
+        }	
     }
-    else
-    {
-        end = mid - 1; 
-        return binarySearchGetPivot(nums, begin, end); 
-    }	
+    return -1; 
 } 
 
 int getPivot(vector<int>& nums)
 {
     if( nums.size() == 0) return -1; 
-    int result = binarySearchGetPivot(nums, 0, nums.size()-1); 
+    int result = binarySearchGetPivot(nums); 
     return result; 
 }
 
@@ -376,7 +379,7 @@ int search(vector<int>& nums, int target)
 
 int main(void)
 {
-	vector<int> nums = {4,5,6,7,0,1,2}; // C++ 11 compiler required 
+	vector<int> nums = {4,5,6,7,0,1,2}; // C++11 compiler required 
 	int result = getPivot(nums); 
 	cout << result << endl; 
 	cout << nums[result] << endl; 
