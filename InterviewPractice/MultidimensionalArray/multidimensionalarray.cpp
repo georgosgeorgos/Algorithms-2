@@ -2,7 +2,7 @@
 /* //
 Table of Contents
 1. Rotate 2D Image (N x N) 90 Degrees In Place, T(n) = O(n^2), S(n) = O(1)
-2. Traverse (NxN) array spirally, T(n) =  O(n^2), S(n) = O(n), (Bloomberg Interview) 
+2. Traverse (NxM) array spirally, T(n,m) = O(nm), S(n,m) = O(nm), (Bloomberg Interview)
 3. Given a N x M matrix of integers, if an element is 0, its entire row and column are set to 0, T(n,m) = O(nm), S(n,m) = O(n + m)
 //-------------------------------------------
 TODO:
@@ -105,112 +105,123 @@ void rotate90InPlace(int** image, int n)
 }
 // */
 //----------------------------------------------------------------------------------------
-// 2 Traverse (NxN) array spirally
-// Traverse array Spirally
-// Time Complexity O(n^2) , if array is size a[n][n]
-// Space Complexity O(n)
+// 2 Traverse (NxM) array spirally
+// Time Complexity, T(n,m) = O(nm)
+// Space Complexity, S(n,m) = O(nm)
 //-------------------------------------------
 /*
-Recursive calls can take a maximum depth of O(n)
+Questions:
+    1. Is size of array always n^2? or O(nm)
+    2. int or doubles? 
+    3. Counter clockwise or clockwise? 
+FunctionPrototype:
+    void traverseSpiral(vector< vector<int> >& matrix);
+TestCases:
+    [[1,2],
+     [3,4]
+     ]
+     => 1,2,4,3? 
+Algorithm:   
+    Traverse top right to btm, then call recursively 
+    Recursive calls can take a maximum depth of O(nm)
 */
 //-------------------------------------------
 /* //
-#include <stdlib.h>
-#include <stdio.h>
+#include <vector>
 #include <iostream>
 using namespace std;
 
-void printValue(int a);
-void traverseSpiralTopRight(int** a, int x1, int x2, int y1, int y2,void (*funcPointer)(int));
-void traverseSpiralBottomLeft(int** a, int x1, int x2, int y1, int y2,void (*funcPointer)(int));
-int main(void)
+void printMatrix(vector< vector<int> >& matrix) 
 {
-    int** a;    
-    // Note: Can easily change value of N here due to great setup to see if it works for various values of N
-    int N = 5;
-    a = (int**) malloc(sizeof(int*) * N);
-    int i = 0;
-    for(i = 0; i < N; i++)
+    for(int i = 0; i < matrix.size(); i++)
     {
-        a[i] = (int *) malloc(sizeof(int) * N);
-    }
-    int count = 0;
-
-    int j = 0;
-    for(i = 0; i < N; i++)
-    {
-        for(j = 0; j < N; j++)
+        for(int j = 0; j < matrix[i].size(); j++)
         {
-            a[i][j] = count;
-            count++;
-        }
-    }
-    for(i = 0; i < N; i++)
-    {
-        for(j = 0; j < N; j++)
-        {
-            cout << a[i][j] <<" ";
+            cout << matrix[i][j] << " ";
         }
         cout << endl;
     }
+}
+
+void traverseSpiralRightDown(vector< vector<int> >& matrix, int y, int x, int depth);
+void traverseSpiralLeftUp(vector< vector<int> >& matrix, int y, int x, int depth)
+{
+    // base case: 
+    if(x < depth || y < (depth + 1)) return;
+    while(x >= depth)
+    {
+        cout << matrix[y][x] << " ";
+        x--;
+    }
+    x++; // increment as decremented from exiting while loop
+    y--; // skip current cell
+    while(y >= (depth + 1)) // need to add 1 here
+    {
+        cout << matrix[y][x] << " ";
+        y--; // Mistake: Decremented y before printing
+    }
+    y++; // increment as decremented from exiting while loop
+    x++; // skip current cell
+    return traverseSpiralRightDown(matrix, y, x, depth+1); // must increment depth here
+}
+
+void traverseSpiralRightDown(vector< vector<int> >& matrix, int y, int x, int depth)
+{
+    // base case: 
+    if(x >= matrix[0].size() - depth || y >= matrix.size() - depth) return;
+    while(x < matrix[0].size() - depth)
+    {
+        cout << matrix[y][x] << " ";
+        x++;
+    }
+    x--; // decrement as incremented from while loop
+    y++; // skip current cell
+    while(y < matrix.size() - depth)
+    {
+        cout << matrix[y][x] << " ";
+        y++; // Mistake: Incremented y before printing
+    }
+    y--; // decrement as incremented from whle loop
+    x--; // skip current cell
+    return traverseSpiralLeftUp(matrix, y, x, depth); // don't increment depth here
+}
+
+void traverseSpiral(vector< vector<int> >& matrix)
+{
+    if(matrix.size() <= 0 || matrix[0].size() <= 0) return;
+    traverseSpiralRightDown(matrix, 0, 0, 0);
     cout << endl;
-    void (*funcPointer)(int) = &printValue;
-    traverseSpiralTopRight(a,0, N-1, 0, N-1, funcPointer);
+}
+
+int main(void)
+{
+    int N = 3, M = 3;
+    vector< vector<int> > matrix (N, vector<int>(M,0));
+    int count = 0;
+    for(int i = 0; i < matrix.size(); i++)
+    {
+        for(int j = 0; j < matrix[i].size(); j++)
+        {
+            matrix[i][j] = count;
+            count++;
+        }
+    }
+    printMatrix(matrix);
+    traverseSpiral(matrix);
+    N = 2, M = 5;
+    vector< vector<int> > matrix2 (N, vector<int>(M,0));
+    count = 0;
+    for(int i = 0; i < matrix2.size(); i++)
+    {
+        for(int j = 0; j < matrix2[i].size(); j++)
+        {
+            matrix2[i][j] = count;
+            count++;
+        }
+    }
+    printMatrix(matrix2);
+    traverseSpiral(matrix2);
     return 0;
-}
-
-
-void printValue(int a)
-{
-    cout << a << " ";
-    return;
-}
-
-void traverseSpiralTopRight(int** a, int x1, int x2, int y1, int y2,void (*funcPointer)(int) )
-{
-    int i = 0;
-    int j = 0 ;
-    double temp;
-    for (i = x1; i <= x2; i++)
-    {
-        // Mistake, its [y][x] NOT [x][y]
-        temp = a[y1][i];
-        funcPointer(temp);
-    }
-    // Mistake: Start from y1+1, NOT y1
-    for(j = y1+1; j <= y2; j++)
-    {
-        temp = a[j][x2];
-        funcPointer(temp);
-    }
-    if (x2 - x1 > 0)
-    {
-        return traverseSpiralBottomLeft(a, x1, x2-1, y1+1, y2, funcPointer);
-    }
-    return;
-}
-
-void traverseSpiralBottomLeft(int** a, int x1, int x2, int y1, int y2,void (*funcPointer)(int))
-{
-    int i = 0;
-    int j = 0 ;
-    double temp;
-    for (i = x2; i >= x1; i--)
-    {
-        temp = a[y2][i];
-        funcPointer(temp);
-    }
-    // Mistake: Start from y2-1, NOT y2
-    for(j = y2-1; j >= y1; j--)
-    {
-        temp = a[j][x1];
-        funcPointer(temp);
-    }
-    if (x2 - x1 > 0)
-    {
-        return traverseSpiralTopRight(a, x1+1, x2, y1, y2-1, funcPointer);
-    }
-    return;
 }
 // */
 //----------------------------------------------------------------------------------------
