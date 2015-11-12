@@ -860,6 +860,36 @@ void countingSortForRadixSort(int* p, int n, int k, int d)
 // Time Complexity, T(n) = O(logn)
 // Space Complexity, S(n) = O(1)
 //---------------------------------------
+/*
+note: always change recursive binary search to while loop binary search
+Recursive pseudocode: 
+recursiveBinarySearch(arr, begin, end, target) // O(logN) space
+{
+    if(begin > end) return -1;
+    mid = (begin+end)/2;
+    if(arr[mid] == target) return mid; 
+    else if(arr[mid] < target) 
+        recursiveBinarySearch(arr, mid+1, end, target);
+    else
+        recursiveBinarySearch(arr, begin, mid-1, target);
+}
+binarySearch(arr, target) // O(1) space, although few extra lines for while loop
+{
+    int begin = 0; int end = arr.size() - 1; 
+    while(begin <= end)
+    {
+        mid = (begin+end)/2;
+        if(arr[mid] == target) return mid; 
+        else if(arr[mid] < target) 
+            begin = mid+1;
+        else
+            end = mid-1;
+    }
+    return -1;
+}
+// */
+//---------------------------------------
+//
 /* //
 template <class X>
 int binarySearch(X a[], X element, int n);
@@ -895,6 +925,7 @@ int binarySearch(X a[], X element, int n)
         return -1;
     }
 }
+
 // */
 //----------------------------------------------------------------------------------------------------
 // 9 Given a sorted array of integers, find range at which a target value exist. 
