@@ -1,10 +1,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-TODO: Some of the space complexities below is really O(lgn) instead of O(n) if recursive iteration, update them later
-1. Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
+1. Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(logn)
 2. Preorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
-3. Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
+3. Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(logn)
 4. Inorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 5. Levelorder traversal binary tree iteratively. T(n) = O(n), S(n) = O(n)
 6. ZigZag Traversal binary tree iteratively, T(n) = O(n), S(n) = O(n)
@@ -21,6 +20,7 @@ TODO: Some of the space complexities below is really O(lgn) instead of O(n) if r
 16. Serializing & De-Serializing a Binary Tree, T(n) = O(n), S(n) = O(n) 
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
+40. Get random node in Binary Tree
 25. Determine if 2 binary trees are equal
     Question: 
         1. Are 2 trees which have totally equal structure and data equal? Or only if both trees point to exact same tree in memory?  
@@ -119,8 +119,9 @@ Questions:
     // What happens if node being searched for doesn't exist? 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 1 Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
-// T(n) = O(n), S(n) = O(n)
+// 1 Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(logn)
+// Time Complexity, T(n) = O(n), 
+// Space Complexity, S(n) = O(logn) // assuming no need space for pushing back order of roots
 //---------------------------------
 /* 
 Questions: 
@@ -217,7 +218,7 @@ Test_cases:
 	=> [1, 2,3 ]
 
 Algorithm: 9
-Recursively print myself, then print left, then print right. 
+print myself, then print left, then print right. 
       2. Iteratively Print 
 push myself into stack 
 	while stack not empty 
@@ -281,8 +282,9 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 3 Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(n)
-// Time Complexity, T(n) = O(n), S(n) = O(n)
+// 3 Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(logn)
+// Time Complexity, T(n) = O(n),
+// Space Complexity, S(n) = O(logn) // assuming no space needed to store final output
 //---------------------------------
 /*
 Iterative! 
