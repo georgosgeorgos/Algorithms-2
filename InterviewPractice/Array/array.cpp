@@ -505,7 +505,6 @@ int maxProductSubArray(vector<int> arr)
     int maxProduct = INT_MIN;
     int maxCurr = 1; // initialize to 1
     int minCurr = 1; // initialize to 1
-    int curr = arr[0]; // 
     for(int i = 0; i < n; i++)
     {
         // Base case to reinitialize
@@ -514,20 +513,18 @@ int maxProductSubArray(vector<int> arr)
             if(maxProduct < arr[i]) maxProduct = arr[i]; // to handle case where 0 is the maximum you can get
             maxCurr = 1; 
             minCurr = 1;
-            curr = arr[i];
         }
         else
         {
             // Calculate all possible 3 choices
-            curr = arr[i]; 
-            int a = curr*maxCurr;  
-            int b = curr*minCurr; 
+            int a = arr[i]*maxCurr;  
+            int b = arr[i]*minCurr; 
             // Get the max of all 3 elements
             maxCurr = max(a,b); 
-            maxCurr = max(maxCurr, curr);
+            maxCurr = max(maxCurr, arr[i]);
             // Get the min of all 3 elements
             minCurr = min(a,b); 
-            minCurr = min(minCurr, curr);
+            minCurr = min(minCurr, arr[i]);
             if (maxProduct < maxCurr) maxProduct = maxCurr; 
         }
     }
