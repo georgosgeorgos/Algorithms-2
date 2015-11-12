@@ -214,38 +214,28 @@ int gcd(int n, int k)
     int temp = k; 
     while (n != k)
     {
-        temp = k; 
         n -= k;
-        k = n; 
-        n = temp;
+        temp = k; k = n; n = temp; // swap
     }
     return n;
-
 }
 
 void rotateCounterClockwise(vector<int>& arr, int k)
 {
-    bool negative = false;
-    if (k < 0) negative = true;
     int n = arr.size();
-    if (n <= 1) return;
+    if (k == 0 || n <= 1) return; // Mistake: Forgot to check for n <= 1
     int divisor = abs(k)/n;
-    if (negative) k += (divisor * n) + n; // add n more to make it rotate right instead of left
-    else  k %= n; 
-    int d = gcd(n, k);
-    for(int i = 0; i < d; i++)
+    k = k < 0 ? k += (divisor+1) * n : k %= n ; // Mistake: Forgot to %= n for positive k
+    int numIter = gcd(n, k);
+    for(int i = 0; i < numIter; i++)
     {
-        int prevVal = arr[i]; 
-        int currIndex = i ; 
-        currIndex = (currIndex + k)%n ; 
-        while (currIndex != i) // while not equal to starting point for this iteration
+        int prevVal = arr[i];
+        for(int j = 1; j <= n/numIter; j++)
         {
-            int temp = arr[currIndex]; // needed for swap
-            arr[currIndex] = prevVal;
-            prevVal = temp; 
-            currIndex = (currIndex + k)%n ; 
+            int temp = arr[(i + k*j) % n];
+            arr[(i + k*j) % n] = prevVal;
+            prevVal = temp;
         }
-        arr[currIndex] = prevVal;
     }
     return; 
 }
@@ -256,13 +246,21 @@ int main(void)
     for(int i = 0; i < arr.size(); i++) arr[i] = i+1; 
     vector<int> arr2 (6, 0); // n2 = 6
     for(int i = 0; i < arr2.size(); i++) arr2[i] = i+1; 
+    vector<int> arr3 (5, 0); // n2 = 6
+    for(int i = 0; i < arr3.size(); i++) arr3[i] = i+1; 
+    vector<int> arr4 (5, 0); // n2 = 6
+    for(int i = 0; i < arr4.size(); i++) arr4[i] = i+1; 
     rotateCounterClockwise(arr,6); // k1 = 6
     rotateCounterClockwise(arr2,10); // k2 = 10
-    // After rotating n1 = 10 by k1 = 6
-    for(int i = 0; i < arr.size(); i++) cout << arr[i] << " ";
+    rotateCounterClockwise(arr3,-2); // k3 = -2
+    rotateCounterClockwise(arr4,0); // k4 = 0
+    for(int i = 0; i < arr.size(); i++) cout << arr[i] << " "; // After rotating n1 = 10 by k1 = 6
     cout << endl;
-    // after rotating n2 = 6 by k2 = 10
-    for(int i = 0; i < arr2.size(); i++) cout << arr2[i] << " ";
+    for(int i = 0; i < arr2.size(); i++) cout << arr2[i] << " "; // after rotating n2 = 6 by k2 = 10
+    cout << endl;
+    for(int i = 0; i < arr3.size(); i++) cout << arr3[i] << " "; // after rotating n3 = 5 by k3 = -2
+    cout << endl;
+    for(int i = 0; i < arr4.size(); i++) cout << arr4[i] << " "; // after rotating n4 = 5 by k4 = 0
     cout << endl;
     return 0;
 }
