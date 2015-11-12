@@ -869,9 +869,9 @@ recursiveBinarySearch(arr, begin, end, target) // O(logN) space
     mid = (begin+end)/2;
     if(arr[mid] == target) return mid; 
     else if(arr[mid] < target) 
-        recursiveBinarySearch(arr, mid+1, end, target);
+        return recursiveBinarySearch(arr, mid+1, end, target);
     else
-        recursiveBinarySearch(arr, begin, mid-1, target);
+        return recursiveBinarySearch(arr, begin, mid-1, target);
 }
 binarySearch(arr, target) // O(1) space, although few extra lines for while loop
 {
@@ -889,11 +889,9 @@ binarySearch(arr, target) // O(1) space, although few extra lines for while loop
 }
 // */
 //---------------------------------------
-//
 /* //
 template <class X>
 int binarySearch(X a[], X element, int n);
-
 
 // returns index of found element or -1 if not found
 // a[] contains sorted array to be search
