@@ -18,9 +18,9 @@ Table of Contents
 14. Lowest Common Ancestor of Binary Tree, T(n) = O(n), S(n) = O(n)
 15. Invert a binary tree side ways, T(n) = O(n), S(n) = O(n)
 16. Serializing & De-Serializing a Binary Tree, T(n) = O(n), S(n) = O(n) 
+17. Return random node in binary tree (Microsoft: girl, on-site Round 2b), T(n) = O(n), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
-40. Get random node in Binary Tree
 25. Determine if 2 binary trees are equal
     Question: 
         1. Are 2 trees which have totally equal structure and data equal? Or only if both trees point to exact same tree in memory?  
@@ -1266,6 +1266,96 @@ int main(void)
         outputSerialForm.append(" ");
     }
     cout << outputSerialForm << endl; // ["1","2","#","3","#", "#", "4", "25", "#","#", "#"]
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 17 Return random node in binary tree (Microsoft: girl, on-site Round 2b)
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n) // recursion
+//---------------------------------
+/*
+Question
+Function Prototype
+    struct node * randomNode(struct node * root);
+TestCases
+    1
+   2 3 
+Algorithm
+    i) original problem
+    T(n) = O(n), S(n) = O(n) , takes O(n) space due to recursion 
+        Calculate number of nodes in tree with in-order traversal
+        calculate probability first out of all number of nodes in equal probability 
+        do a in-order traversal and output that number. 
+    ii) If each node has number of nodes on left and right, 
+        Then, can know number of nodes in tree from root node and skip and traverse right and will be faster, 
+        but worst case is still O(n) time if you have a linked list configuration of binary tre
+Implement
+Test
+*/
+//---------------------------------
+/* //
+#include <ctime> // for time()
+#include <cstdlib> // for rand()
+#include <iostream> 
+using namespace std; 
+
+struct node
+{
+    int value;
+    struct node * left;
+    struct node * right;
+    node(int _val, struct node * _left, struct node * _right) : value(_val), left(_left), right(_right) {}
+};
+
+int getSize(struct node* root)
+{
+    if(!root)
+        return 0;
+    int size = 1;
+    size += getSize(root->left);
+    size += getSize(root->right);
+    return size;
+}
+
+struct node * getNode(struct node* root, int number, int& depth)
+{
+    if (depth == number)
+        return root;
+    struct node * curr; 
+    if(root->left)
+    {
+        depth += 1;
+        curr = getNode(root->left, number, depth);
+        if(curr) return curr; // if found it, return the node
+    }
+    // here, means node is not yet found
+    if(root->right) 
+    {
+        depth += 1;
+        curr = getNode(root->right, number, depth);
+        if(curr) return curr; // if found it, return the node
+    }
+    return NULL; // not found since number is more than size of root
+}
+
+struct node * randomNode(struct node * root)
+{
+    int size = getSize(root); // get size of tree
+    srand(time(NULL));
+    int number = rand() % size; // get probability of one of the nodes
+    // Iterate and return that node
+    int depth = 0;
+    struct node * randNode = getNode(root, number, depth);
+    return randNode;
+}
+int main(void)
+{
+    struct node node3(3, NULL, NULL);
+    struct node node2(2, NULL, NULL);
+    struct node root(1, &node2, &node3);
+    struct node * randNode = randomNode(&root);
+    cout << randNode->value << endl;
     return 0;
 }
 // */
