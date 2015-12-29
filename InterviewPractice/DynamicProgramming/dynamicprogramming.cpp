@@ -13,12 +13,20 @@ Table of Contents
 10. Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
 11. Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break, T(n,k) = O(n(k^2)), S(n,k) = O(nk)
 12. Longest Palindrome Subsequence, T(n) = O(n^2), S(n) = O(n^2) 
-13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right)at any time, T(n,m) = O(n), S(n,m) = O(min(n,m)) 
+13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right) at any time, T(n,m) = O(nm), S(n,m) = O(min(n,m)) 
 14. Minimum Number Coin Change: Find min. number of coins from a set of coin values to get a particular value, T(V,n) = O(Vn), S(V,n) = O(V)
 //----------------------------------------------------------------------------------------------------
-15.Longest Common Substring Between Two Strings (Bottom Up)
+TODO:
+15. Palindrome Partitioning (Solved on paper, not implemented yet)
+16. SubsetSum Problem: Given an array and a sum, figure out if a subset of the array has value equal to that sum. 
+17. Partitioning Problem
+    Hint: Subset Sum Problem
+
+
+
+25.Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
-16. Longest Palindromic Substring 
+26. Longest Palindromic Substring 
     Note: Optimal solution is not dynamic programming but try dynamic programming for learning, similar to maxContiguousSumSubArray
     Note: Must pass this case: str = abacdfgdcaba
     There are 4 solutions:  (refer to LeetCode textbook)
@@ -27,7 +35,6 @@ Table of Contents
     3. Array  O(n^2) & O(1) (hint: There are only (2n-1) centers and expanding takes O(n)
     4. Manacher Algorithm O(n) & O(n)
 TODO MUST DO: Unbounded Knapsack (Easy, just your solution for 0-1 knapsack but with O(n) space cause can add itself many times) 
-25.Maximum Contiguous Sum Subarray() (using dynamic instead of kadane's algorithm) (noting that dynamic isn't the optimal solution)
 23. Unique Paths with Obstacles given 
 27.Josephus Problem
 28. Triangle Problem
@@ -42,11 +49,14 @@ TODO MUST DO: Unbounded Knapsack (Easy, just your solution for 0-1 knapsack but 
       [4,1,8,3]
     ]
     Question: 1. what does adjacent mean? It means if you look at the triangle in a diagonal way, it can either go left or right, (NOT array way where its left, right, or middle)
+40.Maximum Contiguous Sum Subarray() (using dynamic instead of kadane's algorithm) (noting that dynamic isn't the optimal solution)
 //-------------------
 notes: 
 //-------------------
 0. To know when dynamic programming should be tried: 
+    - Repeated computation
     - At each level, you can either move to left or right
+    - Can solve sub-problems optimally
 1. Remove useless arguments from function, the different combinations of arguments are the states of the function. Repeat Step 1
 2. Find out equation and create recursive function.  (Really, what you are doing is trial and error until you find a solution that works from these approaches)
     - Start by figuring out the base cases
@@ -76,7 +86,7 @@ notes:
      Change the order of computation that covers what you depend on with as little space as possible as well as correct computation.
        - Swap the 2 inner and outer for loops and see if that works.  (e.g. Coin Change from S(n,m) = O(nm) to O(n)
        - Make the for loop go from 1->N elements or from N->1 elements
-       - there are prolly 2 different iterations dpeending on what current element depends on in matrix
+       - there are prolly 2 different iterations depending on what current element depends on in matrix
             - Depends on (top and left) of matrix 
                 - Loop from (left to right and diagonaltopLeft) downwards
                 - Loop from (up to down) rightwards
@@ -100,6 +110,10 @@ notes:
     what is the worst case for picking it? thats the worst case. 
     Thus, you pick the best cases among all the worst cases. 
     e.g. Egg Dropping Problem
+
+
+Number of subsets from n elements is (2^n), since you can think of it as 1=> in subset, and 0 => Not in subset and so if you have n elements, 
+you can binary count from 00000 to 11111 and there's 2^n total number of them
 //-------------------
 e.g. Pasted from comments at: https://www.quora.com/Are-there-any-good-resources-or-tutorials-for-dynamic-programming-besides-the-TopCoder-tutorial
     Imagine you have a collection of N wines placed next to each other on a shelf. For simplicity, let's number the wines from left to right as they are standing 
@@ -285,6 +299,7 @@ int MaxSumIncreaseSubsequence(vector<int>& arr)
             }
         }
     }
+    // TODO: Use single pass by putting the logic below into the logic above instead of 2 passes. 
     // Now get the maximum sum
     int maxSum = L[0];
     for(int i = 0; i < n; i++)
@@ -367,7 +382,7 @@ int LCS(const char* s1, const char* s2)
     {
         for(int j = 0; j < m; j++)
         {
-            if (s1[i] == s2[j])
+            if (s1[i] == s2[j]) // matches
             {
                 dir[i][j] = 2; 
                 arr[i][j] = 1; 
@@ -376,8 +391,10 @@ int LCS(const char* s1, const char* s2)
                     arr[i][j] += arr[i-1][j-1]; 
                 }
             }
-            else 
+            else // not match
             {
+                // FIXME: Need to take max of arr[i-1][j] or arr[i][j-1] if both i or j != 0 !!!
+                //          CURRENT IMPLEMENTATION IS WRONG!
                 if (i!=0)
                 {
                     dir[i][j] = 1; 
@@ -397,7 +414,7 @@ int LCS(const char* s1, const char* s2)
     }
     printLCS( dir, s1, n-1, m-1);
     cout << endl;
-    return maxSoFar; 
+    return maxSoFar; // FIXME: Just need to return arr[n-1][m-1] if done correctly without keeping track of maxSoFar.  
 }
 
 int main(void)
@@ -405,6 +422,7 @@ int main(void)
     string a1 = "aghbklc";
     string b1 = "hgalbckzzyw";
     const char* s1 = a1.c_str();
+
     const char* s2 = b1.c_str();
     int maxLCS = LCS(s1, s2); // 3 => "abc"
     cout << maxLCS << endl;
@@ -1027,8 +1045,8 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-// 13 Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right)at any time
-// Time Complexity, T(n,m) = O(n) 
+// 13 Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right) at any time
+// Time Complexity, T(n,m) = O(nm) 
 // Space Complexity, S(n,m) = O(min(n,m)) 
 //-------------------------------------
 /* 
