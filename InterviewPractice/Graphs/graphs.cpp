@@ -1,3 +1,56 @@
+//-----------------------------------------------------------------------------------------------
+// TODO: 6. Return nodes for cycles on unweighted directed graph (Microsoft: on-site Round 3 scary guy)
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n)
+//---------------------------------
+/*
+Question
+Function Prototype
+TestCases
+Algorithm
+    T(n) = O(n), S(n) = O(n)
+    Do a DFS 
+    Mark each node as visited, 
+    if ever reach end with no adjacent nodes, you can make as 'definitely not in cycle'
+    no adjacent nodes => no actual adjacent nodes including adjacent nodes that were already marked 'definitely not in cycle'
+    If ever visit a node that was visited already and not marked definitely not in cycle, then you know you already detected a cycle. 
+    Then, just keep outputting current node backwards until reach the same node again. 
+Implement
+Test
+// */
+//---------------------------------
+//
+#include <iostream> 
+using namespace std; 
+int main(void)
+{
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 7 Johnson's Algorithm: All Pairs shortest path for Directed, Weighted Graphs
+// Time Complexity, T(V,E) = O()
+// Space Complexity, S(V,E) = O()
+// TODO: 2 hour coding, lots of work
+//-------------------------
+/*
+Algorithm:
+    Use an algorithm similar to Bellman-Ford to convert negative weights to positive
+    Make a new node and point an edge of weight 0 to all other nodes 
+    Calculate shortest path from that new node to all other nodes using BellmanFord
+    If (-) cycle, return immediately
+    Then, apply Djikstra's algorithm to each node since graph is no longer negative
+    Use Adjacency List representation
+*/
+//-------------------------
+#include <iostream> 
+using namespace std;
+
+int main(void)
+{
+    return 0;
+}
+// */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 /* // 
 Table of Contents
@@ -11,15 +64,30 @@ Graph Algorithms in other folders:
     - Kruskal (Disjoint Set)
 //-------------------------
 TODO:
+TODO: REFER TO 
+    http://stanford.edu/~liszt90/acm/notebook.html 
+    FOR THE SHORTEST WAY TO IMPLEMENT EVERYTHING. YOU DON'T EVEN NEED TO MAKE YOUR OWN HEAP AS YOU CAN USE STL'S PRIORITY_QUEUE ==" 
+    http://www.cplusplus.com/reference/queue/priority_queue/
 // Time Complexity, T(V,E) = O(V + ElogV), S(V,E) = O
-22. Check if graph is weakly connected component
-11. BFS
-12. DFS
-13. Topological Sort
-14. Given directed graph, find out if there exist a route between 2 nodes
-15. Djikstra using Fibonacci Heap
-16. Prim using Fibonacci Heap
-17. Knapsack Problem using Graph and Topological Sort
+21. Edmond Karp (Max Flow) , T(V,E) = O(V(E^2))
+22. Dinic Algorithm (Max Flow) T(V,E) = O((V^2)E)
+    http://stanford.edu/~liszt90/acm/notebook.html#file1
+23. Max-Bipartite Matching 
+    http://stanford.edu/~liszt90/acm/notebook.html#file5
+24. Push-Relabel algorithm
+    http://stanford.edu/~liszt90/acm/notebook.html#file3
+25. Relabel to front algorithm
+26. Min-Bipartite Matching 
+    http://stanford.edu/~liszt90/acm/notebook.html#file4
+31. BFS
+32. DFS
+33. Topological Sort
+34. Given directed graph, find out if there exist a route between 2 nodes
+35. Djikstra using Fibonacci Heap
+36. Prim using Fibonacci Heap
+37. Knapsack Problem using Graph and Topological Sort
+38. Johnson using Fibonacci Heap
+39. Check if graph is weakly connected component
 //-------------------------
 note: Complexity is measured in terms of |V| = number of nodes and |E| = number of edges!
 //-------------------------
@@ -40,10 +108,10 @@ note: Undirected is much easier than directed, since you don't need to store wei
     for:
     - space requirements (less space if no edge)
     - Traversing through the nodes connected to the current node  O(V) only in worst case where a node is connected to all other nodes
-
-note: If you find yourself ever adding INT_MAX (e.g. BellmanFord), make sure to account for integer overflow!
-
-Note: Both incidence Matrix and Incidence list are terrible and should never be used
+//-------------------------
+note: If you find yourself ever adding INT_MAX (e.g. BellmanFord, FloydWarshall), make sure to account for integer overflow!
+//-------------------------
+note: Both incidence Matrix and Incidence list are terrible and should never be used
     Incidence Matrix is basically Adjacency Matrix nodes at rows and edges at columns, 
     each column only has 2 1's connected by the vertices and everything else 0
     Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
@@ -53,7 +121,11 @@ Note: Both incidence Matrix and Incidence list are terrible and should never be 
                   whereas in stack, you may end up visiting the last node in each list of edges of a node first
             note: Recursion => Call stack 
                   Stack => User Stack 
+note: E <= V^2 => Complete Graph
+      E <= V => Sparse Graph
+//-------------------------
 
+//-------------------------
 note: Implementation for Djikstra Algorithm and Prim's Algorithm is very similar. The difference is that:
     - Djikstra Algorithm updates the minimum value to the shortest path from source to current node whereas
           if(curr.val + edge.weight < adj.val) adj.val = curr.val + edge.weight;
@@ -62,6 +134,30 @@ note: Implementation for Djikstra Algorithm and Prim's Algorithm is very similar
     - Prim's Algorithm updates the minimum value based on the edges connecting the vertex to a current vertex already included in the MST.
           if(edge.weight < adj.val) adj.val = edge.weight;
     - Must be undirected for greedy approach of picking vertex with current minimum surrounding edges to make sense
+//-------------------------
+
+//-------------------------
+note: Floyd Warshall vs Johnson's Algorithm
+    Case 1: Assuming fibonacci heap implementation of Johnson's Algorithm T(V,E) = O(2VE + (V^2)logV) = O(VE + (V^2)logV)
+    Floyd Warshall T(V,E) = O(V^3) 
+    If E <= V, then O(2V^2 + (V^2)logV) is faster than O(V^3), pick Johnson's , 2V^2 because first one is for Bellman Ford, 2nd one is for djikstra on each node
+    however, if E <= V^2 (complete graph)
+    then O(V^3 + V^2logV) is slower than O(V^3), pick Floyd Warshall 
+
+    Case 2: If use binary heap implementation of Johnson's Algorithm T(V,E) = O(VElogV)
+    If E <= V, then O((V^2)logV) is faster than O(V^3), pick Johnson's
+    however, if E <= V^2 (complete graph)
+    then O(V^3logV) is slower than O(V^3), pick Floyd Warshall 
+    
+    Case 3: If no negative weights and E <= V, can use Djikstra directly and do it for all nodes and not needed to use Johnson's Algorithm
+    T(V,E) = O(VE + (V^2)logV) = O(V^2 + (V^2)logV) = O((V^2)logV) which is faster than  T(V,E)=O(V^3) of Floyd Warshall
+//-------------------------
+//
+//-------------------------
+/*
+Note: Best implementation is using Fibonacci Heap which is
+T(V,E) = O(E + VlogV) as E >> V => O(E + VlogV) < O(ElogV)
+
 */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 // 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
