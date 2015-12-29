@@ -1,3 +1,4 @@
+//-----------------------------------------------------------------------------------------------
 // TODO: Code Threads in C++ Kali Linux or Java
 // Interview Practice
 // This file is like a rough paper
@@ -40,7 +41,7 @@ Check that:
 // iv) Search
 // v) Max? Min?
 //-----------------------------------------------------------------------------------------------
-//
+/* //
 template <class X>
 int binarySearch(X a[], X element, int n);
 
@@ -71,6 +72,7 @@ int binarySearch(X a[], X element, int n)
     }
     return -1;
 }
+// */
 
 // use bsearch () from C or lower_bound() from C++ 
 // use qsort() from C or sort() from C++ 
@@ -241,6 +243,12 @@ C) DO
 DESIGN PROCESS
 //----------------------------------------------------------------------
 QUESTIONS, FUNCTION PROTOTYPE, TEST_CASES, ALGORITHM, IMPLEMENT, TEST
+Listen to clues in question: 
+    e.g. Build a binary search tree from scratch, and later return a random node in tree in uniform distribution. (each node is 1/n chance)
+    clue1: Binary Search Tree
+    clue2: Building from scratch => you can store an index for each node and have internals to tree to optimize random access tree
+            - store number of nodes i nleft subtree and right subtree, then 1/(numLeft+numRight) to pick current, numLeft/numL+numR to go left and 
+                remaining chances to go right
 QUESTIONS
 - Clarify with example problem and the final solution
 - Clarify with function prototype, Clarify Return Value!! (IBM Round 1 compress string)
@@ -254,7 +262,9 @@ FUNCTION PROTOYTPE
 - Make sure have meaningful names 
 TEST_CASES
 - Come up with test cases, does it work for +, -, 0? (VERY IMPORTANT STEP), and their expected output
+- Come up with simple enough test case that covers the corner cases (simple enough -> Quick to test using head), 
 ALGORITHM 
+- When saying complexity, make sure to define variables, O(logn), where n = number of nodes in tree or O(n) where n = height of tree
 - Come up with a solution, test for complexity
 - Come up with a better solution, test for complexity and compare
 - Share both good and bad solution and why. 
@@ -271,6 +281,11 @@ IMPLEMENT
 - Implement solution
 - Write code in detail 
 - Write neatly & organize space 
+- Write excellent code! 
+    - Clean Code (variable name meanings)
+    - Google's coding style
+    - TODO: 
+    - FIXME: 
 TEST
 - Check solution again
 - Run example on code
@@ -444,6 +459,13 @@ Technical Skills Steps: (How to acquire the technical skills you need)
 	- User experience and user interface
 	- Code has to be designed such that it is (testable, maintainable, extensible) 
 	- Learn to package your code into an installer and executable. So non-programmers can just download it, install it, and run the .exe file! 
+
+//----------------------------------------------------------------------
+// Track Your Progress
+//----------------------------------------------------------------------
+- Able to know if your current approaches are working and change if it doesn't
+- TODO:  More on this later
+
 // */
 //----------------------------------------------------------------------
 //
