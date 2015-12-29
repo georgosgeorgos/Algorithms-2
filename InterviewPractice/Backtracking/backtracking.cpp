@@ -6,6 +6,7 @@ Table of Contents
 3. N-Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other, T(n) = O(n!), S(n) = O(n)
 4. Knight's Tour: N*M board, touch each cell exactly once, false if impossible, T(n,m) = O(8^(nm)), S(n,m) = O(nm)
 5. M-Coloring : Given an undirected graph, check if every node can be colored from M colors such that no 2 adjacent have same colors, T(V,E,M) = O(M^(V+E)), S(V,E,M) = O(V+E)
+6. Number Keypad Permutation: Find combinations of given set of digits, (Microsoft: Jason, on-site Round 1), T(n) = O(5^n), S(n) = O(5^n)
 //---------------------------------
 TODO: 
 15. Subset Sum 
@@ -445,6 +446,108 @@ int main(void)
         g->printColors();
     }
     else cout << M << " colors is NOT possible" << endl;
+    return 0;
+}
+// */
+//-----------------------------------------------------------------------------------------------
+// 6 Number Keypad Permutation: Find combinations of given set of digits, (Microsoft: Jason, on-site Round 1)
+// Time Complexity, T(n) = O(5^n), since maximum character is 5
+// Space Complexity, S(n) = O(5^n) (to store results)
+//---------------------------------
+/*
+Question:
+    1. Is there a difference between 'a' and 'A' ? No, assume only 'a' for now. 
+    2. What do I have to focus on ? Assume build for actual user at Microsoft. 
+    3. 
+Function Prototype: 
+    list<string> outputCombination(string input); 
+Test Cases: 
+   '23' = 'ad', 'ae', 'af', 'a3', 'bd', 'be', 'bf', 'b3', 'cd', 'ce', 'cf', 'c3', '2d', '2e', '2f', '23'  
+Algorithm:  
+   Each key on keypad has multiple letters ('1', 'a', 'b', 'c') for keypad's key '1' 
+   When user types keys on keypad, return all the list of possible words. 
+   How to store the multiple letters for each keypad's key?
+Implement
+Test!
+*/
+//---------------------------------
+/* // 
+#include <list> // to append the results
+#include <string> 
+#include <iostream> 
+using namespace std; 
+
+string getAvailableChar(char value)
+{
+    switch(value)
+    {
+        case '1':
+                return "1";
+        case '2':
+                return "abc2";
+        case '3':
+                return "def3";
+        case '4': 
+                return "ghi4";
+        case '5':
+                return "jkl5";
+        case '6':
+                return "mno6";
+        case '7': 
+                return "pqrs7"; 
+        case '8':
+                return "tuv8";
+        case '9':
+                return "wxyz9";
+        case '0':
+                return "0";
+        default:
+                string temp = "";
+                temp.push_back(value);
+                return temp;
+    }
+}
+
+void outputBacktrack(string input, string currResult, int depth, list<string>& result)
+{
+    // Step 1: Output if depth is same as digit size 
+    if(depth == input.length())
+    {
+        result.push_back(currResult);
+    }
+    // Step 2: Iterate through all possibilities
+    // Go through each character
+    for(int i = depth; i < input.length(); i++)
+    {
+        // Step 3: Every character is legal 
+        string currChar = getAvailableChar(input[i]);
+        for(int j = 0; j < currChar.length(); j++)
+        {
+            // Step 4: Add move
+            currResult[i] = currChar[j];
+            // Step 5: Backtrack
+            outputBacktrack(input, currResult, depth + 1, result); 
+            // Step 6: Will undo move automatically when overwrite
+        }
+    }
+    return;
+}
+
+list<string> outputCombination(string input)
+{
+    list<string> result;
+    outputBacktrack(input,input, 0, result);
+    return result;
+}
+
+int main(void)
+{
+    string input = "23"; 
+    list<string> result = outputCombination(input);
+    for(auto i = result.begin(); i != result.end(); i++)
+    {
+       cout << *i << endl; // note: Error occurs in compiler due to wrong i and j values that are iterated
+    }
     return 0;
 }
 // */
