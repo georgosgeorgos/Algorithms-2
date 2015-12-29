@@ -1,4 +1,22 @@
 //----------------------------------------------------------------------------------------
+// 13 Reverse Groups of linked list in given size
+// Time Complexity, T(n) = 
+// Space Complexity, S(n) = 
+//---------------------------------
+/*
+Questions:
+    1. 
+*/
+//---------------------------------
+#include <iostream> 
+using namespace std; 
+
+int main(void)
+{
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
 /* //
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
@@ -9,7 +27,7 @@ Table of Contents
 6. Detect if a Linked List is circular, T(n) = O(n), S(n) = O(1)
 7. Given Circular Linked List, return node at beginning of circular list, T(n) = O(n), S(n) = O(1) TODO: INT
 8. Detect if a Linked List is a palindrome T(n) = O(n) , S(n) = O(n)
-9. Given a linked list, swap every two adjacent nodes and return its head.
+9. Pairwise Swap: Swap every two adjacent nodes and return its head.
    If odd number of elements, ignore the last element. Time Complexity, T(n) = O(n), S(n) = O(1) 
 10. Given a linked list and a value x, partition it such that all nodes less than x come 
     before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
@@ -44,6 +62,16 @@ e.g.: int curr = listA.front();
     erase_after()
     resize()
     swap()
+//----------------------------------------------------------------------------------------
+Notes: 
+    If you ever need to re-point head to something else in list, (e.g. Sorting), you MUST work with double pointers
+    When you work with double pointers, make sure you keep track on where the current double pointer is pointing at 
+    as the pointing it is pointing at may be re-assigned from NULL to something else which may result in infinite loop
+
+    Or a better approach is to always return the pointer that the new head should point to as a return value. 
+    That way, you won't have weird problems
+
+//----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 Hints: 
 //----------------------------------------------------------------------------------------
@@ -269,6 +297,9 @@ Algoritm:
     Time Complexity, T(n) = O(n^2) 
     Space Complexity, S(n) = O(1) 
     note: Can reduce T(n) to O(1) by sacrificing space using hash table
+    Method 3: Hashing
+    Time Complexity, T(n) = O(n)
+    Space Complexity, S(n) = O(n)
 */
 //---------------------------------
 /* //
@@ -793,7 +824,7 @@ bool isPalindrome(struct node * head)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 9 Given a linked list, swap every two adjacent nodes and return its head. If odd number of elements, ignore the last element.
+// 9 Pairwise Swap: Swap every two adjacent nodes and return its head. If odd number of elements, ignore the last element.
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1) 
 //---------------------------------
@@ -881,7 +912,7 @@ Given 1->4->3->2->5->2 and x = 3,
 return 1->2->2->4->3->5.
 */
 //---------------------------------
-/*
+/* //
 struct ListNode {
     int val;
     ListNode *next;
@@ -890,7 +921,6 @@ struct ListNode {
 ListNode* partition(ListNode* head, int x) 
 {
     if(!head) return head; 
-    
     ListNode* lastLess = NULL; 
     ListNode* lastMore = NULL; 
     ListNode* curr = NULL;
@@ -915,17 +945,17 @@ ListNode* partition(ListNode* head, int x)
                 if(!lastMore)
                 {
                     lastLess = curr; // MISTAKE: FORGOT TO REASSIGN LASTLESS HERE
-                    // haven't seen a more. started from less, no swaps needed. 
-                    curr = curr->next; 
-                    continue; 
+                    curr = curr->next; // haven't seen a more. started from less, no swaps needed. 
                 }
-                lastMore->next = curr->next; 
-                curr->next = lastLess->next; 
-                lastLess->next = curr; 
-                lastLess = curr; 
-                curr = lastMore->next; 
+                else
+                {
+                    lastMore->next = curr->next; 
+                    curr->next = lastLess->next; 
+                    lastLess->next = curr; 
+                    lastLess = curr; 
+                    curr = lastMore->next; 
+                }
             }
-            // reassign lastLess
         }
         else
         {
@@ -1117,7 +1147,7 @@ struct node {
     struct node* next; 
 };
 
-struct node * findIntersectionLinkedList(struct node * head1, struct node * head2)
+struct node * findIntersectionPointLinkedList(struct node * head1, struct node * head2)
 {
     if(!head1 || !head2) return NULL; // no intersection if any list is NULL
     int lengthOne = 0, lengthTwo = 0;
@@ -1189,7 +1219,7 @@ int main(void)
     }
     printLinkedList(head1);
     printLinkedList(head2);
-    struct node * newHead = findIntersectionLinkedList(head1, head2);
+    struct node * newHead = findIntersectionPointLinkedList(head1, head2);
     printLinkedList(newHead);
     return 0;
 }
