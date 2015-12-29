@@ -8,6 +8,7 @@ Table of Contents
 5. Maximum Contiguous Product Subarray, T(n) = O(n), S(n) = O(1)
 6. Buy and sell stocks as many times. Max profit?, T(n) = O(n), S(n) = O(1)
 7. Buy and sell stock one time. Max Profit? T(n) = O(n), S(n) = O(1)
+8. Merge Intersection 2 unsorted array with duplicates (Microsoft: girl, on-site Round 2a), T(n,m) = O(n + m), S(n,m) = O(min(n,m))
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -655,6 +656,86 @@ int main(void)
     int maxProfit = oneTransactionMaxProfit(a, 10); 
     cout << maxProfit << endl; 
     return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 8 Merge Intersection 2 unsorted array with duplicates (Microsoft: girl, on-site Round 2a)
+// Time Complexity, T(n,m) = O(n + m)
+// Space Complexity, S(n,m) = O(min(n,m))
+//---------------------------------
+/*
+Question: 
+    1. Does output need to be sorted? No
+    2. If 3 same elements, output 3 same alphabet or once only? 3 same elements
+    3. Optimize for time or space ? Optimize for time => Use Method 2
+Function Prototype
+    vector<int> mergeIntersection(vector<int> arrA, vector<int> arrB);
+Test Cases
+    [2,2,3,4,3,3,3,4,1] ^ [5,3,4,2,3,4,4,1, 6, 7] = [3, 4, 2, 3, 4, 1]
+Algorithm
+    Method 1:
+        T(n,m) = O(max(n,m)lg(min(n,m))), S(n,m) = O(1)
+        Sort both arrays first
+        T(max(n,m)logmin(n,m))
+        then iterate through each element in smaller array, 
+            find upper and lower bound for that element in that first array T(n) = O(n)
+            then find upper and lower bound for same element in second array  T(m) = O(logM) 
+            Output the intersection in sorted order
+            skip the first array until next element directly 
+    Method 2: 
+        T(n,m) = O(n + m), S(n,m) = O(min(n,m))
+        Hash all elements from smaller array into hash table with counts of each alphabet
+        then iterate through bigger array and for each alphabet that is more than 0, you add it to the intersection array.
+Implement
+Test
+*/
+//---------------------------------
+/* // 
+#include <unordered_map> // hash table
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+vector<int> mergeIntersection(vector<int> arrA, vector<int> arrB)
+{
+    vector<int> small = arrA.size() > arrB.size() ? arrB : arrA;
+    vector<int> big = arrA.size() > arrB.size() ? arrA : arrB;
+   
+    vector<int> intersection;
+    unordered_map<int,int> m; 
+    for(int i = 0; i < small.size(); i++)
+    {
+        if(m.count(small[i]))
+        {
+            m[small[i]]++;
+        }
+        else
+        {
+            m[small[i]] = 1;
+        }
+   } 
+   for(int i = 0; i < big.size(); i++)
+   {
+       if(m.count(big[i]) && (m[big[i]] > 0))
+       {
+           m[big[i]]--;
+           intersection.push_back(big[i]);
+       }
+   }
+    return intersection;
+}
+
+int main(void)
+{
+    vector<int> arrA = {2, 2, 3, 4, 3, 3, 4, 1};
+    vector<int> arrB = {5, 3, 4, 2, 3, 4, 4, 1, 6, 7};
+    vector<int> result = mergeIntersection(arrA, arrB);
+    for(int i = 0; i < result.size(); i++)
+    {
+        cout << result[i] << " "; 
+    }
+    cout << endl;
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
