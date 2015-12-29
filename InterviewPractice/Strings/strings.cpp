@@ -18,6 +18,9 @@ TODO:
     b) Dynamic Programming T(n) = O(n^2), S(n) = O(n^2)
     c) T(n) = O(n^2), S(n) = O(1) // least space, checking takes O(n), and (2n-1) centers
     d) Brute Force
+Find all permutations of strings s in string b. 
+    Easy: Just store all character of s in hashtable with count
+    go to b, and reduce from hash table until not exist, then re-do
 21. Longest Duplicated substring in a string.
 30. Split a string by delimiter in  C++ using <string> 
 31. Reading an input string of arbitrary size.
@@ -57,16 +60,20 @@ Hint: 2 pointers, 1 to point to replace, one to search for more
 //-------------------------
 To work between <cstring> and <string> 
 //-------------------------
-    string bigString = "aabccccaaa";
-    char* temp2; 
-    cin >> bigString; // if needed
-    const char* temp = bigString.c_str(); // must always be const char*
-    // Copy it into normal char*
-    strcpy(temp2, temp);
-    // Now can use temp2 as usual. 
+    To convert from string to char *
+        string bigString = "aabccccaaa";
+        char* temp2; 
+        cin >> bigString; // if needed
+        const char* temp = bigString.c_str(); // must always be const char*
+        // Copy it into normal char*
+        strcpy(temp2, temp);
+        // Now can use temp2 as usual. 
+    To convert from char * to string
+        char * haha = "abc";
+        string newhaha = haha; // this works!
     // Must always malloc if changing an old cString
-    char* compressed = (char *) malloc(strlen(inputStr));
-    // Must also always null terminate the string! 
+        char* compressed = (char *) malloc(strlen(inputStr));
+        // Must also always null terminate the string! 
 
 //-------------------------
 <string> 
@@ -81,7 +88,9 @@ strcmp(cStr,cStr2); == str.compare(str2);
 cStr[2] = 'k'; == str[2]  = 'k';
 
 str.erase(startIndex,amountToErase); 
+    // note: This inserts a string
 str.insert(startIndex, str2); // insert str2 from startIndex position in str, if want to append in front, do str.insert(0,str2)
+str.push_back(character1); // to insert 1 single character
 //-------------------------
 Common Hints
 //-------------------------
