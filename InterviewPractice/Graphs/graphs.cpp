@@ -1,32 +1,3 @@
-//-----------------------------------------------------------------------------------------------
-// TODO: 6. Return nodes for cycles on unweighted directed graph (Microsoft: on-site Round 3 scary guy)
-// Time Complexity, T(n) = O(n)
-// Space Complexity, S(n) = O(n)
-//---------------------------------
-/*
-Question
-Function Prototype
-TestCases
-Algorithm
-    T(n) = O(n), S(n) = O(n)
-    Do a DFS 
-    Mark each node as visited, 
-    if ever reach end with no adjacent nodes, you can make as 'definitely not in cycle'
-    no adjacent nodes => no actual adjacent nodes including adjacent nodes that were already marked 'definitely not in cycle'
-    If ever visit a node that was visited already and not marked definitely not in cycle, then you know you already detected a cycle. 
-    Then, just keep outputting current node backwards until reach the same node again. 
-Implement
-Test
-// */
-//---------------------------------
-//
-#include <iostream> 
-using namespace std; 
-int main(void)
-{
-    return 0;
-}
-// */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 // 7 Johnson's Algorithm: All Pairs shortest path for Directed, Weighted Graphs
 // Time Complexity, T(V,E) = O()
@@ -43,6 +14,7 @@ Algorithm:
     Use Adjacency List representation
 */
 //-------------------------
+/* //
 #include <iostream> 
 using namespace std;
 
@@ -59,6 +31,7 @@ Table of Contents
 3. Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph, T(V,E) = O(ElogV), S(V,E) = O(V + E)
 4. Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs, T(V,E) = O(VE), S(V,E) = O(V + E)
 5. Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles, T(V,E) = O(V^3), Space Complexity, T(V,E) = O(V^2)
+6. Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy), T(n) = O(n), S(n) = O(n)
 
 Graph Algorithms in other folders:
     - Kruskal (Disjoint Set)
@@ -894,6 +867,147 @@ int main(void)
         }
         cout << endl;
     }
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 6 Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy)
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n)
+//---------------------------------
+/*
+Question
+Function Prototype
+TestCases
+1. No cycle
+    0-1-2-3
+          |
+          4-5
+2. 2-3-4
+    0-1-2-3
+         \|
+          4-5
+3. 0-1-2 
+   0-1
+    \|
+     2
+Algorithm
+    T(n) = O(n), S(n) = O(n)
+    Do a DFS 
+    Mark each node as visited, 
+    if ever reach end with no adjacent nodes, you can make as 'definitely not in cycle'
+    no adjacent nodes => no actual adjacent nodes including adjacent nodes that were already marked 'definitely not in cycle'
+    If ever visit a node that was visited already and not marked definitely not in cycle, then you know you already detected a cycle. 
+    Then, just keep outputting current node backwards until reach the same node again. 
+Implement
+Test
+// */
+//---------------------------------
+/* //
+#include <vector> 
+#include <cstdlib> // for bool
+#include <list> 
+#include <iostream> 
+using namespace std; 
+
+class Graph
+{
+private:
+    list<int>* adj; 
+    int numVertices; 
+public: 
+    Graph(int numV)
+    {
+        this->numVertices = numV;
+        adj = new list<int> [numV]; 
+    }
+    
+    void addDirectedEdge(int v, int w)
+    {
+        adj[v].push_back(w); 
+    }
+
+    vector<int> outputCyclicNodesDFS(int numNode, vector<bool>& visited, vector<bool>& notInCycle)
+    {
+        vector<int> cyclicNodes; 
+        for(auto i = this->adj[numNode].begin(); i != this->adj[numNode].end(); i++)
+        {
+            if(!notInCycle[*i])
+            {
+                if(!visited[*i])
+                {
+                    visited[*i] = true; 
+                    cyclicNodes = this->outputCyclicNodesDFS(*i, visited, notInCycle);
+                    // If the cycle has begun, append if same not first as last
+                    if(!cyclicNodes.empty())
+                    {
+                        // If cycle has not been completely appended, append this current node
+                        if ((cyclicNodes.size() > 1) && (cyclicNodes[0] != cyclicNodes[cyclicNodes.size()-1])) // ERROR! Didn't handle case of first node added to cyclic nodes
+                        {
+                            cyclicNodes.push_back(numNode);
+                        }
+                        // return it regardless since either appended current node or cycle has been completed already 
+                        return cyclicNodes; 
+                    }
+                    // else, there is no cycle, just return
+                }
+                // Found a cycle
+                else
+                {
+                    cyclicNodes.push_back(*i); // append the initial node
+                    cyclicNodes.push_back(numNode); // append this node as it is part of cycle
+                    return cyclicNodes; 
+                }
+            }
+        }
+        // otherwise, marked this node as not being in cycle
+        notInCycle[numNode] = true;
+        return cyclicNodes;
+    }
+
+    void outputCyclicNodes()
+    {
+        vector<bool> visited(this->numVertices, false); // to mark nodes that are visited
+        vector<bool> notInCycle(this->numVertices, false); // to mark nodes that are definitely not in cycle
+        // Iterate through every possible starting point
+        for(int i = 0; i < this->numVertices; i++)
+        {
+            if(!visited[i] && !notInCycle[i])
+            {
+                visited[i] = true;
+                vector<int> cyclicNodes = this->outputCyclicNodesDFS(i, visited, notInCycle);
+                if(!cyclicNodes.empty())
+                {
+                    // Iterate from last node added to second node since first node is just a copy and need maintain direction of edges
+                    for(int i = cyclicNodes.size() - 1 ; i > 0; i--)
+                    {
+                        cout << cyclicNodes[i] << " ";
+                    }
+                    cout << endl;
+                    return; // return right away cause a cycle has been detected
+                }
+            }
+        }
+        cout << "No cycle exists!" << endl;
+    }
+};
+
+int main(void)
+{
+    Graph g(6); 
+    g.addDirectedEdge(0,1);
+    g.addDirectedEdge(1,2);
+    g.addDirectedEdge(2,3);
+    g.addDirectedEdge(3,4);
+    g.addDirectedEdge(4,5);
+    g.outputCyclicNodes(); // no cycle 
+    g.addDirectedEdge(4,2); // 2-3-4
+    g.outputCyclicNodes();
+    Graph g2(3);
+    g2.addDirectedEdge(0,1);
+    g2.addDirectedEdge(1,2);
+    g2.addDirectedEdge(2,0);
+    g2.outputCyclicNodes(); // 0-1-2
     return 0;
 }
 // */
