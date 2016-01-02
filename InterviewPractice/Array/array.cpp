@@ -9,6 +9,7 @@ Table of Contents
 6. Buy and sell stocks as many times. Max profit?, T(n) = O(n), S(n) = O(1)
 7. Buy and sell stock one time. Max Profit? T(n) = O(n), S(n) = O(1)
 8. Merge Intersection 2 unsorted array with duplicates (Microsoft: girl, on-site Round 2a), T(n,m) = O(n + m), S(n,m) = O(min(n,m))
+9. Given circular array with reference indexing, return if it is a complete circular array. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview) 
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -32,8 +33,6 @@ e.g. 10, 6, 4, 3, 12, 19, 18, 20, 17 has 3 local mins at : 3, 18, 17
      loop in certain cases. basically must always exclude the middle element that you checked itself
      so that don't end up checking it again in any way.
 // ADD Array questions implemented in RandomDecision folder for ECE345 assignments here, where you find intersection of 2 different arrays etc. 
-// Given circular array with reference indexing, return if it is a complete circular array.T(n) = O(n), S(n) = O(1) , (Google Practice Interview) note: Use a single pass only
-        // hint: Just check if nth element is the starting element. If it is not, then error, if you reach starting element before n, then error
 // TODO: 2. Merge two equally sized integer arrays, the first one   having the capacity to accommodate the result.
             Hint: Merge from end to first so won't overwrite non-merge values
 // TODO 3.   Implement a method for a Fibonacci sequence where instead of adding the last 2 elemenT's you add the last n elements. For n=3. 1 1 1 3 5 9...
@@ -735,6 +734,80 @@ int main(void)
         cout << result[i] << " "; 
     }
     cout << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 9 Given circular array with reference indexing, return if it is a complete circular array, (Google On-Site Practice Interview) 
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/*
+    Questions 
+        1. Circular Array ?
+            arr[n] == arr[0]
+        2. ReferenceIndexing? 
+            means instead of [0|1|2|3] 
+            it's [1|2|-2|-1] so like its [0|1|3|2] instead since referenced index
+        3. (-) indexing? 
+            Yes, (-) indexing is allowed. 
+        4. Complete Circular Array ?
+            the entire array must be part of the circular array and not a smaller circular array within a larger array 
+        5. Handle cases where index is larger than size of array? 
+            Yes
+    Function Prototype
+        bool completeCircularArray(vector<int>& refIndexArr);
+    Test Cases
+            [1|2|-2|-1]  => True
+            [5|2|-2|-5] => True
+            [1|2|-1|-1] => False
+            [1|-1|1|-1] => False     
+    Algorithm
+        note: Use a single pass only
+        hint: Just check if nth element is the starting element. If it is not, then error, if you reach starting element before n, then error
+    Implement!
+    Test!
+*/ 
+//-------------------------
+/* // 
+#include <cmath> // abs()
+#include <vector> 
+#include <iostream> 
+using namespace std; 
+
+bool completeCircularArray(vector<int>& refIndexArr)
+{
+    int currIndex = 0; // start from first element
+    for(int i = 0; i < refIndexArr.size(); i++)
+    {
+        currIndex += refIndexArr[currIndex]; // Move to appropriate index form current reference position
+        if(currIndex > refIndexArr.size())
+            currIndex = currIndex % refIndexArr.size(); // Handle wrap around case for too high (+)
+        else if (currIndex < 0) // Handle wrap around for too high (-)
+        { 
+            currIndex += refIndexArr.size()*(abs(currIndex)/refIndexArr.size()); // e.g. -6 += 4*(|-6|/4)
+        } 
+        // If end up to original earlier, means not complete circle, return false. 
+        if((currIndex == 0) && (i < (refIndexArr.size() - 1))) return false; // note: Make sure not checking for final iteration
+    }
+    if(currIndex == 0) return true; // If end up at beginning, means it is a complete circular array, return true
+    return false; // If did not end up at beginning, means it is not a complete circular array, return false
+}
+
+int main(void)
+{
+    vector<int> arrA = {1, 2, -2, -1}; // True
+    vector<int> arrB = {5, 2, -2, -5}; // True
+    vector<int> arrC = {1, 2, -1, -1}; // False
+    vector<int> arrD = {1, -1, 1, -1}; // False
+    if (completeCircularArray(arrA)) cout << "Circular" << endl;
+    else cout << "Not circular" << endl;
+    if (completeCircularArray(arrB)) cout << "Circular" << endl;
+    else cout << "Not circular" << endl;
+    if (completeCircularArray(arrC)) cout << "Circular" << endl;
+    else cout << "Not circular" << endl;
+    if (completeCircularArray(arrD)) cout << "Circular" << endl;
+    else cout << "Not circular" << endl;
     return 0;
 }
 // */
