@@ -9,7 +9,7 @@ Table of Contents
 6. Buy and sell stocks as many times. Max profit?, T(n) = O(n), S(n) = O(1)
 7. Buy and sell stock one time. Max Profit? T(n) = O(n), S(n) = O(1)
 8. Merge Intersection 2 unsorted array with duplicates (Microsoft: girl, on-site Round 2a), T(n,m) = O(n + m), S(n,m) = O(min(n,m))
-9. Given circular array with reference indexing, return if it is a complete circular array. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview) 
+9. Return if array is a complete circular array with reference indexing. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview) 
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -738,7 +738,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 9 Given circular array with reference indexing, return if it is a complete circular array, (Google On-Site Practice Interview) 
+// 9 Return if array is a complete circular array with reference indexing.(Google On-Site Practice Interview) 
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
 //-------------------------
