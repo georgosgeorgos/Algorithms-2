@@ -10,6 +10,7 @@ Table of Contents
 7. Buy and sell stock one time. Max Profit? T(n) = O(n), S(n) = O(1)
 8. Merge Intersection 2 unsorted array with duplicates (Microsoft: girl, on-site Round 2a), T(n,m) = O(n + m), S(n,m) = O(min(n,m))
 9. Return if array is a complete circular array with reference indexing. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview) 
+10. Return if a sorted array contains duplicates that is duplicated at least N/4 times, T(n) = O(lgN), S(n) = O(1) (Google Second Round Interview)
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -36,7 +37,6 @@ e.g. 10, 6, 4, 3, 12, 19, 18, 20, 17 has 3 local mins at : 3, 18, 17
 // TODO: 2. Merge two equally sized integer arrays, the first one   having the capacity to accommodate the result.
             Hint: Merge from end to first so won't overwrite non-merge values
 // TODO 3.   Implement a method for a Fibonacci sequence where instead of adding the last 2 elemenT's you add the last n elements. For n=3. 1 1 1 3 5 9...
-Determine if there is a number in a sorted array that may contain duplicates that is duplicated at least N/4 times. (G Interview) 
 //----------------------------------------------------------------------------------------------------------------------------------
 // Common Hints
 //-------------------------
@@ -809,6 +809,74 @@ int main(void)
     if (completeCircularArray(arrD)) cout << "Circular" << endl;
     else cout << "Not circular" << endl;
     return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 10 Return if a sorted array contains duplicates that is duplicated at least N/4 times (Google Second Round Interview)
+// Time Complexity, T(n) = O(lgN)
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/*
+Questions:
+    1. Any value integers? Yes
+    2.  == N/4 is considered true or false? True, assume numbers divisible by 4. 
+    3. If array size is < 4? Return false
+Function Prototype:
+    bool containN4Duplicates(vector<int>& sortedArr);
+Algorithm:
+    T(n) = O(8lgN)
+    Start from (N/4 -1) index array O(4)
+        check upper and lower bound.  O(2lgN)
+            If it is >= N/4, then return true
+            Otherwise, skip to next N/4 th integer. Check upper and lower bound. 
+TestCases: 
+   [0,1,2,3,4,5,7,7] = Yes => 7,7 
+   [0,1,2,3,4,5,6,7] = No
+   [0,0,2,3,4,5,6,7] = Yes => 0, 0
+   [0,1,2,3,3,5,6,7] = Yes => 3, 3
+Implement!
+Test!
+*/
+//-------------------------
+/* //
+#include <algorithm> // upper_bound()
+#include <vector>  // lower_bound()
+#include <iostream> 
+using namespace std;
+
+bool containN4Duplicates(vector<int>& sortedArr)
+{
+    if(sortedArr.size() < 4) return false;
+    int i = sortedArr.size()/4 - 1;
+    while(i < sortedArr.size())
+    {
+        int val = sortedArr[i];
+        int upper = upper_bound(sortedArr.begin(), sortedArr.end(), val) - sortedArr.begin() - 1; // need to - 1 to work properly for upper to be 0-index
+        int lower = lower_bound(sortedArr.begin(), sortedArr.end(), val) - sortedArr.begin();
+        if(((upper - lower) + 1) >= (sortedArr.size()/4)) return true; // add 1 cause 0 indexing
+        i += sortedArr.size()/4; 
+    }
+    return false; // Already checked entire array and is no longer the case
+}
+
+int main(void)
+{
+    vector<int> arrA = {0,1,2,3,4,5,7,7}; // True
+    vector<int> arrB = {0,1,2,3,4,5,6,7}; // False
+    vector<int> arrC = {0,0,2,3,4,5,6,7}; // True
+    vector<int> arrD = {0,1,2,3,3,5,6,7}; // True
+    if (containN4Duplicates(arrA))
+        cout << "Yes" << endl;
+    else cout << "No" << endl;
+    if (containN4Duplicates(arrB))
+        cout << "Yes" << endl;
+    else cout << "No" << endl;
+    if (containN4Duplicates(arrC))
+        cout << "Yes" << endl;
+    else cout << "No" << endl;
+    if (containN4Duplicates(arrD))
+        cout << "Yes" << endl;
+    else cout << "No" << endl;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
