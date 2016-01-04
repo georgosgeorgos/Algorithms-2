@@ -5,14 +5,92 @@
 //---------------------------------
 /*
 Questions:
-    1. 
+    1. What if size is more that the size of linked list? Reverse entire linked list
+    2. What if size of linked list is not exactly divisble by size? Then reverse the initial groups and reverse the final smaller size group by itself
+Function Prototype:
+    struct node * reverseLinkedListGroup(struct node * head, int size);
+TestCases: 
+    1 -> 2 -> 3 -> 4 -> 5, 2 => 2 -> 1 -> 4 -> 3 -> 5
+    1 -> 2 -> 3 -> 4 -> 5, 3 => 3 -> 2 -> 1 -> 5 -> 4
+Algorithm: 
+    Just iterate until reach size and reverse it in place
+Implement
+Test!
 */
 //---------------------------------
+//
 #include <iostream> 
 using namespace std; 
 
+struct node {
+    int val; 
+    struct node * next; 
+    node(int _val, struct node * _next) : val(_val), next(_next) {}
+};
+
+struct node * reverseLinkedListGroup(struct node * head, int size)
+{
+    if((size <= 1) || (!head) || (!head->next)) return head;  // Base case
+    struct node * prev, curr, next, ret;
+    prev = head; 
+    prev->next = NULL; // only the first node points to NULL
+    // First iteration
+    for(int i = 0; i < size; i++) // TODO: Account for size larger than initial and size smaller than initial
+    {
+        curr = prev->next;  
+        if(!curr || !curr->next)
+        {
+            // TODO Terminate early 
+        }
+        if(curr && curr->next)
+        {
+            next = curr->next;
+            prev->next = curr->next; 
+            curr->next = prev; 
+        }
+        else
+        {
+
+        }
+        prev = curr;
+        curr = 
+    }
+    while(curr)
+    {
+        for(int i = 0; i < size; i++)
+        {
+
+        }
+    }
+    if(!ret) // if have not assigned ret node
+    {
+    }
+
+    return ret;
+}
+
 int main(void)
 {
+    struct node a5(5, NULL);
+    struct node a4(4, &a5);
+    struct node a3(3, &a4);
+    struct node a2(2, &a3);
+    struct node a1(1, &a2);
+    struct node * a1a = reverseLinkedListGroup(&a1, 2);
+    while(curr)
+    {
+        cout << curr->val << " ";
+        curr = curr->next; 
+    }
+    cout << endl;
+    a1a = reverseLinkedListGroup(&a1a, 2); // fix original
+    a1a = reverseLinkedListGroup(&a1, 3);
+    while(curr)
+    {
+        cout << curr->val << " ";
+        curr = curr->next; 
+    }
+    cout << endl;
     return 0;
 }
 // */
