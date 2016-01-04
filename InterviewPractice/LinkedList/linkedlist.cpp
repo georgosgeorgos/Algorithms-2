@@ -1,100 +1,4 @@
 //----------------------------------------------------------------------------------------
-// 13 Reverse Groups of linked list in given size
-// Time Complexity, T(n) = 
-// Space Complexity, S(n) = 
-//---------------------------------
-/*
-Questions:
-    1. What if size is more that the size of linked list? Reverse entire linked list
-    2. What if size of linked list is not exactly divisble by size? Then reverse the initial groups and reverse the final smaller size group by itself
-Function Prototype:
-    struct node * reverseLinkedListGroup(struct node * head, int size);
-TestCases: 
-    1 -> 2 -> 3 -> 4 -> 5, 2 => 2 -> 1 -> 4 -> 3 -> 5
-    1 -> 2 -> 3 -> 4 -> 5, 3 => 3 -> 2 -> 1 -> 5 -> 4
-Algorithm: 
-    Just iterate until reach size and reverse it in place
-Implement
-Test!
-*/
-//---------------------------------
-//
-#include <iostream> 
-using namespace std; 
-
-struct node {
-    int val; 
-    struct node * next; 
-    node(int _val, struct node * _next) : val(_val), next(_next) {}
-};
-
-struct node * reverseLinkedListGroup(struct node * head, int size)
-{
-    if((size <= 1) || (!head) || (!head->next)) return head;  // Base case
-    struct node * prev, curr, next, ret;
-    prev = head; 
-    prev->next = NULL; // only the first node points to NULL
-    // First iteration
-    for(int i = 0; i < size; i++) // TODO: Account for size larger than initial and size smaller than initial
-    {
-        curr = prev->next;  
-        if(!curr || !curr->next)
-        {
-            // TODO Terminate early 
-        }
-        if(curr && curr->next)
-        {
-            next = curr->next;
-            prev->next = curr->next; 
-            curr->next = prev; 
-        }
-        else
-        {
-
-        }
-        prev = curr;
-        curr = 
-    }
-    while(curr)
-    {
-        for(int i = 0; i < size; i++)
-        {
-
-        }
-    }
-    if(!ret) // if have not assigned ret node
-    {
-    }
-
-    return ret;
-}
-
-int main(void)
-{
-    struct node a5(5, NULL);
-    struct node a4(4, &a5);
-    struct node a3(3, &a4);
-    struct node a2(2, &a3);
-    struct node a1(1, &a2);
-    struct node * a1a = reverseLinkedListGroup(&a1, 2);
-    while(curr)
-    {
-        cout << curr->val << " ";
-        curr = curr->next; 
-    }
-    cout << endl;
-    a1a = reverseLinkedListGroup(&a1a, 2); // fix original
-    a1a = reverseLinkedListGroup(&a1, 3);
-    while(curr)
-    {
-        cout << curr->val << " ";
-        curr = curr->next; 
-    }
-    cout << endl;
-    return 0;
-}
-// */
-//----------------------------------------------------------------------------------------
 /* //
 Table of Contents
 1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
@@ -111,6 +15,7 @@ Table of Contents
     before nodes greater than or equal to x, T(n) = O(n), S(n) = O(1)
 11. Insert an element into a sorted circular linked list (Microsoft Round 1), T(n) = O(n) (single pass), S(n) = O(1) TODO: INT
 12. Find intersection point of 2 singly linked list, T(n,m) = O(n + m + max(n,m)), S(n,m) = O(1)
+13. Reverse linked list in groups of given size, T(n) = O(n), S(n) = O(1)
 //----------------------------------------------------------------------------------------
 TODO: 
 21. Partition List: 
@@ -229,23 +134,19 @@ struct node* reverseLinkedList(struct node* head)
     struct node* curr;
     struct node* next;
     // if (!head)
-    if(head == NULL)
+    if(!head || !head->next)
         return head;
     prev = head;
     curr = head->next;
-    if(curr == NULL)
-        return head;
-
     // NOTE: MISTAKE HERE!! Forgot to point first element to NULL
     prev->next = NULL; // point first element to NULL
     //while(curr) // NOTE: MISTAKE HERE! DID while(!curr) instead of while(curr) 
-    while(curr!= NULL)
+    while(curr != NULL)
     {
         next= curr->next;
         curr->next = prev;
         prev = curr;
         curr = next;
-
     }
     head = prev; // set head to previous
     // Note: Mistake!! You can never return pointer by reference, return pointer using return value instead!!
@@ -1299,6 +1200,115 @@ int main(void)
     printLinkedList(head2);
     struct node * newHead = findIntersectionPointLinkedList(head1, head2);
     printLinkedList(newHead);
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 13 Reverse linked list in groups of given size
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//---------------------------------
+/*
+Questions:
+    1. What if size is more that the size of linked list? Reverse entire linked list
+    2. What if size of linked list is not exactly divisble by size? Then reverse the initial groups and reverse the final smaller size group by itself
+Function Prototype:
+    struct node * reverseLinkedListGroup(struct node * head, int size);
+TestCases: 
+    1 -> 2 -> 3 -> 4 -> 5, 2 => 2 -> 1 -> 4 -> 3 -> 5
+    1 -> 2 -> 3 -> 4 -> 5, 3 => 3 -> 2 -> 1 -> 5 -> 4
+    1 -> 2, 2 => 2 -> 1
+Algorithm: 
+    T(n) = O(n), S(n) = O(1)
+    Just iterate until reach size and reverse it in place
+    Base case: size == 1, or 1 node or no node, return head
+    While(!curr)
+        If size > linked list's current group
+            Then just reverse entire remaining linked list
+            Point last group's lastNode to latest first node. 
+        else
+            switch the entire current group first. 
+            Point last element of last group to current group new first element
+    Corner case: Assign ret node to the first group's first element and return that for function
+Implement
+Test!
+*/
+//---------------------------------
+/* //
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int val; 
+    struct node * next; 
+    node(int _val, struct node * _next) : val(_val), next(_next) {}
+};
+
+struct node * reverseLinkedListGroup(struct node * head, int size)
+{
+    if((size <= 1) || (!head) || (!head->next)) return head;  // Base case
+    struct node * prev, * curr, * next, * groupTail, * lastGroupTail, * ret; // Mistake: Did not include '*' before each other variable declaration
+    ret = NULL;
+    lastGroupTail = NULL;
+    groupTail = head;
+    prev = head; 
+    curr = prev->next;
+    while(curr)
+    {
+        for(int i = 1; i < size; i++) // TODO: Account for size larger than initial and size smaller than initial
+        {
+            if(!curr) break;
+            next = curr->next;
+            curr->next = prev; 
+            prev = curr; 
+            curr = next; 
+        }
+        if(curr)
+        {
+            // Here, means current group is done
+            if(!ret) ret = prev; // assign first node if not yet assigned
+            else lastGroupTail->next = prev; // Mistake: Did not handle lastGroupTail to point to current group's new head
+            prev = curr;
+            curr = curr->next; 
+            lastGroupTail = groupTail;
+            groupTail = prev; // point to new groupTail
+        }
+        // If already last group
+        if(!curr) // note: Needs to be if instead of else to handle conditions after the if(curr) above
+        {
+            groupTail->next = NULL;
+            if(lastGroupTail) lastGroupTail->next = prev;  // assign last group's tail to current group's head
+            if(ret) return ret; 
+            return prev; // If size is larger than entire linked list
+        }
+    }
+    // Will never be here
+}
+
+void printLinkedList(struct node * head)
+{
+    struct node * curr = head;
+    while(curr)
+    {
+        cout << curr->val << " ";
+        curr = curr->next; 
+    }
+    cout << endl;
+    return;
+}
+
+int main(void)
+{
+    struct node a5(5, NULL);
+    struct node a4(4, &a5);
+    struct node a3(3, &a4);
+    struct node a2(2, &a3);
+    struct node a1(1, &a2);
+    struct node * a1a = reverseLinkedListGroup(&a1, 2);
+    printLinkedList(a1a);
+    a1a = reverseLinkedListGroup(a1a, 2); // fix original
+    a1a = reverseLinkedListGroup(&a1, 3);
+    printLinkedList(a1a);
     return 0;
 }
 // */
