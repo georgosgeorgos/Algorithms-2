@@ -1,15 +1,17 @@
 //----------------------------------------------------------------------------------------
-// 4 Prim's Algorithm
-// TODO: THIS IS TOO MUCH IMPLEMENTATION, DON'T THINK CAN FIT IN 1 INTERVIEW SLOT, YES YOU CAN! JUST PRACTICE IMPLEMENTING 10 TIMES
-//       CAN IF YOU USE STL's PRIORITY_QUEUE 
-//----------------------------------------------------------------------------------------
 /* 
-1. BuildHeap, converts an unsorted array into a Binary Heap, T(n) = O(n), S() = O(1)
+1. BuildHeap, converts an unsorted array into a Binary Heap, T(n) = O(n), S(n) = O(1)
 2. HeapSort, T(n) = O(nlogn), S(n) = O(1)
+3. Kth largest elements from heap, T(n) = O(klogk), S(n) = O(k) 
+
+In other folders:
+    Prim's Algorithm using Binary Heap (Graphs)
 //-------------------------
 TODO:
-4. Prims Algorithm
-3. Find the kth largest elements from a heap, T(n) = O(klogk), S(n) = O(k) 
+3. Kth largest elements from heap, T(n) = O(klogk), S(n) = O(k) 
+4. Prim's Algorithm
+    TODO: THIS IS TOO MUCH IMPLEMENTATION, DON'T THINK CAN FIT IN 1 INTERVIEW SLOT, YES YOU CAN! JUST PRACTICE IMPLEMENTING 10 TIMES
+          CAN IF YOU USE STL's PRIORITY_QUEUE 
 Binary Heap
 Binomial Heap 
 B-Heap 
@@ -34,7 +36,7 @@ int main(void)
     maxHeap.push(40);
     while(!maxHeap.empty()) // outputs 40,20,10 since it's maxHeap
     {
-        cout << maxHeap.top() << endl;
+        cout << maxHeap.top() << endl; // note: For priority_queue, it is top(), for queue, it is front()
         maxHeap.pop();
     }
 
@@ -366,6 +368,138 @@ void swap(int* a, int* b)
     *a = *b;
     *b = temp;
     return;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 3 Kth largest elements from heap
+// Time Complexity, T(n) = O(klogk)
+// Space Complexity, S(n) = O(k)
+//-------------------------
+/*
+Questions:
+    1. What does the heap store? Integers >= 0
+    2. All k elements or only kth? kth
+    3. Contain duplicates? Yes
+    4. Minimum/Maximum heap? Maximum
+        note: If minimum heap, convert to maxHeap in O(n), then execute algorithm below.
+    5. Kth largest? The kth biggest element
+    6. What if k > size of heap? return -1
+Function Prototype: 
+    int kthLargest(vector<int>& maxHeap, int k); 
+TestCases:
+Algorithms:
+Implement!
+*/
+//-------------------------
+/* //
+#include <vector>
+#include <iostream> 
+using namespace std; 
+
+class maxHeap
+{
+private:
+    vector<int> mHeap; // maxHeap
+    vector<int> kHeap; // kHeap
+    // Accept nodes cause can swap either mHeap or kHeap
+    void swap(int posI, int posJ, vector<int>& nodes)
+    {
+        int temp = nodes[posI];
+        nodes[posI] = nodes[posJ];
+        nodes[posJ] = temp;
+        return;
+    }
+    void insertKHeap(int posAtMheap)
+    {
+        kHeap.push_back(posAtMheap);
+        int curr = this->kHeap.size() - 1; 
+        while(curr > 0)
+        {
+            int parent = (curr-1)/2;
+            if (this->mHeap[this->kHeap[curr]] > this->mHeap[this->kHeap[parent]])
+            {
+                this->swap(curr, parent, this->kHeap);
+                curr = parent;
+            }
+            else break;
+        }
+        return;
+
+    }
+    int extractMaxKHeap()
+    {
+        int max = this->mHeap[this->kHeap[0]];
+        this->swap(0, this->kHeap.size() - 1,this->kHeap);
+        this->kHeap.pop_back(); // reduce the size of variable length array 
+        int curr = 0;
+        while(curr < this->kHeap.size())
+        {
+            int childLeft = 2*curr + 1;
+            int childRight = 2*curr + 2;
+            int maxChild = childLeft;
+            if(childLeft >= this->kHeap.size()) break;
+            if((childRight < this->kHeap.size()) && (this->mHeap[this->kHeap[childRight]] > this->mHeap[this->kHeap[childLeft]]))
+                maxChild = childRight;
+            if (this->mHeap[this->kHeap[curr]] > this->mHeap[this->kHeap[maxChild]]) break;
+            this->swap(curr, maxChild, this->kHeap);
+            curr = maxChild;
+        }
+        return max;
+    }
+public:
+    void insert(int v)
+    {
+        this->mHeap.push_back(v);
+        int curr = this->mHeap.size() - 1; 
+        while(curr > 0)
+        {
+            int parent = (curr-1)/2;
+            if (this->mHeap[curr] > this->mHeap[parent])
+            {
+                this->swap(curr, parent, this->mHeap);
+                curr = parent;
+            }
+            else break;
+        }
+        return;
+    }
+    // Return -1 if k is larger than the size of the mHeap
+    int kthLargest(int k) // assumes k >= 1
+    {
+        this->kHeap.clear(); // initialize kHeap to be empty
+        this->insertKHeap(0); // insert first element always
+        int currAtMaxHeap = 0;
+        for(int i = 1; i < k; i++)
+        {
+            int childLeft = currAtMaxHeap*2 + 1;
+            int childRight = currAtMaxHeap*2 + 2;
+            if(this->kHeap.size() <= 0) return -1; // return -1 cause no more elements in kHeap which means k > mHeap.size()
+            this->extractMaxKHeap(); // remove the previous largest element
+            if(childLeft >= this->mHeap.size()) continue; // nothing to add
+            else this->insertKHeap(childLeft);
+            if(childRight >= this->mHeap.size()) continue; // can't add right child
+            else this->insertKHeap(childRight);
+            currAtMaxHeap = this->kHeap[0]; // get position of current maximum 
+        }
+        if(this->kHeap.size() <= 0) return -1; // Mistake: Forgot to account for cases where extractMaxHeap() above makes heap empty and then below 
+                                               //          line will extract again causing segmentation fault 
+        return this->extractMaxKHeap();  
+    }
+};
+
+int main(void)
+{
+    maxHeap heap; 
+    heap.insert(1);
+    heap.insert(3);
+    heap.insert(2);
+    heap.insert(5);
+    heap.insert(4);
+    cout << heap.kthLargest(1) << endl; // 5
+    cout << heap.kthLargest(6) << endl; // -1
+    cout << heap.kthLargest(5) << endl; // 1
+    cout << heap.kthLargest(4) << endl; // 2
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------
