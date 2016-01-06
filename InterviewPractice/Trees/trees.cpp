@@ -19,6 +19,7 @@ Table of Contents
 15. Invert a binary tree side ways, T(n) = O(n), S(n) = O(n)
 16. Serializing & De-Serializing a Binary Tree, T(n) = O(n), S(n) = O(n) 
 17. Return random node in binary tree (Microsoft: girl, on-site Round 2b), T(n) = O(n), S(n) = O(n)
+18. Sum level k nodes in binary tree (Bloomberg First Round), T(n) = O(n), S(n) = O(n)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO:
 25. Determine if 2 binary trees are equal
@@ -50,7 +51,6 @@ TODO:
 to that value. Note: It can be any path in the tree and does not have to start at root (refer to coding interview)
 38. Given the root of a binary tree and a node, return array of path from root to that node or NULL if that node is not in the tree
     Hint: Use stack, go down till find it, then push to stack once found and just keep pushing to stack if one of child found it
-21. Print all nodes in a binary tree at level k (Easy, just make sure height k, and then output, otherwise, dont output) (Bloomberg First Round)
 22. Serialize & De-Serialize a N-ary Tree
 //----------------------------------------------------------------------------------------------------------------------------------
 Notes:
@@ -108,7 +108,7 @@ Applications: For operating on disk = Each node is the size of a disk page
 //----------------------------------------------------------------------------------------------------------------------------------
 Questions:
 //----------------------------------------------------------------------------------------------------------------------------------
-    // Is binary tree balanced? O(logn) worst case
+    // Is binary tree balanced? O(logn) worst case for space
     // Is binary tree a BST? 
     // Is it a complete binary tree, all leaves are same level, and all leaves exist
     // Are there parent pointers? (Doubly linked or singly linked)
@@ -121,7 +121,7 @@ Questions:
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(logn)
 // Time Complexity, T(n) = O(n), 
-// Space Complexity, S(n) = O(logn) // assuming no need space for pushing back order of roots
+// Space Complexity, S(n) = O(logn) // assuming no need space for pushing back order of roots and tree is balanced
 //---------------------------------
 /* 
 Questions: 
@@ -284,7 +284,7 @@ int main(void)
 //----------------------------------------------------------------------------------------------------------------------------------
 // 3 Inorder traversal binary tree recursively. T(n) = O(n), S(n) = O(logn)
 // Time Complexity, T(n) = O(n),
-// Space Complexity, S(n) = O(logn) // assuming no space needed to store final output
+// Space Complexity, S(n) = O(logn) // assuming no space needed to store final output and tree is balanced
 //---------------------------------
 /*
 Iterative! 
@@ -1359,4 +1359,79 @@ int main(void)
     return 0;
 }
 // */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 18 Sum level k nodes in binary tree (Bloomberg First Round)
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n)
+//---------------------------------
+/*
+Question: 
+    1. What if N < 0 || N > maxHeight(tree) 
+        N < 0 => Return 0
+        N > maxHeight(tree) return 0  // assume no difference with actual 0 answer
+    2. Each tree has a value, integers? doubles? int, (-) , (0)
+    3. Is tree balanced? Not necessary => S(n) = O(n) != O(logn)
+Function Prototype: 
+    int sumNodeHeightK(struct node* root, int level);
+TestCase:
+    0 -       6
+    1 -     2    3
+    2 -  4    5    7 
+    Remember to check level = 0 case 
+    0 => 6
+    1 => 5
+    2 => 16
+Algorithm: 
+    recursive: preorder:
+    return sum of the recursive itself. 
+    base case: only return own value to sum if currheight is the right height; need helper function to pass in height 
+Implement
+Test!
+*/
+//---------------------------------
+/* //
+#include <iostream> 
+using namespace std; 
+
+struct node {
+    int val; 
+    struct node* left; 
+    struct node* right;
+    node(int _val, struct node* _left, struct node* _right) : val(_val), left(_left), right(_right) {}
+}; 
+
+int sumNodeHelper(struct node* root, int level, int currLevel)
+{
+    if(!root) return 0; // base case
+    // know this node exist 
+    if (currLevel == level) return root->val;  // 2 | 3
+    int LeftSum =  sumNodeHelper(root->left, level, currLevel+1); 
+    int RightSum =  sumNodeHelper(root->right, level, currLevel+1);  
+    return LeftSum + RightSum;  
+}
+
+int sumNodeHeightK(struct node* root, int level)
+{
+    if (level < 0 || !root) return 0; 
+    int currLevel = 0; 
+    return sumNodeHelper(root, level, currLevel); 
+}
+
+
+int main(void)
+{
+    node t7(7, NULL, NULL);
+    node t5(5, NULL, NULL);
+    node t4(4, NULL, NULL);
+    node t3(3, NULL, &t7);
+    node t2(2, &t4, &t5); 
+    node root(6, &t2, &t3);
+    cout << sumNodeHeightK(&root, 0) << endl; // 6
+    cout << sumNodeHeightK(&root, 1) << endl; // 5
+    cout << sumNodeHeightK(&root, 2) << endl; // 16
+    cout << sumNodeHeightK(&root, -1) << endl; // 0 
+    cout << sumNodeHeightK(&root, 3) << endl; // 0
+    return 0; 
+}
+// */ 
 //----------------------------------------------------------------------------------------------------------------------------------
