@@ -26,15 +26,16 @@ int main(void)
 //----------------------------------------------------------------------------------------------------------------------------------------------
 /* // 
 Table of Contents
-1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(n) = O(n), S(n) = O(1)
+1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(V,E) = O(V+E), S(V,E) = O(V)
 2. Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0, T(V,E) = O(ElogV), S(V,E) = O(V + E)
 3. Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph, T(V,E) = O(ElogV), S(V,E) = O(V + E)
 4. Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs, T(V,E) = O(VE), S(V,E) = O(V + E)
 5. Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles, T(V,E) = O(V^3), Space Complexity, T(V,E) = O(V^2)
-6. Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy), T(n) = O(n), S(n) = O(n)
+6. Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy), T(V,E) = O(V + E), S(V,E) = O(V)
 
 Graph Algorithms in other folders:
     - Kruskal (Disjoint Set)
+    - Topological Sort (Sorting)
 //-------------------------
 TODO:
 TODO: REFER TO 
@@ -52,9 +53,6 @@ TODO: REFER TO
 25. Relabel to front algorithm
 26. Min-Bipartite Matching 
     http://stanford.edu/~liszt90/acm/notebook.html#file4
-31. BFS
-32. DFS
-33. Topological Sort
 34. Given directed graph, find out if there exist a route between 2 nodes
 35. Djikstra using Fibonacci Heap
 36. Prim using Fibonacci Heap
@@ -872,8 +870,8 @@ int main(void)
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 // 6 Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy)
-// Time Complexity, T(n) = O(n)
-// Space Complexity, S(n) = O(n)
+// Time Complexity, T(V,E) = O(V + E)
+// Space Complexity, S(V,E) = O(V)
 //---------------------------------
 /*
 Question
@@ -892,7 +890,6 @@ TestCases
     \|
      2
 Algorithm
-    T(n) = O(n), S(n) = O(n)
     Do a DFS 
     Mark each node as visited, 
     if ever reach end with no adjacent nodes, you can make as 'definitely not in cycle'
@@ -942,7 +939,7 @@ public:
                     if(!cyclicNodes.empty())
                     {
                         // If cycle has not been completely appended, append this current node
-                        if ((cyclicNodes.size() > 1) && (cyclicNodes[0] != cyclicNodes[cyclicNodes.size()-1])) // ERROR! Didn't handle case of first node added to cyclic nodes
+                        if ((cyclicNodes.size() > 1) && (cyclicNodes[0] != cyclicNodes[cyclicNodes.size()-1])) // Mistake: Didn't handle case of first node added to cyclic nodes
                         {
                             cyclicNodes.push_back(numNode);
                         }
