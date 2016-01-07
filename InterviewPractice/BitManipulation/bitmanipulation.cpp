@@ -1,21 +1,14 @@
-//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 /*
 Table of Contents
-1. Given an array of integers, every element appears twice except for two. Output both elements . T(n) = O(n), S(n) = O(1)
-
-
-//----------------------------------------------------------------------------------------
+1. Given an array of integers, every element appears twice except for two. Output both elements. T(n) = O(n), S(n) = O(1)
+2. Check if a number is a power of 2, T(n) = O(1), S(n) = O(1)
+//----------------------------------------------------------------------------------------------------------------------------------
 TODO: 
 10. Count first occurence of leading 1 in a variable (Qualcomm interview) // (done in leetcode)
-
-2.Check if a number is a power of 2
-// Hint: ((n&1 == 0) only tells you it is even, use (n&(n-1))to find if it is power of 2 (done in leecode)
-
 3. Write function to determine number of bit swap required to convert integer A to integer B
-
 4. Write program to swap odd and even bits in an interger with the fewest instructions (O(1))
 // e.g. bit 0 and bit 1 swapped, bit 2 and bit 3 swapped
-
 HARD: 6. SingleNumberII: Given an array of 3n + 1 elements, where n of elements are repeated thrice each, and 1 element is different from the rest. Identify that one element.
 7. SingleNumberIII: Given an array of kn + 1 elements, where n of elements are repeated k times each, k > 1, and 1 element is different from the rest. Identify that one element.
     Create an array of 32/64 slots. 
@@ -32,6 +25,9 @@ For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
 10 - 2
     hint: Go forwards, then when end, append a 1, and go backwards, all the way, needs some form of recursion. 
     betterHint: BinaryToGrey => (num>>1 ^ num)
+
+10: Implement Swap() function on integers using just bit operators: 
+    Hint: XOR 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Given an array of integers, every element appears twice except for two. Output both elements . T(n) = O(n), S(n) = O(1)
@@ -104,6 +100,46 @@ int main(void)
     vec[1] = 4;
     outputBothUnique(vec);
     
+    return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 2 Check if a number is a power of 2
+// Time Complexity, T(n) = O(1)
+// Space Complexity, S(n) = O(1)
+//---------------------------------
+/*
+Question:
+    1. Is the number integer or float? integer, because power of 2 must be integer!
+Function Prototype:
+    bool powerOfTwo(int num);
+TestCases:
+    2,8 => True
+    7 => False
+
+
+Algorithm
+    ((n&1 == 0) only tells you it is even, use (n&(n-1))to find if it is power of 2 (done in leecode)
+*/
+//---------------------------------
+/* //
+#include <iostream> 
+using namespace std; 
+
+bool powerOfTwo(int num)
+{
+    if(num & (num-1))
+        return false;
+    return true;
+}
+int main(void)
+{
+    int a = 2; 
+    if (powerOfTwo(a)) cout << "True" << endl; else cout << "False" << endl;
+    a = 8; 
+    if (powerOfTwo(a)) cout << "True" << endl; else cout << "False" << endl;
+    a = 7;
+    if (powerOfTwo(a)) cout << "True" << endl; else cout << "False" << endl;
     return 0; 
 }
 // */
