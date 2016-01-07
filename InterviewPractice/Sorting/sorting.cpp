@@ -13,10 +13,11 @@ Table of Contents
 8. Binary Search, T(n) = O(logn), S(n) = O(1)
 9. Given a sorted array of integers, find range at which a target value exist. T(n) = O(nlgn), S(n) = O(1)
 10. MergeSort LinkedList, T(n) = O(nlogn), S(n) = O(logn)
+11. Topological Sort, T(V,E) = O(V+E), S(V,E) = O(V)
 //----------------------------------------------------------------------------------------
 // TODO 
 QuickSort LinkedList
-Insertion Sort
+Insertion Sort 
 Selection Sort
 TimSort (Make sure you include the bug fixes) 
 BucketSort (Improves 
@@ -1149,4 +1150,93 @@ int main(void)
     return 0;
 }
 // */
+//----------------------------------------------------------------------------------------
+// 11 Topological Sort
+// Time Complexity, T(V,E) = O(V+E)
+// Space Complexity, S(V,E) = O(V)
+//---------------------------------------
+/*
+Question: 
+    1. Can the graph be not directed acylic graph? No, assume it always is DAG. 
+Function Prototype: 
+    stack<int> topologicalSort(Graph g);
+TestCase: 
+    0->1->2
+     ->3->2
+     Output => [0,1,3,2] or [0,3,1,2]
+     
+Algorithm:
+    DFS, then push into stack from nodes with no outgoing edges
+    Finally, output from stack in order
+    Adjacency List representation => Quicker to check for adjacent nodes for DFS, slower to check if 2 nodes have edges in between
+*/
+//---------------------------------------
+/* //
+#include <vector>
+#include <list>
+#include <stack>
+#include <iostream> 
+using namespace std; 
+
+// Directed Acyclic Graph => There must be nodes with no incoming edges, and nodes with no outgoing edges
+class Graph {
+private:
+    list<int>* adj;
+    int numNodes; 
+    void DFS(int v, vector<bool>& visited, stack<int>& sortedOrder)
+    {
+        for(auto i = adj[v].begin(); i != adj[v].end(); i++)
+        {
+            if(!visited[*i])
+            {
+                visited[*i] = true;
+                this->DFS(*i, visited, sortedOrder);
+            }
+        }
+        // Only push to stack once all outgoing edges has been pushed
+        sortedOrder.push(v);
+        return;
+    }
+public:
+    Graph(int _numNodes) 
+    {
+        this->numNodes = _numNodes; 
+        adj = new list<int>[this->numNodes];
+    }
+    void insertDirectedEdge(int v, int w)
+    {
+        this->adj[v].push_back(w);
+    }
+    stack<int> topologicalSort(void)
+    {
+        stack<int> sortedOrder; 
+        vector<bool> visited(this->numNodes, false);
+        for(int i = 0; i < this->numNodes; i++)
+        {
+            if(!visited[i]) 
+            {
+                visited[i] = true;
+                this->DFS(i, visited, sortedOrder);
+            }
+        }
+        return sortedOrder;
+    }
+};
+
+int main(void)
+{
+    Graph g(4);
+    g.insertDirectedEdge(0,1);
+    g.insertDirectedEdge(1,2);
+    g.insertDirectedEdge(0,3);
+    g.insertDirectedEdge(3,2);
+    stack<int> s = g.topologicalSort();
+    while(!s.empty()) // 0,1,3,2 or 0,3,1,2
+    {
+        cout << s.top() << endl;
+        s.pop();
+    }
+    return 0;
+}
+// */ 
 //----------------------------------------------------------------------------------------------------
