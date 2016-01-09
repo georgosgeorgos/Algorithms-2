@@ -3,10 +3,10 @@
 Table of Contents
 1. Given an array of integers, every element appears twice except for two. Output both elements. T(n) = O(n), S(n) = O(1)
 2. Check if a number is a power of 2, T(n) = O(1), S(n) = O(1)
+3. Count first occurence of leading 1 in a variable (Qualcomm interview), T(n) = O(n), S(n) = O(1)
 //----------------------------------------------------------------------------------------------------------------------------------
 TODO: 
-10. Count first occurence of leading 1 in a variable (Qualcomm interview) // (done in leetcode)
-3. Write function to determine number of bit swap required to convert integer A to integer B
+5. Write function to determine number of bit swap required to convert integer A to integer B
 4. Write program to swap odd and even bits in an interger with the fewest instructions (O(1))
 // e.g. bit 0 and bit 1 swapped, bit 2 and bit 3 swapped
 HARD: 6. SingleNumberII: Given an array of 3n + 1 elements, where n of elements are repeated thrice each, and 1 element is different from the rest. Identify that one element.
@@ -141,6 +141,50 @@ int main(void)
     a = 7;
     if (powerOfTwo(a)) cout << "True" << endl; else cout << "False" << endl;
     return 0; 
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 Count first occurence of leading 1 in a variable (Qualcomm interview) 
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//---------------------------------
+/*
+Questions
+Function Prototype:
+    int firstOccurenceLeadOne(int x);
+TestCases:
+    0 => 0
+    1 => 1
+    2 => 2
+    3 => 1
+    4 => 3
+*/
+//---------------------------------
+/* //
+#include <iostream> 
+using namespace std; 
+
+int firstOccurenceLeadOne(int x)
+{
+    int count = 0;
+    if(!x) return count; // Base Case: x = 0
+    count++;
+    while (!(x&0x1))
+    {
+        x = x >> 1; // shift x by 1
+        count++;
+    }
+    return count;
+}
+
+int main(void)
+{
+    cout << firstOccurenceLeadOne(0) << endl; // 0
+    cout << firstOccurenceLeadOne(1) << endl; // 1
+    cout << firstOccurenceLeadOne(2) << endl; // 2
+    cout << firstOccurenceLeadOne(3) << endl; // 1  
+    cout << firstOccurenceLeadOne(4) << endl; // 3
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
