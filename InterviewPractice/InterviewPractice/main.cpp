@@ -364,6 +364,32 @@ Make sure to actually run step by step with the conditions and code! Assume you 
 // Technical Skills, Usefulness to society, Produces income, Brings Fame
 //----------------------------------------------------------------------
 // note: Refer to below for more details on each of them
+// Understand a basic course of all the technologies you could have picked at Google which are:
+
+TODO (1 course each! => 3 to 4 assignments to upload to Github)
+    Distributed Systems & Parallel Computing
+    Information Retrieval 
+    Computer Networks
+    Compilers
+    Natural Language Processing 
+    Machine Learning
+    Security 
+    Economics & Electronic Commerce
+    Data Mining
+    Speech Processing 
+    Statistics 
+    UX & UI 
+
+DONE
+    Computer Vision
+    Computer Graphics 
+    Algorithms
+    Operating Systems 
+    Web Front End
+    Web Back End 
+    Databases
+    Operating Systems
+
 You need to prove to yourself and the world that you are the best by winning competitions. 
 1. Compete in hackathons (Build a prototype from a great idea quickly) 
 	- Goal:
