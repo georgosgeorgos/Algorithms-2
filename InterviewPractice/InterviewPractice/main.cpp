@@ -363,8 +363,9 @@ Make sure to actually run step by step with the conditions and code! Assume you 
 // Ways to Become the Best Programmer
 // Technical Skills, Usefulness to society, Produces income, Brings Fame
 //----------------------------------------------------------------------
+// note: Refer to below for more details on each of them
 You need to prove to yourself and the world that you are the best by winning competitions. 
-1. Compete in hackathons 
+1. Compete in hackathons (Build a prototype from a great idea quickly) 
 	- Goal:
 		- Difficulty => Was what you built difficult to implement, is it just nice graphics on some API? 
 		- Usefulness => Will people use your hack, does it solve a real problem 
@@ -379,22 +380,28 @@ You need to prove to yourself and the world that you are the best by winning com
 	- Ability to motivate, stay productive, sleep less. 
 	- Ability to pitch your idea to everyone during presentation and team gathering. 
 	- Ability to divide work and integrate between teams
-2. Compete in programming challenges
+2. Compete in programming challenges (Algorithms, Problem Solving, Efficient Coding) 
 	- Based on: 
 		- Algorithms => Knowledge on time space complexity 
         - Data Structures => How well do you know all existing data structures and their implementation and their details in implementation differences. 
         - Math => How well can you solve a math problem
         - IQ => How well do you detect special cases for this problem
-3. Kaggle Competitions 
+3. Kaggle Competitions (Machine Learning, Statistic, Data Mining)
 	- Based on: 
 		- Proficiency in Analyzing Existing Data
 		- Proficiency in Data Mining 
 		- Proficiency in using the right ML models and libraries 
-4. Open Source 
+4. Open Source (Working Efficiently with Legacy Code, Code Complete, Testing, Working with large code bases, Understand cutting edge technologies) 
 	- Based on: 
 		- How often do other programmers use your work? 
 		- How easy are you able to understand large amount of code and improve it
         - Can you parallelize code and build robust, scalable, efficient systems.
+        - Do you understand the architecture of a new technology, how it works and why it beats older technologies? 
+    - Need to know: 
+        - Competent in both using these new technologies as well as understand how they work and why. 
+        - Technologies: 
+            Apache Kafka => Message Queues
+            Apache Zookeeper => An abstraction for concurrency problems
 5. Start Ups (Compete in Life) 
 	- Based on: 
 		- Creating a solution that is: 
@@ -409,6 +416,11 @@ You need to prove to yourself and the world that you are the best by winning com
 				- How will you earn money
 		- Ability to use open source code to achieve what you ned
 		- Ability to gather a strong team 
+6. Research Papers (Mathematics) 
+    - Based on:
+        - Ability to understand difficult math. 
+        - Ability to solve difficult problems using math
+        - Ability to write well (Excellent Technical Writing) 
 Technical Skills Steps: (How to acquire the technical skills you need)
 1. Solve programming challenges quickly
 	- (Understand, Augment, Create) algorithms & data structures
@@ -459,6 +471,8 @@ Technical Skills Steps: (How to acquire the technical skills you need)
 	- User experience and user interface
 	- Code has to be designed such that it is (testable, maintainable, extensible) 
 	- Learn to package your code into an installer and executable. So non-programmers can just download it, install it, and run the .exe file! 
+
+6. Research Papers
 
 //----------------------------------------------------------------------
 // Track Your Progress
