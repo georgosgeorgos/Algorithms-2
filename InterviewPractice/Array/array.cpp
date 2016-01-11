@@ -3,7 +3,7 @@
 Table of Contents
 1. Maximum Contiguous Sum Subarray using Kadane's Algorithm, T(n) = O(n), S(n) = O(1)
 2. Rotate Array : Rotate an array of n elements to the right by k units, T(n,k) = O(n), S(n,k) = O(1) 
-3. Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(n)
+3. Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(1)
 4. Given an array of integers, find two numbers such that they add up to a specific target number. T(n) = O(nlogn), S(n) = O(1)
 5. Maximum Contiguous Product Subarray, T(n) = O(n), S(n) = O(1)
 6. Buy and sell stocks as many times. Max profit?, T(n) = O(n), S(n) = O(1)
@@ -266,9 +266,9 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 3 Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(n)
+// 3 Sorted Shifted Array with only distinct elements, find if a value exist in the sorted shifted array, T(n) = O(logn) = S(1)
 // Time Complexity, T(n) = O(logn)
-// Space Complexity, S(n) = O(logn)
+// Space Complexity, S(n) = O(1)
 //------------------------
 /*
 Questions: 
