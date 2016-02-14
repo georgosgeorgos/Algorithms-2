@@ -13,12 +13,15 @@ Table of Contents
 9. Inheritance
 10. Private, Protected, Public
 11. this vs *this
-
-note: Nothing is this file is actually compilable so no point commenting out everything
-      It is more of answering by proof of concept style questions
 //-------------------------
 TODO:
-21. 
+21. Memory Layout of C Programs
+    http://www.geeksforgeeks.org/memory-layout-of-c-program/
+
+//----------------------------------------------------------------------------------------------------------------------------------
+// notes
+//-------------------------
+- Nothing is this file is actually compilable so no point commenting out everything. It is more of answering by proof of concept style questions
 //----------------------------------------------------------------------------------------------------------------------------------
 // Common Hints
 //-------------------------
