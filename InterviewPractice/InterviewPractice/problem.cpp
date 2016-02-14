@@ -1,5 +1,7 @@
 // This file generates a random question to solve
-// No databases needed
+// No databases needed for now
+// Database needed if wanna prevent doing the same problem too many times, so always output he lowest count. 
+// Means you will complete one round of all problems before getting brand new ones
 #include <ctime> 
 #include <cstdlib>
 #include <vector> 
@@ -8,10 +10,14 @@ using namespace std;
 
 int main(void)
 {
+    // TODO: Add design pattern challenges as designing each class with an example, also other challenges like designing URL shortener etc. 
+        // Anything that seems reasonable to design in an interview of 45 minutes
     vector<string> p;
     p.push_back("Search: Binary Search (personal and bsearch())");
     p.push_back("Sort: Randomized QuickSort Array (personal and qsort())");
     p.push_back("Sort: MergeSort Array");
+    p.push_back("Search: Search for element in rotated sorted array with distinct elements"); // need rotated problem
+            // Hint: Find index of rotation first, k. Then search for element knowing index of rotation.  
     p.push_back("Heap: HeapSort");
     p.push_back("Heap: A* Search");
     p.push_back("Heap: Get Top K heap elements");
@@ -28,7 +34,7 @@ int main(void)
     p.push_back("Sort: Radix Sort");
     p.push_back("Mathematics: Implement Pow() function");
     p.push_back("DynamicProgramming: Longest Common Subsequence between 2 strings");
-    p.push_back("BitManipulation: Count first occurence of leading 1 in a variable");
+    p.push_back("BitManipulation: Given an array of 2n + 2 integers where n of them are repeated twice and 2 of them are unique, output the 2 unique integers");
     p.push_back("Prims Algorithm");
     p.push_back("Djikstra Algo.");
     p.push_back("Bellman Ford algorithm");

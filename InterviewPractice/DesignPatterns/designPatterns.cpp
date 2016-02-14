@@ -94,6 +94,18 @@ TODO:
 . Iterator Design Pattern
 . Reference Counting Pointer Garbage Collection Class Wrapper Automation (Bloomberg Interview)
         - using Proxy Design Pattern  and Flyweight Pattern
+
+How to design TinyURL (url shorterner) 
+
+Twitter is real-time and back and forth conversation and Google is not. Therefore, different problems with both companies. 
+Database Sharding
+
+
+
+Give all anagrams of a word, given dictionary. 
+Sort all words in dictionary with mapping to original, 
+     then can just hash from sorted to all anagrams 
+     Long pre-computation but short actual look-up
 */ 
 //---------------------------------------------------------------------------------------------------------------------------------
 // 0 Design Principles: SOLID 

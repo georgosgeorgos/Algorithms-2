@@ -1,5 +1,6 @@
 //----------------------------------------------------------------------------------------
-/*
+/* //
+Table of Contents
 1. Kruskal's Algorithm, T(V,E) = O(ElgV), S(V,E) = O(V)
 //-------------------------
 TODO: 
@@ -7,7 +8,7 @@ TODO:
     e.g. [1,2,3] 
     => Solution Set = [[],[1],[2],[3],[1,2],[1,3],[2,3],[1,2,3]]
     hint Method1: Use bit manipulation ==" it was so easy, i was so dumb
-    hint Method2: Use DFS
+    hint Method2: Use DFS (Implemented in Backtracking folder)
     sol.add(path); // add if statement up here if only want full paths
     for(int i = index; i < n; i++)
     {
@@ -20,6 +21,7 @@ TODO:
     => Solution Set = [[],[1],[2],[1,2],[2,2],[1,2,2]]
 14. 
     Longest Consecutive SubSequence
+    note: Try implementing this using <set> so you can use it in interview instead of implementing sets from scratch
     Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
     Given [100, 4, 200, 1, 3, 2],
     The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
@@ -71,6 +73,16 @@ TODO:
             No time to code the entire disjoint set solution but it's easy. 
             Therefore, total time complexity , T(n) (single pass) 
             Space complexity , S(n) since each element in array has 1 set by itself before merging the nodes together. 
+//-------------------------
+// notes
+//-------------------------
+You can also implement sets with integer arrays, e,g given k nodes
+arr[0] = m; => node 0 is in the set m, m <= k
+however, doing this requires merge operation to takes long time since each time merge, you must switch all elements of 1 set to elements of another set. 
+Worst Case:
+    1+2+3+4+...+n/2 => O(n^2) time 
+Therefore, the original implementation above is much faster! 
+
 */
 //
 //----------------------------------------------------------------------------------------
@@ -79,6 +91,7 @@ TODO:
 // Space Complexity, S(V,E) = O(V) 
 //      V is for all the sets made
 //      Assume if modify same graph, will only be deleting edges, so won't create any space for new edges
+//      Uses Object and Pointers representation of Graph
 
 // note: qsort() is for arrays 
 // sort() is for vectors

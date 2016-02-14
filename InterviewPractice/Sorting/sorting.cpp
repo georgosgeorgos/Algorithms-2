@@ -16,6 +16,8 @@ Table of Contents
 11. Topological Sort, T(V,E) = O(V+E), S(V,E) = O(V)
 //----------------------------------------------------------------------------------------
 // TODO 
+TreeSort (Sorts an array by inserting it into a binary search tree and retrieving it in order) 
+QuickSelect (Searches kth smallest element in O(n) average time)
 QuickSort LinkedList
 Insertion Sort 
 Selection Sort

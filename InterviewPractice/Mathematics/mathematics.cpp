@@ -28,7 +28,12 @@ hint: Dynamic Programming/BFS/Math theorem can be used to solve
     T(n) = O(n) S(n) = O(1)
 11. Add 'x' between 10^k,  (Bloomberg Round 1)
     e.g. k = 3 , x = ',', input = 12300987 (int) => output 12,300,987 (string)
-
+//-----------------------------------
+// Hint
+//-----------------------------------
+When working with % and / operators:
+   - if handling (-) numbers, convert to (+) and solve, then multiply final result by (-)
+   - make sure to account for appending "0"s if converting number to strings
 // */
 //----------------------------------------------------------------------------------------
 // 1 Implement Pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)

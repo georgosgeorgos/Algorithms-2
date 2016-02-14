@@ -2,12 +2,10 @@
 //----------------------------------------------------------------------------------------
 /* //
 Table of Contents
-
 1.
-
 // */
 //----------------------------------------------------------------------------------------
-
+/* //
 #include <queue>
     // q.empty()
     // q.size()
@@ -15,13 +13,9 @@ Table of Contents
     // q.pop() // pop from front of queue
     // q.front() // returns reference to the front element
     // q.back() // returns reference to the back element (last element added
-
 #include <string>
 #include <iostream>
-
-
 using namespace std;
-
 int main(void)
 {
     queue<string> q;
@@ -38,10 +32,10 @@ int main(void)
     {
         cout << "queue is now empty" << endl;
     }
-
     q.push(temp);
     q.push(temp2);
     cout << "number of elements in queue is " << q.size() << endl;
     return 0;
 }
+// */
 //----------------------------------------------------------------------------------------
