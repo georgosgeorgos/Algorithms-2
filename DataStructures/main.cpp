@@ -4,6 +4,7 @@
 // The library will contain structures that can be initialized, passed in, and easily usable in assignments
 // This is so that doing future assignments in C++, you can easily copy paste this library from here,
 // Change the compare function, and use it extensively.
+// Or just use BOOST, but implement them to understand how everything works (Example, how random forest works in Machine Learning) 
 
 // It makes use of:
 // i) template class
