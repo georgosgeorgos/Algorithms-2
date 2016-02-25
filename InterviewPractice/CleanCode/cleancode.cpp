@@ -4,6 +4,7 @@ Table Of Contents
     Names
     Functions
     Comments
+    Formatting
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -98,9 +99,23 @@ When to comment:
         e.g. You must trim white space to make sure the objects are comparable. 
    Documentation Generator 
         e.g. JavaDocs, DOxygen
-      
+//-------------------------------------------------------------------------------------------
+// Formatting
+//-------------------------------------------------------------------------------------------
+In a team, stick to team's style conventions. 
+Each file should be as simple as possible at the top of file. 
+The user can then dive to bottom of the file for details. 
+Vertical distance between related code should be close
+    e.g. 
+       Removing the comments on top of member variables, you can easily see how many member variables a file has, and number of methods
+       BAD: 
+            // The age
+            int age; 
 
-    
-
-
-
+            // The height
+            int height; 
+       GOOD: 
+            int age; 
+            int height; 
+Prevent reader from hoping around too much between related code. 
+//-------------------------------------------------------------------------------------------
