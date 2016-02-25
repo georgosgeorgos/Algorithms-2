@@ -22,6 +22,9 @@ Be able to easily understand the entire project of what you large code base cove
     Don't use short words like 'k' cause can't search for an alphabet easily in file. 
     Easy to search
  - Never use l or O (cause L can be l or 1, O can be O or 0)
+ - Replace constants (e.g. 200, 300) with what they represent using MACROS! 
+    Easy to change in Macro as it is all in one location
+    Easy to understand what these constants mean
 //-------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------
@@ -69,7 +72,35 @@ Be able to easily understand the entire project of what you large code base cove
 //-------------------------------------------------------------------------------------------
 // Comments
 //-------------------------------------------------------------------------------------------
+Code changes, comments may not follow. 
+    Understand the code when you see it, and not have to search through the comment that explains that code 
+        e.g. methods and variables that gets used everywhere but explained once in comments
+Don't: 
+    comment bad code, rewrite it.
+    repeat what code is saying using comments.
+        Explaining constructor/getters/setters 
+    journal of changes (version control does that for you now!) 
+    Mark closing braces, make function shorter instead, editors does that for you as well.
+    e.g. 
+            } // if
+        } // try
+    Comment out old code (version control saves it for you now!) 
+Replace comments that describe what a function does by describing it in the function name. 
+When to comment: 
+    Can't figure out how to explain it clearly using code. 
+        Prevent using comment to cover up what your bad code is trying to do, clean up your bad code so it is easy to understand.  
+    What to explain a design decision on why your code implements it this way. 
+    Warning of consequence
+        e.g. This function is NOT thread safe
+    TODO: comments that tells programmer feature that aren't implemented yet
+    FIXME: comments that tells programmer there is a bug in a certain function
+    Amplification
+        e.g. You must trim white space to make sure the objects are comparable. 
+   Documentation Generator 
+        e.g. JavaDocs, DOxygen
+      
 
+    
 
 
 
