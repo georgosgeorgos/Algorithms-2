@@ -1,16 +1,23 @@
 Functional Programming
     - Imposes restrictions on how to write program, while maintaining what programs we can write
+    - Maintains Referencial Integrity
+
+Higher-Order Functions
+    - Functions that take in other functions as parameters and output functions 
 
 Pure Functions
     - no hidden inputs and hidden outputs
+
 Writing code that doesn't change state
     - Can call same function multiple times
         - Easier to parallelize
     - Same input => Same output 
+        - Reusable code
+        - Order of execution doesn't matter
+            - Easier to parallelize
     - Easier to test
     - Less prone to bugs
     - Easier to prove for correctness
-Pass function as parameters to other functions
 
 - Reduce hidden inputs and hidden outputs to conform with some of functional programming's specialties
     Hidden inputs => Inputs that function depends on, but isn't pass in as parameter
@@ -24,3 +31,4 @@ Pass function as parameters to other functions
         - sending output to ethernet, audio, file, screen
         - Throwing exception
         - Halting with errors
+
