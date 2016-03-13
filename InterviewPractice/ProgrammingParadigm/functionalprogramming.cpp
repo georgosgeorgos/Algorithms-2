@@ -1,6 +1,7 @@
 Functional Programming
     - Imposes restrictions on how to write program, while maintaining what programs we can write
     - Maintains Referencial Integrity
+        - Easier to prove mathematically
 
 Higher-Order Functions
     - Functions that take in other functions as parameters and output functions 
