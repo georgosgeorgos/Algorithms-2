@@ -16,6 +16,9 @@ Imperative Programming = Every command shows how programming takes place, step b
         - Uses lots of goto (to move to a subroutine) 
     Advantages:
         - Closer to machine-level programming
+            - Variable assignment = store
+            - Mutable Variables = memory cells
+            - Variable dereferences = load
     Languages:
         - Assembly
 //-----------------------------------------------------------------------------------------------------------

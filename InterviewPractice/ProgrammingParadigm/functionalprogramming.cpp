@@ -3,6 +3,11 @@ Functional Programming
     - Maintains Referencial Integrity
         - Easier to prove mathematically
 
+Function as First Class Citizens:
+    - Can pass function like a parameter to other functions
+    - Can define function without a name (similar to how you can let define an int as 42, a constant) 
+    - Can define function inside another function (similar to how you can create a local variable in a function) 
+
 Higher-Order Functions
     - Functions that take in other functions as parameters and output functions 
 
