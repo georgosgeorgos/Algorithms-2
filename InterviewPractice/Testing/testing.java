@@ -149,3 +149,7 @@ Reduce static (procedural) code
     Problem: Static methods and classes cannot be injected and cannot be mocked, a code base with all static methods is basically a procedural code and not Object Oriented
     Code: Replace static methods called by receiving those classes as dependencies and calling the classes method
     TestCode: Now, those static methods can be mocked by creating those classes
+Wrapper around other people's static code
+    Problem: Cannot replace static methods in code that belongs to other libraries
+    Code: Create a wrapper class that wraps around those static methods
+    TestCode: Can now mock those wrapper classes.
