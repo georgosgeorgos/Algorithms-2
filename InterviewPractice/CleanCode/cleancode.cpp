@@ -5,6 +5,9 @@ Table Of Contents
     Functions
     Comments
     Formatting
+    TODO: Objects vs Data Structures
+    Exception Handling
+    Third Party Library
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -119,3 +122,27 @@ Vertical distance between related code should be close
             int height; 
 Prevent reader from hoping around too much between related code. 
 //-------------------------------------------------------------------------------------------
+// Exception Handling
+//-------------------------------------------------------------------------------------------
+Separate actual program logic with exception logic. 
+    Wrap the actual program logic in a class that handles exceptions. Call that wrappers method instead. 
+Never use return codes to indicate error, always use exceptions. 
+    For example, if error occurs, instead of returning -1 to indicate error, or even constructing special Integer wrappers so you can return null to handle errors,
+    you simply throw an exception! 
+Stack Trace from exception are the basic requirements, however do add informational messages at each level of the stack trace to know why it failed at each level. 
+Never return NULL 
+    Then, won't have own logic code filled with if(variable != null) 
+    If 3rd party API returns NULL, create a wrapper and return a special exception instead! 
+Never pass NULL
+    Try not to design function that accepts null as an argument, so you will never pass the NULL values to them! 
+
+//-------------------------------------------------------------------------------------------
+// Third Party Library
+//-------------------------------------------------------------------------------------------
+Use Libraries that are well known and robust, instead of re-writing your own code from scratch. 
+Create wrappers for third party library
+    Advantages: 
+        Own code logic can be independent on 3rd party API. 
+        Can mock so that only test own code.
+        Can handle exception code in the wrappers
+//
