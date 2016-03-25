@@ -14,6 +14,9 @@ Table Of Contents
         Hide Delegate
         Remove Middle Man
         Local Extension
+    Programming Paradigms
+        Flexible Objects
+        Flexible Methods
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -214,4 +217,72 @@ Refactoring = A change made to internal structure of software so that it is easi
        Method2-Composition: Wrapper to the class, redefine methods and call the 3rd party methods. 
             - Change Interface (e.g. change method signature of previous class)
             - Delay creation of delegates. 
+//-------------------------------------------------------------------------------------------
+// Programming Paradigms
+//-------------------------------------------------------------------------------------------
+To satisfy closed for modification, open for extension principle. 
+Want to use OOP if often add new objects, want to use procedural if often add new functions
+    OOP: 
+        Add new objects => Easy
+            Doesn't affect existing code. 
+            Just need to implement all existing method for the new object, can inherit functionalities
+        Add new methods => Hard
+            Affects all existing objects.
+            All objects  now need to implement the new method
+    Procedural: Easy to add new functions, but hard to add new data structures. 
+        Add new objects => Hard
+            Affects all existing methods.
+            All methods need to account for new objects
+        Add new methods => Easy
+            Doesn't affect existing code. 
+            New method just need to account for all existing objects
+//----------------------------
+// Flexible Objects
+//----------------------------
+Switch Procedural Code to OOP 
+    from:
+        class Geometry implements Methods{
+            // note: Adding new object here will require modifying both area and perimeter
+            double area(Object object) {
+                if (Object instanceof Square)
+                    return Square.topLeft * Square.btmRight;
+                else if (Object instanceof Circle)
+                    return Circle.radius*Circle.radius*Math.pi;
+                // note: Need modify here if add new object
+            }
+            double perimeter(Object object) {
+                if (Object instanceof Square)
+                    return 2 * (Math.abs(Square.topLeft.x - Square.btmRight.x) + Math.abMath.abs(Square.topLeft.y - Square.btmRight.y);
+                else if (Object instanceof Circle)
+                    return 2*Circle.radius*Math.pi;
+                // note: Need modify here if add new object
+            }
+        }
+        class Square extends Object {
+            public Point topLeft;
+            public Point btmRight;
+        }
+        class Circle extends Object {
+            public Point center; 
+            public double radius; 
+        }
+   to:
+        class Square implements Methods {
+            double area();
+            double perimeter();
+            // note: Need modify here if add new function
+        }
+        class Circle implements Methods {
+            double area();
+            double perimeter();
+            // note: Need modify here if add new function
+        }
+//----------------------------
+// Flexible Methods
+//----------------------------
+Switch from OOP to Procedural 
+    from: 
+        Refer to to: of Flexible Objects
+    to:
+        Refer to from: of Flexible Objects
 //-------------------------------------------------------------------------------------------
