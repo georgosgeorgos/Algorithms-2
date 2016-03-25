@@ -7,7 +7,7 @@ Table Of Contents
     Formatting
     TODO: Objects vs Data Structures
     Exception Handling
-    Third Party Library
+    Boundaries: Third Party Library
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -137,12 +137,16 @@ Never pass NULL
     Try not to design function that accepts null as an argument, so you will never pass the NULL values to them! 
 
 //-------------------------------------------------------------------------------------------
-// Third Party Library
+// Boundaries: Third Party Library
 //-------------------------------------------------------------------------------------------
 Use Libraries that are well known and robust, instead of re-writing your own code from scratch. 
 Create wrappers for third party library
     Advantages: 
-        Own code logic can be independent on 3rd party API. 
+        Own code logic can be independent on 3rd party API as well as their updates. 
         Can mock so that only test own code.
         Can handle exception code in the wrappers
-//
+Write learning test:
+    Unit test that test Third Party Library code behaves like what we expect. 
+    This way, when Third Party Library updates to not be backward compatible, we will find out. 
+    Learning test cost nothing, cause you had to learn the API anyway, might as well learn while writing them. 
+//-------------------------------------------------------------------------------------------
