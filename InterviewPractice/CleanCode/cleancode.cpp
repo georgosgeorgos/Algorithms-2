@@ -5,7 +5,7 @@ Table Of Contents
     Functions
     Comments
     Formatting
-    TODO: Objects vs Data Structures
+    Data Abstraction
     Exception Handling
     Boundaries: Third Party Library
 // */
@@ -122,6 +122,31 @@ Vertical distance between related code should be close
             int age; 
             int height; 
 Prevent reader from hoping around too much between related code. 
+//-------------------------------------------------------------------------------------------
+// Data Abstraction
+//-------------------------------------------------------------------------------------------
+You want to hide implementation.
+    Don't always put getters and setters for every single member variable you have
+        class sillyClassExposingEverything {
+            private int a; 
+            private int b;
+            void setA(int _a);
+            void setB(int _b);
+            int getA();
+            int getB();
+        }
+    Getters()
+        // Doesn't hide implementation: you know it's stored in gasoline with unit gallons
+            getGallonsInGasoline();
+        // Hides implementation
+            getPercentageOfFuelRemaining();
+    Setters()
+        // Doesn't hide implementation: you know there is an X point and a Y point
+            setX()
+            setY() 
+        // Hides implementation: you don't know how it stores its values, can set via radius or points, also, must set both values together.
+            setPolarCoordinates(double r, double theta);
+            setCartesianCoordinates(int x, int y);
 //-------------------------------------------------------------------------------------------
 // Exception Handling
 //-------------------------------------------------------------------------------------------
