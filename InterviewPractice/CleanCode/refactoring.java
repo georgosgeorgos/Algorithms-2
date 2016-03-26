@@ -14,6 +14,13 @@ Table Of Contents
         Hide Delegate
         Remove Middle Man
         Local Extension
+        Unidirectional To Bidirectional
+        Bidirectional To Unidirectional
+    Member Variables
+        Replace Member Variable with Object
+        Replace Member Array with Object
+        Replace Magic Number with Symbolic Constant
+        Encapsulate Collection
     Programming Paradigms
         Flexible Objects
         Flexible Methods
@@ -101,7 +108,7 @@ Refactoring = A change made to internal structure of software so that it is easi
 //----------------------------
     Move responsibilities from a class to a new class, and make the original class contain that new class as a member variable. 
     from:
-        classA {
+        class A {
             method1();
             method2() {
                 ...
@@ -110,15 +117,15 @@ Refactoring = A change made to internal structure of software so that it is easi
             }
         }
     to:
-        classA {
-            classB b;
+        class A {
+            B b;
             method2() {
                 ...
                 b.method1();
                 ...
             }
         }
-        classB{
+        class B {
             method1();
         }
 //----------------------------
@@ -126,21 +133,21 @@ Refactoring = A change made to internal structure of software so that it is easi
 //----------------------------
     Move member variable from one class to another, when the other class actually uses it more. 
     from:
-        ClassA {
+        class A {
             int a;
             int lala;
             ...
                 
         }
-        ClassB {
+        class B {
             string b;
         }
     to:
-        ClassA {
+        class A {
             int lala;
             ...
         }
-        ClassB {
+        class B {
             int b;  // Rename int a to int b here
             string b;
         }
@@ -149,36 +156,37 @@ Refactoring = A change made to internal structure of software so that it is easi
 //----------------------------
     Move member methods from one class to another, when the other class actually uses it more
     from:
-        ClassA {
-            int a;
+        class A {
+            int lala;
             ...
             method1() {
                 method2();
                 method3();
             }
             method2(){
-                int var = this.a;
+                int var = this.lala;
                 ...
             }
             method3(){
                 int var = this...; // lots of member variables used
             }
         }
-        ClassB{
+        class B{
             ...
         }
     to:
-        ClassA {
-            ClassB B; // need to contain a ClassB
+        class A {
+            int lala;
+            B B; // need to contain a ClassB
             method1() {
                 // Update to create delegation to ClassB
-                B.method2(this.a);
+                B.method2(this.lala);
                 B.method3(this);
             }
         }
-        classB {
-            method2(int a); // pass in ClassA's member variable as arguments
-            method3(classA A); // pass in a type of Class A
+        class B {
+            method2(int lala); // pass in Class A's member variable as arguments
+            method3(A a); // pass in a type of Class A
         }
 //----------------------------
 // Hide Delegate
@@ -186,22 +194,22 @@ Refactoring = A change made to internal structure of software so that it is easi
     Want to remove dependency on Class C from Class A. Make all operations of Class C go through Class B for Class A
     Think of Delegate as Backend objects called by FrontEnd objects. 
     from:
-        ClassA {
-            ClassB b;
-            ClassC c;
+        class A {
+            B b;
+            C c;
         }
-        ClassB {}
-        ClassC {}
+        class B {}
+        class C {}
    to:
-        ClassA {
-            ClassB b;
+        class A {
+            B b;
         }
-        ClassB {
-            ClassC c;
+        class B {
+            C c;
         }
-        ClassC {}
-    FrontEnd = Class B
-    Delegate = Class C
+        class C {}
+    FrontEnd = B
+    Delegate = C
 //----------------------------
 // Remove Middle Man
 //----------------------------
@@ -217,6 +225,170 @@ Refactoring = A change made to internal structure of software so that it is easi
        Method2-Composition: Wrapper to the class, redefine methods and call the 3rd party methods. 
             - Change Interface (e.g. change method signature of previous class)
             - Delay creation of delegates. 
+//----------------------------
+// Unidirectional To Bidirectional
+//----------------------------
+    Want to create a bi-directional relationship between 2 classes. 
+        // note: Code below hasn't been tested for correctness
+        This is actually an awesome interview coding question that you came up with
+        TestCase to check for future (check for both correctness and ensure no infinite loops)
+            - setBMultipleTimesInARow();
+            - setAMultipleTimesInARow();
+            - setAthatHasAlreadyBeenSetToAnotherB();
+    Relationships: 
+        //------------
+        // 1 to 1:
+        //------------
+            class OneA {
+                OneB b; 
+                void setB(OneB _b) {
+                    if(this.b) this.b.unsetA();
+                    this.b = _b;
+                    if(this.b.getA() != this)
+                        this.b.setA(this);
+                }
+                OneB getB() {return this.b;}
+                void unsetB() {
+                    OneB bPlaceHolder = this.b; // get place holder cause going to remove
+                    this.b = null; // remove to prevent circular infinite loops in next statement
+                    if (bPlaceHolder!= null && bPlaceHolder.getA() == this) {
+                        bPlaceHolder.unsetA(); 
+                    }
+                }
+            }
+            class OneB {
+                OneA a; 
+                void setA(OneA _a) {
+                    if(this.a) this.a.unsetB();
+                    this.a = _a;
+                    if(this.a.getB() != this) 
+                        this.a.setB(this);
+                }
+                void unsetA() {
+                    OneA aPlaceHolder = this.a; // to prevent circular infinite loops 
+                    this.a = null; // remove circular infinite loops 
+                    if (aPlaceHolder!= null && aPlaceHolder.getB() == this) {
+                        aPlaceHolder.unsetB(); 
+                    }
+                }
+                OneA getA() {return this.a;}
+            }
+        //------------
+        // 1 to Many:
+        //------------
+            class OneA {
+                Set<ManyB> setOfB; 
+                void addB(ManyB _b) {
+                    this.setOfB.add(_b);
+                }
+                void removeB(ManyB _b) {
+                    this.setOfB.remove(_b);
+                } 
+            }
+            class ManyB {
+                OneA a;
+                void setA(OneA _a) {
+                    if(this.a) {
+                        this.a.removeB(this);
+                    }
+                    this.a = _a;
+                    this.a.addB(this);
+                }
+                OneA getA() {return this.a;}
+            }
+        //------------
+        // Many to Many:
+        //------------
+            class ManyA {
+                Set<ManyB> setOfB; 
+                void addB(ManyB _b) {
+                    this.setOfB.add(_b);
+                    if(!_b.contains(this))
+                        _b.addA(this);
+                }
+                void removeB(ManyB _b) {
+                    this.setOfB.remove(_b);
+                } 
+            }
+            class ManyB {
+                Set<ManyA> setOfA; 
+                void addA(ManyA _a) {
+                    this.setOfA.add(_a);
+                    if(!_a.contains(this))
+                        _a.addA(this);
+                }
+                void removeA(ManyA _a) {
+                    this.setOfA.remove(_a);
+                    // note: Didn't implement the place holder logic, etc. for this case
+                } 
+            }
+//----------------------------
+// Bidirectional To Unidirectional
+//----------------------------
+    Opposite of Unidirectional To Bidirectional.
+    A drawback is the huge complexity as you can see from the attempted implementation in Unidirectional To Bidirectional.
+    Therefore, if there is no need for Bidirectional, refactor it to only become unidirectional. 
+//-------------------------------------------------------------------------------------------
+// Member Variables
+//-------------------------------------------------------------------------------------------
+//----------------------------
+// Replace Member Variable with Object
+//----------------------------
+    A class does too much work for working with member variable. Replace that member variable with a new class Object 
+    with methods that modify that member variable
+//----------------------------
+// Replace Member Array with Object
+//----------------------------
+    Replace an array used in a class for conventions to an object itself
+    from:
+        class ConventionArrayExist {
+            Array<String> name; 
+            ConventionArrayexist(String lastname, String firstanme) {
+                this.name[0] = lastname;
+                this.name[1] = firstname;
+            }
+        }
+    to: 
+        class NoMoreConventionArray {
+            Name name; 
+            NoMoreConventionArray(String lastname, String firstname) {
+                this.name.setLastName(lastname);
+                this.name.setFirstName(firstname);
+            }
+        }
+//----------------------------
+// Replace Magic Number with Symbolic Constant
+//----------------------------
+    Replace a magic number with a symbolic constant
+    from:
+        class A {
+            double potentialForce(double mass) {
+                return mass * 9.81;
+            }
+        }
+    to:
+        class A {
+            static final double GRAVITATIONAL_CONSTANT = 9.81;
+            double potentialForce(double mass) {
+                return mass * GRAVITATIONAL_CONSTANT;
+            }
+//----------------------------
+// Encapsulate Collection
+//----------------------------
+    Encapsulate collection that is being worked with 
+    from: 
+        class hasCollection {
+            List<Object> listOfObj;
+            List<Object> getList(); 
+            void setList(List<Object> listOfObj);
+        }
+    to:
+        class hasCollection {
+            List<Object> listOfObject;
+            final List<Object> getList(); // unmodifiable list
+            void addObj(Object obj);
+            void removeObj(Obj obj);
+        }
 //-------------------------------------------------------------------------------------------
 // Programming Paradigms
 //-------------------------------------------------------------------------------------------
