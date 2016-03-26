@@ -24,6 +24,12 @@ Table Of Contents
     Programming Paradigms
         Flexible Objects
         Flexible Methods
+    Conditionals
+        Explaining Method
+        Consolidate 2 conditions to initialization
+        Or Same Results
+        And Nested Ifs
+        Bring Out Repeated Statements
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -457,4 +463,68 @@ Switch from OOP to Procedural
         Refer to to: of Flexible Objects
     to:
         Refer to from: of Flexible Objects
+//-------------------------------------------------------------------------------------------
+// Conditionals
+//-------------------------------------------------------------------------------------------
+//----------------------------
+// Explaining Method
+//----------------------------
+    Introduce a new method to explain a complicated expression.
+    from:   
+        if( age >= 21 && age <= 55) 
+    to:
+        if(isAdult())
+//----------------------------
+// Consolidate 2 conditions to initialization
+//----------------------------
+    Remove the else statement by making it the initialization
+    from:
+        if(...)
+            charge = 1;
+        else
+            charge = 0;
+    to:
+        charge = 0;
+        if(...)
+        charge = 1;
+//----------------------------
+// Or Same Results
+//----------------------------
+    from:
+        if(A()) return 0;
+        else if(B()) return 1;
+        else if(C()) return 1;
+        else if(D()) return 0;
+    to:
+        if(A() || D()) return 0;
+        return 1;
+//----------------------------
+// And Nested Ifs
+//----------------------------
+    from:
+       if(A())
+           if(B())
+               ...
+    to:
+        if(A() && B())
+            ...
+//----------------------------
+// Bring Out Repeated Statements
+//----------------------------
+    from:
+        if(A())
+            kara = 0;
+            ...
+            result += 1;
+        else
+            kara = 0;
+            ...
+            result += 1;
+    to:
+        kara = 0;
+        if(A())
+            ...
+        else
+            ...
+        result += 1;
 //-------------------------------------------------------------------------------------------
