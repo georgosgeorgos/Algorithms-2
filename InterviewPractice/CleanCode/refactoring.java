@@ -30,6 +30,9 @@ Table Of Contents
         Or Same Results
         And Nested Ifs
         Bring Out Repeated Statements
+        DeMorgan Law
+        Reverse Conditionals
+    Iterations
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -527,4 +530,36 @@ Switch from OOP to Procedural
         else
             ...
         result += 1;
+//----------------------------
+// DeMorgan Law
+//----------------------------
+    Swap between  && and || so that the probability of complete condition is faster
+        if(a && b && c && d && e) 
+            need to pass all 5 to be complete condition
+            can fail any 1 to complete condition
+        if(a || b || c || d || e)
+            need to fail all 5 to complete condition
+            can pass any 1 to complete condition
+TODO: BUT a && b != a || b , how to swap?? 
+//----------------------------
+// Reverse Conditionals
+//----------------------------
+TODO: 
+    Reverse a conditional so that the condition with higher probability gets evaluated first. 
+    Let P = probability distribution from 0 to 1
+    from:
+        if(P > 0.9) 
+    to:
+        if(
+//-------------------------------------------------------------------------------------------
+// Iterations
+//-------------------------------------------------------------------------------------------
+//----------------------------
+// Replace Control Flag With Break
+//----------------------------
+TODO:
+//----------------------------
+//Replace Control Flag With Return
+//----------------------------
+TODO:
 //-------------------------------------------------------------------------------------------
