@@ -43,6 +43,9 @@ Table Of Contents
         Replace Parameter With Explicit Method
         Replace Parameter With Getter
         Encapsulate Downcast
+    Exceptions
+        Replace Error Code
+        Replace Exception With Test
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -727,7 +730,27 @@ Don't let client code do any casting
 //-------------------------------------------------------------------------------------------
 // Exceptions
 //-------------------------------------------------------------------------------------------
-
 //----------------------------
 // Replace Error Code
 //----------------------------
+    from:
+        method() {
+            if (errorOccurs()) return -1;
+        }
+    to:
+        method() throws ErrorOccursException {
+            if (errorOccurs()) throw new ErrorOccursException("error occured");
+        }
+//----------------------------
+// Replace Exception With Test
+//----------------------------
+Some Exceptions are really basic requirements to the program that the client should check. 
+Allow the check by creating a test method for client to call before calling actual method.
+    from:
+        actualMethod() throws CheckedException {...}
+    to:
+        boolean testIfSafeToCallActualMethodFirst();
+        actualMethod() { 
+            throws UnCheckedException();
+        }
+//-------------------------------------------------------------------------------------------
