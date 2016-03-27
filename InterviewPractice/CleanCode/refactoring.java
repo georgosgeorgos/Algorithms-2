@@ -46,8 +46,16 @@ Table Of Contents
     Exceptions
         Replace Error Code
         Replace Exception With Test
+    Inheritance
+        Pull Up Common
+        Extract Superclass
+        Push Down Member Variable
+        Extract Child Class
+        Extract Interface
+        Form Template Method
+        Replace Inheritance With Composition
+        Replace Composition With Inheritance
 // */
-
 //-------------------------------------------------------------------------------------------
 // Goals
 //-------------------------------------------------------------------------------------------
@@ -752,5 +760,200 @@ Allow the check by creating a test method for client to call before calling actu
         boolean testIfSafeToCallActualMethodFirst();
         actualMethod() { 
             throws UnCheckedException();
+        }
+//-------------------------------------------------------------------------------------------
+//----------------------------
+// Pull Up Common 
+//----------------------------
+Bring up common member variables, methods, constructors from subclasses to existing parent class.
+    from:
+        class parent {
+            int height;
+        }
+        class childA {
+            int body;
+            int weight;
+            methodBody();
+            constructor(int _body);
+        }
+        class childB {
+            int body;
+            int mass;
+            methodBody();
+            constructor(int _body);
+        }
+    to:
+        class parent {
+            int body;
+            methodBody();
+            constructor(int _body);
+        }
+        class childA extends parent {
+            int weight;
+        }
+        class childB extends parent {
+            int mass;
+        }
+//----------------------------
+// Extract Superclass
+//----------------------------
+Create a parent class to group similar features between 2 classes
+    from:
+        class childA {
+            int body;
+            methodBody();
+            constructor(int _body);
+        }
+        class childB {
+            int body;
+            methodBody();
+            constructor(int _body);
+        }
+    to:
+        class parent {
+            int body;
+            methodBody();
+            constructor(int _body);
+        }
+        class childA extends parent {}
+        class childB extends parent {}
+//----------------------------
+// Push Down Special Cases
+//----------------------------
+Pull down member variables and methods that are only being used by some child classes
+    from:
+        class parent {
+            int byChildAOnly;
+            int both;
+            int byChildBOnly();
+        }
+        class childA {
+            int height;
+        }
+        class childB {
+            int weight;
+        }
+    to:
+        class parent {
+            int both;
+        }
+        class childA {
+            int byChildAOnly;
+            int height;
+        }
+        class childB {
+            int weight;
+            int byChildBOnly();
+        }
+//----------------------------
+// Extract Child Class
+//----------------------------
+A class has features only use in some cases. 
+    from: 
+        class Occupation {
+            int pay;
+            int numGuns;
+        }
+    to:
+        class Occupation {
+            int pay;
+        }
+        class Police extend Occupation {
+            int numGuns;
+        }
+//----------------------------
+// Extract Interface
+//----------------------------
+Few classes that are not related implements a few common methods
+    from:
+        class People {
+            fightMove();
+        }
+        class Animal {
+            fightMove();
+        }
+    to: 
+        interface Fighting {
+            fightMove();
+        }
+        class People implements Fighting {
+            @Override
+            fightMove();
+        }
+        class Animal implements Fighting {
+            @Override
+            fightMove();
+        }
+//----------------------------
+// Form Template Method
+//----------------------------
+Two different methods in subclasses performing different steps in same order. 
+    from:
+        class ChildA {
+            int calculateTax() {
+                int grossIncome = countryTaxRate * this.income; 
+                int tax = grossIncome * 0.2;
+                return grossIncome * tax;
+            }
+        }
+        class ChildB {
+            int calculateTax() {
+                int grossIncome = stateTax * this.income
+                int tax = grossIncome * 0.5;
+                return grossIncome * tax;
+            }
+        }
+    to:
+        abstract class Parent {
+            int calculateTax() {
+                return this.getGrossIncome() * this.getTaxRate();
+            }
+            abstract int getGrossIncome();
+            abstract int getTaxRate();
+        }
+        class ChildA extends Parent {
+            @Override
+            int getGrossIncome();
+            @Override
+            int getTaxRate();
+        }
+        class ChildB extends Parent {
+            @Override
+            int getGrossIncome();
+            @Override
+            int getTaxRate();
+        }
+//----------------------------
+// Replace Inheritance With Composition
+//----------------------------
+Child class is only using a few methods from parent class. Don't want to inherit everything. 
+    from:
+        class Child extend Parent {
+        }
+    to:
+        class Child {
+            Parent parent;
+            void onlyMethodChildUsesFromParent () {
+                this.parent.onlyMethodBeingUsedByChild();
+            }
+        }
+//----------------------------
+// Replace Composition With Inheritance
+//----------------------------
+A class is using too much features from something it composed. 
+Should probably just extend that composition instead
+    from:
+        class A {
+            B b;
+            void methodOneFromB() {
+                this.B.methodOne();
+            }
+            ...
+            void methodNFromB() {
+                this.B.methodN();
+            }
+        }
+    to:
+        class A extends B {
         }
 //-------------------------------------------------------------------------------------------
