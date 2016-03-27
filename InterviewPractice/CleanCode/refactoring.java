@@ -30,9 +30,11 @@ Table Of Contents
         Or Same Results
         And Nested Ifs
         Bring Out Repeated Statements
-        DeMorgan Law
-        Reverse Conditionals
+        Probability To Complete Condition
     Iterations
+        Replace Control Flag With Break
+    Nulls
+        Null Object
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -531,7 +533,7 @@ Switch from OOP to Procedural
             ...
         result += 1;
 //----------------------------
-// DeMorgan Law
+// Probability To Complete Condition
 //----------------------------
     Swap between  && and || so that the probability of complete condition is faster
         if(a && b && c && d && e) 
@@ -540,26 +542,72 @@ Switch from OOP to Procedural
         if(a || b || c || d || e)
             need to fail all 5 to complete condition
             can pass any 1 to complete condition
-TODO: BUT a && b != a || b , how to swap?? 
-//----------------------------
-// Reverse Conditionals
-//----------------------------
-TODO: 
-    Reverse a conditional so that the condition with higher probability gets evaluated first. 
-    Let P = probability distribution from 0 to 1
+    note: Can only swap if 2nd condition doesnt depend of first. e.g. ( if (a && a.getItem) (need check null before getItem)
     from:
-        if(P > 0.9) 
-    to:
-        if(
+        if(probability90Percent && probability10Percent) {...}
+        else if(probability10Percent || probability90Percent) {...}
+    to: 
+        if(probability10Percent && probability90Percent) {...}
+        else if(probability90Percent || probability10Percent) {...}
 //-------------------------------------------------------------------------------------------
 // Iterations
 //-------------------------------------------------------------------------------------------
 //----------------------------
 // Replace Control Flag With Break
 //----------------------------
-TODO:
+Control flag is only used as a control flag.
+    from:
+        boolean gameOver = false;
+        while(!gameOver) {
+            preProcessing();
+            if(playerLoses) gameOver = true;
+            ...
+            if(computerWins) gameOver = true;
+            postProcessing();
+        }
+    to:
+        while(true) {
+            preProcessing();
+            if(playerLoses)  break;
+            ...
+            if(computerWins) break;
+            postProcessing();
+        }
+        postProcessing(); // don't need this line if no post processing code
+//-------------------------------------------------------------------------------------------
+// Nulls
+//-------------------------------------------------------------------------------------------
 //----------------------------
-//Replace Control Flag With Return
+// Null Object
 //----------------------------
-TODO:
+To replace default handles for nulls to normal method call. 
+Makes code a lot cleaner from null checks.
+    from:
+        Customer customer = site.getCustomer();
+        if(customer == null) // imagine a lot more of this kind of code everywhere. 
+            logger.info("No customer");
+        else 
+            customer.print();
+
+        class Site {
+            Customer getCustomer() {
+                return this.stack.pop();
+            }
+        }
+    to:
+        Customer customer = site.getCustomer(); 
+        customer.print(); // now code is a lot cleaner everywhere by just writing one extra method below
+
+        class Site {
+            getCustomer() {
+                if(this.stack.top() == null) return NullCustomer();
+                return this.stack.pop();
+            }
+        }
+        class NullCustomer extends Customer {
+            @Override
+            void print() {
+                logger.info("No customer");
+            }
+        }
 //-------------------------------------------------------------------------------------------
