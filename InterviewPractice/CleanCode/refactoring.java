@@ -2,6 +2,7 @@
 Table Of Contents
     Goals
     Methods
+        Privatize
         Replace Temp
         Split Variable
         Explaining Variable
@@ -17,6 +18,7 @@ Table Of Contents
         Unidirectional To Bidirectional
         Bidirectional To Unidirectional
     Member Variables
+        Finalized and Remove Setter
         Replace Member Variable with Object
         Replace Member Array with Object
         Replace Magic Number with Symbolic Constant
@@ -35,6 +37,12 @@ Table Of Contents
         Replace Control Flag With Break
     Nulls
         Null Object
+    Parameters
+        Encapsulate Side Effects
+        Parametrized Method
+        Replace Parameter With Explicit Method
+        Replace Parameter With Getter
+        Encapsulate Downcast
 // */
 
 //-------------------------------------------------------------------------------------------
@@ -44,6 +52,14 @@ Refactoring = A change made to internal structure of software so that it is easi
 //-------------------------------------------------------------------------------------------
 // Methods
 //-------------------------------------------------------------------------------------------
+//----------------------------
+// Privatize
+//----------------------------
+Make any methods that shouldn't be use outside this class private
+    from:
+        void method();
+    to:
+        private void method();
 //----------------------------
 // Replace Temp
 //----------------------------
@@ -343,6 +359,19 @@ Refactoring = A change made to internal structure of software so that it is easi
 // Member Variables
 //-------------------------------------------------------------------------------------------
 //----------------------------
+// Finalized and Remove Setter
+//----------------------------
+Finalize and remove setter for any member variables that shouldn't change past constructor
+    from:
+        class A {
+            private int memberVariable;
+            setMemberVariable(int _memberVariable);
+        }
+    to:
+        class A {
+            final private int memberVariable;
+        }
+//----------------------------
 // Replace Member Variable with Object
 //----------------------------
     A class does too much work for working with member variable. Replace that member variable with a new class Object 
@@ -611,3 +640,94 @@ Makes code a lot cleaner from null checks.
             }
         }
 //-------------------------------------------------------------------------------------------
+// Parameters
+//-------------------------------------------------------------------------------------------
+//----------------------------
+// Encapsulate Side Effects
+//----------------------------
+Split a method that has side effect and non-side effect components to be able to re-use non-side effect components using functional programming paradigm.
+    from:
+        HasSideEffects() {
+            ...
+            sideEffectCodeStarts();
+            sideEffectCodeEnds();
+            ...
+        }
+    to:
+        HasSideEffects() {
+            noSideEffect1();
+            sideEffectCode();
+            noSideEffect2();
+        }
+        sideEffectCode() {
+            sideEffectCodeStarts();
+            sideEffectCodeEnds();
+        }
+//----------------------------
+// Parametrized Method
+//----------------------------
+For multiple methods that performs similar calculations that can be grouped up. Parametrize them. 
+    from:
+        printUSD() {
+            logger.info("USD");
+        }
+        printCAD() {
+            logger.info("CAD");
+        }
+    to:
+        print(String value) {
+            logger.info(value);
+        }
+//----------------------------
+// Replace Parameter With Explicit Method
+//----------------------------
+Replace parameter when it causes the method to do 2 totally different things. 
+    from:
+        doDifferent("Engineer");
+        void doDifferent(String type) {
+            if(type.equals("Engineer")
+                ...
+            else if(type.equals("Doctor")
+                ...
+        }
+    to:
+        doEngineer();
+        void doEngineer();
+        void doDoctor(); 
+//----------------------------
+// Replace Parameter With Getter
+//----------------------------
+    from:
+        workWithThis(int height) {
+            int tall = height * 3;  
+            ...
+        }
+    to:
+        workWithThis() {
+            ...
+            int tall = this.compositionObject.getHeight();
+        }
+        int getHeight() {
+            return this.height;
+        }
+//----------------------------
+// Encapsulate Downcast
+//----------------------------
+Don't let client code do any casting
+    from:
+        Object lastReading() {
+            return reading.lastElement();
+        }
+        Reading read = (Reading) lastReading();
+    to:
+        Object lastReading() {
+            return (Reading) reading.lastElement();
+        }
+        Reading read = lastReading();
+//-------------------------------------------------------------------------------------------
+// Exceptions
+//-------------------------------------------------------------------------------------------
+
+//----------------------------
+// Replace Error Code
+//----------------------------
