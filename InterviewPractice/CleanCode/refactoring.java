@@ -60,6 +60,7 @@ Table Of Contents
 // Goals
 //-------------------------------------------------------------------------------------------
 Refactoring = A change made to internal structure of software so that it is easier to understand, modify, and debug without changing any observable behavior.
+To tradeoff advantages and drawbacks between rewriting from scratch and reusing existing code.
 //-------------------------------------------------------------------------------------------
 // Methods
 //-------------------------------------------------------------------------------------------
