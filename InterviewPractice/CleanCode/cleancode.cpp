@@ -16,6 +16,7 @@ Table Of Contents
 Be able to understand your code by just reading your code without comments
 Be able to easily understand the entire project of what you large code base covers 
 Be able to easily make changes to existing code
+Reduce number of WTF's per minute when others read your code = Reduce number of surprise factors in code
 //-------------------------------------------------------------------------------------------
 // Names
 //-------------------------------------------------------------------------------------------
