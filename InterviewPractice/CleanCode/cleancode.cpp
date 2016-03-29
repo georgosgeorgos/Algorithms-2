@@ -71,6 +71,10 @@ Reduce number of WTF's per minute when others read your code = Reduce number of 
     Error codes results in many different if and else statement when using the function.
     Exception results in only a try and catch block when using the function. 
     Easier to add new exceptions to a class since it derives from parent Exception class, but need recompile every class if using a set of error codes. 
+    Each time you throw a new exception from catching an old one, always append the old method's message so that you don't lose the root of the cause of exception
+        catch (Exception e) {
+            throw new whateverException("whateverNewMessage\n" + e.getMessage(), e);
+        }
 - Separate error handling from functionality of code. 
     Try and catch block    
 - Write, then refactor. 
