@@ -36,7 +36,12 @@ A form of documentation for large code bases, and how the code is supposed to ru
 //---------------------------------------------------------------------------------------------------------------------------------
 Testing
     testMethodNames should be sentences describing behavior of test, what exactly is being tested, what are the inputs and what are the expected outputs. 
-    testMethodNames should begin with word 'should'
+    testMethodNames should have the word 'should'
+    testMethodNames should begin with what the inputs are
+    e.g. 
+        onePartitionAndOneNegativeReplicationShouldThrowIllegalArgumentException
+        onePartitionAndOneReplicationShouldReturnAListOfValidKafkaTopics
+    This is because during testing, some test frameworks like JUnit will only show you the test method name and line number. Therefore, naming the test method name is very important.
 Unit Test
     Don't use functions inside Unit Test cause you don't want to be testing, debugging your unit test. Instead, re-write every code. 
     setup() and cleanup() only works if ALL your unit test uses them. 
