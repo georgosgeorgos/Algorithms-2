@@ -7,6 +7,7 @@ Table Of Contents
     Formatting
     Data Abstraction
     Exception Handling
+    Constructors
     Boundaries: Third Party Library
 // */
 
@@ -166,6 +167,38 @@ Never return NULL
     If 3rd party API returns NULL, create a wrapper and return a special exception instead! 
 Never pass NULL
     Try not to design function that accepts null as an argument, so you will never pass the NULL values to them! 
+Always throw only 1 class of Checked Exception finally in your interface. Catch all other runtimeexception. This way
+    users to your interface won't be shocked by all the other exceptions. However, throw unchecked exceptions within the classes themselves. 
+    This way, your own classes won't need so many try and catch blocks to catch checked exceptions, and instead can check all other exceptions under the Exception parent class. 
+    e.g. 
+        interfaceMethod() throws customException {
+            try {
+            } catch (Exception e) { // catches all exceptions
+                throw new customException(e.getMessage, e);
+            }
+        }
+        ownMethodThatDontNeedThrowStatement() {
+            ...
+            throw new RuntimeException(...);
+        }
+        ownMethodUsingownMethodThatDontNeedThrowStatementWillNotNeedTryCatchBlocks {
+            ...
+            // don't need try block for below
+            ownMethodThatDontNeedThrowStatement();
+            // don't need catch block for above
+            ...
+        }
+//-------------------------------------------------------------------------------------------
+// Constructors
+//-------------------------------------------------------------------------------------------
+Should always be declared public.
+    public className(...) {}
+
+Unless you don't want users to use it
+    private className(...) {}
+
+If you don't users to use it, but you want it to be testable, make it package private
+    className(...) {}
 
 //-------------------------------------------------------------------------------------------
 // Boundaries: Third Party Library
