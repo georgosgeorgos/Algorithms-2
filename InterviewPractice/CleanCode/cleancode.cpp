@@ -7,6 +7,7 @@ Table Of Contents
     Formatting
     Data Abstraction
     Exception Handling
+    Streams
     Constructors
     Boundaries: Third Party Library
 // */
@@ -188,6 +189,29 @@ Always throw only 1 class of Checked Exception finally in your interface. Catch 
             // don't need catch block for above
             ...
         }
+//-------------------------------------------------------------------------------------------
+// Streams 
+//-------------------------------------------------------------------------------------------
+Always close all streams properly using try with resources block 
+    boolean exceptionOccurred = false; // only needed if have finally block to close streams that do not implement AutoCloseable
+    try ( 
+        ... // open few streams
+    ) {
+        ... // actual code
+        try (
+            ... // open more streams
+        ) {
+            ... // actual code
+        }
+    } catch(Exception e) {
+        // handle exceptions 
+        exceptionOccurred = true;
+    } finally {
+        // close streams that do not override Autocloseable
+        // Ensure this code is run and isn't prevent from exception
+    }
+    Assert.assertFalse(exceptionOccurred, "Reason why it failed");
+
 //-------------------------------------------------------------------------------------------
 // Constructors
 //-------------------------------------------------------------------------------------------
