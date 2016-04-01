@@ -9,6 +9,7 @@ Table Of Contents
     Exception Handling
     Streams
     Constructors
+    Configuration
     Boundaries: Third Party Library
 // */
 
@@ -224,6 +225,11 @@ Unless you don't want users to use it
 If you don't users to use it, but you want it to be testable, make it package private
     className(...) {}
 
+//-------------------------------------------------------------------------------------------
+// Configuration
+//-------------------------------------------------------------------------------------------
+Dependency Management: 
+    Never depend on SNAPSHOT for production company services, always depend on a stable release version.  
 //-------------------------------------------------------------------------------------------
 // Boundaries: Third Party Library
 //-------------------------------------------------------------------------------------------
