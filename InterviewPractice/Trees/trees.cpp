@@ -52,6 +52,8 @@ to that value. Note: It can be any path in the tree and does not have to start a
 38. Given the root of a binary tree and a node, return array of path from root to that node or NULL if that node is not in the tree
     Hint: Use stack, go down till find it, then push to stack once found and just keep pushing to stack if one of child found it
 22. Serialize & De-Serialize a N-ary Tree
+KD Tree
+Cover Tree
 //----------------------------------------------------------------------------------------------------------------------------------
 Notes:
 //----------------------------------------------------------------------------------------------------------------------------------
