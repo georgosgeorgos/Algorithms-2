@@ -16,4 +16,4 @@ Ray Tracer
 
 Ray Casting 
 1. Implement a ray caster 
-2. BSP trees for depth  
+2. BSP (Binary Space Partitioning) trees for depth  
