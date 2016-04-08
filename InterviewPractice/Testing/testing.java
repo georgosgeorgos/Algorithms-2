@@ -42,6 +42,14 @@ Testing
         onePartitionAndOneNegativeReplicationShouldThrowIllegalArgumentException
         onePartitionAndOneReplicationShouldReturnAListOfValidKafkaTopics
     This is because during testing, some test frameworks like JUnit will only show you the test method name and line number. Therefore, naming the test method name is very important.
+    Don't bother catching exceptions in test, just define test to throws Exception 
+    e.g.    
+        @Test
+        public void inputShouldDoThis() throws Exception {
+            try (openingResources();) {
+                ...
+            } // no need catch block as throws Exception
+        }
 Unit Test
     Don't use functions inside Unit Test cause you don't want to be testing, debugging your unit test. Instead, re-write every code. 
     setup() and cleanup() only works if ALL your unit test uses them. 
