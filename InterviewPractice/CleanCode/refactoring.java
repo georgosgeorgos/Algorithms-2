@@ -29,6 +29,7 @@ Table Of Contents
     Conditionals
         Explaining Method
         Consolidate 2 conditions to initialization
+        Remove else throw to if throw
         Or Same Results
         And Nested Ifs
         Bring Out Repeated Statements
@@ -533,6 +534,19 @@ Switch from OOP to Procedural
         charge = 0;
         if(...)
         charge = 1;
+//----------------------------
+// Remove else throw to if throw
+//----------------------------
+    Remove else statement by throwing in if instead
+    from:
+        if(thisMustBeTrueForCodeToWork())
+            ...
+        else
+            throw error;
+    to:
+        if(!thisMustBeTrueForCodeToWork())
+            throw error;
+        ...
 //----------------------------
 // Or Same Results
 //----------------------------
