@@ -457,6 +457,12 @@ int main(void)
 // However, you can pass it variables so it does a different construction for arms and legs 
 // You can have classes that initialize all 100 variables for you. 
 // Then, you can pass those classes in as a parameter to the Builder, which reads those pre-defined variables and constructs the robot
+
+// Use Case 3: Required and Optional variables
+// When your class has required variables and optional variables, the user won't know which is which. 
+// Therefore, you make required variables variables in the constructor for the builder, 
+// and optional variables as variables that are set by the builder.
+// Then, it will be clear
 //-------------------------------
 /* //
 #include <string>
