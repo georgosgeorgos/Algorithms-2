@@ -239,8 +239,11 @@ Create wrappers for third party library
         Own code logic can be independent on 3rd party API as well as their updates. 
         Can mock so that only test own code.
         Can handle exception code in the wrappers
+        Can find out if new version of Third Party Library deprecated automatically
 Write learning test:
     Unit test that test Third Party Library code behaves like what we expect. 
     This way, when Third Party Library updates to not be backward compatible, we will find out. 
     Learning test cost nothing, cause you had to learn the API anyway, might as well learn while writing them. 
+Disadvantage: 
+    Increasing unit test time taken due to extra test
 //-------------------------------------------------------------------------------------------
