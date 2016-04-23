@@ -9,6 +9,7 @@ Table Of Contents
     Exception Handling
     Streams
     Constructors
+    Logging
     Configuration
     Boundaries: Third Party Library
 // */
@@ -225,6 +226,15 @@ Unless you don't want users to use it
 If you don't users to use it, but you want it to be testable, make it package private
     className(...) {}
 
+//-------------------------------------------------------------------------------------------
+// Logging
+//-------------------------------------------------------------------------------------------
+Try to use a facade like SLF4J so that the implementation can differ and can be injected but same API 
+Format logging to be more readable. 
+    Not very readable
+        logger.info("This is " + var1 + " not very " + var2 + " okay!");
+    Readabale
+        logger.info("This is {} not very {} okay!", var1, var2);
 //-------------------------------------------------------------------------------------------
 // Configuration
 //-------------------------------------------------------------------------------------------
