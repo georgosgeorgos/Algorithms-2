@@ -235,6 +235,7 @@ Format logging to be more readable.
         logger.info("This is " + var1 + " not very " + var2 + " okay!");
     Readabale
         logger.info("This is {} not very {} okay!", var1, var2);
+Debugging logs should be informative enough to re-construct failure scenarios
 //-------------------------------------------------------------------------------------------
 // Configuration
 //-------------------------------------------------------------------------------------------
