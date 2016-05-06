@@ -11,6 +11,7 @@ Types of Test:
     Unit Test
       - State Test
       - Interaction Test
+      - Behavior-Driven Testing
     Integration Test
     System Test == Functional Test
     User Interaction Test (Web Driver, e.g. Selenium simulates browser interactions)
@@ -46,9 +47,6 @@ Predicts failure
 //---------------------------------------------------------------------------------------------------------------------------------
 // Code Guidelines
 //---------------------------------------------------------------------------------------------------------------------------------
-Code Coverage == Line Coverage, Code Coverage != Path Coverage
-  Make sure your tests cover every important path in the code.
-  Test from user's API perspective.
 Testing
     testMethodNames should be sentences describing behavior of test, what exactly is being tested, what are the inputs and what are the expected outputs. 
     testMethodNames should have the word 'should'
@@ -65,11 +63,29 @@ Testing
                 ...
             } // no need catch block as throws Exception
         }
+    Complexity of calculations should be in code! NOT in test!
+      This way, if a test fails, you know something is wrong with the code, NOT the test. 
+    e.g.
+      testDoesComplicatedChecks() {
+        // Test failing, not sure if test written wrongly or code is wrong
+        assertEquals(this.getExpected, kaka.a() + kaka.b() * kaka.c() + kaka.d());
+      }
+      testIsSimple() {
+        // Test failing, something is wrong with  kaka.getResult()
+        assertEquals(this.getExpected, kaka.getResult());
+      }
     A little deviation from actual Code's Clean Code:
-      Readers should be able to understand what the test is testing (input to test, behavior, expected output) without diving out into any methods called by the test.
+      Conciseness: Less distractions from what the test code does
+      Completeness: Readers should be able to understand what the test is testing (input to test, behavior, expected output) without diving out into any methods called by the test.
+      Balance between conciseness and completeness.
 Unit Test
     Don't use functions inside Unit Test cause you don't want to be testing, debugging your unit test. Instead, re-write every code. 
     setup() and cleanup() only works if ALL your unit test uses them. 
+    Each test should only setup things that it needs in order for the test to pass. Not the generic setup for everything! 
+    Front Door First: Don't write test for a class in a way that users won't be able to
+      Test only the public API available for people using your class, NOT the internal private methods. 
+      This allows test to be used as a form of documentation.
+      This makes the test resilient to internal implementation changes. (test code doesn't have to change) 
 //---------------------------------------------------------------------------------------------------------------------------------
 // Categorizing Test
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -96,6 +112,8 @@ Reliable/Deterministic
 Unit Not Integration
     Independent of external environments
     No dependency
+Resilient
+  Test code shouldn't change as much if actual code changes.
 Clean
     Test code is production code
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -163,6 +181,16 @@ public void testSortNumbers_quicksortIsUsed() {
     // Step6: Verify numberSorted used quicksort's sort() method. The line below fails if the function below wasn't executed
     verify(mockQuicksort).sort(new ArrayList(3, 1, 2));
 }
+//---------------------------------------------------------------------------------------------------------------------------------
+// Behavior Driven Testing
+//---------------------------------------------------------------------------------------------------------------------------------
+A method can contain multiple behaviors (does different things)
+Multiple methods can be used for a single behavior. 
+Test each possible behavior (path) in separate test. 
+  Each test should test only 1 behavior, not all the behaviors for 1 method.
+Code Coverage == Line Coverage, Code Coverage != Path Coverage
+  Make sure your tests cover every important path in the code.
+  Test from user's API perspective.
 //---------------------------------------------------------------------------------------------------------------------------------
 // Integration Test
 //---------------------------------------------------------------------------------------------------------------------------------
