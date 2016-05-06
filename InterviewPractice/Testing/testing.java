@@ -1,18 +1,27 @@
 // Mockito, Junit
 /*
-Goals: 
-
-Guidelines
+Goals
+Code Guidelines
     Testing
     Unit-Test
+
+Categorizing Tests
+
+Types of Test:
+    Unit Test
+      - State Test
+      - Interaction Test
+    Integration Test
+    System Test == Functional Test
+    User Interaction Test (Web Driver, e.g. Selenium simulates browser interactions)
+
+    A/B Testing => e.g. Change color and measure impact to amount of user interaction.
+    Accessibility Testing => Ensure people with disability can use it
+    Internalization Testing => Ensure it works for both boy, girls
 
 Mocking:
     Benefits
     Types of Test Doubles
-
-Types of Test:
-    Unit Test
-    Integration Test
 
 What to Test:
     State Test
@@ -21,19 +30,25 @@ What to Test:
     Interaction Test
         Test that function calls the right method properly (e.g. a Sort master class calls the quicksort method instead of bubblesort method
     Behavior Test
-        Test methodNames should be sentences describing behavior of test. Ignore clean code practices for unit testing. It's different!
-
+        Test methodNames should be sentences describing behavior of test. 
 Writing Testable Code:
 */
 //---------------------------------------------------------------------------------------------------------------------------------
 // Goals
 //---------------------------------------------------------------------------------------------------------------------------------
-Ensure code works as expected. 
+Ensure code works as expected.
+  - Ensures you fix the right thing. Worst problem: Having the same bug appear twice.
 Allows developer to modify code without breaking existing functionality as long as they pass the unit test. => Encourages more flexible code
-A form of documentation for large code bases, and how the code is supposed to run
+A form of documentation for large code bases, and how the code is supposed to run, that doesn't become obsolete.
+  - Test is the first user.
+Minimize use of debugger when code breaks.
+Predicts failure
 //---------------------------------------------------------------------------------------------------------------------------------
-// Guidelines
+// Code Guidelines
 //---------------------------------------------------------------------------------------------------------------------------------
+Code Coverage == Line Coverage, Code Coverage != Path Coverage
+  Make sure your tests cover every important path in the code.
+  Test from user's API perspective.
 Testing
     testMethodNames should be sentences describing behavior of test, what exactly is being tested, what are the inputs and what are the expected outputs. 
     testMethodNames should have the word 'should'
@@ -50,9 +65,39 @@ Testing
                 ...
             } // no need catch block as throws Exception
         }
+    A little deviation from actual Code's Clean Code:
+      Readers should be able to understand what the test is testing (input to test, behavior, expected output) without diving out into any methods called by the test.
 Unit Test
     Don't use functions inside Unit Test cause you don't want to be testing, debugging your unit test. Instead, re-write every code. 
     setup() and cleanup() only works if ALL your unit test uses them. 
+//---------------------------------------------------------------------------------------------------------------------------------
+// Categorizing Test
+//---------------------------------------------------------------------------------------------------------------------------------
+Metrics:
+  Speed
+  Isolation
+  Confidence In Parts
+  Confidence In Systems
+  Fragility = How much test code needs to change if code changes. 
+Unit Test => High (speed, isolation, confidence in parts, fragility), Low(others)
+Integration Test => Medium (all)
+System Test => High (confidence in systems), Low(others)
+//---------------------------------------------------------------------------------------------------------------------------------
+// Unit Test
+//---------------------------------------------------------------------------------------------------------------------------------
+Readable
+    Unit test should clearly tell the behavior of application and which scenario is being tested.
+Fast
+    Unit test needs to execute fast so that developers can run them often
+    No calls to database, filesystem. 
+Reliable/Deterministic
+    Passing unit test in development must pass in production
+    Failing unit test in production should be reproducible in development
+Unit Not Integration
+    Independent of external environments
+    No dependency
+Clean
+    Test code is production code
 //---------------------------------------------------------------------------------------------------------------------------------
 // Mocking
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -75,18 +120,6 @@ Types of Test Doubles: Similar to acting, where a Double does crazy stunts, Mock
         Provide hard-coded return values when it's methods are called
     Mocks
         Objects with expectations about calls that are expected to receive. 
-//---------------------------------------------------------------------------------------------------------------------------------
-// Unit Test
-//---------------------------------------------------------------------------------------------------------------------------------
-Readable
-    Unit test should clearly tell the behavior of application and which scenario is being tested. 
-Fast 
-    Unit test needs to execute fast so that developers can run them often
-Reliable/Deterministic
-    Passing unit test in development must pass in production
-    Failing unit test in production should be reproducible in development
-Unit Not Integration 
-    Independent of external environments
 //---------------------------------------------------------------------------------------------------------------------------------
 // Interaction Test
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -130,7 +163,47 @@ public void testSortNumbers_quicksortIsUsed() {
     // Step6: Verify numberSorted used quicksort's sort() method. The line below fails if the function below wasn't executed
     verify(mockQuicksort).sort(new ArrayList(3, 1, 2));
 }
-
+//---------------------------------------------------------------------------------------------------------------------------------
+// Integration Test
+//---------------------------------------------------------------------------------------------------------------------------------
+Pairwise components interact correctly
+  - Test 2 components at a time.
+//---------------------------------------------------------------------------------------------------------------------------------
+// System Test == Functional Test
+//---------------------------------------------------------------------------------------------------------------------------------
+End to End testing
+Involves everything
+//---------------------------------------------------------------------------------------------------------------------------------
+// Accessibility Testing
+//---------------------------------------------------------------------------------------------------------------------------------
+There's no replacement for staring at the target user use your product in person at their location. 
+Accessibility Design:
+  Focus on the user
+  Design the IDEAL Wallet
+    Some cool watch that pays by scanning automatically.
+  Design the IDEAL Wallter for blind people in Asian countries
+    User:
+        Poor
+        Uses cash instead of cards
+        Can't identify how much money being held/received
+    Mechanical wallet that sorts money your drop into it based on weight.
+  Notice how the goal is still the same (storing money), but the design changes completely
+//---------------------------------------------------------------------------------------------------------------------------------
+// Internalization Testing
+//---------------------------------------------------------------------------------------------------------------------------------
+Test your app on slow wifi, if it doesn't work, billions of people can't use it.
+Red colored $$$ in US is bad, but in China is good
+Ensure message is translatable using Google Translate, and is still culturally acceptable
+Same words in some languages may vary from less characters to more characters
+    Super long words in other languages may not fit screen.
+Muslims do not like default picture to be substituted to a puppy.
+Some cultures prefer more privacy, some prefers less.
+  e.g.
+    System.out.println(name + " added " + number + " person to his circles");
+      Problems:
+          Number > 1 ? => "persons"
+          gender(name).equals("girl") ? => "her"
+Top 10 apps at every country is different => Some apps are more targetted in some countries.
 //---------------------------------------------------------------------------------------------------------------------------------
 // Writing Testable Code
 //---------------------------------------------------------------------------------------------------------------------------------
