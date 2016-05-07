@@ -1,4 +1,3 @@
-//
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
@@ -13,7 +12,6 @@ C++ is divided into:
 //-------------------------
 1. Implementation of Standard Template Library  internally
 2. Benefits of Iterators
-
 //-------------------------
 // B) Functions
 //-------------------------
@@ -41,7 +39,7 @@ TODO:
   100. Memory Layout of C Programs
       http://www.geeksforgeeks.org/memory-layout-of-c-program/
 //-------------------------
-Reference: 
+Reference:
 Effective C++ Series by Scott Meyers
 Exceptional C++ Series by Herb Sutter
 //-------------------------
@@ -192,8 +190,11 @@ BaseClass::BaseClass(int a1, int b1) : a(a1), b(b1) {}
 //----------------------------------------------------------------------------------------------------------------------------------
 // 2 Virtual
 //---------------------------------
+// Function
 A function declared virtual will call its derived class before itself for a pointer from the base class
 Without virtual, the pointer will call the base's class function 
+//---------------------------------
+
 //----------------------------------------------------------------------------------------------------------------------------------
 // 3 Private, Protected, Public
 //---------------------------------
