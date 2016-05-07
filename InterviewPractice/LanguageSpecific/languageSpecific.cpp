@@ -13,6 +13,11 @@ Table of Contents
 9. Inheritance
 10. Private, Protected, Public
 11. this vs *this
+12. 
+
+Reference: 
+Effective C++ Series by Scott Meyers
+Exceptional C++ Series by Herb Sutter
 //-------------------------
 TODO:
 21. Memory Layout of C Programs
@@ -79,8 +84,8 @@ The first constructor that is called is called last from destructor at end of pr
 //---------------------------------
 // Copy constructor is called when an object is passed by value into a function, or when instantiate using 'new' 
 // If no pointers, no need to define destructor as default destructor deletes original object for you
-a = b; // invokes Assignment Operator, NOT copy constructor  , when '=' is used for assignment
-className a = b; // invokes Copy Constructor when '=' is used for initialization
+a = b; // invokes Assignment Operator, NOT copy constructor  , when '=' is used for assignment (not constructing a new 'a')
+className a = b; // invokes Copy Constructor when '=' is used for initialization (constructing a new 'a')
 a = new b; // '=' invokes Assignment Operator, 'new' invokes Copy Constructor
 //----------------------------------------------------------------------------------------------------------------------------------
 // 5 Virtual
