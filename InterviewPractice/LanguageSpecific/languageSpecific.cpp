@@ -2,40 +2,52 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
+C++ is divided into:
+  - C
+  - Classes
+  - STL
+  - Templates (Generics)
+  Practices depends on which part of C++ you are using.
+//-------------------------
+// A) Standard Template Library
+//-------------------------
 1. Implementation of Standard Template Library  internally
-2. Pass by Value vs Pass by Reference
-3. Default Constructors
-4. Copy Constructor vs Assignment Operator
-5. Virtual
-6. Benefits of Iterators
-7. Flow of Program
-8. Operator Overloading 
-9. Inheritance
-10. Private, Protected, Public
-11. this vs *this
-12. 
+2. Benefits of Iterators
 
+//-------------------------
+// B) Functions
+//-------------------------
+1. Pass by Value vs Pass by Reference
+//-------------------------
+// C) Constructors & Overloading
+//-------------------------
+1. Default Constructors
+2. Copy Constructor vs Assignment Operator
+3. Flow of Program
+4. Operator Overloading
+//-------------------------
+// D) Inheritance
+//-------------------------
+1. Inheritance
+2. Virtual
+3. Private, Protected, Public
+4. this vs *this
+//-------------------------
+// E) Plain Old C
+//-------------------------
+1. const
+2. (const, enum, inline) > define
+TODO:
+  100. Memory Layout of C Programs
+      http://www.geeksforgeeks.org/memory-layout-of-c-program/
+//-------------------------
 Reference: 
 Effective C++ Series by Scott Meyers
 Exceptional C++ Series by Herb Sutter
 //-------------------------
-TODO:
-21. Memory Layout of C Programs
-    http://www.geeksforgeeks.org/memory-layout-of-c-program/
-
-//----------------------------------------------------------------------------------------------------------------------------------
-// notes
-//-------------------------
-- Nothing is this file is actually compilable so no point commenting out everything. It is more of answering by proof of concept style questions
-//----------------------------------------------------------------------------------------------------------------------------------
-// Common Hints
-//-------------------------
-- 
-//-------------------------
-// Common Questions
-//-------------------------
-- 
 // */
+//----------------------------------------------------------------------------------------------------------------------------------
+// A) Standard Template Library
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Implementation of Standard Template Library  internally
 //---------------------------------
@@ -55,7 +67,17 @@ TODO:
     unordered => Don't have any > or <  relation
 <unordered_set> => Hashed Set
 //----------------------------------------------------------------------------------------------------------------------------------
-// 2 Pass by Value vs Pass by Reference
+// 2 Benefits of Iterators
+//----------------------------------------------------------------------------------------------------------------------------------
+Without Iterators,
+    indexing an array can be done using *p to get the value, p++, p+5 etc.
+    indexing a linked list has to be done using p = p->next;
+With Iterators,
+    indexing both a <vector> and <list> can be done using p++; (instead of p = p->next), where p++ is operator overloaded of ++ by doing p = p->next; 
+//----------------------------------------------------------------------------------------------------------------------------------
+// B) Functions
+//----------------------------------------------------------------------------------------------------------------------------------
+// 1 Pass by Value vs Pass by Reference
 //---------------------------------
 Reference
     Can't change a reference or assign a reference toa nother object
@@ -68,7 +90,9 @@ local copy, returns new copy                    changes actual copy
 Can't change actual copy                        Less memory used
 can only return 1 value                         Can return multiple values  
 //----------------------------------------------------------------------------------------------------------------------------------
-// 3 Default Constructors
+// C) Constructors
+//----------------------------------------------------------------------------------------------------------------------------------
+// 1 Default Constructors
 //---------------------------------
 // Default Constructor
 classname::classname(); // Does a shallow copy of everything (pointers point to exact same object that exists before) 
@@ -80,7 +104,7 @@ classname::~classname(); // A shallow destroy
 Constructors and Destructors are called in a Stack approach. 
 The first constructor that is called is called last from destructor at end of program 
 //----------------------------------------------------------------------------------------------------------------------------------
-// 4 Copy Constructor vs Assignment Operator
+// 2 Copy Constructor vs Assignment Operator
 //---------------------------------
 // Copy constructor is called when an object is passed by value into a function, or when instantiate using 'new' 
 // If no pointers, no need to define destructor as default destructor deletes original object for you
@@ -88,20 +112,7 @@ a = b; // invokes Assignment Operator, NOT copy constructor  , when '=' is used 
 className a = b; // invokes Copy Constructor when '=' is used for initialization (constructing a new 'a')
 a = new b; // '=' invokes Assignment Operator, 'new' invokes Copy Constructor
 //----------------------------------------------------------------------------------------------------------------------------------
-// 5 Virtual
-//---------------------------------
-A function declared virtual will call its derived class before itself for a pointer from the base class
-Without virtual, the pointer will call the base's class function 
-//----------------------------------------------------------------------------------------------------------------------------------
-// 6 Benefits of Iterators
-//---------------------------------
-Without Iterators,
-    indexing an array can be done using *p to get the value, p++, p+5 etc.
-    indexing a linked list has to be done using p = p->next;
-With Iterators,
-    indexing both a <vector> and <list> can be done using p++; (instead of p = p->next), where p++ is operator overloaded of ++ by doing p = p->next; 
-//----------------------------------------------------------------------------------------------------------------------------------
-// 7 Flow of Program
+// 3 Flow of Program
 //---------------------------------
 #include <cstdlib>
 #include <iostream>
@@ -139,7 +150,7 @@ int main(void)
 }
 // 11 (1 gets deleted)
 //----------------------------------------------------------------------------------------------------------------------------------
-// 8 Operator Overloading 
+// 4 Operator Overloading 
 //---------------------------------
 className:: operator * (const className &rhs) const 
 // 1st const is to make rhs const
@@ -151,7 +162,9 @@ className::operator - () {
 // a = -b;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-// 9 Inheritance
+// D) Inheritance
+//----------------------------------------------------------------------------------------------------------------------------------
+// 1 Inheritance
 //---------------------------------
 Derived class inherits:
     i) Member data 
@@ -177,7 +190,12 @@ DerivedClass::DerivedClass () : BaseClass() {
 // To automatically assign values to members in constructor
 BaseClass::BaseClass(int a1, int b1) : a(a1), b(b1) {} 
 //----------------------------------------------------------------------------------------------------------------------------------
-// 10 Private, Protected, Public
+// 2 Virtual
+//---------------------------------
+A function declared virtual will call its derived class before itself for a pointer from the base class
+Without virtual, the pointer will call the base's class function 
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 Private, Protected, Public
 //---------------------------------
 #include <iostream>
 #include "Class2a.cpp"
@@ -256,13 +274,74 @@ int main()
     return 0;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-// 11 this vs *this
+// 4 this vs *this
 //---------------------------------
 this => A pointer to the object calling the function
 *this => A reference to the object calling the function
-    e.g. 
+    e.g.
     className& className::operator = (const className &rhs) {
-        this->value = rhs.value; 
+        this->value = rhs.value;
         return *this;
     }
+//----------------------------------------------------------------------------------------------------------------------------------
+// E) Plain Old C
+//----------------------------------------------------------------------------------------------------------------------------------
+// 1 const
+//---------------------------------
+// value is constant (const before '*')
+const char * aa = "lala"; 
+char const * aa = "lala"; 
+// pointer is const (const after '*')
+char * const aa = "lala";
+// both value and pointer are const
+const char * const aa = "lala";
+char const * const aa = "lala";
+// Make all results of user-defined operator (+,-,*,/) constants
+const className operator*(const className& lhs, const className& rhs);
+  // This avoid typos of using '=' instead of '=='
+  if((a*b) = c) // this will be true if c != 0 since it is an assignment!
+  // However, defining results of operator to be constant makes this a compilation error.
+
+//----------------------------------------------------------------------------------------------------------------------------------
+// 2 (const, enum, inline) > #define
+//---------------------------------
+// Simple Constants
+#define LALA 1.653
+Problems:
+  When error occurs, compiler will say error with 1.653, it doesn't actually save the word 'LALA' into symbol table, this makes it harder to debug. 
+  There is no scoping for #define
+  Can't take address to #define & enum, but can take address of const
+
+Solution: // const
+  const double Lala = 1.653;
+
+// Imagine you want the constant to be within the scope of class only that is
+// used directly in an array
+class someClass {
+private:
+  const double Lele = 3;
+  int scores[Lele]
+}
+Problems:
+  Some compilers don't let you define the values during compilation time
+Solution: // enum
+  class someClass {
+  private:
+    enum { Lele = 3 };
+    int scores[Lele]
+  }
+//---------------------------------
+// Function macros
+#define CALL_MAX(a,b) f((a) > (b) ? (a) : (b))
+Problems:
+  Hard to write, need '()' for every argument
+  Different behavior depending on argument
+    int a = 5, b = 0;
+    CALL_MAX(++a, b); // a is incremented twice
+    CALL_MAX(++a, b+10); // a is  incremented once
+Solution: inline
+  template<typename T>
+  inline void callMax(const T& a, const T& b) {
+    f(a > b ? a : b);
+  }
 //----------------------------------------------------------------------------------------------------------------------------------
