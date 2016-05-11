@@ -1,5 +1,10 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
+TODO: 
+    Add 'using' as replacement for typedef
+    Add nullptr
+    add constexpr
+    Add checking resource is closed properly in clean code (C++ does not have finally block) 
 Table of Contents
 C++ is divided into:
   - C
@@ -20,7 +25,7 @@ C++ is divided into:
 // C) Constructors & Overloading
 //-------------------------
 1. Default Constructors
-2. Copy Constructor vs Assignment Operator
+2. Copy Constructor vs Assignment Operator vs Move Constructor
 3. Flow of Program
 4. Operator Overloading
 //-------------------------
@@ -102,13 +107,15 @@ classname::~classname(); // A shallow destroy
 Constructors and Destructors are called in a Stack approach. 
 The first constructor that is called is called last from destructor at end of program 
 //----------------------------------------------------------------------------------------------------------------------------------
-// 2 Copy Constructor vs Assignment Operator
+// 2 Copy Constructor vs Assignment Operator vs Move Constructor
 //---------------------------------
 // Copy constructor is called when an object is passed by value into a function, or when instantiate using 'new' 
 // If no pointers, no need to define destructor as default destructor deletes original object for you
 a = b; // invokes Assignment Operator, NOT copy constructor  , when '=' is used for assignment (not constructing a new 'a')
 className a = b; // invokes Copy Constructor when '=' is used for initialization (constructing a new 'a')
 a = new b; // '=' invokes Assignment Operator, 'new' invokes Copy Constructor
+a = std::move(b); // invokes Move Constructor
+return b; // invokes Move Constructor
 //----------------------------------------------------------------------------------------------------------------------------------
 // 3 Flow of Program
 //---------------------------------
