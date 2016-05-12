@@ -1279,4 +1279,11 @@ Preemptive benefits
 Feedback based scheduling can help avoid starvation because it prioritizes IO bound processes over CPU bound processes. 
 IO bound would not starve CPU as if it uses CPU excessively, its priority value will increase and priority will reduce to below CPU bound process
 Therefore, it prevents starvation 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Continuation Passing => Pass a callback function to be called once the current thread finishes executing. 
+Message Passing => Copy shared data to thread that needs it
+
+Thread pool = A limited number of threads continually getting tasks from queue to run 
+	Limited number of threads, extra tasks will just be queued => Won't over-exhaust space complexity for number of threads created
+	Problems: May cause deadlock if resource to be queued blocks as queue is full and no threads can run to consume from queue. 
 
