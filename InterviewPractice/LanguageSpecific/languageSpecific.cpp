@@ -28,6 +28,8 @@ C++ is divided into:
 2. Copy Constructor vs Assignment Operator vs Move Constructor
 3. Flow of Program
 4. Operator Overloading
+5. Initialization > Default Constructor + Assignment
+6. Destructors Throwing Exceptions Must Be Handled
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -35,11 +37,13 @@ C++ is divided into:
 2. Virtual
 3. Private, Protected, Public
 4. this vs *this
+5. Never Inherit Non-virtual Destructors
 //-------------------------
 // E) Plain Old C
 //-------------------------
 1. const
 2. (const, enum, inline) > define
+3. Order of Initialization
 TODO:
   100. Memory Layout of C Programs
       http://www.geeksforgeeks.org/memory-layout-of-c-program/
@@ -87,7 +91,7 @@ Reference
     Can't reference a reference
     Taking address of a reference is just the reference of the object instead of address of the reference itself. 
 
-Pass by: 
+Pass by:
 value                               |           reference
 local copy, returns new copy                    changes actual copy 
 Can't change actual copy                        Less memory used
@@ -166,6 +170,36 @@ className::operator - () {
 // This is used for the the unary case where:
 // a = -b;
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 5 Initialization > Default Constructor + Assignment
+//---------------------------------
+// note: This is only true for classes. There is no difference for primitives like int, double
+from:
+  // This constructor calls default constructor, then assigns the value, which wastes the effort of default constructor
+  ClassName(const std::string& input_name) { this->name = input_name; }
+to:
+  // This constructor initializes member variable this->name to name, therefore is more efficient
+  ClassName(const std::string& input_name) : this->name(input_name) {}
+//----------------------------------------------------------------------------------------------------------------------------------
+// 6 Destructors Throwing Exceptions Must Be Handled
+//---------------------------------
+If a class's destructor throws exceptions that isn't handled, undefined behavior can occur. 
+If a vector contains multiple instances of this class, destruction of this vector may result in more than 1 exception
+being thrown which will result in undefined behavior. 
+Therefore, all destructors that contain exceptions must be handled by either:
+1. Terminating the program.
+2. Swallowing the exception, then logging the error, and maybe notify client via another function. 
+e.g. 
+public:
+  bool errorOccurred;
+  ~ClassName() {
+    try {
+      database.close(); // may throw exception
+    } catch (int e) {
+      cerr << "Error occurred" << endl;
+      errorOccurred = true; // allows clients to detect
+    }
+  }
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -292,6 +326,21 @@ this => A pointer to the object calling the function
         return *this;
     }
 //----------------------------------------------------------------------------------------------------------------------------------
+// 5 Never Inherit Non-virtual Destructors
+//---------------------------------
+Virtual destructor ensures that it calls the child's destructor before itself.
+If you inherit non-virtual destructors, deleting the object using the parent's pointer may only call the parent's destructor,
+resulting in memory leak.
+  public OwnString :: std::string {
+  }
+  OwnString* os = new OwnString("lala");
+  std::string* s; 
+  s = os;
+  delete s; // Will only call std::string's destructor without calling own string's destructor
+// note: Don't always declare every destructor virtual unless it is needed
+// because anything declared virtual will require a virtual table and virtual
+// pointers which takes up more memory in C++ (e.g. from 32-bit to 64-bit) 
+//----------------------------------------------------------------------------------------------------------------------------------
 // E) Plain Old C
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 const
@@ -307,8 +356,8 @@ char const * const aa = "lala";
 // Make all results of user-defined operator (+,-,*,/) constants
 const className operator*(const className& lhs, const className& rhs);
   // This avoid typos of using '=' instead of '=='
-  if((a*b) = c) // this will be true if c != 0 since it is an assignment!
-  // However, defining results of operator to be constant makes this a compilation error.
+    if((a*b) = c) // this will be true if c != 0 since it is an assignment!
+    // However, defining results of operator to be constant makes this a compilation error.
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // 2 (const, enum, inline) > #define
@@ -352,4 +401,28 @@ Solution: inline
   inline void callMax(const T& a, const T& b) {
     f(a > b ? a : b);
   }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 Order of Initialization
+//---------------------------------
+Unitialize objects that are accidentally used are  very common and yields undefined behavior.
+  from:
+    int x;
+    doSomething(x); // may cause error since x has random values
+  to:
+    int x = 0;
+    doSomething(x); // easier to debug if errors
+If order of initialization matters, using another object may result in that object not being initialized yet.
+Therefore, define static objects in functions as they are guaranteed to be initialized if local static to a function (Singleton Pattern)
+  from:
+    static int aStaticThatDependsOnStatic = bStaticThatMayNotYetBeInitialized + 3;
+    static int bStatic = 0;
+  to:
+    int aStaticThatDependsOnStatic() {
+      static int aStaticThatDependsOnStatic = bStaticThatWillBeInitialized() + 3;
+      return aStaticThatDependsOnStatic;
+    }
+    int bStaticThatWillBeInitialized() {
+      static int bStaticThatWillBeInitialized = 0;
+      return bStaticThatWillBeInitialized;
+    }
 //----------------------------------------------------------------------------------------------------------------------------------
