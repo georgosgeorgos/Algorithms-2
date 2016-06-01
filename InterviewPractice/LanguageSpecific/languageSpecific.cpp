@@ -30,6 +30,8 @@ C++ is divided into:
 4. Operator Overloading
 5. Initialization > Default Constructor + Assignment
 6. Destructors Throwing Exceptions Must Be Handled
+7. Explicit Constructors
+8. No Virtual methods in Constructor & Destructor
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -200,6 +202,89 @@ public:
       errorOccurred = true; // allows clients to detect
     }
   }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 7 Explicit Constructors
+//---------------------------------
+// Implicit conversions can happen automatically 
+class Foo {
+Foo(int integerNeededForFooConstructor);
+};
+
+methodThatUsesFoo(Foo aFooObject);
+
+int main() {
+    methodThatUsesFoo(42); // legal, implicitly called Foo's constructor, construct Foo's object, thatn uses this method
+}
+Problems & Solution:
+class MyString {
+MyString(int sizeOfStringToAllocate);
+}
+class MyExplicitString {
+explicit MyExplicitString(int sizeOfStringToAllocate);
+}
+printMethodForMyString(MyString stringToPrint);
+printMethodForMyExplicitString(MyExplicitString stringToPrint);
+int main() {
+    // Want to print "50", but printed an empty string with size 50 instead. 
+    printMethodForMyString(50); 
+    // Want to print "50"
+    printMethodForMyExplicitString(50);  // Error!
+    printMethodForMyExplicitString(MyExplicitString(50)); // you know exactly what is happening here, it prints en empty string with size 50, so it's clearer. 
+    MyExplicitString mES(50);
+    mES.setString("50");
+    printMethodForMyExplicitString(mES);
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+// 8 No Virtual methods in Constructor & Destructor
+//---------------------------------
+Problem: Will not call derived class's method during construction and destruction. 
+Assume you wanna output logs for each derived class constructored
+
+class BaseClass {
+    BaseClass() {
+        logOutput(); // output logs each time anything is constructed
+        indirectNonVirtualButCallsVirtual();
+    }
+    virtual void logOutput() = 0; // must be overriden
+    void indirectNonVirtualButCallsVirtual() {
+        logOutput(); 
+    }
+
+};
+
+class Derive1 : public BaseClass {
+    virtual void logOutput() override;
+};
+
+int main() {
+    // Want to log "derive1", but resulted in undefined behavior instead.
+    Derive1 derive1; 
+}
+
+Problem: 
+    When Base class is constructed, derived class isn't constructed yet, therefore, virtual methods such as logOutput() will call the
+    Base class's logOutput() instead of derived classes logOutput()
+    logOutput() wouldn't compile since BaseClass does not implement it
+    indirectNonVirtualButCallsvirtual() will compile since it is non-virtual but will have linking errors during runtime since it calls
+        logOutput() which isn't define in base class during construction().
+    Destructors have a similar problem since the derived classes are destroyed before the Base classes' destructor are called. 
+Solution:
+    Pass the info needed by base class during construction and use only non-virtual methods that do not call any virtual methods
+
+class BaseClass { 
+    BaseClass(string logOutputString) {
+        logOutput(logOutputString);
+    }
+    void logOutput(string stringToLog);
+}
+class Derive1 : public BaseClass {
+    // Pass log information to base class during construction
+    Derive1() : BaseClass("I am derive class 1") {};
+}
+
+int main() {
+    Derive1 derive1; // does what you want, the base class will constructor will log the correct log information as needed.
+}
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
 //----------------------------------------------------------------------------------------------------------------------------------
