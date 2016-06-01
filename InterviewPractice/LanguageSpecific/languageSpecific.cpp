@@ -32,6 +32,7 @@ C++ is divided into:
 6. Destructors Throwing Exceptions Must Be Handled
 7. Explicit Constructors
 8. No Virtual methods in Constructor & Destructor
+9. No Copy And Assign
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -284,6 +285,19 @@ class Derive1 : public BaseClass {
 
 int main() {
     Derive1 derive1; // does what you want, the base class will constructor will log the correct log information as needed.
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+// 9 No Copy And Assign
+//---------------------------------
+No copying
+    NoCopyingAndAssignClass original;
+    NoCopyingAndAssignClass copy(original); // copy constructor
+    NoCopyingAndAssignClass reassign = original; // assignment operator
+
+class NoCopyingAndAssignClass{
+    // Set both copy constructor and assignment operator to '= delete'
+    NoCopyingAndAssignClass(const NoCopyingAndAssignClass&) = delete; 
+    NoCopyingAndAssignClass& operator = (const NoCopyingAndAssignClass&) = delete;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
