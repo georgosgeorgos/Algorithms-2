@@ -33,6 +33,7 @@ C++ is divided into:
 7. Explicit Constructors
 8. No Virtual methods in Constructor & Destructor
 9. No Copy And Assign
+10. Right Associative Assignment Operators
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -298,6 +299,18 @@ class NoCopyingAndAssignClass{
     // Set both copy constructor and assignment operator to '= delete'
     NoCopyingAndAssignClass(const NoCopyingAndAssignClass&) = delete; 
     NoCopyingAndAssignClass& operator = (const NoCopyingAndAssignClass&) = delete;
+}
+//----------------------------------------------------------------------------------------------------------------------------------
+// 10 Right Associative Assignment Operators
+//---------------------------------
+// Applies to (= , +=, -=, *=, /=)
+// x = y = z = 15 means x = (y = (z = 15 ))
+// Convention from C++ is to be right associative assignment. 
+// To do so, you return this* in overloading any assignment operators
+
+ClassName& operator = (const ClassName& rhs) {
+    ...
+    return *this;
 }
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
