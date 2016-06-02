@@ -34,6 +34,7 @@ C++ is divided into:
 8. No Virtual methods in Constructor & Destructor
 9. No Copy And Assign
 10. Right Associative Assignment Operators
+11. Overriding Copy Constructor and Assignment Operator
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -312,6 +313,38 @@ ClassName& operator = (const ClassName& rhs) {
     ...
     return *this;
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 11 Overriding Copy Constructor and Assignment Operator
+//---------------------------------
+Problems:
+    Assume you override copy constructor and Assignment Operator, however, you added a new member variable, now you must remember
+    to update both of them to copy that extra member variable.
+
+    Similarly, must always call base's classes copy constructor and assignment operator as there may be member variables
+    that are only visible in base class that needs to be copied over. 
+
+    Copy constructor and Assignment operator shares a lot of common code. DON'T call one from the other as neither makes any sense. 
+    Put common code in a local function that both calls. In other words, don't call copy constructor from assignment operator and vice versa. 
+    Doesn't make sense because:
+        call assignment operator from copy constructor => Assigning to existing when not even created yet
+        call copy constructor from assignment operator => creating something new when it already exist
+Solution:
+    Copy everything
+        Need to update both of them each time new member comes
+        Need to remember to call base's classes copy constructor and assignment operator
+    Share common methods in a local private method. 
+
+ChildClass::ChildCass(const ChildClass& rhs)
+    : ParentClass(rhs), // invoke parent's copy constructor
+      childClassMemberOne(rhs.childClassMemberOne) { 
+      init();}
+      
+ChildClass& ChildClass::operator = (const ChildClass& rhs) {
+    ParentClass::operator=(rhs); // assign parent's class member variable
+    childClassMemberOne = rhs.childClassMemberOne;
+    init(); // call common function
+    return *this;
+} 
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
 //----------------------------------------------------------------------------------------------------------------------------------
