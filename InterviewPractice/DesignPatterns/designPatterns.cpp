@@ -291,6 +291,10 @@ int main(void)
 // Basically, when don't know what class object will be needed
 // Centralize class selection code
 
+// Want to help control automatic allocation and deallocation of classes for clients
+// Want to help share common resources for clients 
+//      (e.g. The objects you construct can share a common thread-safe object that you can construct as well, therefore saving space and time)
+
 // For instance,
 // Create a new enemy in a game
 // RNG picks a random enemy type
