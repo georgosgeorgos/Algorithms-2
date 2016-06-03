@@ -43,12 +43,14 @@ C++ is divided into:
 3. Private, Protected, Public
 4. this vs *this
 5. Never Inherit Non-virtual Destructors
+6. override & final
 //-------------------------
-// E) Plain Old C
+// E) Plain Old C, C++, C++11, C++14
 //-------------------------
 1. const
 2. (const, enum, inline) > define
 3. Order of Initialization
+4. auto , auto& , auto*
 TODO:
   100. Memory Layout of C Programs
       http://www.geeksforgeeks.org/memory-layout-of-c-program/
@@ -486,7 +488,26 @@ resulting in memory leak.
 // because anything declared virtual will require a virtual table and virtual
 // pointers which takes up more memory in C++ (e.g. from 32-bit to 64-bit) 
 //----------------------------------------------------------------------------------------------------------------------------------
-// E) Plain Old C
+// 6 override & final
+//---------------------------------
+// Problem: Think you override a base class's method but you didn't due to typo. 
+    // Imagine base class's method is 
+    const void methodName(); 
+    // But child class wanted to override was
+    void methodName(); 
+    // Then in code, think you are calling child class method but actually calling base class method cause didn't override
+// Solution: 
+    //In child class, type
+    void methodName() override; // will generate compile time error as you are not overriding anything. 
+    const void methodName() override; // no compile time error as did override
+ 
+// If don't want a method to be overriden, declare it final
+    // In base class, 
+   final void methodName();
+   // In derived class,
+   void methodName() override; // compile time error! Can't override final methods
+//----------------------------------------------------------------------------------------------------------------------------------
+// E) Plain Old C, C++, C++11, C++14
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 const
 //---------------------------------
@@ -570,4 +591,15 @@ Therefore, define static objects in functions as they are guaranteed to be initi
       static int bStaticThatWillBeInitialized = 0;
       return bStaticThatWillBeInitialized;
     }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 4 auto , auto& , auto*
+//---------------------------------
+// auto will copy by value for references, however, if you want to copy by reference, use auto&, 
+// auto* is useless as it behaves the same as auto when copying pointers. 
+int a = 2; 
+int& b = a;
+auto c = b; // note: c is an 'int', NOT 'int&' like b
+int* p1 = &a;
+auto d = p1 // d is 'int*', auto does correct behavior
+auto* e = p1; // e is also 'int*', so auto* is useless as it does the same thing as 'auto' on pointers
 //----------------------------------------------------------------------------------------------------------------------------------
