@@ -29,7 +29,8 @@ What to Test:
         Test that function returns right results based on tested input 
         Basically, if it returns the right tested input, that means the state of the objects changed correctly. 
     Interaction Test
-        Test that function calls the right method properly (e.g. a Sort master class calls the quicksort method instead of bubblesort method
+        Test that function calls the right method properly (e.g. a Sort master class calls the quicksort method instead of bubblesort method)
+        Test code's response to certain result (if dependent object returns this, independent object will response a certain way)
     Behavior Test
         Test methodNames should be sentences describing behavior of test. 
 Writing Testable Code:
@@ -45,9 +46,21 @@ A form of documentation for large code bases, and how the code is supposed to ru
 Minimize use of debugger when code breaks.
 Predicts failure
 //---------------------------------------------------------------------------------------------------------------------------------
+// Test Driven Development
+//---------------------------------------------------------------------------------------------------------------------------------
+Goal:
+    Writing easy to test code 
+    Focusing on ease of use rather than ease of implementation. (test code = usage code)
+    Think about corner cases (similar to thinking about test cases first before designing the algorithms in interviews)
+Methods:
+    Write test before writing code.
+    Write a failing test, then write enough code to pass the test. 
+    Then, refactor the code, making sure it still passes the test. 
+//---------------------------------------------------------------------------------------------------------------------------------
 // Code Guidelines
 //---------------------------------------------------------------------------------------------------------------------------------
 Testing
+    testClassName shoulld be the word Test right after word class, so in testing ClassName, the test's class's name should be ClassNameTest
     testMethodNames should be sentences describing behavior of test, what exactly is being tested, what are the inputs and what are the expected outputs. 
     testMethodNames should have the word 'should'
     testMethodNames should begin with what the inputs are
@@ -125,6 +138,7 @@ Benefits
     Don't actually call the methods that are being mocked
         e.g. Don't want to actually send an email for exception each time test runs
         e.g. Faster test run-time as don't need to run mocked objects
+    Allow to test how component would react in low probability of occurence cases by hardcoding those cases in.
 
 Types of Test Doubles: Similar to acting, where a Double does crazy stunts, Mockito mocks out doubles for you
     Dummy
