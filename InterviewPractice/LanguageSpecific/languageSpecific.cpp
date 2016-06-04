@@ -49,7 +49,11 @@ C++ is divided into:
 5. Never Inherit Non-virtual Destructors
 6. override & final
 //-------------------------
-// E) Plain Old C, C++, C++11, C++14
+// E) Exceptions
+//-------------------------
+1. Exception Safety
+//-------------------------
+// F) Plain Old C, C++, C++11, C++14
 //-------------------------
 1. const
 2. (const, enum, inline) > define
@@ -590,7 +594,45 @@ resulting in memory leak.
    // In derived class,
    void methodName() override; // compile time error! Can't override final methods
 //----------------------------------------------------------------------------------------------------------------------------------
-// E) Plain Old C, C++, C++11, C++14
+// E) Exceptions
+//----------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
+// 1 Exception Safety
+//---------------------------------
+Goals:
+    - No memory leaks
+    - No corrupted state
+Guarantees:
+    - No throw
+        The code will never throw exceptions. Therefore, they don't need to be exception safe. Used by Google due to legacy reasons
+        Disadvantages:
+            Will rely on error codes, which is bad coding style.
+            Unable to work with code that throws exceptions
+    - Basic Guarantee
+        Multiple states, whatever exceptions are thrown, the code will be in 1 of the stable states, client code needs to 
+        call a getCurrentState() function to find out which state the code is in.
+    - Strong Guarantee
+        2 states, either the code executed, and the code is in the new state,
+        or the code fails, and the code remains in the previous state as if it wasn't executed.
+Methods:
+    Strong Guarantee
+        Copy & Swap. 
+        Basically copy the current object entirely, so and work on modifying the copied object. If anything fails,
+        just return the original unmodified object. If everything passes, then the copied object is now in the new state. 
+        Just swap to the copied object and return it. Assuming swap operation doesn't throw exceptions.
+note:
+      A method containing Basic Guarantee can never be Strong Guarantee. 
+      A method containing > 1 Strong Guarantee can never be Strong Guarantee.
+      e.g. 
+        void methodWithMoreThan1StrongGuaranteeIsntStrongGuarantee() {
+            StrongGuaranteeMethod1(); // Fail here, is fine, we return at original state
+            // Pass Method1();
+            StrongGuaranteeMethod2(); // ERROR! Fail method2 but pass method1, no longer at original state nor final state. 
+            // Pass both methods, we are at final state
+        }
+//----------------------------------------------------------------------------------------------------------------------------------
+// F) Plain Old C, C++, C++11, C++14
+//----------------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 const
 //---------------------------------
