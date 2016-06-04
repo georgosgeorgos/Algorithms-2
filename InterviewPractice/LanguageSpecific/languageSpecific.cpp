@@ -475,8 +475,24 @@ class Base {
     virtual void methodThatMustBeImplementedByDerived() = 0;
 };
 virtual void Base::methodWithBaseImplementation() { ... }
-//---------------------------------
 
+note: Never redefine a default parameter value for a function
+// Problem:
+class Base {
+    virtual void printNumber(int num = 1) const = 0;
+}
+
+class Derive : public Base {
+    virtual void printNumber(int num = 2) const = 0;
+}
+int main(void) {
+    Base* basePointToDerive;
+    Derive * dPointer = new Derive();
+    basePointToDerive = dPointer;
+    basePointToDerive->printNumber(3); // calls Derive::printNumber(3);
+    // note: Default arguments are linked during creation time. Thus, it will print the number 1 instead of 2!
+    basePointToDerive->printNumber(); // WARNING! calls Derive::printNumber(1) instead of Derive::printNumber(2)!
+}
 //----------------------------------------------------------------------------------------------------------------------------------
 // 3 Private, Protected, Public
 //---------------------------------
