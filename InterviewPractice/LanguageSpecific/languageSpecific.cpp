@@ -48,6 +48,7 @@ C++ is divided into:
 5. Never Inherit Non-virtual Destructors
 6. override & final
 7. Reduce Compilation Dependencies
+8. Overriding Base Method Hides All Overloaded Base Method
 //-------------------------
 // E) Exceptions
 //-------------------------
@@ -634,6 +635,39 @@ class HandlerClass {
 
 Small Disadvantage:
     Interfaces and Handlers increase object code size and require slightly more time to run the code as it adds a layer of indirection.
+//----------------------------------------------------------------------------------------------------------------------------------
+// 8 Overriding Base Method Hides All Overloaded Base Method
+//---------------------------------
+// Problem:
+class Base {
+ public:
+    void overloadedMethod();
+    void overloadedMethod(int a);
+};
+class Derive : public Base {
+ public:
+     void overloadedMethod();
+};
+
+int main(void) {
+    Base b; 
+    b.overloadedMethod();
+    b.overloadedMethod(1);
+    Derived d; 
+    d.overloadedMethod();
+    d.overloadedMethod(1); // Error! Derive class which overrides overloadedMethod() from Base now hides all overloaded methods of overloadedMethod()
+    return 0;
+}
+// Solution:
+class Derive : public Base {
+public:
+    using Base::overloadedMethod; // make both overloadedMethod() and overloadedMethod(int a) from Base class visible
+    void overloadedMethod(); // only override the overloadedMethod()
+};
+int main(void) {
+    Derived d;
+    d.overloadedMethod(1); // fine, class Base::overloadedMethod(int a)
+}
 //----------------------------------------------------------------------------------------------------------------------------------
 // E) Exceptions
 //----------------------------------------------------------------------------------------------------------------------------------
