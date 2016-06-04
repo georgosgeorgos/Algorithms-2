@@ -1089,13 +1089,13 @@ class TemplateMethod
 {
 public:
     // These are submethods that needs to be defined in children that implements this method
-    virtual void methodOne() = 0;
+    virtual void methodOne() = 0; // these must be implemented in derived
     virtual void methodTwo() = 0;
     virtual void methodThree() = 0;
     virtual string getVarStr() = 0;
     // This is the template method 
     // It will always be the same, its just the variables inside it may change
-    void mainTemplateMethod() 
+    void mainTemplateMethod()  // notice how this is non-virtual, which means any derive class that do not override this function will call this template
     {
         cout << "Doing some stuff before calling method 1" << endl;
         // Call method one

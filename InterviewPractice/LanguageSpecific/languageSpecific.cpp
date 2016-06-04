@@ -339,7 +339,7 @@ class BaseClass {
         logOutput(); // output logs each time anything is constructed
         indirectNonVirtualButCallsVirtual();
     }
-    virtual void logOutput() = 0; // must be overriden
+    virtual void logOutput() = 0; // must be overriden as indicated by '= 0'
     void indirectNonVirtualButCallsVirtual() {
         logOutput(); 
     }
@@ -470,6 +470,11 @@ BaseClass::BaseClass(int a1, int b1) : a(a1), b(b1) {}
 // Function
 A function declared virtual will call its derived class before itself for a pointer from the base class
 Without virtual, the pointer will call the base's class function 
+class Base {
+    virtual void methodWithBaseImplementation();
+    virtual void methodThatMustBeImplementedByDerived() = 0;
+};
+virtual void Base::methodWithBaseImplementation() { ... }
 //---------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------------------
