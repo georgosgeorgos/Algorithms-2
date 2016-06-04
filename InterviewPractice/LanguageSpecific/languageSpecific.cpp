@@ -21,6 +21,8 @@ C++ is divided into:
 // B) Functions
 //-------------------------
 1. Pass by Value vs Pass by Reference
+2. Pass by Reference Avoids Slicing
+3. Return By Value > Return By Reference for Local (stack,heap,static) Variables
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
@@ -91,18 +93,54 @@ With Iterators,
 //----------------------------------------------------------------------------------------------------------------------------------
 // B) Functions
 //----------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 // 1 Pass by Value vs Pass by Reference
 //---------------------------------
 Reference
-    Can't change a reference or assign a reference toa nother object
+    Can't change a reference or assign a reference to another object
     Can't reference a reference
     Taking address of a reference is just the reference of the object instead of address of the reference itself. 
 
 Pass by:
 value                               |           reference
-local copy, returns new copy                    changes actual copy 
+local copy, returns new copy                    changes actual copy, modifies actual data
 Can't change actual copy                        Less memory used
 can only return 1 value                         Can return multiple values  
+less efficient due to copying                   More efficient as no copy constructor called
+
+//----------------------------------------------------------------------------------------------------------------------------------
+// 2 Pass by Reference Avoids Slicing
+//---------------------------------
+If you pass by value, the object gets copied in the function. 
+Problem:
+    MethodPassByValueWillSliceChildren(ParentClass parent); 
+    MethodPassByValueWillSliceChildren(child); // Problem: Only the parent's part are copied, not the children. 
+Solution:
+    MethodPassByReferenceWillNotSliceChildren(ParentClass& parent);
+    MethodPassByReferenceWillNotSliceChildren(child); // success, it gets a reference to child, so no slicing occurs.
+
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 Return By Value > Return By Reference for Local (stack,heap,static) Variables
+//---------------------------------
+// Problem: Return by reference;
+ClassName& functionReturnsByReference() {
+    ClassName localStackVariable;
+    ClassName localHeapVariable = new ClassName();
+    static ClassName localStaticVariable;
+    ...
+    return localStackVariable; 
+        // Problems: 
+        //  This local stack will not exist after function goes out of scope, undefined behavior!
+    return localHeapVariable;
+        // Problems:
+            // How does client know it needs to call delete on this? resource leak!
+            //  If this function was overloading operators like '*', then this client expression:
+            //      ClassName result = a * b * c; will definitely leak resources as no one has access to result of (b*c) in (a*(b*c))
+
+    return localStaticVariable; 
+    // If this function was overloading operator '*', then AssertTrue((a*b)==(c*d)) since will always refer to same static result value returned
+}
+Solution: Return by value for localStackVariable
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
