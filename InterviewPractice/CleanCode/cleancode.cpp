@@ -214,7 +214,8 @@ Always close all streams properly using try with resources block
         // Ensure this code is run and isn't prevent from exception
     }
     Assert.assertFalse(exceptionOccurred, "Reason why it failed");
-
+For languages like C++ without any finally block or tryWithResources block, ensure stream are closed properly by using
+    objects to manage resources. It closes it automatically using it's destructor.
 //-------------------------------------------------------------------------------------------
 // Constructors
 //-------------------------------------------------------------------------------------------
@@ -247,6 +248,9 @@ Dependency Management:
 //-------------------------------------------------------------------------------------------
 80-20 rule: A program normally spends 80% of time executing 20% of code. Figure out which 20% needs to be highest performance.
 Bottlenecks: There is no point making a section of code faster if it isn't the bottleneck region.
+Move running time to compilation time: Reduce program run time by moving it to compilation time. 
+        e.g. Making sure everything is defined via interfaces during compilation time
+             instead of using polymorphism to infer object type during runtime
 //-------------------------------------------------------------------------------------------
 // Boundaries: Third Party Library
 //-------------------------------------------------------------------------------------------

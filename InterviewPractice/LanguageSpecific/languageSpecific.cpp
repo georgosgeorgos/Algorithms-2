@@ -4,7 +4,6 @@ TODO:
     Add 'using' as replacement for typedef
     Add nullptr
     add constexpr
-    Add checking resource is closed properly in clean code (C++ does not have finally block) 
 Table of Contents
 C++ is divided into:
   - C
@@ -48,6 +47,7 @@ C++ is divided into:
 4. this vs *this
 5. Never Inherit Non-virtual Destructors
 6. override & final
+7. Reduce Compilation Dependencies
 //-------------------------
 // E) Exceptions
 //-------------------------
@@ -594,6 +594,46 @@ resulting in memory leak.
    final void methodName();
    // In derived class,
    void methodName() override; // compile time error! Can't override final methods
+//----------------------------------------------------------------------------------------------------------------------------------
+// 7 Reduce Compilation Dependencies
+//---------------------------------
+// Reducing compilation depencencies reduces compile time.
+// Problem:
+class ASemiInterfaceCLass {
+ public:
+    virtual std::string method1() const = 0;
+    virtual std::string method2() const = 0;
+ private:
+    AnotherClass className; // this will cause you to compile entire AnotherClass.h for any file that #include ASemiInterfaceClass.h
+};
+
+// Solution
+class AnInterfaceClass {
+ public:
+    virtual std::string method1() const = 0;
+    virtual std::string method2() const = 0;
+ private:
+   AnotherClass* className; // this is fine, pointers won't cause re-compile
+ // Perfect, client's only need to compile AnIntefaceClass.h instead of compiling ItsImplementation.h file as well
+};
+// Therefore, to reduce compilation dependencies, use Interfaces.
+// If Interfaces needs private members, try to use pointers and references instead of actual objects.
+
+// An alternative to the Interface is the Handle class
+// It achieves the same no-compilation dependency by implementing all it's methods using a pointer to the implementation object
+// It makes each of it's own method a 1-liner, which makes compilation equally quick.
+class HandlerClass {
+ public:
+   void aMethod() {
+       this->handlerClassImplementation->aMethod(); // only 1 line for each method, not much compilation needed.
+       // Drawback: Adds a layer of indirection to code, violating OOP principles
+   }
+ private:
+   HandlerClassImplementation* handlerCLassImplementation; // a pointer, won't need to include this file
+}
+
+Small Disadvantage:
+    Interfaces and Handlers increase object code size and require slightly more time to run the code as it adds a layer of indirection.
 //----------------------------------------------------------------------------------------------------------------------------------
 // E) Exceptions
 //----------------------------------------------------------------------------------------------------------------------------------
