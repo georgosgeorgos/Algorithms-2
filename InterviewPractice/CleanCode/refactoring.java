@@ -8,6 +8,7 @@ Table Of Contents
         Explaining Variable
         Extract Method
         Method Object   
+        Record Result After Execution
     Classes
         Extract Class
         Move Member Variables
@@ -140,6 +141,16 @@ Make any methods that shouldn't be use outside this class private
     to:
         Method1 method1 = new Method1(firstVariable, ..., lastVariable);
         int result = method1.execute();
+//----------------------------
+// Record Result After Execution
+//----------------------------
+    Only record the result of an execution after it is executed
+    from:
+        counter++;
+        incrementCounter(); // may call exception() and thus, counter shouldn't be incremented
+    to:
+        incrementCounter();
+        counter++; // only increment counter after it is actually incremented
 //-------------------------------------------------------------------------------------------
 // Classes
 //-------------------------------------------------------------------------------------------
