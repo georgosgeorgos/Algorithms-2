@@ -50,6 +50,7 @@ C++ is divided into:
 7. Reduce Compilation Dependencies
 8. Overriding Base Method Hides All Overloaded Base Method
 9. Private Inheritance for Sharing Code Without Relationships
+10. Virtual Public Inheritance for Multiple Paths To Base
 //-------------------------
 // E) Exceptions
 //-------------------------
@@ -706,6 +707,32 @@ to:
     private:
         Base baseObject;
     };
+//----------------------------------------------------------------------------------------------------------------------------------
+// 10 Virtual Public Inheritance for Multiple Paths To Base
+//---------------------------------
+// Problems: Data duplication when have multiple paths to base
+
+class GrandPa{
+ public:
+    int dataMemberThatCanBeDuplicatedByGrandChild;
+}
+
+class Mama : public GrandPa {};
+class Papa : public GrandPa {};
+
+class ChildA : public Mama, public Papa {};
+// In this case ChildA->Mama->GrandPa and ChildA->Papa->GrandPa. 
+// C++ compiler will replicate the members of GrandPa in ChildA, which is redundant and wastes space. 
+
+// Solution: To prevent this, inherit with virtual.
+class MamaVirtual : virtual public GrandPa {};
+class PapaVirtual : virtual public GrandPa {};
+// No longer duplicates dataMemberThatCanBeDuplicatedByGrandChild
+class ChildB : public MamaVirtual, public PapaVirtual {};
+// note: Can't just blindly inherit by virtual all the time. 
+// Virtual Inheritance costs: (when used blindly without any actual need as no GrandChild via > 1 path)
+    // Larger Object Code compiled.
+    // Slower code 
 //----------------------------------------------------------------------------------------------------------------------------------
 // E) Exceptions
 //----------------------------------------------------------------------------------------------------------------------------------
