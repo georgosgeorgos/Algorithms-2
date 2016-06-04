@@ -23,6 +23,8 @@ C++ is divided into:
 1. Pass by Value vs Pass by Reference
 2. Pass by Reference Avoids Slicing
 3. Return By Value > Return By Reference for Local (stack,heap,static) Variables
+4. Non Member Function to Allow Commutative Operations
+5. Postpone Variable Definitions As Long As Possible but Outside Loops
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
@@ -141,6 +143,49 @@ ClassName& functionReturnsByReference() {
     // If this function was overloading operator '*', then AssertTrue((a*b)==(c*d)) since will always refer to same static result value returned
 }
 Solution: Return by value for localStackVariable
+//----------------------------------------------------------------------------------------------------------------------------------
+// 4 Non Member Function to Allow Commutative Operations
+//---------------------------------
+You can overload operator '*' for a RationalNumber class.
+const Rational operator * (const Rational& rhs) const; 
+Problem:
+    // In client code
+    Rational oneHalf(1,2);
+    Rational result = oneHalf * 2; // fine, because it implicitly converts 2 to a Rational assuming constructor Rational(int) exist
+    Rational result2 = 2 * oneHalf; // error, because the type 'int' doesn't take in Rational as its constructor
+Solution:
+    Declare a non-member function that takes 2 class objects instead. 
+const Rational operator * (const Rational& lhs, const Rational& rhs);
+    // In client code
+    Rational result = oneHalf * 2; // Works
+    Rational result2 = 2 * oneHalf; // Works as well
+//----------------------------------------------------------------------------------------------------------------------------------
+// 5 Postpone Variable Definitions As Long As Possible but Outside Loops
+//---------------------------------
+Always postpone variable definition until you need them
+from:
+    string encrypted;
+    thisFuncMayThrowError(); // Problem: If this throws error, then you are creating and destructing encrypted for no reason
+    functionUsingEncrypted(encrypted);
+to:
+    thisFuncMayThrowError();
+    string encrypted;
+    functionUsingEncrypted(encrypted);
+
+from:
+    // Problem: n constructor + n destructor
+    for(int i = 0; i < n; i++) {
+        string encrypted(assignValueDependentOn(i);
+        functionUsingEncrypted(encrypted);
+    }
+to:
+    // Solution: 1 constructor + 1 desctructor + n assignments
+    string encrypted
+    for(int i = 0; i < n; i++) {
+        encrypted = assignValueDependentOn(i)
+        functionUsingEncrypted(encrypted);
+    }
+    // note: Use the one inside loop if (cost(assignment) > (cost(constructor) + cost(destructor)))
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
