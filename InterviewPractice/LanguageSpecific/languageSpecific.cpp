@@ -49,6 +49,7 @@ C++ is divided into:
 6. override & final
 7. Reduce Compilation Dependencies
 8. Overriding Base Method Hides All Overloaded Base Method
+9. Private Inheritance for Sharing Code Without Relationships
 //-------------------------
 // E) Exceptions
 //-------------------------
@@ -689,6 +690,22 @@ int main(void) {
     Derived d;
     d.overloadedMethod(1); // fine, class Base::overloadedMethod(int a)
 }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 9 Private Inheritance for Sharing Code Without Relationships
+//---------------------------------
+class PublicDeriveIsAOrImplements : public Base {}; // inherits all public and protected from base class  as public and protected
+class PrivateDerive : private Base {}; // inherits all public and protected from base class  as private
+private inheritance is used when you want to re-use code from Base but PrivateDerive is not a Base. 
+This means that there is no relationship at all between PrivateDerive and Base, just re-using code from Base.
+However, you can almost always turn private inheritance into composition which is better for testing.
+The only time when you can't do that is if you want to inherit protected members from Base class, that you wouldn't have available via Composition.
+from:
+    class PrivateDerive : private Base {};
+to:
+    class StandAlone {
+    private:
+        Base baseObject;
+    };
 //----------------------------------------------------------------------------------------------------------------------------------
 // E) Exceptions
 //----------------------------------------------------------------------------------------------------------------------------------
