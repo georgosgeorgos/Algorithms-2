@@ -11,6 +11,7 @@ Table Of Contents
     Constructors
     Logging
     Configuration
+    Performance
     Boundaries: Third Party Library
 // */
 
@@ -241,6 +242,11 @@ Debugging logs should be informative enough to re-construct failure scenarios
 //-------------------------------------------------------------------------------------------
 Dependency Management: 
     Never depend on SNAPSHOT for production company services, always depend on a stable release version.  
+//-------------------------------------------------------------------------------------------
+// Performance
+//-------------------------------------------------------------------------------------------
+80-20 rule: A program normally spends 80% of time executing 20% of code. Figure out which 20% needs to be highest performance.
+Bottlenecks: There is no point making a section of code faster if it isn't the bottleneck region.
 //-------------------------------------------------------------------------------------------
 // Boundaries: Third Party Library
 //-------------------------------------------------------------------------------------------
