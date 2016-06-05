@@ -9,6 +9,8 @@ Table Of Contents
     Declarative = Program state the result you want, not how to get it.
     Logic = Uses or and and
     Functional = no assignments of variables. 
+    Template Metaprogramming = Executes during compilation
+    Generic Programming = Programming that works for multiple types.
     Dependency Injection = All dependencies to an object is injected to it automatically.
 //-----------------------------------------------------------------------------------------------------------
 Imperative Programming = Every command shows how programming takes place, step by step
@@ -70,8 +72,25 @@ Functional = no assignments of variables.
     Disadvantage:
         - Less efficient as function gets evaluated many times instead of re-using evaluations using variables
 //-----------------------------------------------------------------------------------------------------------
-Event-Driven — Control flow is determined by asynchronous actions (from humans or sensors).
-Constraint — Programmer specifies a set of constraints, and an engine infers the answers to questions.
-Aspect-Oriented — Programs have cross-cutting concerns applied transparently.
-Reflective — Programs manipulate their own structures.
-Array — Operators are extended to arrays, so loops are normally unnecessary.
+Template Metaprogramming = Executes during compilation
+    Reduces running time by moving work to compile time
+    Runtime errors are shifted to compile time errors, which eases debugging. 
+    Smaller executables, lower memory requirements.
+//-----------------------------------------------------------------------------------------------------------
+Generic Programming = Programming that works for multiple types.
+Methods:`
+    Implemented as Templates in C++
+    Writing code for general class
+        Implemented by accepting Object Class as parameters in Java
+        Disadvantage:
+            Every class has to now extend the Object Class. However, this is automatically done in Java.
+    Pre-processor => A compilation before actual compilation that reads the types and outputs actual source code
+        Disadvantage:
+            Code outputted is not formatted properly
+Prevents re-inventing the wheel => Lower errors.
+//-----------------------------------------------------------------------------------------------------------
+Event-Driven = Control flow is determined by asynchronous actions (from humans or sensors).
+Constraint = Programmer specifies a set of constraints, and an engine infers the answers to questions.
+Aspect-Oriented = Programs have cross-cutting concerns applied transparently.
+Reflective = Programs manipulate their own structures.
+Array = Operators are extended to arrays, so loops are normally unnecessary.
