@@ -38,6 +38,7 @@ C++ is divided into:
 9. No Copy And Assign
 10. Right Associative Assignment Operators
 11. Overriding Copy Constructor and Assignment Operator
+12. Handle Assignment To Self
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -438,6 +439,44 @@ ChildClass& ChildClass::operator = (const ChildClass& rhs) {
     init(); // call common function
     return *this;
 } 
+//----------------------------------------------------------------------------------------------------------------------------------
+// 12 Handle Assignment To Self
+//---------------------------------
+When overloading operator = , always remember to handle assignment to self. 
+Assignment to self may not always be obvious to a method. 
+Method(BaseClass b, DerivedClass d); // note: d and b may refer to the same object, due to multiple pointers/references to same object
+
+from:
+    // Problem: rhs may refer to the current object itself. 
+    ClassName& ClassName::operator = (const ClassName& rhs) {
+        delete this->memberVariable;
+        this->memberVariable = new ClassForMemberVariable(*rhs.memberVariable); // ERROR! *rhs.memberVariable was already deleted in previous line
+        return *this;
+    }
+to: // Solution: Check for self-identities
+    ClassName& ClassName::operator = (const ClassName& rhs) {
+        // Problem: How often does assignment to self actually occur? This code executes everytime. Inefficient!
+        if(this == &rhs) return *this; // checking for self identities here
+        delete this->memberVariable;
+        this->memberVariable = new ClassForMemberVariable(*rhs.memberVariable); // no errors here as rhs definitely not referring to itself
+        return *this;
+    }
+to: // Solution: Delete only after copying
+    ClassName& ClassName::operator = (const ClassName& rhs) {
+        ClassForMemberVariable *pointerToOriginal = this->memberVariable; // delete only after assign to new one
+        // Problem: Not exception safe, as creating a new memberVariable may throw exceptions
+        // Create a new memberVariable
+        this->memberVariable = new ClassForMemberVariable(*rhs.memberVariable); // no errors, as won't be deleted yet
+        delete pointerToOriginal; // can delete the old one even if (&rhs == this) since nothing refers to it anymore
+        return *this;
+    }
+to: // Solution: Copy & Swap (non throwing) (also makes it exception safe)
+    ClassName& ClassName::operator = (const ClassName& rhs) {
+        ClassName aNewCopy(rhs);
+        this->swap(aNewCopy); // non-throwing swap
+        return *this;
+        // note: Automatic destruction by garbage collection
+    }
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
 //----------------------------------------------------------------------------------------------------------------------------------
