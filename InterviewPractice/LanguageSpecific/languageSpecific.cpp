@@ -67,6 +67,7 @@ C++ is divided into:
 4. auto , auto& , auto*
 5. inline
 6. Pointer vs Reference
+7. (new, operator new, delete, operator delete, new [], delete [], operator new [], operator delete [])
 TODO:
   100. Memory Layout of C Programs
       http://www.geeksforgeeks.org/memory-layout-of-c-program/
@@ -1053,4 +1054,19 @@ pointerToOne = &two; // pointerToOne now points to 'two', 'one' is unchanged
 referenceToOne = two; // referenceToOne still refers to 'one', however, now ( one = 2 ), value of 'one' is now 2
 
 // Use references when overloading '[]' operator
+//----------------------------------------------------------------------------------------------------------------------------------
+// 7 (new, operator new, delete, operator delete, new [], delete [], operator new [], operator delete [])
+//---------------------------------
+new
+    1. Calls operator new
+    2. Calls constructor
+operator new 
+    Similar to malloc() from C, only allocates memory
+new []
+    1. Calls operator new []
+    2. Calls constructor
+operator new []
+    malloc for entire array
+operator delete
+    Similar to free() from C, only deallocates memory
 //----------------------------------------------------------------------------------------------------------------------------------
