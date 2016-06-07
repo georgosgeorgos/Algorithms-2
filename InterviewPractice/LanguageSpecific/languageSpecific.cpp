@@ -27,7 +27,7 @@ C++ is divided into:
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
-1. Default Constructors
+1. Constructors Given For A Class With No Constructor Implementation
 2. Copy Constructor vs Assignment Operator vs Move Constructor
 3. Flow of Program
 4. Operator Overloading
@@ -39,6 +39,7 @@ C++ is divided into:
 10. Right Associative Assignment Operators
 11. Overriding Copy Constructor and Assignment Operator
 12. Handle Assignment To Self
+13. No Default Constructor TradeOffs
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -200,7 +201,7 @@ to:
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
-// 1 Default Constructors
+// 1 Constructors Given For A Class With No Constructor Implementation
 //---------------------------------
 // Default Constructor
 classname::classname(); // Does a shallow copy of everything (pointers point to exact same object that exists before) 
@@ -211,6 +212,7 @@ classname::~classname(); // A shallow destroy
 // Note: Once you declare any constructor, the default constructors won't be defined anymore! Trying to use them without defining them will cause compile error.
 Constructors and Destructors are called in a Stack approach. 
 The first constructor that is called is called last from destructor at end of program 
+notes: None of these constructors will be implemented as soon as you implement any of your own constructor
 //----------------------------------------------------------------------------------------------------------------------------------
 // 2 Copy Constructor vs Assignment Operator vs Move Constructor
 //---------------------------------
@@ -479,6 +481,59 @@ to: // Solution: Copy & Swap (non throwing) (also makes it exception safe)
         return *this;
         // note: Automatic destruction by garbage collection
     }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 13 No Default Constructor TradeOffs
+//---------------------------------
+Some classes doesn't make sense to provide a default constructor (constructor with no arguments), as some classes
+must be initialize with a uniqueID in order to work properly. 
+
+Class with no default constructor
+// Problem:
+    // Unable to work with template design or classes that assume default constructor exists.
+// Solution:
+    // Have to re-write the template design or those classes to assume no default constructor exist
+
+// Problem:
+    // Unable to define arrays easily
+    ClassWithNoDefaultConstructor arr[10]; // Error! No way to call default constructor of ClassWithNoDefaultConstructor
+    ClassWithNoDefaultConstructor *arr = new ClassWithNoDefaultConstructor[10]; // Error! Similarly, no default constructor
+// Solution1: Initialize array of pointers instead
+    ClassWithNoDefaultConstructor* arrOfPointersToClassWithNoDefaultConstructor[10]; // no error
+    // Now you can initialize them whenever you have the constructor arguments
+    for(int i = 0; i < 10; i++) 
+    { 
+        arrOfPointersToClassWithNoDefaultConstructor[i] = new ClassWithNoDefaultConstructor(constructorArguments);
+    }
+// Costs:
+    // More space required as need to store both objects and pointers to them instead of just objects.
+
+// Solution2: Allocate raw memory first, therefore only need space for objects and extra space for pointers needed
+    void* rawMemory = operator new[] (10 * sizeof(ClassWithNoDefaultConstructor));
+    // Now make the array point to it, casting the raw memory to the appropriate type (pointer to the class type)
+    ClassWithNoDefaultConstructor* arrOfPointersToClassWithNoDefaultConstructor = static_cast<ClassWithNoDefaultConstructor*> (rawMemory)
+    // Now, can make space using reference
+    for(int i = 0; i < 10; i++) 
+    { 
+        new &arrOfPointersToClassWithNoDefaultConstructor[i] ClassWithNoDefaultConstructor(constructorArguments);
+    }
+// Cost:
+    // Can't delete the easy way as didn't use the easy way of new[] to initialize it
+        delete [] arrOfPointersToClassWithNoDefaultConstructor; // Error! didn't initialize using new [] operator
+    // Therefore Need to manually call destructor
+        for(int i = 9; i >= 0; --i) {
+           // Destroy each object individually by calling its destructor
+           arrOfPointersToClassWithNoDefaultConstructor[i].~ClassWithNoDefaultConstructor();
+        } 
+        // Deallocate raw memory
+        operator delete[] (rawMemory);
+
+// Solution3: Can also avoid all problems above by defining a dummy default constructor 
+// Classes with dummy default constructor 
+ClassNameDefaultConstructor() {
+    this->idValue = UNDEFINED; // defined to be some out of valid logical application-dependent range number
+}
+// Cost:
+    All code must now check if the (this->idValue != UNDEFINED), which is a little ugly code
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
 //----------------------------------------------------------------------------------------------------------------------------------
