@@ -52,6 +52,7 @@ C++ is divided into:
 8. Overriding Base Method Hides All Overloaded Base Method
 9. Private Inheritance for Sharing Code Without Relationships
 10. Virtual Public Inheritance for Multiple Paths To Base
+11. Array/Pointer Arithmetics and Polymophism Doesn't Work
 //-------------------------
 // E) Exceptions
 //-------------------------
@@ -773,6 +774,28 @@ class ChildB : public MamaVirtual, public PapaVirtual {};
 // Virtual Inheritance costs: (when used blindly without any actual need as no GrandChild via > 1 path)
     // Larger Object Code compiled.
     // Slower code 
+//----------------------------------------------------------------------------------------------------------------------------------
+// 11 Array/Pointer Arithmetics and Polymophism Doesn't Work
+//---------------------------------
+class Child : public Base {...};
+void methodThatTakesBase(const Base[] arrOfBase, int numElements) {
+    for(int i = 0; i < numElements; i ++) {
+        // note: Pointer arithmetic is perform here
+        //       It skips every interval of memory containing Base
+        //       However, a child class objects will be larger than Base class objects
+        //       So the interval it skips for child class objects would be incorrect
+        cout << arrOfBase[i]; // assume operator '<<' is defined for Base objects
+    }
+}
+int main(void) {
+    Base arrOfBase[10]; 
+    methodThatTakesBase(arrOfBase); // this is fine
+    Child arrOfChild[10];
+    // The below causes an error as the array skips the child class objects wrongly
+    methodThatTakesBase(arrOfChild); // runtime error! 
+}
+
+// Thus, pointer arithmetics (array) and polymorphism never works in C++ 
 //----------------------------------------------------------------------------------------------------------------------------------
 // E) Exceptions
 //----------------------------------------------------------------------------------------------------------------------------------
