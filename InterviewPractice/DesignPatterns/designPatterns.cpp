@@ -87,6 +87,10 @@ C) Structural Design Pattern
     - note: Both primitive and composite needs to be handled differently, but on Component Interface, they are called the same
     - Application: e.g. Computer Graphics project where you multiply the matrix recursively along the tree. 
 //-------------------------------
+D) Concurrency Design Pattern
+//-------------------------------
+- Always set thread pools for anything that deals with (database, FileIO)
+//-------------------------------
 TODO:
 . Abstract Factory Design Pattern
 . Facade Design Pattern
