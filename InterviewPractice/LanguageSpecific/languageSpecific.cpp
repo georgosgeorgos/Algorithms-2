@@ -58,6 +58,7 @@ C++ is divided into:
 // E) Exceptions
 //-------------------------
 1. Exception Safety
+2. No Exceptions in Destructor
 //-------------------------
 // F) Plain Old C, C++, C++11, C++14
 //-------------------------
@@ -890,6 +891,12 @@ note:
             // Pass both methods, we are at final state
         }
 //----------------------------------------------------------------------------------------------------------------------------------
+// 2 No Exceptions in Destructor
+//---------------------------------
+Destructors can be called normally (out of scope, explicitly called using delete) or via exceptions
+If destructor is called via exception, and an exception is thrown in destructor, C++ automatically terminates entire program.
+
+//----------------------------------------------------------------------------------------------------------------------------------
 // F) Plain Old C, C++, C++11, C++14
 //----------------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -1069,4 +1076,5 @@ operator new []
     malloc for entire array
 operator delete
     Similar to free() from C, only deallocates memory
+// note: new and operator new can always throw the an exception indicating not enough memory, therefore, must be prepared to handle them
 //----------------------------------------------------------------------------------------------------------------------------------
