@@ -37,6 +37,7 @@ Table Of Contents
         Probability To Complete Condition
     Iterations
         Replace Control Flag With Break
+        Return Immediately Instead Of Assigning Return Value
     Nulls
         Null Object
     Parameters
@@ -642,6 +643,24 @@ Control flag is only used as a control flag.
             postProcessing();
         }
         postProcessing(); // don't need this line if no post processing code
+//----------------------------
+// Return Immediately Instead Of Assigning Return Value
+//----------------------------
+    from:
+        class ClassValue(valueDefault);
+        if( ...) {
+            classValue = valueA;
+        } else if ( ...) {
+            classValue = valueB;
+        }
+        return classValue;
+   to:
+        if( ...) {
+            return valueA;
+        } else if ( ...) {
+            return valueB;
+        }
+        return valueDefault;
 //-------------------------------------------------------------------------------------------
 // Nulls
 //-------------------------------------------------------------------------------------------
