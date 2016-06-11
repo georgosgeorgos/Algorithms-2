@@ -907,14 +907,23 @@ Difference1: Method returns to original place method was called, exception gets 
     // will be here after callMethod
     throw anException;
     // will never come here
-Difference2: Due to Difference1 above, exceptions always creates a temporary copy as original object will go out of scope and be destroyed.
+Difference2: Due to Difference1 above, exceptions creates a temporary copy for both 
+             throw by value and throw by reference as original object will go out of scope and be destroyed.
     method(className aCopyOfClass);
     method(className& aReferenceToAnExistingClassObjectPassedIn);
     method(className* aPointerToAnExistingClassObjectOrNull);
 
+    // note: the first copy made, it will copy for the exact same type, 
+    // for the 2nd co
     catch(className aCopyOfTheTemporaryCopyMade); // note: 2 copies are made, 1 for temporary, and 1 from temporary to inside catch
-    catch(className& aReferenceToTheTemporaryCopy); // 1 copy made
-    catch(className* aPointerToTemporaryCopy);
+                                                  //       for the 2nd copy made, if it's made for the base class from a derived class object,
+                                                  //       it will lost the derived class properties which is bad. This is known as slicing problem.
+    catch(className& aReferenceToTheTemporaryCopy); // 1 copy made, it will copy for exact same type, no slicing problem, no cleaning memory problem
+                                                    // A tradeoff between catch by value and catch by pointer
+    catch(className* aPointerToToExistingObject); // no copies made, expects throw clause to throw only exceptions in which will still exist (e.g. global, static)
+                                               // However, hard for client code to know if they are supposed to call delete on the pointer exception or not
+                                               // If don't delete when need to, may end up with memory leak
+                                               // If delete when don't need to, will end up with segmentation fault
 
 Difference3: No implicit conversions in exception
     int x;
@@ -925,15 +934,21 @@ Difference4: A higher exception will always catch anything below it;
     class Base {...};
     class Derive : public Base {...};
     try {
-        ...
+        Derive d;
+        throw d;
     }
     // catches all class of type 'Base' and anything under the inheritance hierarchy of class 'Base'
+    // note: As this is catch by value, it will slice off any derive components when making copies
     catch(Base b) {
         ...
     }
     // Note: Below will never be executed as above catches everything 
     catch(Derive d) {
         ...
+    }
+    try {
+        Derive d;
+        throw &d; // throw a pointer
     }
     // This catches all types of pointers
     catch(const void*) {
@@ -1140,5 +1155,5 @@ operator new []
     malloc for entire array
 operator delete
     Similar to free() from C, only deallocates memory
-// note: new and operator new can always throw the an exception indicating not enough memory, therefore, must be prepared to handle them
+// note: new and operator new can always throw the an exception indicating not enough memory (bad_alloc), therefore, must be prepared to handle them
 //----------------------------------------------------------------------------------------------------------------------------------
