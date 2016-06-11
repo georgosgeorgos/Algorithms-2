@@ -251,6 +251,20 @@ Bottlenecks: There is no point making a section of code faster if it isn't the b
 Move running time to compilation time: Reduce program run time by moving it to compilation time. 
         e.g. Making sure everything is defined via interfaces during compilation time
              instead of using polymorphism to infer object type during runtime
+Lazy Evaluation:
+    Declare variables as late as possible, if not needed, don't have to waste time constructing and deleting them.
+    from:
+       int x;
+       ... // code that doesn't use x;
+       func(x);
+    to:
+        ... // code that doesn't use x; , if it returns early or throws, will never have to execute 'int x;'
+        int x;
+        func(x);
+    Only create copies when you need them
+        Class aNewClassObject = existingClassObject; // calls the copy constructor, however, don't create a copy, only make a reference to it
+        int x = aNewClassObject[2]; // just reading, don't bother creating a copy, just read from existingClassObject
+        aNewClassObject[2] = 3; // now, create a copy for aNewClassObject because you need it
 //-------------------------------------------------------------------------------------------
 // Boundaries: Third Party Library
 //-------------------------------------------------------------------------------------------

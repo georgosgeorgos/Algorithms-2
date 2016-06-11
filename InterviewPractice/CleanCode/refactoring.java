@@ -78,6 +78,8 @@ Make any methods that shouldn't be use outside this class private
 // Replace Temp
 //----------------------------
     Remove any temporary variables with the function calls that gave them directly 
+    This is because temporary objects may be costly to construct and destroy.
+    The example below assumes that getLala() only refers a reference to it, so no construction is needed
     from: 
         int lala = getLala();
         doBaba(lala);
