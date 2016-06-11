@@ -59,6 +59,8 @@ C++ is divided into:
 //-------------------------
 1. Exception Safety
 2. No Exceptions in Destructor
+3. Exception vs Method
+4. throw vs throw e
 //-------------------------
 // F) Plain Old C, C++, C++11, C++14
 //-------------------------
@@ -895,7 +897,69 @@ note:
 //---------------------------------
 Destructors can be called normally (out of scope, explicitly called using delete) or via exceptions
 If destructor is called via exception, and an exception is thrown in destructor, C++ automatically terminates entire program.
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 Exception vs Method
+//---------------------------------
+Differences between exception and method calls. 
+Difference1: Method returns to original place method was called, exception gets out and never returns to original place
+    ...
+    callMethod();
+    // will be here after callMethod
+    throw anException;
+    // will never come here
+Difference2: Due to Difference1 above, exceptions always creates a temporary copy as original object will go out of scope and be destroyed.
+    method(className aCopyOfClass);
+    method(className& aReferenceToAnExistingClassObjectPassedIn);
+    method(className* aPointerToAnExistingClassObjectOrNull);
 
+    catch(className aCopyOfTheTemporaryCopyMade); // note: 2 copies are made, 1 for temporary, and 1 from temporary to inside catch
+    catch(className& aReferenceToTheTemporaryCopy); // 1 copy made
+    catch(className* aPointerToTemporaryCopy);
+
+Difference3: No implicit conversions in exception
+    int x;
+    funcThatTakesInDouble(x); // this is fine
+    catch(double a); // this will never catch 'x' as 'x' is type int
+
+Difference4: A higher exception will always catch anything below it;
+    class Base {...};
+    class Derive : public Base {...};
+    try {
+        ...
+    }
+    // catches all class of type 'Base' and anything under the inheritance hierarchy of class 'Base'
+    catch(Base b) {
+        ...
+    }
+    // Note: Below will never be executed as above catches everything 
+    catch(Derive d) {
+        ...
+    }
+    // This catches all types of pointers
+    catch(const void*) {
+        ...
+    }
+    // note: below will never be executed as above catches all types of pointers
+    catch(const Base*) {
+    }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 4 throw vs throw e
+//---------------------------------
+DeriveClass derived;
+BaseClass& base = derived; // base refers to a derived class
+throw base; // this will throw a class of type Base NOT derived 
+            // Remember that throwing will always invoke a copy constructor to make a temporary object.
+            // The copy constructor will invoke whatever the variable's static type is NOT what it points to.
+
+catch(Base b) {
+    // Let's just say the above catch clause catches a Derived type
+    
+    // this rethrows current Exception
+    throw; // this will throw the same class, Derived
+
+    // this rethrows a copy of the caught exception
+    throw b; // this will throw the static type, Base
+}
 //----------------------------------------------------------------------------------------------------------------------------------
 // F) Plain Old C, C++, C++11, C++14
 //----------------------------------------------------------------------------------------------------------------------------------
