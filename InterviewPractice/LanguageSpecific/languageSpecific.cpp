@@ -71,6 +71,7 @@ C++ is divided into:
 5. inline
 6. Pointer vs Reference
 7. (new, operator new, delete, operator delete, new [], delete [], operator new [], operator delete [])
+8. Include Only Files Needed By Client
 TODO:
   100. Memory Layout of C Programs
       http://www.geeksforgeeks.org/memory-layout-of-c-program/
@@ -1156,4 +1157,10 @@ operator new []
 operator delete
     Similar to free() from C, only deallocates memory
 // note: new and operator new can always throw the an exception indicating not enough memory (bad_alloc), therefore, must be prepared to handle them
+//----------------------------------------------------------------------------------------------------------------------------------
+// 8 Include Only Files Needed By Client
+//---------------------------------
+// .h files should include files that are needed by clients importing that file
+// .cpp files should include files that are needed for implementation only, that were not used in the .h files.
+// This way, clients don't have to include files it may not need
 //----------------------------------------------------------------------------------------------------------------------------------
