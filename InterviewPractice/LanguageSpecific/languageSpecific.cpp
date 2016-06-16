@@ -40,6 +40,7 @@ C++ is divided into:
 11. Overriding Copy Constructor and Assignment Operator
 12. Handle Assignment To Self
 13. No Default Constructor TradeOffs
+14. Private Member Method to Function If No Member Variable
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -540,6 +541,12 @@ ClassNameDefaultConstructor() {
 }
 // Cost:
     All code must now check if the (this->idValue != UNDEFINED), which is a little ugly code
+//----------------------------------------------------------------------------------------------------------------------------------
+// 14 Private Member Method to Function If No Member Variable
+//---------------------------------
+If a private member method does not use any of it's member variables inside it, 
+then it should not be a member method but should just be a function inside the .cpp as an unnamed namespace,
+this why, people using the .h file won't have to see it as private.
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
 //----------------------------------------------------------------------------------------------------------------------------------
