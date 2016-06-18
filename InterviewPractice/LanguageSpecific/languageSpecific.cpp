@@ -41,6 +41,7 @@ C++ is divided into:
 12. Handle Assignment To Self
 13. No Default Constructor TradeOffs
 14. Private Member Method to Function If No Member Variable
+15. Multiple Dispatch
 //-------------------------
 // D) Inheritance
 //-------------------------
@@ -547,6 +548,62 @@ ClassNameDefaultConstructor() {
 If a private member method does not use any of it's member variables inside it, 
 then it should not be a member method but should just be a function inside the .cpp as an unnamed namespace,
 this why, people using the .h file won't have to see it as private.
+//----------------------------------------------------------------------------------------------------------------------------------
+// 15 Multiple Dispatch
+//---------------------------------
+Single Dispatch => Only one object is dynamic in a function
+class Dynamic Object {
+    virtual void print() = 0;
+}
+// Each object overrides their own print function
+class ObjectK : public Dynamic Object {...}
+DynamicObject* dym = ObjectK();
+dym->print();
+
+Problem:
+    Whenever more than 1 object can be dynamic in a function => Multiple Dispatch
+    e.g. DoubleDispatch => 2 objects can be dynamic
+
+void Collision(GameObject obj1, GameObject obj2);
+
+from: 1 object is virtual, the other is RunTimeTypeInformation
+
+    class GameObjectOne : public GameObject {
+        Collision(GameObject otherObject) {
+            if (IsGameObjectTwo(otherObject))
+                ...
+            } else if (IsGameObjectThree(otherObject)) {
+                ...
+            } ...
+            else {
+                throw CollisionWithUnknownObject(otherObject);
+            }
+        }
+    }
+    Problems:
+        Clients may not be able to handle the exception that is thrown
+to: Both are virtual, therefore, no longer throw exception, simply doesns't compile if compilation can't figure out it's type.
+    class GameObject {
+        void Collision(GameObject obj) {
+            // Here, since obj will never be instantiate as a GameObject, we immediately know what its type is
+            // It will be a concrete type with a method call Collision()
+            obj.Collision(*this);
+        }
+    }
+    class GameObjectOne : public GameObject {
+        void Collision(GameObjectTwo obj2) {...}
+        void Collision(GameObjectThree obj3) {...}
+    }
+    class GameObjectTwo : public GameObject { 
+        void Collision(GameObjectOne obj1) {...}
+        void Collision(GameObjectThree obj3) {...}
+    }
+    class GameObjectThree : public GameObject { 
+        void Collision(GameObjectOne obj1) {...}
+        void Collision(GameObjectTwo obj2) {...}
+    }
+    // note: The only problem with this approach is that every new object, will need to re-define
+    //       how to handle that object in each class, requiring each class to compile
 //----------------------------------------------------------------------------------------------------------------------------------
 // D) Inheritance
 //----------------------------------------------------------------------------------------------------------------------------------
