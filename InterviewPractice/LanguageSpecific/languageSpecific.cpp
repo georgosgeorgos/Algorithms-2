@@ -24,6 +24,7 @@ C++ is divided into:
 3. Return By Value > Return By Reference for Local (stack,heap,static) Variables
 4. Non Member Function to Allow Commutative Operations
 5. Postpone Variable Definitions As Long As Possible but Outside Loops
+6. Lambdas & Functors && std::function
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
@@ -206,6 +207,116 @@ to:
         functionUsingEncrypted(encrypted);
     }
     // note: Use the one inside loop if (cost(assignment) > (cost(constructor) + cost(destructor)))
+//----------------------------------------------------------------------------------------------------------------------------------
+// 6 Lambdas & Functors && std::function
+//---------------------------------
+Functors = Function Objects = Objects that can be treated like functions & function pointers.
+    Overload operator() to indicate a class is a Functor
+Functors allow easier to  with STL or third party code (note: Functors were made for cases like this
+// e.g. To work with STL's sort, it must take in a comparison function that only accepts (lhs,rhs) and returns bool
+//      But if your own comparison function needs extra parameters, you can encapsulate it inside a Functor object
+//      Otherwise, would have to write own sort() function that is aware of the extra parameters
+from: Writing own sort() function
+    bool SuperLongOwnSortFunctionToWorkWithExtraVariableCalledPercentageComparison(vector<objectToCompare>& objects, int percentageComparison){
+        .... // code to sort the objects
+    }
+to: Using existing std::sort()
+    class aFunctorClass {
+     public:
+     // Overriding operator() makes this class a Functor object
+     aFunctorClass(int percentageComparison_) : this->percentageComparison(percentageComparison_) {}
+     bool operator() (const objectToCompare& lhs, const objectToCompare& rhs) {
+        return lhs.calculateFinalWeightBasedOnPercentage(this->percentageComparison) < rhs.calculateFinalWeightBasedOnPercentage(this->percentageComparison);
+     }
+     private:
+     // Extra parameters needed
+     int percentageComparison; // e.g. of an extra parameter to comparison function
+    };
+    // Now, you can use existing STL's sort function
+    std::vector<objectToCompare> objects;
+    aFunctorClass comparator(30);
+    std::sort(objects.begin(), objects.end(), comparator);
+// Now, for Lambda
+Lambda => Replaces Functors. Similar to Callbacks & Closures in the sense that you can embed variables in it, and use it as a function with lesser or no variables
+std::function => Used to declare a Lambda as a variable
+    std::function<void(int)> aLambdaThatTakesInIntAndReturnsVoid = [/* Does not use any variables in current scope */] (int x) -> void { return x+2; };
+    // Syntax: A function parameter without the function name
+        std::function<void(int)>
+        // means
+        void funcName(int x)
+// Benefits of Lambda
+// Benefit 1: A shorter code replacement for Functor
+The above example of uses of Functor can be replaced with a much shorter code below.
+to:
+    int percentageComparison = 30;
+    std::vector<objectToCompare> objects;
+    // Feed in the Functor as lambda into std::sort
+    std::sort(objects.begin(), objects.end(), [&percentageComparison] (const objectToCompare& lhs, const objectToCompare& rhs) {
+        return lhs.calculateFinalWeightBasedOnPercentage(percentageComparison) < rhs.calculateFinalWeightBasedOnPercentage(percentageComparison);
+    });
+// Benefit 2: Eliminate the need to write separate function for each purpose.
+// e.g. Want to filter a string exist in name field or date field
+from:
+    class someClass {
+     public:
+        // First need to define comparison functions 
+        bool matchesNameFilter(std::string data, std::string val) {
+            // Assume strip() and contains() implemented
+            if(stripName(data).contains(val)) return true;
+            return false;
+        }
+        bool matchesDateFilter(std::string data, std::string val) {
+            // Assume strip() and contains() implemented
+            if(stripDate(data).contains(val)) return true;
+            return false;
+        }
+        // Now, need to define functions that uses these comparison functions but are very similar
+        std::vector<std::string> addToFilterByName(std::string val) {
+            std::vector<std::string> results;
+            for (auto i = this->datas.begin(); itr != this->datas.end(); ++i) {
+                if(matchesNameFilter(*i,val)) {
+                    results.push_back(*i);
+                }
+            }
+            return results;
+        }
+        std::vector<std::string> addToFilterByDate(std::string val) {
+            std::vector<std::string> results;
+            for (auto i = this->datas.begin(); itr != this->datas.end(); ++i) {
+                if(matchesDateFilter(*i,val)) {
+                    results.push_back(*i);
+                }
+            }
+            return results;
+        }
+     private:
+       std::vector<std::string> datas; // datas containing name and date, name:date
+    };
+to:
+    // Basically, now both functions can re-use similar code in the function called addToFilter
+    // and pass in the comparison function as a lambda instead of declaring them by their own functions matchesNameFilter & matchesDateFilter
+    template<typename aFunctor>
+    addToFilter(string val, aFunctor func) {
+        std::vector<std::string> results;
+        for (auto i = this->datas.begin(); itr != this->datas.end(); ++i) {
+            if(func(*i, val)) {
+                results.push_back(*i);
+            }
+        }
+    } 
+    std::vector<std::string> datas;
+    addToFilterByName(val) {
+        addFilter(val, [](&data, &val) -> bool {
+            if(stripName(data).contains(val)) return true;
+            return false;
+        }
+    }
+    addToFilterByDate(val) {
+        addFilter(val, [] (&data, &val) -> bool {
+            if(stripDate(data).contains(val)) return true;
+            return false;
+        }
+    }
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
