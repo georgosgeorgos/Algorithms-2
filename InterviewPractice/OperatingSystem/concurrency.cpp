@@ -23,7 +23,7 @@ Accidental Data Sharing Using ThreadPools
 }
 
 Prevent concurrent data access using Mutex
-    - Mutex 
+    - Mutex = Locks
         from:
             function(mutexForData, data) {
                 mutexForData->Lock();
@@ -36,6 +36,11 @@ Prevent concurrent data access using Mutex
                 accessData(data);
                 // Destructor for Mutex unlocks it
           }
+    - Optimization: ReaderLock 
+        Can make reader locks such that more than 1 thread can have ReaderLocks 
+        but it prevents threads from having WriterLock until all threads release their reader locks
+        Only 1 thread can have access to a WriterLock at any time.
+        This allows concurrent reads
 
 Synchronization using:
     - Time (unreliable)
@@ -64,3 +69,27 @@ Synchronization using:
             return (this->numExit == 0); // only the last thread to exit will be true and will delete this barreir
         }
         Barrier::Barrier(int numThreads) : this->numBlock(numThreads), this->numExit(numThreads);
+    - ConditionalVariables
+      Blocks a thread until condition is satisfied until woken up by another thread
+        // Thread 1: Sleeping Thread (Thread in charge of waiting until woken up by other thread)
+        lock->Lock();
+        while (!conditionIsTrue()) {
+            conditionVariable.Wait(&lock); // wait will release the lock and block on this thread until it is signaled, then it re-acquires the lock
+            // Here, it re-acquires the lock cause some other thread signals it
+            // However, more than 1 thread that were waiting could have been signaled,
+            // so we need to check the condition again, if condition is no longer true then this thread waits again.
+            // This can happen if this thread was woken up, but then context switch occurs before it acquires the lock
+        }
+        // Condition variable is now true and we do have the lock, so now it's this thread's turn to do stuff
+        // Do whatever you want with the lock
+        ...
+        // Done doing things, unlock it
+        lock->Unlock(); // unlock it
+        // Thread 2: The Waking Thread (Thread in charge of signalling sleeping thread to wake up)
+        lock->Lock();
+        // Do whatever
+        ...
+        setConditionToTrue(); // Make condition true first
+        // Now signal another thread to wake up
+        conditionVariable.Signal();
+        lock->Unlock(); // unlock it for other threads to wake up
