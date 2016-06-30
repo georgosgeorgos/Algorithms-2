@@ -36,6 +36,8 @@ Prevent concurrent data access using Mutex
                 accessData(data);
                 // Destructor for Mutex unlocks it
           }
+      Problems: Locking can be the bottleneck between many threads
+      Solution: Partition data such that each partition has its own lock (e.g. Distributed Hash Map)
     - Optimization: ReaderLock 
         Can make reader locks such that more than 1 thread can have ReaderLocks 
         but it prevents threads from having WriterLock until all threads release their reader locks
@@ -70,6 +72,7 @@ Synchronization using:
         }
         Barrier::Barrier(int numThreads) : this->numBlock(numThreads), this->numExit(numThreads);
     - ConditionalVariables
+      note: Can be used to solve the consumer producer problem using 2 ConditionalVariables called NotEmpty & NotFull
       Blocks a thread until condition is satisfied until woken up by another thread
         // Thread 1: Sleeping Thread (Thread in charge of waiting until woken up by other thread)
         lock->Lock();
@@ -93,3 +96,7 @@ Synchronization using:
         // Now signal another thread to wake up
         conditionVariable.Signal();
         lock->Unlock(); // unlock it for other threads to wake up
+    - Message Passing
+        A data is associated with a main thread and only that main thread can change that data. 
+        Other threads that want to change that data to communicate with the main thread for any actions on that data
+        The communication is done using message channels (producer-consumer queue)
