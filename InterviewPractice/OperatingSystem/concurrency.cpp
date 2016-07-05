@@ -36,6 +36,14 @@ Prevent concurrent data access using Mutex
                 accessData(data);
                 // Destructor for Mutex unlocks it
           }
+      Application: Maintain invariant
+          e.g. Maintain invariant count = 0
+              Lock(&mutex);
+              assert(count == 0); // this invariant must be true if have lock
+              count++; // make invariant false
+              ...
+              count = 0; // restore the invariant before releasing lock
+              Unlock(&mutex);
       Problems: Locking can be the bottleneck between many threads
       Solution: Partition data such that each partition has its own lock (e.g. Distributed Hash Map)
     - Optimization: ReaderLock 
