@@ -76,6 +76,11 @@ Synchronization using:
       Blocks a thread until condition is satisfied until woken up by another thread
         // Thread 1: Sleeping Thread (Thread in charge of waiting until woken up by other thread)
         lock->Lock();
+        // note: Must always Lock() before calling Wait() in the while loop that relies on a condition because if do not Lock(), 
+        // the while loop may be entered due to the condition being true but then context switch can happen
+        // after entering the while loop, then other threads can make the condition no longer true,
+        // then when context switch to original threa, the condition is no longer true, but it is already in the while loop
+        // so it will call Wait() which is wrong.
         while (!conditionIsTrue()) {
             conditionVariable.Wait(&lock); // wait will release the lock and block on this thread until it is signaled, then it re-acquires the lock
             // Here, it re-acquires the lock cause some other thread signals it
@@ -100,3 +105,7 @@ Synchronization using:
         A data is associated with a main thread and only that main thread can change that data. 
         Other threads that want to change that data to communicate with the main thread for any actions on that data
         The communication is done using message channels (producer-consumer queue)
+    - Semaphore
+        Implemented using Mutex & Conditional Variables
+        Basically blocks once all resource is used up. 
+        Allows keeping track of a set number of resources to be shared between many threads.
