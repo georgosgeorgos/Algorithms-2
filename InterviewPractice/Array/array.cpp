@@ -46,7 +46,7 @@ e.g. 10, 6, 4, 3, 12, 19, 18, 20, 17 has 3 local mins at : 3, 18, 17
 - Solve for 1, then recursively solve the remainders  
 - Have 2 pointers, one at each end, have third pointer moving from one end to another and swapping elements in and out from both end pointers. 
 - Partition values to left and right of middle element (quicksort) 
-- If a number isn't in the array, and -1 is a valid number, you need to create a new Integer class and return NULL instead. 
+- If a number isn't in the array, and -1 is a valid number, you need to create a new Integer class and return NULL instead, or just throw Exceptions
 - Greatest Common Divisor might be helpful
 - First find number of rotation, but do a binary seach, creating a mapping from rotation index to 0->n-1 index
 //-------------------------
