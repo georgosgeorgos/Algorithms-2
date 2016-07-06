@@ -1,5 +1,4 @@
 //-----------------------------------------------------------------------------------------------
-// TODO: Code Threads in C++ Kali Linux or Java
 // Interview Practice
 // This file is like a rough paper
 // 1. To practce previous programming questions
@@ -13,7 +12,7 @@ With practice comes confidence. Account for errors as you code to try to write p
 Check that:
     - What you pass into each variables is actually type (don't pass in int to double)
     - Classes are terminated with ; 
-    - Static instances are intialize outside a class, defining an init() private function if necessary for STL 
+    - Static instances are initialize outside a class, defining an init() private function if necessary for STL 
     - Constructors are defined in child classes as they are not inherited
     - Any parent function used in child class must be either public or protected, if used by child class inside main(), it must be public!
 */
@@ -82,20 +81,10 @@ int binarySearch(X a[], X element, int n)
     -Loop and add and keep track of min and max
     -deduct both and divide by n-2
 3. Find number of zeroes in a number factorial
-5. Default constructor
-6. Catching and Exception
-7. *string  (*string+4 ) and type
-
-Array and Linked List
-Pointers and Strings in C
 4. add last n elements for new fibonacci instead of 2
 7. Find all anagrams of a given word
 Constructor, Destructor, Multithreading
 C++ questions!
-Difference between
-const char *
-&
-char* const
 
 Given 2 large numbers
 that cannot be stored in 64 bit,
@@ -110,8 +99,6 @@ how to calculate final product?
 
 // Note: Can eliminate the N since a number XOR itself is always 0
 // thus, initialize max to 0 and if a value is same with itself, don't bother comparing
-
-
  // */
 //----------------------------------------------------------------------------------------
 
@@ -141,19 +128,6 @@ int main(void)
 }
 */
 
-//----------------------------------------------------------------------------------------
-
-/*
-int main(void)
-{
-    // haha
-//    int 100_bottles;
-    int _100_bottles;
-    int one_hundred_bottles;
-    int bottles_by_the_hundred;
-    return 0;
-}
-*/
 //----------------------------------------------------------------------------------------
 void swap(int ab[], int a, int b)
 {
@@ -203,6 +177,7 @@ void swap(int*a, int*b)
     // - State user design 
     // - Design specification to solve problem 
     // - Evaluate whether design fulfills requirements to enable scenarios to meet goals to solve problem
+
 // 5. Testing (Microsoft) 
     // e.g. Test Soda Machine
     // Questions - Where is the soda can? Who is it being used by? 
@@ -236,7 +211,6 @@ C) DO
 //----------------------------------------------------------------------
 // Just write out method prototypes and class prototypes first before implementing anything!
 //      It is impossible to implementing everything in that 45 minutes of interview
-
 
 2) Algorithms & Data Structures
 //----------------------------------------------------------------------
@@ -282,7 +256,7 @@ IMPLEMENT
 - Write code in detail 
 - Write neatly & organize space 
 - Write excellent code! 
-    - Clean Code (variable name meanings)
+    - Clean Code (variable name meanings), Refactoring, Testable
     - Google's coding style
     - TODO: 
     - FIXME: 
@@ -290,7 +264,7 @@ TEST
 - Check solution again
 - Run example on code
 - Check all lines to make sure ends with ';' 
-- Check to make sure functions used in function is defined above it and not below it. 
+- Check to make sure functions used in function is defined above it and not below it (forward declarations)
 - Check to make sure variable parameters are actually used, and all variables used are defined? Also, are the scoping of variables correct? 
 - Ensure type passed into function is actual type defined, ensure type returned from function is same as actual type collecting
 - Ensure vector is push_back() NOT push(), ensure stack is push() and top() with pop() NOT JUST pop() 
@@ -367,19 +341,20 @@ Make sure to actually run step by step with the conditions and code! Assume you 
 // Understand a basic course of all the technologies you could have picked at Google which are:
 
 TODO (1 course each! => 3 to 4 assignments to upload to Github)
+    Machine Learning
+    Natural Language Processing 
     Distributed Systems & Parallel Computing
+    Distributed Algorithms
+    Concurrency & Multithreading
     Information Retrieval 
     Computer Networks
     Compilers
-    Natural Language Processing 
-    Machine Learning
     Security 
     Economics & Electronic Commerce
     Data Mining
     Speech Processing 
     Statistics 
     UX & UI 
-
 DONE
     Computer Vision
     Computer Graphics 
@@ -388,7 +363,6 @@ DONE
     Web Front End
     Web Back End 
     Databases
-    Operating Systems
 
 You need to prove to yourself and the world that you are the best by winning competitions. 
 1. Compete in hackathons (Build a prototype from a great idea quickly) 
@@ -505,7 +479,6 @@ Technical Skills Steps: (How to acquire the technical skills you need)
 //----------------------------------------------------------------------
 - Able to know if your current approaches are working and change if it doesn't
 - TODO:  More on this later
-
 // */
 //----------------------------------------------------------------------
 //
