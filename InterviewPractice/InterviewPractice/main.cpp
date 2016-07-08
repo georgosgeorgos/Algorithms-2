@@ -1,8 +1,11 @@
 //-----------------------------------------------------------------------------------------------
 // Interview Practice
-// This file is like a rough paper
-// 1. To practce previous programming questions
-// 2. To practice new programming questions before documenting into other files
+// This file used to be for rough paper:
+    // 1. To practce previous programming questions
+    // 2. To practice new programming questions before documenting into other files
+// However, you should just practice on CoderPad and paste to the correct files if your implementation improves
+// Coderpad also works with Vim, Syntax highlighting, and google hangout, which is nice.
+https://coderpad.io
 // It also contains notes for you to read to practice programming challenges
 //-----------------------------------------------------------------------------------------------
 /*
