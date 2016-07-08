@@ -40,6 +40,7 @@ Table Of Contents
         Return Immediately Instead Of Assigning Return Value
         For Each Loop
         Continuation Index Instead Of Calculating While Loops
+        Post-increment or Post-decrement While Doing
     Nulls
         Null Object
     Parameters
@@ -713,6 +714,15 @@ Instead of having if and else, just separate to 2.
         for (; i < n; i++) {
             arrA[i] = arrC[i-arrB.size()];
         }
+//----------------------------
+// Post-increment or Post-decrement While Doing
+//----------------------------
+    from:
+        leftArr[leftIndex] = arr[resultIndex];
+        leftIndex++;
+        resultIndex--;
+    to:
+        leftArr[leftIndex++] = arr[resultIndex--];
 //-------------------------------------------------------------------------------------------
 // Nulls
 //-------------------------------------------------------------------------------------------
