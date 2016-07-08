@@ -92,19 +92,23 @@ str.erase(startIndex,amountToErase);
 str.insert(startIndex, str2); // insert str2 from startIndex position in str, if want to append in front, do str.insert(0,str2)
 str.push_back(character1); // to insert 1 single character
 //-------------------------
+notes:
+//-------------------------
+"k" != 'k'
+"k" is a char * whereas 'k' is a char
+//-------------------------
 Common Hints
 //-------------------------
 - Reversing entire sentence, then reversing each word string => Reversing words in a sentence
 - Assume ascii => char arr[256]; => Constant space, otherwise use Hash Table which is O(n)
 - Loop through entire string with more than just 1 pointer, the first pointer moves faster, the 2nd pointer follows
 //-------------------------
-notes:
-//-------------------------
-"k" != 'k'
-"k" is a char * whereas 'k' is a char
-//-------------------------
 Common Questions: 
 //-------------------------
+What happens if string is empty "", or NULL, or contains 1 character only? 
+Can the original string be modified? 
+Can the string have repeated characters or all distinct? 
+Return position of string, or length or an entire new string itself? 
 A-Z only or can have special characters?  ASCII or Unicode?
 Does upper/lower cases matter ? 
 What is a white space? How bout '\n' and '\t'
@@ -113,10 +117,6 @@ ASCII only or A-Z, or entire character space (Mandarin, English etc.)?
 Does upper-case, lower-case matter? 
 Is there trailing white space? 
 Can there be multiple consecutive white spaces? 
-Can there string have repeated characters or all distinct? 
-Return position of string, or length or an entire new string itself? 
-Can the original string be modified? 
-What happens if string is empty "", or NULL, or contains 1 character only? 
 //---------------------------------------------------------------------------------------------------
 /* //
 // Bloomberg Interview Round 1
@@ -246,46 +246,58 @@ void reverseSentence(char* string)
 // Space Complexity, S(n) = O(1)
 //-------------------------
 /* //
-#include <stdio.h>
-#include <string.h>
-void reverseStr(char* word);
+#include <string>
+#include <iostream>
+using namespace std;
+
+void reverseStringWhileLoop(string& word)
+{
+    if(word.empty()) return;
+    unsigned int startIndex = 0;
+    unsigned int endIndex = word.size() - 1;
+    while(startIndex < endIndex)
+    {
+        // Swap
+        char temp = word[startIndex];
+        word[startIndex--] = word[endIndex];
+        word[endIndex--] = temp;
+    }
+    return;
+}
+
+void reverseStringForLoop(string& word)
+{
+    int length = word.size();
+    for (int i = 0; i < length/2; i++)
+    {
+    	// Swap
+        char temp = word[length-1-i];
+        word[length-1-i] = word[i];
+        word[i] = temp;
+    }
+    return;
+}
+
+void printSolution(string& str)
+{
+    cout << "Original: " << str << endl;
+    reverseStringWhileLoop(str);
+    cout << "Reverse: " << str << endl;
+    reverseStringForLoop(str);
+    cout << "ReverseBack: " << str << endl;
+}
 
 int main(void)
 {
-    char word[80] = "abcdefg";
-    printf("%s\n", word);
-    reverseStr(word);
-    printf("%s\n", word);
+    string empty = ""; // ""
+    string single = "a"; // "a"
+    string even = "ab"; // "ba"
+    string odd = "abc"; // "cba"
+    printSolution(empty);
+    printSolution(single);
+    printSolution(even);
+    printSolution(odd);
     return 0;
-}
-
-void reverseStr(char* word)
-{
-    int n = strlen(word) - 1;
-    int i = 0;
-    for (i = 0; i < n; i++)
-    {
-        char temp = word[n];
-        word[n] = word[i];
-        word[i] = temp;
-        n--;
-    }
-    return;
-}
-
-// Untested
-void reverseStrMethod2(char* word)
-{
-    int n = strlen(word);
-    int i = 0;
-    for (i = 0; i < n/2; i++)
-    {
-    	// Swap
-        char temp = word[n-1-i];
-        word[n-1-i] = word[i];
-        word[i] = temp;
-    }
-    return;
 }
 // */
 //----------------------------------------------------------------------------------------
