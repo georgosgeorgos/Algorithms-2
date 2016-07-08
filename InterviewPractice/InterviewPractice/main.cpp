@@ -279,8 +279,11 @@ A) QUESTIONS & Function Prototype
 //----------------------------------------------------------------------
 // Common Questions
 //----------------------------------------------------------------------
-What are the parameters? 
-What are the return values? 
+Function Prototype:
+    What are the parameters? 
+    What are the return values? Are you returning anything be reference?
+    Can the input be modified? If not, input has to be const.
+    What if input is empty (has no elements) or NULL?
 What extra/specific functionalities?
 What is the problem I am trying to solve?
 What does the sentence '...' mean exactly? 
