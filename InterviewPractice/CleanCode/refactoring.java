@@ -38,6 +38,8 @@ Table Of Contents
     Iterations
         Replace Control Flag With Break
         Return Immediately Instead Of Assigning Return Value
+        For Each Loop
+        Continuation Index Instead Of Calculating While Loops
     Nulls
         Null Object
     Parameters
@@ -296,9 +298,9 @@ Make any methods that shouldn't be use outside this class private
             class OneA {
                 OneB b; 
                 void setB(OneB _b) {
-                    if(this.b) this.b.unsetA();
+                    if (this.b) this.b.unsetA();
                     this.b = _b;
-                    if(this.b.getA() != this)
+                    if (this.b.getA() != this)
                         this.b.setA(this);
                 }
                 OneB getB() {return this.b;}
@@ -313,9 +315,9 @@ Make any methods that shouldn't be use outside this class private
             class OneB {
                 OneA a; 
                 void setA(OneA _a) {
-                    if(this.a) this.a.unsetB();
+                    if (this.a) this.a.unsetB();
                     this.a = _a;
-                    if(this.a.getB() != this) 
+                    if (this.a.getB() != this) 
                         this.a.setB(this);
                 }
                 void unsetA() {
@@ -342,7 +344,7 @@ Make any methods that shouldn't be use outside this class private
             class ManyB {
                 OneA a;
                 void setA(OneA _a) {
-                    if(this.a) {
+                    if (this.a) {
                         this.a.removeB(this);
                     }
                     this.a = _a;
@@ -357,7 +359,7 @@ Make any methods that shouldn't be use outside this class private
                 Set<ManyB> setOfB; 
                 void addB(ManyB _b) {
                     this.setOfB.add(_b);
-                    if(!_b.contains(this))
+                    if (!_b.contains(this))
                         _b.addA(this);
                 }
                 void removeB(ManyB _b) {
@@ -368,7 +370,7 @@ Make any methods that shouldn't be use outside this class private
                 Set<ManyA> setOfA; 
                 void addA(ManyA _a) {
                     this.setOfA.add(_a);
-                    if(!_a.contains(this))
+                    if (!_a.contains(this))
                         _a.addA(this);
                 }
                 void removeA(ManyA _a) {
@@ -532,61 +534,61 @@ Switch from OOP to Procedural
 //----------------------------
     Introduce a new method to explain a complicated expression.
     from:   
-        if( age >= 21 && age <= 55) 
+        if ( age >= 21 && age <= 55) 
     to:
-        if(isAdult())
+        if (isAdult())
 //----------------------------
 // Consolidate 2 conditions to initialization
 //----------------------------
     Remove the else statement by making it the initialization
     from:
-        if(...)
+        if (...)
             charge = 1;
         else
             charge = 0;
     to:
         charge = 0;
-        if(...)
+        if (...)
         charge = 1;
 //----------------------------
 // Remove else throw to if throw
 //----------------------------
     Remove else statement by throwing in if instead
     from:
-        if(thisMustBeTrueForCodeToWork())
+        if (thisMustBeTrueForCodeToWork())
             ...
         else
             throw error;
     to:
-        if(!thisMustBeTrueForCodeToWork())
+        if (!thisMustBeTrueForCodeToWork())
             throw error;
         ...
 //----------------------------
 // Or Same Results
 //----------------------------
     from:
-        if(A()) return 0;
-        else if(B()) return 1;
-        else if(C()) return 1;
-        else if(D()) return 0;
+        if (A()) return 0;
+        else if (B()) return 1;
+        else if (C()) return 1;
+        else if (D()) return 0;
     to:
-        if(A() || D()) return 0;
+        if (A() || D()) return 0;
         return 1;
 //----------------------------
 // And Nested Ifs
 //----------------------------
     from:
-       if(A())
-           if(B())
+       if (A())
+           if (B())
                ...
     to:
-        if(A() && B())
+        if (A() && B())
             ...
 //----------------------------
 // Bring Out Repeated Statements
 //----------------------------
     from:
-        if(A())
+        if (A())
             kara = 0;
             ...
             result += 1;
@@ -596,7 +598,7 @@ Switch from OOP to Procedural
             result += 1;
     to:
         kara = 0;
-        if(A())
+        if (A())
             ...
         else
             ...
@@ -605,19 +607,19 @@ Switch from OOP to Procedural
 // Probability To Complete Condition
 //----------------------------
     Swap between  && and || so that the probability of complete condition is faster
-        if(a && b && c && d && e) 
+        if (a && b && c && d && e) 
             need to pass all 5 to be complete condition
             can fail any 1 to complete condition
-        if(a || b || c || d || e)
+        if (a || b || c || d || e)
             need to fail all 5 to complete condition
             can pass any 1 to complete condition
     note: Can only swap if 2nd condition doesnt depend of first. e.g. ( if (a && a.getItem) (need check null before getItem)
     from:
-        if(probability90Percent && probability10Percent) {...}
-        else if(probability10Percent || probability90Percent) {...}
+        if (probability90Percent && probability10Percent) {...}
+        else if (probability10Percent || probability90Percent) {...}
     to: 
-        if(probability10Percent && probability90Percent) {...}
-        else if(probability90Percent || probability10Percent) {...}
+        if (probability10Percent && probability90Percent) {...}
+        else if (probability90Percent || probability10Percent) {...}
 //-------------------------------------------------------------------------------------------
 // Iterations
 //-------------------------------------------------------------------------------------------
@@ -629,17 +631,17 @@ Control flag is only used as a control flag.
         boolean gameOver = false;
         while(!gameOver) {
             preProcessing();
-            if(playerLoses) gameOver = true;
+            if (playerLoses) gameOver = true;
             ...
-            if(computerWins) gameOver = true;
+            if (computerWins) gameOver = true;
             postProcessing();
         }
     to:
         while(true) {
             preProcessing();
-            if(playerLoses)  break;
+            if (playerLoses)  break;
             ...
-            if(computerWins) break;
+            if (computerWins) break;
             postProcessing();
         }
         postProcessing(); // don't need this line if no post processing code
@@ -648,19 +650,69 @@ Control flag is only used as a control flag.
 //----------------------------
     from:
         class ClassValue(valueDefault);
-        if( ...) {
+        if ( ...) {
             classValue = valueA;
         } else if ( ...) {
             classValue = valueB;
         }
         return classValue;
    to:
-        if( ...) {
+        if ( ...) {
             return valueA;
         } else if ( ...) {
             return valueB;
         }
         return valueDefault;
+//----------------------------
+// For Each Loop
+//----------------------------
+There are cases where you do not need the index parameter, i as you are just
+looping through each element without any special iteration logic.
+    from:
+        for (int i = 0; i < n; i++) {
+            doSomething(arr[i]);
+        }
+    to:
+        for (Element e : arr) {
+            doSomething(e);
+        }
+note: You can't do this when you need i for calculation
+    arr[i+k] = arr[i-l];
+//----------------------------
+// Continuation Index Instead Of If & Else
+//----------------------------
+Sometimes, you just wanna loop through elements twice doing different things.
+Instead of having if and else, just separate to 2.
+    from: // Bad: Need to evaluate if logic each time
+        int k = n/2;
+        for (int i = 0; i < n; i++) {
+            if (i < k) {
+                ...
+            } else {
+                ...
+            }
+        }
+    to: // Good: Nicely separate both if and else cases
+        // Bad: Need complex end of loop calculations
+        int sizeOfB = n/2;
+        int sizeOfC = n/2; 
+        if (n%0x1) sizeOfC++;
+        for (int i = 0; i < sizeOfB; i++) {
+            arrA[i] = arrB[i]
+            ...
+        }
+        for (int i = 0; i < sizeOfC; i++) {
+            arrA[i+sizeOfB] = arrC[i];
+            ...
+        }
+    to: // Good: Just loop till the end, no complex end of loop calculations
+        int i = 0;
+        for (; i < arrB.size(); i++) {
+            arrA[i] = arrB[i];
+        }
+        for (; i < n; i++) {
+            arrA[i] = arrC[i-arrB.size()];
+        }
 //-------------------------------------------------------------------------------------------
 // Nulls
 //-------------------------------------------------------------------------------------------
@@ -671,7 +723,7 @@ To replace default handles for nulls to normal method call.
 Makes code a lot cleaner from null checks.
     from:
         Customer customer = site.getCustomer();
-        if(customer == null) // imagine a lot more of this kind of code everywhere. 
+        if (customer == null) // imagine a lot more of this kind of code everywhere. 
             logger.info("No customer");
         else 
             customer.print();
@@ -687,7 +739,7 @@ Makes code a lot cleaner from null checks.
 
         class Site {
             getCustomer() {
-                if(this.stack.top() == null) return NullCustomer();
+                if (this.stack.top() == null) return NullCustomer();
                 return this.stack.pop();
             }
         }
@@ -743,9 +795,9 @@ Replace parameter when it causes the method to do 2 totally different things.
     from:
         doDifferent("Engineer");
         void doDifferent(String type) {
-            if(type.equals("Engineer")
+            if (type.equals("Engineer")
                 ...
-            else if(type.equals("Doctor")
+            else if (type.equals("Doctor")
                 ...
         }
     to:
