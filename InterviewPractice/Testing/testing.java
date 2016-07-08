@@ -15,6 +15,7 @@ Types of Test:
     Integration Test
     System Test == Functional Test
     Sanitizer Test
+    Lint Test
     User Interaction Test (Web Driver, e.g. Selenium simulates browser interactions)
 
     A/B Testing => e.g. Change color and measure impact to amount of user interaction.
@@ -122,6 +123,10 @@ Sanitizer Test
         Out of bounds catches.
     Memory Sanitizer
         Uninitialized memory.
+Lint Test
+    Checks formatting of code (e.g. No extra trailing white space)
+Clang Tidy
+    Detects use of deprecated code (e.g. Using function objects instead of lambdas)
 //---------------------------------------------------------------------------------------------------------------------------------
 // Unit Test
 //---------------------------------------------------------------------------------------------------------------------------------
