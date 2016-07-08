@@ -63,6 +63,7 @@ Can there be (-) indices for circular arrays?
 resizable or fixed size? 
 (-) index? 
 circular or straight array? 
+To find min/max sum, what if entire array is (-) ? Do I return 0 or the smallest number? 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Maximum Contiguous Sum Subarray using Kadane's Algorithm, T(n) = O(n), S(n) = O(1)
@@ -71,6 +72,30 @@ circular or straight array?
 //---------------------------------
 /*
 Questions:
+    What does contiguous mean? 
+    What does the array store?
+    Int? 
+    Is it unsigned or signed? 
+    Is int enough ? or do we need long long int?
+    Can the values be repeated or unique?
+    Is it already sorted? 
+    If not sorted? Is there a limit to number of elements?
+    If small number of values, bubble sort is faster than quicksort
+    If values of number limited by k, then radix sort or counting sort is faster
+    Is it a normal array or circular array ? Can it have (-) index?
+    Can input be modified? No, then const vector, no changing the values, read only
+    What if entire array is negative? 
+Function Prototype:
+    What are the parameters and what does it return? Does it return by reference for anything?
+    int MaxContiguousSumSubarray(const vector<int>& arr);  
+TestCase:
+    [] = 0 // empty
+    [2,3,4] = 9 // all positive
+    [-1, -2, -3] = -1 // all negative
+    [-2.4,5,-1,2] = 10 // need to pass by negative 
+    [1, 1, -3, 2, 3] = 5 // bigger positive
+Algorithm:
+    Need handle all negative case
 */
 //---------------------------------
 /* //
@@ -79,10 +104,12 @@ Questions:
 #include <iostream>
 using namespace std;
 
-int maxSubArray(vector<int>& arr, int& startIndex, int& endIndex)
+// Returns the result by reference for which index of the array it is calculating the sum
+int maxSubArray(const vector<int>& arr, int& startIndexResult, int& endIndexResult)
 {
-    startIndex = 0;
-    endIndex = 0;
+    startIndexResult = 0;
+    endIndexResult = 0;
+    if(arr.empty()) return 0;
     int currStartIndex = 0; int currEndIndex = 0;
     int cumulativeSum= -1*INT_MAX;  
     int tempSum = 0;
@@ -94,8 +121,8 @@ int maxSubArray(vector<int>& arr, int& startIndex, int& endIndex)
         if (tempSum > cumulativeSum)  // Mistake: Did if statement at beginning of for loop which is wrong as the last index wasn't checked
         {
             cumulativeSum= tempSum; 
-            startIndex = currStartIndex;
-            endIndex = i;
+            startIndexResult = currStartIndex;
+            endIndexResult = i;
         }
     }
     return cumulativeSum;
@@ -103,7 +130,6 @@ int maxSubArray(vector<int>& arr, int& startIndex, int& endIndex)
 
 // or another implementation which is easier to understand
 // Note: You solved this yourself! Kadane's algorithm is basically a dynamic programming solution that can easily be solved!=) 
-
 
 // Basically 2 cases: 
 // Case 1: There is a positive number in the array
@@ -114,14 +140,15 @@ int maxSubArray(vector<int>& arr, int& startIndex, int& endIndex)
 // Time Complexity, T(n) = O(n) // one pass only 
 // Space Complexity, S(n) = O(1) 
 // Note: Haven't accounted for start and end index yet
-int maxSubArrayDynamic(vector<int>& arr)
+int maxSubArrayDynamic(const vector<int>& arr)
 {
+    if(arr.empty()) return 0;
     int N = arr.size();
     bool notAllNegative = false; // initialize to all are negative
     int minNegative = arr[0]; // initialize minNegative to first element assuming there exist a first element
     int maxSum = arr[0]; // initialize maximumSum to be first element
     int currSum = 0; // initialize to 0 for a[-1] 
-    for(int i = 0; i <N; i++)
+    for(int i = 0; i < N; i++)
     {
         currSum = max(0, currSum + arr[i]);
         if(currSum > maxSum) 
@@ -150,19 +177,69 @@ int maxSubArrayDynamic(vector<int>& arr)
     else return maxSum; 
 }
 
+int maxSubArraySplitByPosAndNegCases(const vector<int>& arr)
+{
+    if (arr.empty()) return 0;
+    int i = 0;
+    int sum = arr[i++];
+    // Initialize to bigger negative element if it is negative
+    // Handle negative case
+    while(sum < 0 && i < arr.size())
+    {
+        if(arr[i] > sum)
+        {
+            sum = arr[i];
+        } 
+        i++;
+    }
+    int negativeSoFar = 0;
+    int positiveSoFar = 0;
+    for(; i < arr.size(); i++)
+    {
+        if(arr[i] >= 0)
+        {
+            positiveSoFar += arr[i];
+            int difference = positiveSoFar + negativeSoFar;
+            if(difference >= 0) 
+            {
+                sum = max(sum + difference, positiveSoFar);
+                positiveSoFar = 0;
+                negativeSoFar = 0;
+            }
+        }
+        else
+        {
+            negativeSoFar += arr[i];
+            positiveSoFar = 0;
+        }
+    }
+    return sum;
+}
+
+void printSolution(vector<int>& arr)
+{
+    int startIndexResult = 0;
+    int endIndexResult = 0;
+    int maximum = maxSubArray(arr, startIndexResult, endIndexResult);
+    if(maximum == maxSubArrayDynamic(arr) && maximum == maxSubArraySplitByPosAndNegCases(arr))
+        cout<<"Start: "<< startIndexResult <<" to End: " << endIndexResult <<" is maximum: "<< maximum << endl;
+    else cout << "Error! Different answer between implementations" << endl;
+}
+
 int main(void)
 {
-    vector<int> arr = {1, 3, -3, 4, -5, 3};  // Test normal: 5
-    int startIndex, endIndex;
-    int maximum = maxSubArray(arr, startIndex, endIndex);
-    int maximum2 = maxSubArrayDynamic(arr);
-    cout<<"Start: "<< startIndex <<" to End: " << endIndex <<" is maximum: "<< maximum << endl;
-    cout<<"maximum: "<< maximum2 << endl;
-    vector<int> arr2 = { -4, -2, -3, -1, -5}; // Test All Negative: -1
-    maximum = maxSubArray(arr2, startIndex, endIndex);
-    maximum2 = maxSubArrayDynamic(arr2);
-    cout<<"Start: "<< startIndex <<" to End: " << endIndex <<" is maximum: "<< maximum << endl;
-    cout<<"maximum: "<< maximum2 << endl;
+    vector<int> normal = {1, 3, -3, 4, -5, 3};  // Test normal: 5
+    vector<int> allNegative = {-4, -2, -3, -1, -5}; // test all negative: -1
+    vector<int> singlePos = {1, 1, -3, 3}; // single positive: 3
+    vector<int> biggerPos = {1, 1, -3, 3, 2}; // bigger positive: 5
+    vector<int> empty; // empty: 0
+    vector<int> allPos = {2, 3, 4}; // all positive: 9
+    printSolution(normal);
+    printSolution(allNegative);
+    printSolution(singlePos);
+    printSolution(biggerPos);
+    printSolution(empty);
+    printSolution(allPos);
     return 0;
 }
 // */
