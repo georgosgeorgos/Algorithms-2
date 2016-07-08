@@ -3,7 +3,7 @@
 Table of Contents
 // Comparison Sorts 
 1. BubbleSort, T(n) = O(n^2), S(n) = O(1)
-2. MergeSort Array, T(n) = O(nlogn), S(n) = O(nlogn) 
+2. MergeSort Array, T(n) = O(nlogn), S(n) = O(n) 
 3. QuickSort Array, T(n) = O(n^2), S(n) = O(1)
 4. Randomized Quicksort, T(n) = O(n^2), S(n) = O(1)
 5. HeapSort, T(n) = O(nlogn), S(n) = O(1)
@@ -14,6 +14,10 @@ Table of Contents
 9. Given a sorted array of integers, find range at which a target value exist. T(n) = O(nlgn), S(n) = O(1)
 10. MergeSort LinkedList, T(n) = O(nlogn), S(n) = O(logn)
 11. Topological Sort, T(V,E) = O(V+E), S(V,E) = O(V)
+// Selection 
+TODO: QuickSelect
+TODO: Median of Medians
+// Partial Sorts
 //----------------------------------------------------------------------------------------
 // TODO 
 TreeSort (Sorts an array by inserting it into a binary search tree and retrieving it in order) 
@@ -70,7 +74,7 @@ void bubblesort(double * array, int n)
     int j = 0;
     for ( i = n-1; i>= 0; i--)
     {
-        for(j = 0; j < i; j++)
+        for (j = 0; j < i; j++)
         {
             if (array[j] > array[j+1])
             {
@@ -94,12 +98,12 @@ int main(void)
     haha[3] = 2.0;
     int i = 0;
 
-    for(i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++)
     {
         printf("%f ", haha[i]);
     }
     bubblesort(haha, 4);
-    for(i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++)
     {
         printf("%f ", haha[i]);
     }
@@ -155,16 +159,15 @@ void swap(X ab[], int a, int b)
 }
 // */
 //----------------------------------------------------------------------------------------
-// 2 MergeSort Array, T(n) = O(nlogn), S(n) = O(nlogn) 
+// 2 MergeSort Array, T(n) = O(nlogn), S(n) = O(n) 
 // Time Complexity, T(n) = O(nlogn)
-// Space Complexity, S(n) = O(nlogn)
+// Space Complexity, S(n) = O(n)
 //---------------------------------------
 // OMG, it works perfectly on first trial!!
 // only 1 mistake of not closing curly braces properly due to nested else and for =D =D =D
 // Note: Update: Fixed small mistake that q is either n/2 or n/2+1 depending on whether n is odd or even
 //      This was updated on 6th February 2015
-
-// Time Complexity:Xilinx's Vivado HLS 2.
+// Time Complexity:
 // a[n] = 2a[n/2] + n + n  = 2a[n/2] + 2n
 // From Master's Thm. Case 2
 // This is O(nlgn)
@@ -184,73 +187,59 @@ void swap(X ab[], int a, int b)
 using namespace std; 
 void mergeSort(vector<int>& arr)
 {
-    int n = arr.size();
-    if(n == 1) return;
-    int n1 = n/2;
-    int n2 = n/2;
-    if(n & 0x1) 
-        n2 += 1;
-    vector<int> arr1 (n1, 0);
-    for(int i = 0; i < n1; i++)
-    {
-        arr1[i] = arr[i];
-    }
-    // Call mergesort on first
-    mergeSort(arr1);
-    // To save space, only create n2 once done calling on n1 
-    vector<int> arr2 (n2, 0);
-    for(int i = 0; i < n2; i++)
-    {
-        arr2[i] = arr[i+n1];
-    }
-    // Call mergesort on second
-    mergeSort(arr2);
-    // Now merge the 2 together
-    int p = 0; int q = 0;
-    int i = 0;
-    while(p < n1 && q < n2)
-    {
-        if (arr1[p] <= arr2[q])
-        {
-            arr[i] = arr1[p];
-            p++;
-        }
+    const int totalSize = arr.size();
+    if (totalSize <= 1) return;
+    int leftSize = totalSize/2;
+    int rightSize = totalSize/2;
+    if (totalSize & 0x1) rightSize += 1;
+    vector<int> leftArr (leftSize, 0);
+    for (int i = 0; i < leftSize; i++) leftArr[i] = arr[i];
+    // Call mergesort on left side
+    mergeSort(leftArr);
+    // To save space, only create rightSize once done calling on leftSize 
+    vector<int> rightArr (rightSize, 0);
+    for (int i = 0; i < rightSize; i++) rightArr[i] = arr[i+leftSize];
+    // Call mergesort on right side
+    mergeSort(rightArr);
+    // Now merge both sides together
+    int leftIndex = 0; int rightIndex = 0; int sortedIndex = 0;
+    while(leftIndex < leftSize && rightIndex < rightSize)
+        if (leftArr[leftIndex] <= rightArr[rightIndex])
+            arr[sortedIndex++] = leftArr[leftIndex++];
         else
-        {
-            arr[i] = arr2[q];
-            q++;
-        }
-        i++;
-    }
-    if(p < n1)
-    {
-        while(p < n1)
-        {
-            arr[i] = arr1[p];
-            p++;
-            i++;
-        }
-    }
+            arr[sortedIndex++] = rightArr[rightIndex++];
+    if (leftIndex < leftSize)
+        while(leftIndex < leftSize)
+            arr[sortedIndex++] = leftArr[leftIndex++];
     else
-    {
-        while(q < n2)
-        {
-            arr[i] = arr2[q];
-            q++;
-            i++;
-        }
-    }
+        while(rightIndex < rightSize) 
+            arr[sortedIndex++] = rightArr[rightIndex++];
     return;
 }
+
+void printSolution(vector<int>& arr)
+{
+    cout << endl << "Before Sorting" << endl;
+    for (int i = 0; i < arr.size();i++)
+        cout << arr[i] << " "; 
+    mergeSort(arr);
+    cout << endl << "After Sorting" << endl;
+    for (int i = 0; i < arr.size();i++)
+        cout << arr[i] << " "; 
+}
+
 int main(void)
 {
-    vector<int> arr = {5,4,2,3,1};
-    mergeSort(arr);
-    for(int i = 0; i < arr.size();i++)
-        cout << i << " "; 
+    vector<int> normal = {5,4,2,3,1};
+    vector<int> empty;
+    vector<int> reverse = {5,4,3,2,1}; // reverse sorted case
+    printSolution(normal);
+    printSolution(empty);
+    printSolution(reverse);
     return 0; 
 }
 //---------------------------------------
+/* //
 #include <iostream>
 using namespace std;
 
@@ -264,8 +253,8 @@ void mergesort(X a[], int n)
     int q, p;
     q = n/2;
     p = n/2;
-    //if(n % 2 == 1) p++; // increment by 1
-    if(n & 0x1) p++; // increment by 1
+    //if (n % 2 == 1) p++; // increment by 1
+    if (n & 0x1) p++; // increment by 1
         // note: doing and operator is much faster in hardware than calculating the mod (%)
     X b[q];
     int i = 0;
@@ -362,7 +351,7 @@ int quickSort(int *p, int l, int r)
     int pivot = r;
     int left = l;
     int right = l;
-    for(right = l; right<pivot; right++)
+    for (right = l; right<pivot; right++)
     {
         if (p[right] < p[pivot])
         {
@@ -387,14 +376,14 @@ int main(void)
     p[4] = 1;
     int i = 0;
     cout <<"Before Sorting"<<endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] << " ";
     }
     cout << endl;
     quickSort(p, 0, n-1);
     cout <<"After Sorting"<<endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] << " ";
     }
@@ -428,14 +417,14 @@ int main(void)
     p[4] = 1;
     int i = 0;
     cout <<"Before Sorting"<<endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] << " ";
     }
     cout << endl;
     randomizedQuickSort(p, 0, n-1);
     cout <<"After Sorting"<<endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] << " ";
     }
@@ -455,7 +444,7 @@ int randomizedQuickSort(int *p, int l, int r)
     pivot = r; // use new pivot
     int left = l;
     int right = l;
-    for(right = l; right<pivot; right++)
+    for (right = l; right<pivot; right++)
     {
         if (p[right] < p[pivot])
         {
@@ -534,7 +523,7 @@ int * heapSort(int * a, int size, bool ascOrDesc)
     // If ascending, need to build a maxHeap, if descending, need to build a minHeap
     buildHeap(a, size, ascOrDesc);
     // Now, sort it 
-    for(int i = size - 1; i >= 0; i--)
+    for (int i = size - 1; i >= 0; i--)
     {
         // first swap the root element (currMax) with the last,
         swap(&a[0], &a[i]);
@@ -568,7 +557,7 @@ int * heapify (int * a, int index, int size, bool maxOrMin)
     // Mistake: Declared smallest and largest within if statement instead of here so that below can access
     int smallest = -1;
     int largest =  -1;
-    if(left < size && right < size) 
+    if (left < size && right < size) 
     {
         // if want largest to be on top 
         if (maxOrMin)
@@ -612,7 +601,7 @@ int * heapify (int * a, int index, int size, bool maxOrMin)
     // If has any child
     if (maxOrMin)
     {
-        if(largest != index) 
+        if (largest != index) 
         {
             swap (&a[largest], &a[index]);
             // Recursively heapify 
@@ -623,7 +612,7 @@ int * heapify (int * a, int index, int size, bool maxOrMin)
     }
     else
     {
-        if(smallest != index) 
+        if (smallest != index) 
         {
             swap (&a[smallest], &a[index]);
             // Recursively heapify 
@@ -665,20 +654,20 @@ int main(void)
     int i = 0;
     time_t t;
     srand((unsigned) time(&t)); // initialize random number genrator
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         p[i] = rand() %k;
     }
 
     cout << "Before Sorting" << endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] <<" ";
     }
     cout << endl;
     countingSort(p, n, k);
     cout << "After Sorting" << endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] <<" ";
     }
@@ -704,16 +693,16 @@ void countingSort(int* p, int n, int k)
         sorted[i] = 0;
     }
     // Store all values
-    for(i = 0; i< n; i++)
+    for (i = 0; i< n; i++)
     {
         q[p[i]]++; // increment that value
     }
-    for(i = 1; i<= k; i++)
+    for (i = 1; i<= k; i++)
     {
         q[i] = q[i] + q[i-1]; // Make it cumulative
     }
     // Sort it
-    for(i = n-1; i>= 0; i--) // Note: need start from n-1 to 0 to ensure stability
+    for (i = n-1; i>= 0; i--) // Note: need start from n-1 to 0 to ensure stability
     {
         sorted[q[p[i]]] = p[i]; // start from last value of p , store that point into sorted
         q[p[i]]--;
@@ -760,20 +749,20 @@ int main(void)
     {
         powerfactor *= 10;
     }
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         p[i] = rand() % powerfactor;
     }
 
     cout << "Before Sorting" << endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] <<" ";
     }
     cout << endl;
     radixSort(p, n, k, d);
     cout << "After Sorting" << endl;
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
         cout<< p[i] <<" ";
     }
@@ -785,13 +774,13 @@ void radixSort(int* p, int n, int k, int d)
 {
     int i = 0;
     cout<<endl;
-    for(i = 1; i <= d; i++)
+    for (i = 1; i <= d; i++)
     {
         countingSortForRadixSort(p, n, k, i);
         // For debugging
         int j = 0;
         cout <<"Step " << i <<":"<<endl;
-        for(j = 0; j < n; j++)
+        for (j = 0; j < n; j++)
         {
             cout<< p[j] <<" ";
         }
@@ -828,7 +817,7 @@ void countingSortForRadixSort(int* p, int n, int k, int d)
     }
 //cout << "powerFactor" << powerFactor << " shift" << shift << endl;
     // Store all values
-    for(i = 0; i< n; i++)
+    for (i = 0; i< n; i++)
     {
 //int op = p[i] %powerFactor;
 //cout << " pi is " << p[i] << " op is " << op << " after shifting is " << (p[i]%powerFactor)*shift << endl;
@@ -836,12 +825,12 @@ void countingSortForRadixSort(int* p, int n, int k, int d)
 //cout << "m is " << m << endl;
         q[m]++; // increment that value
     }
-    for(i = 1; i<= k; i++)
+    for (i = 1; i<= k; i++)
     {
         q[i] = q[i] + q[i-1]; // Make it cumulative
     }
     // Sort it
-    for(i = n-1; i>= 0; i--) // Note: need start from n-1 to 0 to ensure stability which is needed for radix sort
+    for (i = n-1; i>= 0; i--) // Note: need start from n-1 to 0 to ensure stability which is needed for radix sort
     {
         int m = floor((p[i]%powerFactor)*shift);
         sorted[q[m]] = p[i]; // start from last value of p , store that point into sorted
@@ -868,10 +857,10 @@ note: always change recursive binary search to while loop binary search
 Recursive pseudocode: 
 recursiveBinarySearch(arr, begin, end, target) // O(logN) space
 {
-    if(begin > end) return -1;
+    if (begin > end) return -1;
     mid = (begin+end)/2;
-    if(arr[mid] == target) return mid; 
-    else if(arr[mid] < target) 
+    if (arr[mid] == target) return mid; 
+    else if (arr[mid] < target) 
         return recursiveBinarySearch(arr, mid+1, end, target);
     else
         return recursiveBinarySearch(arr, begin, mid-1, target);
@@ -882,8 +871,8 @@ binarySearch(arr, target) // O(1) space, although few extra lines for while loop
     while(begin <= end)
     {
         mid = (begin+end)/2;
-        if(arr[mid] == target) return mid; 
-        else if(arr[mid] < target) 
+        if (arr[mid] == target) return mid; 
+        else if (arr[mid] < target) 
             begin = mid+1;
         else
             end = mid-1;
@@ -917,7 +906,7 @@ int binarySearch(X a[], X element, int n)
         }
     }
     // Here, either the value is found or it doesn't exist
-    if(element == a[first])
+    if (element == a[first])
     {
         return first;
     }
@@ -973,11 +962,11 @@ using namespace std;
 
 int binarySearch(vector<int>& nums, int target, int begin, int end, bool left)
 {
-	if(end < begin) return -1; 
+	if (end < begin) return -1; 
     int mid = (end - begin)/2 + begin; 
-    if(left)
+    if (left)
     {
-        if(nums[mid] == target && (mid == 0 || nums[mid-1] != target))
+        if (nums[mid] == target && (mid == 0 || nums[mid-1] != target))
         {
             return mid; 
         }
@@ -993,7 +982,7 @@ int binarySearch(vector<int>& nums, int target, int begin, int end, bool left)
     }
     else
     {
-        if(nums[mid] == target && ((mid == nums.size()-1)  || nums[mid+1] != target))
+        if (nums[mid] == target && ((mid == nums.size()-1)  || nums[mid+1] != target))
         {
             return mid; 
         }
@@ -1012,10 +1001,10 @@ int binarySearch(vector<int>& nums, int target, int begin, int end, bool left)
 vector<int> searchRange(vector<int>& nums, int target)
 {
     vector<int> result(2,-1); 
-	if(nums.size() == 0) return result; 
+	if (nums.size() == 0) return result; 
     // Search for left most index 
     int left = binarySearch(nums, target, 0, nums.size()-1, true); 
-    if(left == -1) return result;  
+    if (left == -1) return result;  
     result[0] = left; // 1 
     int right = binarySearch(nums, target, 0, nums.size()-1, false); 
     result[1] = right; // 2 
@@ -1027,7 +1016,7 @@ int main(void)
 	vector<int> nums = {5,7,7,8,8,9}; // C++ 11 feature 
 	int target = 8; 
 	vector<int> result = searchRange(nums, target); 
-	for(int i = 0; i < result.size(); i++)
+	for (int i = 0; i < result.size(); i++)
 	{
         cout << result[i] << " ";
     }
@@ -1065,14 +1054,14 @@ struct node {
 struct node * mergeSortLinkedList(struct node ** head) // MISTAKE: To change where pointer points to, must either pass by double pointer or pass by reference pointer
 {
     // Return if no nodes or only 1 node
-    if(!*head || !(*head)->next) return *head;
+    if (!*head || !(*head)->next) return *head;
     // Get middle of Linked List
     struct node * middle = *head;
     struct node * end = (*head)->next; 
     while(end)
     {
         end = end->next;
-        if(end)
+        if (end)
         {
             end = end->next;
             middle = middle->next;
@@ -1091,7 +1080,7 @@ struct node * mergeSortLinkedList(struct node ** head) // MISTAKE: To change whe
     head = NULL; // initialize head to NULL 
     struct node * tempHead = NULL; // need new pointer for head to point to
     // Initialize new head to point to smallest element
-    if(firstList->value <= secondList->value)
+    if (firstList->value <= secondList->value)
     {
         tempHead = firstList;
         firstList = firstList->next;
@@ -1111,7 +1100,7 @@ struct node * mergeSortLinkedList(struct node ** head) // MISTAKE: To change whe
             curr->next = secondList;
             secondList = secondList->next;
         }
-        else if(!secondList || (firstList->value <= secondList->value))
+        else if (!secondList || (firstList->value <= secondList->value))
         {
             curr->next = firstList;
             firstList = firstList->next;
@@ -1187,9 +1176,9 @@ private:
     int numNodes; 
     void DFS(int v, vector<bool>& visited, stack<int>& sortedOrder)
     {
-        for(auto i = adj[v].begin(); i != adj[v].end(); i++)
+        for (auto i = adj[v].begin(); i != adj[v].end(); i++)
         {
-            if(!visited[*i])
+            if (!visited[*i])
             {
                 visited[*i] = true;
                 this->DFS(*i, visited, sortedOrder);
@@ -1213,9 +1202,9 @@ public:
     {
         stack<int> sortedOrder; 
         vector<bool> visited(this->numNodes, false);
-        for(int i = 0; i < this->numNodes; i++)
+        for (int i = 0; i < this->numNodes; i++)
         {
-            if(!visited[i]) 
+            if (!visited[i]) 
             {
                 visited[i] = true;
                 this->DFS(i, visited, sortedOrder);
