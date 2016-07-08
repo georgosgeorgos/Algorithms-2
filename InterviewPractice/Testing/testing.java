@@ -301,7 +301,13 @@ Call Mockable Methods
     Problem: Code runs in multiple threads. 
     Code: Ensure callback threads calls mockable methods to allow test code to synchronize threads.
     TestCode: 
-        Can now determine where callback thread runs from main thread. 
+        Can now determine where callback thread runs from main thread by waiting for a certain mock method to be called before continuing using Notifications.
+    e.g. 
+        WhenMockMethodNCalled, 
+            UnblockBarrier();
+        ...
+        WaitBarrier(); // main test thread will wait until barrier is unblock when the mock is called
+        // here, we know callback thread has called the mock methodN
 Perform Copy By Object
     Problem: Callback thread relies on main thread test method objects.
     Code: Copy objects given by test method to Callback thread.
