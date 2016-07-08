@@ -90,6 +90,7 @@ C) Structural Design Pattern
 D) Concurrency Design Pattern
 //-------------------------------
 - Always set thread pools for anything that deals with (database, FileIO)
+- Never use single threaded components to deal with Database, FileIO, instead delegate task to threadpools via callbacks.
 //-------------------------------
 TODO:
 . Abstract Factory Design Pattern
