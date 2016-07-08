@@ -41,6 +41,7 @@ Table Of Contents
         For Each Loop
         Continuation Index Instead Of Calculating While Loops
         Post-increment or Post-decrement While Doing
+        Calculating Midpoint
     Nulls
         Null Object
     Parameters
@@ -723,6 +724,13 @@ Instead of having if and else, just separate to 2.
         resultIndex--;
     to:
         leftArr[leftIndex++] = arr[resultIndex--];
+//----------------------------
+// Calculating Midpoint
+//----------------------------
+    from:
+        mid = (end-begin)/2 + begin;
+    to:
+        mid = (begin+end)/2;
 //-------------------------------------------------------------------------------------------
 // Nulls
 //-------------------------------------------------------------------------------------------
