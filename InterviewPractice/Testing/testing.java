@@ -14,6 +14,7 @@ Types of Test:
       - Behavior-Driven Testing
     Integration Test
     System Test == Functional Test
+    Sanitizer Test
     User Interaction Test (Web Driver, e.g. Selenium simulates browser interactions)
 
     A/B Testing => e.g. Change color and measure impact to amount of user interaction.
@@ -113,6 +114,14 @@ Metrics:
 Unit Test => High (speed, isolation, confidence in parts, fragility), Low(others)
 Integration Test => Medium (all)
 System Test => High (confidence in systems), Low(others)
+Sanitizer Test
+    Thread Sanitizer 
+        Catches race conditions
+    Address Sanitizer
+        Use after free catches.
+        Out of bounds catches.
+    Memory Sanitizer
+        Uninitialized memory.
 //---------------------------------------------------------------------------------------------------------------------------------
 // Unit Test
 //---------------------------------------------------------------------------------------------------------------------------------
