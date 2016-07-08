@@ -34,6 +34,8 @@ What to Test:
     Behavior Test
         Test methodNames should be sentences describing behavior of test. 
 Writing Testable Code:
+    Single Thread Test
+    Multi Thread Test
 */
 //---------------------------------------------------------------------------------------------------------------------------------
 // Goals
@@ -249,6 +251,8 @@ Top 10 apps at every country is different => Some apps are more targetted in som
 //---------------------------------------------------------------------------------------------------------------------------------
 // Writing Testable Code
 //---------------------------------------------------------------------------------------------------------------------------------
+// Single Thread Test
+//---------------------------------------------------------------------------------------------------------------------------------
 Move to input method parameters
     Problem: Method depends on the changing input (e.g. current time, which changes depending on when test is run)
     Code: Should accept the environment (e.g. currTime) as input parameter
@@ -281,3 +285,25 @@ Wrapper around other people's static code
     Problem: Cannot replace static methods in code that belongs to other libraries
     Code: Create a wrapper class that wraps around those static methods
     TestCode: Can now mock those wrapper classes.
+//---------------------------------------------------------------------------------------------------------------------------------
+// Multi Thread Test
+//---------------------------------------------------------------------------------------------------------------------------------
+// Main thread => Thread running the test code and set up logic
+// Callback thread => Anything that is not the main thread that was spawn in code
+Use Only 1 Callback Thread
+    Problem: Too many threads, difficult to debug what is going on.
+    Code: Allow variable number of threads for threadpool.
+    TestCode:
+        Set up test to set only a single callback thread for threadpool so it's easier to debug what is happening as there are only 2 threads:
+            - Main Test Thread
+            - Callback Thread that runs in actual code. 
+Call Mockable Methods
+    Problem: Code runs in multiple threads. 
+    Code: Ensure callback threads calls mockable methods to allow test code to synchronize threads.
+    TestCode: 
+        Can now determine where callback thread runs from main thread. 
+Perform Copy By Object
+    Problem: Callback thread relies on main thread test method objects.
+    Code: Copy objects given by test method to Callback thread.
+    TestCode:
+        Can now be sure that callback thread does not depend on main thread's object after a certain point as everything has been copied.
