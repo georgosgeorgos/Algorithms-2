@@ -103,18 +103,20 @@ notes:
 "k" != 'k'
 "k" is a char * whereas 'k' is a char
 //-------------------------
-Questions: 
+Common Questions: 
 //-------------------------
-- What is a white space? How bout '\n' and '\t'
-- What is a word? 
-- ASCII only or A-Z, or entire character space (Mandarin, English etc.)? 
-- Does upper-case, lower-case matter? 
-- Is there trailing white space? 
-- Can there be multiple consecutive white spaces? 
-- Can there string have repeated characters or all distinct? 
-- Return position of string, or length or an entire new string itself? 
-- Can the original string be modified? 
-- What happens if string is empty "", or NULL, or contains 1 character only? 
+A-Z only or can have special characters?  ASCII or Unicode?
+Does upper/lower cases matter ? 
+What is a white space? How bout '\n' and '\t'
+What is a word? 
+ASCII only or A-Z, or entire character space (Mandarin, English etc.)? 
+Does upper-case, lower-case matter? 
+Is there trailing white space? 
+Can there be multiple consecutive white spaces? 
+Can there string have repeated characters or all distinct? 
+Return position of string, or length or an entire new string itself? 
+Can the original string be modified? 
+What happens if string is empty "", or NULL, or contains 1 character only? 
 //---------------------------------------------------------------------------------------------------
 /* //
 // Bloomberg Interview Round 1

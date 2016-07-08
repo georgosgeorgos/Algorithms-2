@@ -49,16 +49,20 @@ e.g. 10, 6, 4, 3, 12, 19, 18, 20, 17 has 3 local mins at : 3, 18, 17
 - If a number isn't in the array, and -1 is a valid number, you need to create a new Integer class and return NULL instead, or just throw Exceptions
 - Greatest Common Divisor might be helpful
 - First find number of rotation, but do a binary seach, creating a mapping from rotation index to 0->n-1 index
-//-------------------------
-// Common Questions
-//-------------------------
-- (-) index? 
-- resizable or fixed size? 
-- the type the array is holding? 
-- circular or straight array? 
 - Traverse from left to right, then traverse from right to left. 
     (e.g. Product of entire array except itself without using division(/) operator) 
     (e.g. Sum of entire array except itself without using deduct (-) operator) 
+//-------------------------
+// Common Questions
+//-------------------------
+Are the inputs sorted? 
+    If it is not, sort them at cost of O(nlgn), if it is, then you just reduced your complexity by a lot
+Are the values unique or can they be repeated? 
+Can there be (-) indices for circular arrays? 
+    If (-) indices, need to add a large enough value to bring it back to positive, can determine it using  (-x) + (abs(-x)/modValue + 1)*modValue
+resizable or fixed size? 
+(-) index? 
+circular or straight array? 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Maximum Contiguous Sum Subarray using Kadane's Algorithm, T(n) = O(n), S(n) = O(1)

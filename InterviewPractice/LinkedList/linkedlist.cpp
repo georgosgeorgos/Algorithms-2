@@ -56,7 +56,7 @@ Notes:
 
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
-Hints: 
+// Common Hints
 //----------------------------------------------------------------------------------------
 - Memory address of linkedlist is unique (pointed to by pointers)
 - Can always break circular linked list, solve the problem, then link it back to become circular again
@@ -71,6 +71,10 @@ Hints:
     == curr, == next
     next > curr? next < curr ? next == curr
  if circularLinkedList, next == head? 
+//----------------------------------------------------------------------------------------
+// Common Questions
+//----------------------------------------------------------------------------------------
+Is it a singly linked is or doubly linked list?
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Reverse a Linked list
