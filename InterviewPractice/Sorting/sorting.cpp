@@ -239,7 +239,6 @@ int main(void)
     return 0; 
 }
 //---------------------------------------
-/* //
 #include <iostream>
 using namespace std;
 
@@ -853,7 +852,7 @@ void countingSortForRadixSort(int* p, int n, int k, int d)
 // Space Complexity, S(n) = O(1)
 //---------------------------------------
 /*
-note: always change recursive binary search to while loop binary search
+note: always change recursive binary search to while loop binary search cause while loop uses O(1) space where recursion uses O(logN) space
 Recursive pseudocode: 
 recursiveBinarySearch(arr, begin, end, target) // O(logN) space
 {
@@ -893,7 +892,7 @@ template <class X>
 int binarySearch(X a[], X element, int n)
 {
     int first = 0;
-    int last = n -1;
+    int last = n - 1;
     while (first != last)
     {
         if (element <= a[(first+last)/2])
@@ -915,14 +914,13 @@ int binarySearch(X a[], X element, int n)
         return -1;
     }
 }
-
 // */
 //----------------------------------------------------------------------------------------------------
 // 9 Given a sorted array of integers, find range at which a target value exist. 
 // Time Complexity, T(n) = O(nlgn)
 // Space Complexity, S(n) = O(1)
 //---------------------------------
-/*
+/* 
 Given a sorted array of integers, find the starting and ending position of a given target value.
 Your algorithm's runtime complexity must be in the order of O(log n).
 If the target is not found in the array, return [-1, -1].
@@ -962,40 +960,29 @@ using namespace std;
 
 int binarySearch(vector<int>& nums, int target, int begin, int end, bool left)
 {
-	if (end < begin) return -1; 
-    int mid = (end - begin)/2 + begin; 
-    if (left)
+    while(begin <= end)
     {
-        if (nums[mid] == target && (mid == 0 || nums[mid-1] != target))
+        int mid = (begin+end)/2;
+        if (left)
         {
-            return mid; 
-        }
-        else if ( nums[mid] >= target)
-        {
-            end = mid - 1;  
-        }
-        else
-        {
+            if (nums[mid] == target && (mid == 0 || nums[mid-1] != target))
+                return mid; 
+            else if ( nums[mid] >= target)
+                end = mid - 1;  
+            else
                 begin = mid + 1; 
         }
-        return binarySearch(nums, target, begin, end, left); 
-    }
-    else
-    {
-        if (nums[mid] == target && ((mid == nums.size()-1)  || nums[mid+1] != target))
-        {
-            return mid; 
-        }
-        else if ( nums[mid] <= target)
-        {
-            begin = mid + 1; 
-        }
         else
         {
-            end = mid - 1;  
+            if (nums[mid] == target && ((mid == nums.size()-1)  || nums[mid+1] != target))
+                return mid; 
+            else if ( nums[mid] <= target)
+                begin = mid + 1; 
+            else
+                end = mid - 1;  
         }
-        return binarySearch(nums, target, begin, end, left); 
     }
+    return -1;
 }
 
 vector<int> searchRange(vector<int>& nums, int target)
@@ -1013,13 +1000,11 @@ vector<int> searchRange(vector<int>& nums, int target)
 
 int main(void)
 {
-	vector<int> nums = {5,7,7,8,8,9}; // C++ 11 feature 
+	vector<int> nums = {5,7,7,8,8,9}; // [3,4]
 	int target = 8; 
 	vector<int> result = searchRange(nums, target); 
 	for (int i = 0; i < result.size(); i++)
-	{
         cout << result[i] << " ";
-    }
     cout << endl; 
     return 0; 
 }
