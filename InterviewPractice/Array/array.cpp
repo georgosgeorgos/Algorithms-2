@@ -823,17 +823,17 @@ Questions:
     3. If array size is < 4? Return false
 Function Prototype:
     bool containN4Duplicates(vector<int>& sortedArr);
+TestCases: 
+   [0,1,2,3,4,5,7,7] = Yes => 7,7 
+   [0,1,2,3,4,5,6,7] = No
+   [0,0,2,3,4,5,6,7] = Yes => 0, 0
+   [0,1,2,3,3,5,6,7] = Yes => 3, 3
 Algorithm:
     T(n) = O(8lgN)
     Start from (N/4 -1) index array O(4)
         check upper and lower bound.  O(2lgN)
             If it is >= N/4, then return true
             Otherwise, skip to next N/4 th integer. Check upper and lower bound. 
-TestCases: 
-   [0,1,2,3,4,5,7,7] = Yes => 7,7 
-   [0,1,2,3,4,5,6,7] = No
-   [0,0,2,3,4,5,6,7] = Yes => 0, 0
-   [0,1,2,3,3,5,6,7] = Yes => 3, 3
 Implement!
 Test!
 */
