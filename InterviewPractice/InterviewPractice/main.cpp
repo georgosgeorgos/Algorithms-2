@@ -7,6 +7,9 @@
 // Coderpad also works with Vim, Syntax highlighting, and google hangout, which is nice.
 https://coderpad.io
 // It also contains notes for you to read to practice programming challenges
+// Before interviewing, go through each problem again was you would not be as good as you were in interviews.
+// To make this more enjoyable, jump through each question, so like do 1 Array, then 1 String, then ... then 1 Graph, then 1 Array again
+// Also, document any new refactoring skills you found out if your new solutions are in any way better than existing ones.
 //-----------------------------------------------------------------------------------------------
 /*
 Testing your code after implementing it
