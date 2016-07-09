@@ -33,6 +33,7 @@ For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
 // 1 Given an array of integers, every element appears twice except for two. Output both elements . T(n) = O(n), S(n) = O(1)
 /*
 Questions:
+    Are the inputs sorted already? No 
     Can the original vector be modified? 
     Is there a limit to the number of integers given? No
     Can the integers be (-) ? Yes
@@ -40,11 +41,9 @@ Questions:
         As large as can be represented in memory 
     Can the same number appear 2z times instead of twice? where z is an integer > 0	
         Yes
-    Are the inputs sorted already? 
-        No 
 Test cases: 
-    232536
-    37
+    [2, 3, 2, 5, 3, 6] = [5, 6]
+    [3,7] = [3, 7]
 */
 //---------------------------------
 /* //
@@ -52,54 +51,50 @@ Test cases:
 #include <iostream> 
 using namespace std;
  
-int firstLeadingOne(int x)
+int firstLeadingOne(int value)
 {
-int shift = 0; 
-	int remain = x; 
-	int leadOne = remain & 1; 
-	if(leadOne) return shift;
-	while(remain)
+    if (value == 0) return -1;
+    int shift = 0; 
+	while (!(value & 0x1))
 	{
+		value >>= 1; 
 		shift++; 
-		remain = remain >> 1; 
-		int leadOne = remain & 1; 
-		if(leadOne) return shift;
 	}
+    return shift;
 }
 
-void outputBothUnique(vector<int>& a)
+vector<int> outputBothUnique(const vector<int>& arr)
 {
     int both = 0; 
-    for(int i = 0; i < a.size(); i++)
-    {
-        both = both ^ a[i]; 
-    }
-    // Here, as long as both numbers are different, 
-    // it will xor them separately
+    for (int value : arr) both ^= value;
+    // Here, as long as both numbers are different, it will xor them separately
     int shift = firstLeadingOne(both); 
     int first = 0; 
     int second = 0; 
     int andValue = 1 << shift; 
-    for(int i = 0; i < a.size(); i++)
+    for (int value : arr)
     {
-        if(a[i] & andValue)
-        {
-            first = first ^ a[i]; 
-        }
+        if (value & andValue)
+            first ^= value;
         else
-        {
-            second = second ^ a[i]; 
-        }
+            second ^= value;
     }
-    cout << first << " " << second << endl;
+    vector<int> result = {first, second};
+    return result;
 }
+
+void printSolution(const vector<int>& arr)
+{
+    vector<int> result = outputBothUnique(arr);
+    cout << result[0] << " " << result[1] << endl;
+}
+
 int main(void)
 {
-    vector<int> vec(2, 0); 
-    vec[0] = 2;
-    vec[1] = 4;
-    outputBothUnique(vec);
-    
+    vector<int> onlyTwo = {3,7}; // [3, 7] or [7, 3]
+    vector<int> normal = {2, 3, 2, 5, 3, 6}; //  [5, 6] or [6, 5]
+    printSolution(onlyTwo);
+    printSolution(normal);
     return 0; 
 }
 // */
@@ -117,9 +112,8 @@ TestCases:
     2,8 => True
     7 => False
 
-
 Algorithm
-    ((n&1 == 0) only tells you it is even, use (n&(n-1))to find if it is power of 2 (done in leecode)
+    ((n&1 == 0) only tells you it is even, use (n&(n-1))to find if it is power of 2 (done in leetcode)
 */
 //---------------------------------
 /* //
@@ -128,7 +122,7 @@ using namespace std;
 
 bool powerOfTwo(int num)
 {
-    if(num & (num-1))
+    if (num & (num-1))
         return false;
     return true;
 }
@@ -167,7 +161,7 @@ using namespace std;
 int firstOccurenceLeadOne(int x)
 {
     int count = 0;
-    if(!x) return count; // Base Case: x = 0
+    if (!x) return count; // Base Case: x = 0
     count++;
     while (!(x&0x1))
     {
