@@ -17,6 +17,187 @@ vector< vector<int> > arr(N, vector<int> (M, 0)); // initialize arr[N][M] with a
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(1)
 //-------------------------------------------
+/*
+Questions:
+    1. Is it N x N ? Same number of rows & columns ? Yes
+    2. Return new image or modify existing? Modify existing. 
+    3. What type does it store? int
+    4. Rotate Clockwise or Counter-Clockwise? Clockwise
+Function Prototype:
+    void rotate2DImage90DegreesInPlace(vector<vector<int>>& image);
+TestCase:
+    [] = []
+    1 = 1
+    1 2 3   7 4 1
+    4 5 6 = 8 5 2
+    7 8 9   9 6 3
+    1   2  3  4   13  9 5 1
+    5   6  7  8 = 14 10 6 2
+    9  10 11 12   15 11 7 3
+    13 14 15 16   16 12 8 4
+Algorithm
+    You know you have to move 4 different arrays, only consider 3 x 3 and 4 x 4 case
+    for(int i...)
+        for(int j ...)
+    [i][j]
+    Step 1: List out the exact indices you need to find
+        3 x 3 (refer to test case above an give the actual indices)
+            [0][0] <- [2][0] <- [2][2] <- [0][2] <- temp = [0][0]
+            [0][1] <- [1][0] <- [2][1] <- [1][2] <- temp = [0][1]
+        4 x 4 (refer to test case above an give the actual indices)
+            [0][0] <- [3][0] <- [3][3] <- [0][3] <- temp = [0][0]
+            [0][1] <- [2][0] <- [3][2] <- [1][3] <- ""
+            [0][2] <- [1][0] <- [3][1] <- [2][3] <- ""
+            [1][1] <- [2][1] <- [2][2] <- [1][2] <- ""
+    Step 2: Figure out the for loops i, j iteration 
+        From test case, just need to refer to:
+            size = 3
+                [i][j]
+                [0][0]
+                [0][1]
+            size = 4
+                [i][j]
+                [0][0]
+                [0][1]
+                [0][2]
+                [1][1]
+           This means you get:
+               for(int i = 0; i < (size/2); i++)
+                for(int j = i; j < (size - 1 - i); j++)
+    Step 3: Figure out the 4 changes in terms of i and j
+        [i][j]
+        temp <- [?][?] <- [?][?] <- [?][?] <- [?][?] <- temp
+        Will need to refer to figure out how to get the actual indices derived from Step 1 accounting using the for loop iteration derived from Step 2
+        Referring to:
+            size = 3
+                [i][j]
+                [0][0]
+                [0][1]
+            size = 4
+                [i][j]
+                [0][0]
+                [0][1]
+                [0][2]
+                [1][1]
+            Can derive: [i][j]
+                temp <- [i][j] <- ...
+        Referring to:
+            size = 3
+                [i][j], 
+                [0][0] <- [2][0]
+                [0][1] <- [1][0]
+            size = 4
+                [i][j]
+                [0][0] <- [3][0]
+                [0][1] <- [2][0]
+                [0][2] <- [1][0]
+                [1][1] <- [2][1]
+            Can derive: [size-1-j][i]
+                temp <- [i][j] <- [size-1 - j][i] <- ...
+        Referring to:
+            size = 3
+                [i][j], 
+                [0][0] <- ... <- [2][2]
+                [0][1] <- ... <- [2][1]
+            size = 4
+                [i][j]
+                [0][0] <- ... <- [3][3]
+                [0][1] <- ... <- [3][2]
+                [0][2] <- ... <- [3][1]
+                [1][1] <- ... <- [2][2]
+            Can derive: [size - 1 - i][size - 1 - j]
+                temp <- [i][j] <- [size - 1 - j][i] <- [size - 1 - i][size - 1 - j]
+         Referring to:
+            size = 3
+                [i][j], 
+                [0][0] <- ... <- [0][2]
+                [0][1] <- ... <- [1][2]
+            size = 4
+                [i][j]
+                [0][0] <- ... <- [0][3]
+                [0][1] <- ... <- [1][3]
+                [0][2] <- ... <- [2][3]
+                [1][1] <- ... <- [1][2]
+            Can derive: [j][size - 1 - i]
+                temp <- [i][j] <- [size - 1 - j][i] <- [size - 1 - i][size - 1 - j] <- [j][size - 1 - i] <- temp
+          Thus, figured out solution! :)
+Test!
+*/
+//-------------------------------------------
+/* // 
+#include <vector>
+#include <iostream>
+using namespace std;
+
+void rotate2DImage90DegreesInPlace(vector<vector<int>>& image)
+{
+    if (image.empty() || image[0].empty()) return;
+    int n = image.size();
+    int m = image[0].size();
+    if(n != m) return; // assumes n * n
+    for (int i = 0; i < (n/2); i++)
+    {
+        for(int j = i; j < (n - i - 1); j++)
+        {
+            int temp = image[i][j];
+            image[i][j] = image[n - 1 - j][i];
+            image[n - 1 - j][i] = image[n - 1 - i][n - 1 - j];
+            image[n - 1 - i][n - 1 - j] = image[j][n - 1 - i];
+            image[j][n - 1 - i] = temp;
+        }
+    }
+    return;
+}
+
+vector<vector<int>> buildMatrix(int size)
+{
+    vector< vector<int> > matrix (size, vector<int> (size, 0));
+    int count = 1;
+    for(int i = 0; i < size; i++)
+    {
+        for(int j = 0; j < size; j++)
+        {
+            matrix[i][j] = count++;
+        }
+    }
+    return matrix;
+}
+
+void printMatrix(vector<vector<int>>& matrix) 
+{
+    cout << endl;
+    for(int i = 0; i < matrix.size(); i++)
+    {
+        for(int j = 0; j < matrix[i].size(); j++)
+        {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void printSolution(vector<vector<int>>& image) 
+{
+    printMatrix(image);
+    rotate2DImage90DegreesInPlace(image);
+    printMatrix(image);
+}
+
+int main(void)
+{
+    vector<vector<int>> matrix1D = buildMatrix(1);
+    vector<vector<int>> matrix2D = buildMatrix(2);
+    vector<vector<int>> matrix3D = buildMatrix(3);
+    vector<vector<int>> matrix4D = buildMatrix(4);
+    printSolution(matrix1D);
+    printSolution(matrix2D);
+    printSolution(matrix3D);
+    printSolution(matrix4D);
+    return 0;
+}
+// */
+//-------------------------------------------
+// Implementation in C
 /* //
 #include <stdlib.h>
 #include <stdio.h>
