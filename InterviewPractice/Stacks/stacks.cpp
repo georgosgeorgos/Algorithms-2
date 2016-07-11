@@ -6,16 +6,25 @@ Table of Contents
 1. Stack that can return mininum value element efficiently, T(n) = O(1), S(n) = O(n). (Bloomberg 2nd round)
 
 TODO:
-3. Find out if the braces, brackets open and close properly (Cast Software Interview)
-4. Implement to add more stacks when 1 stack is filled as well as add rollover
+101. Find out if the braces, brackets open and close properly (Cast Software Interview)
+111. Find maximum depth of nested parenthesis in a string 
+    "2((a + b) (a*c(*x)))" => Max depth is 3 
+102. Implement to add more stacks when 1 stack is filled as well as add rollover
     // rollover => If delete from lower stacks, need shift all elements from upper stacks down
-5. Code Tower of Hanoi solution using stacks
+103. Code Tower of Hanoi solution using stacks
 note: Your solution was not the best, the best it to have a 2nd array for mins
 and whenever you pop a value that is the same as the current min, you pop the min as well
 or when you add a value lower than current min, you push to the 2nd array's min.
-6. Implement a queue using 2 stacks
-7. Implement 3 stacks in one array, T(n) = O(...), S(n) = O(n)
+104. Implement a queue using 2 stacks
+105. Implement 3 stacks in one array, T(n) = O(...), S(n) = O(n)
     // Note: basically every stack function has an additional stackNumber parameter. 
+106. Given a stack, sort it using recursion using only s.top(), s.pop(), s.push(), s.empty(), no for,while loops.
+107. Given an array, find the maximum of minimums for every window size
+    e.g [1,2,3] => [maxOfMinsOfWindowSize1, maxOfMinsOfWindowsSize2, maxOfMinsOfWindowsSize3] => [3, 2, 1]
+        windowSize1 => max(min(1), min(2), min(3)) = 3
+        windowSize2 => max(min(1,2), min(2,3)) = max(1,2) = 2
+        windowSize3 => max(min(1,2,3)) = max(1) = 1
+        
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // Introduction to Stacks with C++ Standard Template Library
