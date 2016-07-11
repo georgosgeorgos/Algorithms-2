@@ -18,17 +18,16 @@ or when you add a value lower than current min, you push to the 2nd array's min.
     // Note: basically every stack function has an additional stackNumber parameter. 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// Introduction to Stacks with C++ Standard Template Library, T(n) = O(1), S(n) = O(1)
+// Introduction to Stacks with C++ Standard Template Library
 /* //
 #include <iostream>
 #include <stack>
-    // s.push(value)
-    // s.top()
-    // s.pop()
-    // s.size()
-    // s.empty()
-    // s1.swap(s2)
-        // swap 2 stacks with each other
+s.push(value);
+s.top(); // returns reference to top element
+s.pop();  // pops top element, returns void
+s.size(); 
+s.empty();
+s1.swap(s2); // swap 2 stacks with each other
 using namespace std;
 int main(void)
 {
@@ -50,7 +49,6 @@ int main(void)
     cout << "Number of elements in stack is " << s.size() << endl;
     return 0;
 }
-
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 0 Implement a class for Stacks (Array, LinkedList) and comparisons
@@ -95,6 +93,7 @@ public:
     int getTop();
     bool empty();
 };
+
 ownStack::ownStack() 
 {
     this->size = 0;
@@ -109,6 +108,7 @@ void ownStack::push(int value)
     this->top = newNode;
     this->size++;
 }
+
 void ownStack::pop()
 {
     if(this->size == 0) return;
@@ -117,11 +117,13 @@ void ownStack::pop()
     this->top = this->top->next;
     free(delNode);
 }
+
 int ownStack::getTop()
 {
     if(this->size == 0) return -1;
     return top->value;
 }
+
 bool ownStack::empty()
 {
     if(this->size == 0) return true;
@@ -210,7 +212,6 @@ bool minStack::empty()
 {
     return s.empty();
 }
-
 
 int main(void)
 {
