@@ -285,7 +285,9 @@ A) QUESTIONS & Function Prototype
 Function Prototype:
     What are the parameters? 
     What are the return values? Are you returning anything be reference?
-    Can the input be modified? If not, input has to be const.
+    Can the input be modified?
+        If not, input has to be const, and can pass in by const reference
+        If yes, you can return the result by modifying the input and save space as you don't create any extra
     What if input is empty (has no elements) or NULL?
 What extra/specific functionalities?
 What is the problem I am trying to solve?
