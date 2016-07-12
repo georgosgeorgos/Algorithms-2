@@ -5,6 +5,7 @@ Table of Contents
 0. Implement a class for Stacks using (Array, LinkedList) and comparisons, T(n) = O(1), S(n) = O(n).
 1. Stack that can return mininum value element efficiently, T(n) = O(1), S(n) = O(n). (Bloomberg 2nd round)
 2. Sort A Stack Recursively Without Using for & while loops, T(n) = O(n^2), S(n) = O(n).
+3. Reverse A Stack Recursively Without for & while loops, T(n) = O(n^2), S(n) = O(n)
 
 TODO:
 121. Reverse a Stack recursively (note: Similar to Sort A Stack Recursively
@@ -269,7 +270,7 @@ Algorithm:
     Since will have to keep popping, time complexity is O(n^2)
     Since will have recursion stack, worst case will only recurse O(2n) space
 */
-//----------------------------------------------------------------------------------------------------------------------------------
+//-------------------------
 /* //
 #include <stack>
 #include <iostream>
@@ -331,6 +332,87 @@ int main(void)
     normal.push(1);
     printSolution(reverse);
     printSolution(normal);
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 3 Reverse A Stack Recursively Without for & while loops
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(n)
+//-------------------------
+/*
+Questions:
+Function Prototype:
+    void ReverseStack(stack<int>& s);
+TestCase
+    3     2
+    1 =>  1
+    2     3
+*/
+//-------------------------
+/* //
+#include <stack>
+#include <iostream>
+using namespace std;
+
+// Only insert value when stack is empty
+void insertEmpty(stack<int>& s, int value)
+{
+    if(!s.empty())
+    {
+        int insertAfter = s.top();
+        s.pop();
+        insertEmpty(s, value);
+        s.push(insertAfter);
+    }
+    else
+    {
+        s.push(value);
+    }
+}
+
+void reverseStack(stack<int>& s)
+{
+    if(!s.empty())
+    {
+        int top = s.top();
+        s.pop();
+        reverseStack(s);
+        insertEmpty(s, top);
+    }
+}
+
+// Pass by value cause don't want to modify input
+void printStack(stack<int> s)
+{
+    cout << endl << "[" << endl;
+    while(!s.empty())
+    {
+        cout << "   " << s.top() << endl;
+        s.pop();
+    }
+    cout << "]" << endl;
+}
+
+void printSolution(stack<int>& s)
+{
+    printStack(s);
+    reverseStack(s);
+    printStack(s);
+}
+
+int main(void)
+{
+    stack<int> empty;
+    stack<int> single;
+    single.push(1);
+    stack<int> normal;
+    normal.push(2);
+    normal.push(1);
+    normal.push(3);
+    printSolution(empty);
+    printSolution(single);
+    printSolution(normal);
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
