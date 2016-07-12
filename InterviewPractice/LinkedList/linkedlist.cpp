@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Reverse a Linked list, T(n) = O(n),  S(n) = O(1)
+1. Reverse a Linked List, T(n) = O(n),  S(n) = O(1)
 2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
 3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
 4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
@@ -77,7 +77,7 @@ Notes:
 Is it a singly linked is or doubly linked list?
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 1 Reverse a Linked list
+// 1 Reverse a Linked List
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
 //---------------------------------
@@ -121,7 +121,8 @@ int main(void)
     cout << endl;
     // MISTAKE: Must always return pointer to head using return value.
     // You cannot return pointer to head using parameters
-    // Maybe it works with double pointers??
+    // Unless you return with double pointers, then you pass the memory address to head. 
+    // But then you have to make sure the original head pointer must be updated to point to the reversed head pointer.
     curr = reverseLinkedList(head);
     cout << "After Reversing" << endl;
     while(curr != NULL)
@@ -137,7 +138,6 @@ struct node* reverseLinkedList(struct node* head)
     struct node* prev;
     struct node* curr;
     struct node* next;
-    // if (!head)
     if(!head || !head->next)
         return head;
     prev = head;
