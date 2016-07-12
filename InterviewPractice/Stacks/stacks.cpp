@@ -2,13 +2,20 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-0. Implement a class for Stacks using (Array, LinkedList) and comparisons, T(n) = O(1), S(n) = O(n)
+0. Implement a class for Stacks using (Array, LinkedList) and comparisons, T(n) = O(1), S(n) = O(n).
 1. Stack that can return mininum value element efficiently, T(n) = O(1), S(n) = O(n). (Bloomberg 2nd round)
+2. Sort a Stack Recursively Without Using for & while loops, T(n) = O(n^2), S(n) = O(n).
 
 TODO:
+107. Given an array, find the maximum of minimums for every window size
+    e.g [1,2,3] => [maxOfMinsOfWindowSize1, maxOfMinsOfWindowsSize2, maxOfMinsOfWindowsSize3] => [3, 2, 1]
+        windowSize1 => max(min(1), min(2), min(3)) = 3
+        windowSize2 => max(min(1,2), min(2,3)) = max(1,2) = 2
+        windowSize3 => max(min(1,2,3)) = max(1) = 1
 101. Find out if the braces, brackets open and close properly (Cast Software Interview)
 111. Find maximum depth of nested parenthesis in a string 
     "2((a + b) (a*c(*x)))" => Max depth is 3 
+112. Largest rectangular area in a histogram (refer to geeks for geeks)
 102. Implement to add more stacks when 1 stack is filled as well as add rollover
     // rollover => If delete from lower stacks, need shift all elements from upper stacks down
 103. Code Tower of Hanoi solution using stacks
@@ -18,13 +25,8 @@ or when you add a value lower than current min, you push to the 2nd array's min.
 104. Implement a queue using 2 stacks
 105. Implement 3 stacks in one array, T(n) = O(...), S(n) = O(n)
     // Note: basically every stack function has an additional stackNumber parameter. 
-106. Given a stack, sort it using recursion using only s.top(), s.pop(), s.push(), s.empty(), no for,while loops.
-107. Given an array, find the maximum of minimums for every window size
-    e.g [1,2,3] => [maxOfMinsOfWindowSize1, maxOfMinsOfWindowsSize2, maxOfMinsOfWindowsSize3] => [3, 2, 1]
-        windowSize1 => max(min(1), min(2), min(3)) = 3
-        windowSize2 => max(min(1,2), min(2,3)) = max(1,2) = 2
-        windowSize3 => max(min(1,2,3)) = max(1) = 1
-        
+TODO:
+    http://www.geeksforgeeks.org/tag/stack/
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // Introduction to Stacks with C++ Standard Template Library
@@ -238,6 +240,96 @@ int main(void)
         m.pop();
     }
     return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 2 Sort a Stack Recursively Without Using for & while loops
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(n)
+//-------------------------
+/*
+Function Prototype
+    void sortStack(stack<int>& s);
+TestCase:
+  3     1
+  2  => 2
+  1     3
+
+  1     1
+  3     1
+  1  => 2
+  2     3
+
+Algorithm:
+    Each time before you push an element, 
+    if it's not at right position, you have to pop that first
+    Then insert current element
+    Then only insert popped element
+    Since will have to keep popping, time complexity is O(n^2)
+    Since will have recursion stack, worst case will only recurse O(2n) space
+*/
+//----------------------------------------------------------------------------------------------------------------------------------
+/* //
+#include <stack>
+#include <iostream>
+using namespace std;
+
+void sortedInsert(stack<int>& s, int val)
+{
+    if (s.empty() || val < s.top())
+       s.push(val); 
+    else
+    {
+        int insertAfter = s.top();
+        s.pop();
+        sortedInsert(s, val);
+        s.push(insertAfter);
+    }
+}
+
+void sortStack(stack<int>& s)
+{
+    if (!s.empty())
+    {
+        int insertAfter = s.top();
+        s.pop();
+        sortStack(s);
+        sortedInsert(s, insertAfter);
+    }
+}
+
+// Pass by value cause don't want to modify input
+void printStack(stack<int> s)
+{
+    cout << endl << "[" << endl;
+    while(!s.empty())
+    {
+        cout << "   " << s.top() << endl;
+        s.pop();
+    }
+    cout << "]" << endl;
+}
+
+void printSolution(stack<int>& s)
+{
+    printStack(s);
+    sortStack(s);
+    printStack(s);
+}
+
+int main(void)
+{
+    stack<int> reverse;
+    reverse.push(1);
+    reverse.push(2);
+    reverse.push(3);
+    stack<int> normal;
+    normal.push(2);
+    normal.push(1);
+    normal.push(3);
+    normal.push(1);
+    printSolution(reverse);
+    printSolution(normal);
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
