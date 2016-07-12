@@ -4,9 +4,10 @@
 Table of Contents
 0. Implement a class for Stacks using (Array, LinkedList) and comparisons, T(n) = O(1), S(n) = O(n).
 1. Stack that can return mininum value element efficiently, T(n) = O(1), S(n) = O(n). (Bloomberg 2nd round)
-2. Sort a Stack Recursively Without Using for & while loops, T(n) = O(n^2), S(n) = O(n).
+2. Sort A Stack Recursively Without Using for & while loops, T(n) = O(n^2), S(n) = O(n).
 
 TODO:
+121. Reverse a Stack recursively (note: Similar to Sort A Stack Recursively
 107. Given an array, find the maximum of minimums for every window size
     e.g [1,2,3] => [maxOfMinsOfWindowSize1, maxOfMinsOfWindowsSize2, maxOfMinsOfWindowsSize3] => [3, 2, 1]
         windowSize1 => max(min(1), min(2), min(3)) = 3
@@ -243,7 +244,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 2 Sort a Stack Recursively Without Using for & while loops
+// 2 Sort A Stack Recursively Without Using for & while loops
 // Time Complexity, T(n) = O(n^2)
 // Space Complexity, S(n) = O(n)
 //-------------------------
