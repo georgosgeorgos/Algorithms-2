@@ -1,39 +1,43 @@
 //----------------------------------------------------------------------------------------
 /* 
 Table of Contents
-1. Implement Pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)
+1. Implement Pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN) (Wealthfront)
 2. Euclid's Algorithm: Calculate GCD, T(n) = O(n), S(n) = O(1)
 3. Binomial Coefficient = Number of ways to choose k out of n objects, T(n,k) = O(nk), S(n,k) = O(k)
 4. SquareRoot(int x), where x > 0, T(n) = O(logn), S(n) = O(1)
 5. Replace every # x with # y given an integer, T(n) = O(n), S(n) = O(1)
+TODO: 6. Print All Prime Factors Of Given Number
 //-----------------------------------
 TODO:
-0. Calculate pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(1) Hint: Dynamic Programming
-1. Create rand()
-2. Create 16by 9 => 16by10 or 16 by 8 cannot, 17by9 or 15by 9 cannot, returns true if 16b9 and false otherwise
-3. Generate prime numbers up to N efficiently: Sieve of Eratosthenes
-4. Look up sorting integers in O(logN) time on some Youtube MIT video on advanced data structures
-5. Given numbers 0,1,2,...,N inserted into an array. Now exactly 1 number is removed from this array. Find that one number. 
-6. Given numbers 0,1,2,...,N inserted into an array. Now exactly 2 numbers are removed from this array. Find these two number. 
+100. Calculate pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(1) Hint: Dynamic Programming, hint given by interviewer that you didnt figure out
+101. Create rand()
+102. Create 16by 9 => 16by10 or 16 by 8 cannot, 17by9 or 15by 9 cannot, returns true if 16b9 and false otherwise
+103. Generate prime numbers up to N efficiently: Sieve of Eratosthenes
+104. Look up sorting integers in O(logN) time on some Youtube MIT video on advanced data structures
+105. Given numbers 0,1,2,...,N inserted into an array. Now exactly 1 number is removed from this array. Find that one number. 
+106. Given numbers 0,1,2,...,N inserted into an array. Now exactly 2 numbers are removed from this array. Find these two number. 
     Hint: Linear equation and quadratic eqn. 
-7. Given numbers 0,1,2,...,N inserted into an array. Now exactly k numbers are removed from this array. Find these k numbers, k <= n 
-8. Given a value N, find the minimum number perfect squares sums to reach n. e.g. f(13) = 2 (2*2 + 3*3 = 4 + 9)
+107. Given numbers 0,1,2,...,N inserted into an array. Now exactly k numbers are removed from this array. Find these k numbers, k <= n 
+108. Given a value N, find the minimum number perfect squares sums to reach n. e.g. f(13) = 2 (2*2 + 3*3 = 4 + 9)
 hint: Dynamic Programming/BFS/Math theorem can be used to solve
-9. Reverse Integer 
+109. Reverse Integer 
     -321 => -123
     T(n) = O(n) S(n) = O(1)
-10. Determine whether an integer is a palindrome 
+110. Determine whether an integer is a palindrome 
     12321 => True
     -12321 => False
     T(n) = O(n) S(n) = O(1)
-11. Add 'x' between 10^k,  (Bloomberg Round 1)
+111. Add 'x' between 10^k,  (Bloomberg Round 1)
     e.g. k = 3 , x = ',', input = 12300987 (int) => output 12,300,987 (string)
 //-----------------------------------
-// Hint
+// Common Hints
 //-----------------------------------
 When working with % and / operators:
    - if handling (-) numbers, convert to (+) and solve, then multiply final result by (-)
    - make sure to account for appending "0"s if converting number to strings
+//-----------------------------------
+// Common Questions
+//-----------------------------------
 // */
 //----------------------------------------------------------------------------------------
 // 1 Implement Pow(double, int n), where n can be (-), 0 , (+)  T(n) = O(logN), S(n) = O(logN)
@@ -335,6 +339,20 @@ int main(void)
     int y = 6; 
     int result = replaceNum(input, x, y);
     cout << result << endl;
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------
+// 6 Print All Prime Factors Of Given Number
+// Time Complexity, T(n) = O()
+// Space Complexity, S(n) = O()
+//-----------------------------------
+/*
+*/
+//-----------------------------------
+//
+int main(void)
+{
     return 0;
 }
 // */
