@@ -55,7 +55,7 @@ to that value. Note: It can be any path in the tree and does not have to start a
 KD Tree
 Cover Tree
 //----------------------------------------------------------------------------------------------------------------------------------
-Notes:
+// Notes:
 //----------------------------------------------------------------------------------------------------------------------------------
 Binary Tree != Binary Search Tree
 note: You can store any k-ary tree in an array. (e.g. binary heaps are a type of binary tree) 
@@ -85,7 +85,6 @@ i) Full k-ary tree => Every node has either 0 or k children
 ii) Perfect k-ary tree => Leaf nodes are same depth 
 iii) Complete k-ary tree => You insert elements from left to right at each depth (example, a heap is always complete) 
 
-
 Array Representation
     A node at index: i 
     It's cth child, c < k is at index: k*i + 1 + c (c goes from 0 to k-1)
@@ -108,17 +107,17 @@ thus, the values in between any of the 2 values are in the pointer in between th
 B-Trees => Perfectly Height-Balanced M-way search trees 
 Applications: For operating on disk = Each node is the size of a disk page
 //----------------------------------------------------------------------------------------------------------------------------------
-Questions:
+// Common Questions:
 //----------------------------------------------------------------------------------------------------------------------------------
-    // Is binary tree balanced? O(logn) worst case for space
-    // Is binary tree a BST? 
-    // Is it a complete binary tree, all leaves are same level, and all leaves exist
-    // Are there parent pointers? (Doubly linked or singly linked)
-    // Are all values unique? (useful for BST)
-    // What value type does it store? 
-    // How to return values? In vector or print them out or? 
-    // What happens if root is NULL? 
-    // What happens if node being searched for doesn't exist? 
+    Is binary tree balanced? O(logn) worst case for space
+    Is binary tree a BST? 
+    Is it a complete binary tree, all leaves are same level, and all leaves exist
+    Are there parent pointers? (Doubly linked or singly linked)
+    Are all values unique? (useful for BST)
+    What value type does it store? 
+    How to return values? In vector or print them out or? 
+    What happens if root is NULL? 
+    What happens if node being searched for doesn't exist? 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Preorder traversal binary tree recursively. T(n) = O(n), S(n) = O(logn)
@@ -133,12 +132,12 @@ Function Prototype:
 	vector<int> preorderTraversal(struct node * root); 
 
 Test_cases: 
-	1
-	  \
-	  2
-	 /
-            3
-	=> [1, 2,3 ]
+    1
+    \
+     2
+    /
+   3
+	=> [1, 2, 3]
 
 Algorithm: 
 	Recursively print myself, then print left, then print right. 
@@ -147,15 +146,15 @@ Implementation:
 */
 //---------------------------------
 /* // 
-#include <cstdlib> // for NULL 
 #include <vector> 
 #include <iostream> 
 using namespace std; 
 
 struct node {
 	int value; 
-	struct node * left; 
-	struct node * right; 
+	node * left; 
+	node * right; 
+    node(int value_, node* left_, node* right_) : value(value_), left(left_), right(right_) {}
 }; 
 
 // [1, 2, 3] 
@@ -177,18 +176,9 @@ vector<int> preorderTraversal(struct node * root)
 // TEST! 
 int main(void)
 {
-	struct node A; 
-	struct node B; 
-	struct node C; 
-	A.value = 1; 
-	B.value = 2;
-	C.value = 3; 
-	A.left = NULL;
-	B.right = NULL; 
-	C.left = NULL; 
-	C.right = NULL; 
-	B.left = &C; 
-	A.right = &B; 
+	struct node C(3, nullptr, nullptr); 
+	struct node B(2, &C, nullptr); 
+	struct node A(1, nullptr, &B);
 	vector<int> ans = preorderTraversal(&A); 
 	for(int i = 0 ; i < ans.size(); i++)
 	{
