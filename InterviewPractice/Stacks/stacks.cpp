@@ -62,6 +62,11 @@ int main(void)
     cout << "Number of elements in stack is " << s.size() << endl;
     return 0;
 }
+//-------------------------
+// Common Notes:
+//-------------------------
+You can convert every recursive function into an iterative one using stacks.
+Recursion simply uses a recursive stack. Therefore, it is proven that you can write it iteratively using an explicit user stack instead.
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 0 Implement a class for Stacks (Array, LinkedList) and comparisons
