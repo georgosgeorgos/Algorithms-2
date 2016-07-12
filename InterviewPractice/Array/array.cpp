@@ -11,6 +11,7 @@ Table of Contents
 8. Merge Intersection 2 unsorted array with duplicates (Microsoft: girl, on-site Round 2a), T(n,m) = O(n + m), S(n,m) = O(min(n,m))
 9. Return if array is a complete circular array with reference indexing. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview) 
 10. Return if a sorted array contains duplicates that is duplicated at least N/4 times, T(n) = O(lgN), S(n) = O(1) (Google Second Round Interview)
+11. Merge Overlapping Intervals (Amazon 2nd round) = Determine if there is a clash between any pairs of intervals, T(n) = O(nlogn), S(n) = O(1)
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -958,6 +959,93 @@ int main(void)
     if (containN4Duplicates(arrD))
         cout << "Yes" << endl;
     else cout << "No" << endl;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 11 Merge Overlapping Intervals (Amazon 2nd round) = Determine if there is a clash between any pairs of intervals
+// Time Complexity, T(n) = O(nlogn)
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/*
+Questions:
+    Are the intervals sorted? No
+    Can there be intervals be repeated? Yes
+    Can the  input be modified ? Yes
+    Do I merge when they are touching? Yes => [1,3],[3,4] => [1,4]
+FunctionPrototype:
+void mergeOverlapping(vector<Interval>& arr);
+TestCases:
+    [[1,3], [5,7], [2,4], [6,8], [8,9]] => [[1,4], [5,9]]
+Algorithm:
+    Solution: T(n) = O(nlogn), S(n) = O(n)
+        Sort by start time O(nlogn)
+        Iterate from first till end and merge
+        Stack will store the intervals. Use stack as it's easy to pop from latest interval and push into it.
+        Any non-top element from the stack would mean there is no more conflict and so it won't need to be merged. 
+        Will need O(n) space to store the merged intervals. 
+    Solution T(n) = O(nlogn), S(n) = O(1)
+        Can do in O(1) space if modify input to store the intervals
+Implement!
+Test!
+*/
+//-------------------------
+/* //
+#include <algorithm> // sort()
+#include <vector>
+#include <iostream>
+using namespace std;
+
+struct Interval {
+    int start;
+    int end;
+    Interval(int start, int end)
+    {
+        this->start = start;
+        this->end = end;
+    }
+};
+
+bool compareInterval(Interval lhs, Interval rhs)
+{
+    return lhs.start < rhs.start;
+}
+
+void mergeOverlapping(vector<Interval>& arr)
+{
+    if(arr.empty()) return;
+    sort(arr.begin(), arr.end(), compareInterval);
+    int numInterval = 1;
+    for (int i = 1; i < arr.size(); i++)
+    {
+        if ((arr[i].start <= arr[numInterval - 1].end) && (arr[i].end > arr[numInterval - 1].end))
+        {
+            // Update last interval
+            arr[numInterval - 1].end = arr[i].end;
+        }
+        else 
+        {
+            // Push current interval to the numInterval and increment  numInterval
+            arr[numInterval++] = arr[i];
+        }
+    }
+    // Pop all the unused intervals at the end
+    while(arr.size() > numInterval)
+        arr.pop_back();
+}
+
+void printSolution(vector<Interval>& arr)
+{
+    cout << endl << "[ ";
+    for(Interval interval : arr)
+        cout << "[" << interval.start << ", " << interval.end << "]" << " ";
+    cout << "]" << endl;
+}
+
+int main(void)
+{
+   vector<Interval> arr = { Interval(1,3), Interval(5,7), Interval(2,4), Interval(6,8), Interval(8,9) }; 
+   mergeOverlapping(arr);
+   printSolution(arr);
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
