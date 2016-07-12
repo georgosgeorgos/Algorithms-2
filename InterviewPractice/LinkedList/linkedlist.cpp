@@ -64,17 +64,18 @@ Notes:
 - If a second pointer is running twice as fast, the middle pointer will reach the middle when 2nd pointer reaches the end
 - Can always transfer values of linkedlist instead of the nodes themselves
 - Always initialize all created linkedlist to NULL! If not may have weird errors
-- REMEMBER TO SET HEAD TO LATEST ACTUAL HEAD and ANY OTHER RELEVANT NODES TO POINT TO NULL
+- If pass by double pointer, REMEMBER TO SET HEAD TO LATEST ACTUAL HEAD and ANY OTHER RELEVANT NODES TO POINT TO NULL
 - Consider these cases into logic: 
     > curr, > next
     < curr, < next
     == curr, == next
     next > curr? next < curr ? next == curr
- if circularLinkedList, next == head? 
+- if circularLinkedList, next == head? 
 //----------------------------------------------------------------------------------------
 // Common Questions
 //----------------------------------------------------------------------------------------
-Is it a singly linked is or doubly linked list?
+    Is it a singly linked is or doubly linked list?
+    Is linked list circular?
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Reverse a Linked List
