@@ -39,11 +39,11 @@ int main(void)
         maxHeap.pop();
     }
 
-    priority_queue<int, vector<int>, greater<int> > minHeap;
+    priority_queue<int, vector<int>, greater<int>> minHeap;
     minHeap.push(20);
     minHeap.push(10);
     minHeap.push(40);
-    while(!minHeap.empty()) // outputs 10,20,40 since it's maxHeap
+    while(!minHeap.empty()) // outputs 10,20,40 since it's minHeap
     {
         cout << minHeap.top() << endl;
         minHeap.pop();
@@ -300,6 +300,14 @@ int main(void)
 // 2 HeapSort
 // Time Complexity, T(n) = O(nlogn)
 // Space Complexity, S(n) = O(1)
+//-------------------------
+/*
+Algorithm:
+    BuildHeap()
+    Swap root with last leave
+    Pop the swapped root as it's the current max/min.
+    Heapify  the last leave that was swapped to the root downwards to the proper location. This way, the end of the array will be sorted.
+*/
 //-------------------------
 /* //
 #include <cmath> // for log2()
