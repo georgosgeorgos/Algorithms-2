@@ -59,17 +59,104 @@ int main(void)
 /*
 Algorithm:
     T(n) = O(n) 
-    Note: The reason that the complexity is O(n) instead of O(NlogN) is because 
-    only at the node that you traverse O(logN) nodes in the worst case whereas the finalIndex you will traverse only 1 node
-    Therefore, you traverse:  logN + (logN - 1) + (logN - 2) + ... + 1 in the worst case. 
-    This sums up to N(logN) - ( 1 + 2 + ... + (logN-1)) 
+    Note: The reason that the complexity is O(n) instead of O(NlogN) is explained below for the SiftDown approach.
+    Basically,
+    only at the root will you traverse logN nodes in the worst case whereas the many leaves you will traverse no nodes.
     At each level, i (root node is level = 1), the maximum number of nodes at that level is  (N+1)/((2^i) + 1)
     Cost of heapify  at height, i is at most i 
-    Doing the calculations, you will find that the worst case complexity is O(N) instead.  
-    Refer to this for more information: http://www.dgp.toronto.edu/people/JamesStewart/378notes/08buildheap/ 
+    Calculations is explained below in the Decision.
+There are 2 ways to build heap.
+note: Use max-heap (root is maximum) for this example, min-heap is similar.
+    Approach 1: SiftUp: Think of it as starting from an empty heap, and iteratively inserting elements into the heap.
+        After executing SiftUpHeapify(arr, currentNode) means the path from the currentNode up to the root will maintain the heap property. 
+        for(int i = 0; i < arr.size(); i++)
+        {
+            SiftUpHeapify(arr, i) // note: calling this function that is defined here for clarity in pseudocode
+            {
+                // Here, index 'i' is the child, and you need to push it upwards to the root.
+                int childIndex = i;
+                int parentIndex = (childIndex-1)/2;
+                if (parentIndex < 0) return;
+                if (arr[i] > arr[parentIndex])
+                {
+                    // Swap it upwards
+                    swap(arr[i], arr[parentIndex]);
+                    // Since swapped, may need to swap up even more.
+                    SiftUpHeapify(arr, parentIndex);
+                }
+            }
+        }
+        Advantage: 
+            Easier to implement as only need to check that it's larger than parentIndex instead of comparing with both children like SiftDown approach.
+        Disadvantage:
+            After execution of SiftUpHeapify(arr, currentNode), only the single path from root to currentNode maintains the valid heap properties.
+            Slower, T(n) = O(nlogn)
+
+    Approach 2: SiftDown: Think of it as starting with an broken heap, and need to fix everywhere.
+        After executing SiftDownHeapify(arr, currentNode) means that every path from the currentNode its leaves maintains the heap property.
+        You can think of the current node as a heap by itself, where the current node is the root of the heap.
+        // Calculate the final index you should start from, because in the broken heap, 
+        // The nodes at the leaves of the heap are already a heap and so you don't have to iterate from them.
+        int finalIndex = floor(log2(size));  
+        finalIndex = pow(2,finalIndex) - 2;
+        for (int i = finalIndex; i >= 0; i--)
+        {
+            SiftDownHeapify(arr, i)
+            {
+                // Here, index 'i' is the parent and you need to push it downwards to the leaves
+                int parentIndex = i;
+                int leftChildIndex = (parentIndex*2) + 1;
+                int rightChildIndex = (parentIndex*2) + 2;
+                // Assume already checked that leftChildIndex < arr.size() and rightChildIndex < arr.size()
+                largestIndex =  either(parentIndex, leftChildIndex, rightChildIndex) depending on which is greater.
+                // If any of the childs are larger
+                if(parentIndex != largestIndex)
+                {
+                    swap(arr[parentIndex], arr[largestIndex]);
+                    // Since swapped, may need to swap down even more.
+                    SiftDownHeapify(arr, largestIndex);
+                }
+            }
+        }
+        Advantage:
+            Less to iterate since don't need to heapify from the leaves (anything from arr[finalIndex+1] to arr[arr.size() - 1])
+            After each execution of SiftDownHeapify(arr, currentNode), the currentNode is a root to a valid heap.
+            Faster, T(n) = O(n)
+        Disadvantage:
+            Harder to implement since need to keep checking which is largest between currentIndex, leftChildIndex, rightChildIndex
+    Decision: Use Approach 2 as it has faster time complexity.
+        The reason why Approach 2 is T(n) = O(n) whereas Approach 1 is T(n) = O(nlogn) is because:
+            The closer to the top of the heap (root) => Less nodes per level
+            The closer to bottom of heap (leave) => More nodes per level
+            In fact, the number of nodes per level increases exponentially, 2^level as you go down the heap to the leaves. root => level = 0
+            At each level, i (assume root node is level = 0), the maximum number of nodes at that level is  2^i.
+            SiftDown, 
+                you start from the bottom of the heap and iterate up. Each iteration move nodes downwards.
+                All the leaves already form a heap, so they don't have to swap.
+                This means the most number of nodes at the bottom of the heap will swap 0 times.
+                Whereas the least number of nodes at the root will swap the most times (logN downwards in the worst case).
+                The total time complexity in worst case would be:
+                    Let N = number of nodes
+                    number of leaves in worst case is N/2, moves 0 swaps downwards since already the leaves
+                    N/4 is one level above the leaves, moves at most 1 swap to the leaves
+                    SumAtEachLevel(numberOfNodesAtLevel * numberOfSwapsDownwards) = (N/2 * 0) + (N/4 * 1) + ... + (1 * logN) = T(N) = O(N)
+            SiftUp,
+                you start from top of heap and iterate down. Each iteration move nodes upwards
+                The root is already a heap by itself, so it doesn't need to swap.
+                This means the least number of nodes at the top of the heap also swap the least. 
+                However, the most number of nodes at the leaves, will have to swap the most times (logN upwards in the worst case).
+                The total time complexity in worst case would be:
+                    Let N = number of nodes
+                    number of leaves in worst case is N/2, each moves logN swaps upwards in the worst case
+                    N/4 is one level above the leaves, moves at most (logN - 1) swap to the root
+                    root has 1 element and swaps at most 0 times upwards
+                    SumAtEachLevel(numberOfNodesAtLevel * numberOfSwapsUpwards) = (N/2 * logN) + (N/4 * (logN - 1)) + ... + (1 * 0) = T(N) = O(NlogN)
+            Thus, in SiftUp, you are making more nodes take the longer path, whereas in SiftDown, you are taking more nodes to take the shorter path.
+            After doing some math, you will find out SiftUp => T(n) = O(nlogn), SiftDown => T(n) = O(n)
+        Thus, implement Approach 2 instead.
 */
 //-------------------------
-//
+/* //
 #include <cmath> // for log2()
 #include <vector>
 #include <iostream> 
@@ -83,57 +170,53 @@ void swap(int& a, int& b)
     return;
 }
 
-// TODO: There are 2 ways to heapify, your's is heapify from top to bottom, but needs to check both left and right each time
-//       Good thing is that don't have to heapify leaves
-//       2nd way is to heapfiy from bottom to top, good thing is dont have to check both left and right but only parent, bad thing is need to run through all 10 nodes.
-//       Compare both, implement both and decide which is better
-
 // true => Build a max heap, false => Build a min heap
 // Assumes the binary heap below this node is indeed a binary heap 
 // T(n) = O(logn)
-void heapify(vector<int>& arr, int index, bool maxOrMin)
+void heapifySiftDown(vector<int>& arr, int index, bool maxOrMin)
 {
+    // SiftDown approach
     const int size = arr.size();
     // Get index of left and right child
     int leftChildIndex = 2*index + 1; 
     int rightChildIndex = 2*index + 2; 
     // Mistake: Declared smallest and largest within if statement instead of here so that below can access
-    int smallest = -1;
-    int largest =  -1;
+    int smallestIndex = -1;
+    int largestIndex =  -1;
     if(leftChildIndex < size && rightChildIndex < size) 
     {
-        // if want largest to be on top 
+        // if want largest nodes to be on top 
         if (maxOrMin)
         {
-            int larger = arr[leftChildIndex] >= arr[rightChildIndex] ? leftChildIndex : rightChildIndex;
-            largest = arr[index] >= arr[larger] ? index : larger;
+            int largerIndex = arr[leftChildIndex] >= arr[rightChildIndex] ? leftChildIndex : rightChildIndex;
+            largestIndex = arr[index] >= arr[largerIndex] ? index : largerIndex;
         }
         else 
         {
-            int smaller = arr[leftChildIndex] <= arr[rightChildIndex] ? leftChildIndex : rightChildIndex;
-            smallest = arr[index] <= arr[smaller] ? index : smaller;
+            int smallerIndex = arr[leftChildIndex] <= arr[rightChildIndex] ? leftChildIndex : rightChildIndex;
+            smallestIndex = arr[index] <= arr[smallerIndex] ? index : smallerIndex;
         }
     }
     else if (leftChildIndex < size) 
     {
         if (maxOrMin)
         {
-            largest = arr[index] >= arr[leftChildIndex] ? index : leftChildIndex;
+            largestIndex = arr[index] >= arr[leftChildIndex] ? index : leftChildIndex;
         }
         else 
         {
-            smallest = arr[index] <= arr[leftChildIndex] ? index : leftChildIndex;
+            smallestIndex = arr[index] <= arr[leftChildIndex] ? index : leftChildIndex;
         }
     }
     else if (rightChildIndex < size) 
     {
         if (maxOrMin)
         {
-            largest = arr[index] >= arr[rightChildIndex] ? index : rightChildIndex;
+            largestIndex = arr[index] >= arr[rightChildIndex] ? index : rightChildIndex;
         }
         else 
         {
-            smallest = arr[index] <= arr[leftChildIndex] ? index : leftChildIndex;
+            smallestIndex = arr[index] <= arr[leftChildIndex] ? index : leftChildIndex;
         }
     }
     // Else, if no child, just return it
@@ -144,20 +227,20 @@ void heapify(vector<int>& arr, int index, bool maxOrMin)
     // If has any child
     if (maxOrMin)
     {
-        if(largest != index) 
+        if(largestIndex != index) 
         {
-            swap (arr[largest], arr[index]);
+            swap (arr[largestIndex], arr[index]);
             // Recursively heapify 
-            heapify(arr, largest, maxOrMin);
+            heapifySiftDown(arr, largestIndex, maxOrMin);
         }
     }
     else
     {
-        if(smallest != index) 
+        if(smallestIndex != index) 
         {
-            swap (arr[smallest], arr[index]);
+            swap (arr[smallestIndex], arr[index]);
             // Recursively heapify 
-            heapify(arr,smallest, maxOrMin);
+            heapifySiftDown(arr,smallestIndex, maxOrMin);
         }
     }
     return;
@@ -169,10 +252,10 @@ void buildHeap(vector<int>& arr, bool maxOrMin)
     // calculate finalIndex that you need to begin with since there is no point starting from the leaves
     int finalIndex = floor(log2(size));  
     finalIndex = pow(2,finalIndex) - 2;
-    for (int i = finalIndex; i >= 0; i--)
+    for (int parentIndex = finalIndex; parentIndex >= 0; parentIndex--)
     {
         // heapify from that index onwards
-        heapify(arr, i, maxOrMin);
+        heapifySiftDown(arr, parentIndex, maxOrMin);
     }
     return;
 }
