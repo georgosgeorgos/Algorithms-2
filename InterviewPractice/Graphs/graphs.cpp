@@ -69,8 +69,18 @@ Representation:
         Each column only has 2 1's connected by the vertices and everything else 0
         Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
 Implementation:
-    Adjacency Matrix = vector<vector<int>>
-    Adjacency List <list> 
+    Adjacency Matrix = vector<vector<int>> adjMatrix;
+    Adjacency List = vector<<list<int>>> adjList
+                     for(int i = 0; i < numNodes; i++)
+                     {
+                        adjList.push_back(list<int>());
+                     }
+                     AddUnweightedEdge(int vertex1, int vertex2, bool undirected)
+                     {
+                        adjList[vertex1].push_back(vertex2);
+                        if(undirected)
+                            adjList[vertex2].push_back(vertex1);
+                     }
     Undirected > directed, since no weight information needed (assume all weights are positive constant)
         Otherwise, you need to clear an Edge class/struct to be able to store the edges information such as weight
 Traversals:
@@ -152,28 +162,33 @@ Is it complete graph (E <= V^2) or a sparse graph (E <= V) ?
 // Time Complexity, T(V,E) = O(V+E)
 // Space Complexity, S(V,E) = O(V)
 //-------------------------
-// Algorithm: 
-// 1. Mark all nodes as not seen, O(V)
-// 2. Traverse using BFS/DFS from any node
-//                  
-//          BFS => Queue Implementation:
-    //                 T(V,E) = O(V+E)
-    //                 S(V,E) = O(V) // to maintain the queue of nodes to visit
-//          DFS => Stack Implementation:
-//                 T(V,E) = O(V+E)
-//                 S(V,E) = O(V)  = O(bd) // to maintain the queue of nodes to visit, b = branching factor, d = depth of graph
-//                          // note: More space as you push all current branch before recursing
-//                 Recursive (call stack) Implementation:
-//                 T(V,E) = O(V+E)
-//                 S(V,E) = O(d) // d = Longest depth of graph (since program runs sequentially instead of in parallel,
-//                              // it does not go through every node
-//                             // note: use less space as you recursively first node of all branch and then next node later, so save more space
-//                
-// 3. Check that all nodes are marked as seen, if not , it is unconnected, O(n)
-// Use Adjacency List as it is more efficient than Adjacency Matrix in looking at the next edge node
-// 1 = [2,3]    
-// 2 = [1]
-// 3 = [1]
+/*
+Algorithm: 
+1. Mark all nodes as not seen, O(V)
+2. Traverse using BFS/DFS from any node
+    BFS => Queue Implementation:
+        T(V,E) = O(V+E)
+        S(V,E) = O(V) // to maintain the queue of nodes to visit
+    DFS => Stack Implementation:
+        T(V,E) = O(V+E)
+        S(V,E) = O(V)  = O(bd)  
+            To maintain the queue of nodes to visit, b = branching factor, d = depth of graph
+            note: More space as you push all current branch before recursing
+    Recursive (call stack) Implementation:
+        T(V,E) = O(V+E)
+        S(V,E) = O(d) 
+            d = Longest depth of graph (since program runs sequentially instead of in parallel,
+            it does not go through every node
+            note: use less space as you recursively first node of all branch and then next node later, so save more space
+3. Check that all nodes are marked as seen, if not , it is unconnected, O(n)
+Use Adjacency List as it is more efficient than Adjacency Matrix in looking at the next edge node
+    1 = [2,3]    
+    2 = [1]
+    3 = [1]
+note:
+    If this was a different problem and you need to traverse all nodes, you need to re-run the BFS/DFS algorithm
+    on any nodes that are still unseen as they were not connected to your starting node.
+*/
 //-------------------------
 /* //
 #include <vector> // To hold all nodes that exist and index them quickly
@@ -186,59 +201,52 @@ class Graph
 {
 private:
     // Uses adjacency list representation
-    list<int> * adj;
-    int numNodes; 
+    vector<list<int>> adjList;
     vector<bool> visited;
     void DFS(int currNode);
 public:
-    Graph(int N)
+    Graph(int numNodes)
     {
-        this->numNodes = N;
-        adj = new list<int>[N];
-        for(int i = 0; i < N;i++)
+        for(int i = 0; i < numNodes; i++)
+            adjList.push_back(list<int>());
+        for(int i = 0; i < numNodes; i++)
             visited.push_back(false);
     }
     ~Graph()
     {
-        delete [] adj;
     }
     void addEdgeUndirected(int v, int w)
     {
-        adj[v].push_back(w);
-        adj[w].push_back(v);
+        adjList[v].push_back(w);
+        adjList[w].push_back(v);
     }
     void addEdgeDirected(int v, int w)
     {
-        adj[v].push_back(w);
+        adjList[v].push_back(w);
     }
     bool isConnectedBFS(); // the main algorithm for this problem using BFS
     bool isConnectedDFS(); // the main algorithm for this problem using DFS
+private:
+    void resetVisited();
+    bool allVisited();
 };
+
 bool Graph::isConnectedDFS()
 {
     // O(V)
-    for(int i = 0; i < numNodes; i++)
-    {
-        // reset all visited nodes to false
-        visited[i] = false;
-    }
+   this->resetVisited();
     // Start with the first node
     visited[0] = true;
     // O(V)
     this->DFS(0);
     // Check all are true
-    for(int i = 0; i < numNodes; i++)
-    {
-        // Graph is not connected fully if any nodes remain unvisited
-        if(!visited[i]) return false;
-    }
-    return true;
+    return this->allVisited();
 }
 
 // O(E)
 void  Graph::DFS(int currNode)
 {
-    for(auto i = adj[currNode].begin(); i != adj[currNode].end(); i++)
+    for(auto i = adjList[currNode].begin(); i != adjList[currNode].end(); i++)
     {
         if(!visited[*i])
         {
@@ -250,11 +258,7 @@ void  Graph::DFS(int currNode)
 
 bool Graph::isConnectedBFS()
 {
-    for(int i = 0; i < numNodes; i++) // O(V)
-    {
-        // reset all visited nodes to false
-        visited[i] = false;
-    }
+    this->resetVisited();
     // Traverse the nodes of the first node only
     queue<int> q; 
     visited[0] = true;
@@ -265,7 +269,7 @@ bool Graph::isConnectedBFS()
         int node = q.front();
         q.pop();
         // auto => A C++11 feature, run with: g++ -std=c++11 fileName.cpp
-        for(auto i = adj[node].begin(); i != adj[node].end(); i++)
+        for(auto i = adjList[node].begin(); i != adjList[node].end(); i++)
         {
             // MISTAKE: You only declare visited after popping from queue, should declare visited before popping to save space
                 // note: You may end up inserting the same node twice if it has not been visited yet
@@ -284,60 +288,59 @@ bool Graph::isConnectedBFS()
         // Perform action on node here
     }
     // O(V)
-    for(int i = 0; i < numNodes; i++)
-    {
-        // Graph is not connected fully if any nodes remain unvisited
-        if(!visited[i]) return false;
-    }
+    return this->allVisited();
     // All nodes were seen, graph is fully connected
     return true;
 }
 
-int main(void)
+void Graph::resetVisited()
 {
-    cout << "Undirected Graph" << endl;
-    Graph* g = new Graph(5);
-    g->addEdgeUndirected(0,1);
-    g->addEdgeUndirected(0,2);
-    g->addEdgeUndirected(1,3);
-    // Nothing connects to node 4 
+    for(int i = 0; i < visited.size(); i++)
+    {
+        // reset all visited nodes to false
+        visited[i] = false;
+    }
+}
+
+bool Graph::allVisited()
+{
+    for(int i = 0; i < visited.size(); i++)
+    {
+        // Graph is not connected fully if any nodes remain unvisited
+        if(!visited[i]) return false;
+    }
+    return true;
+}
+
+void printSolution(Graph * g) 
+{
     bool answer = g->isConnectedBFS();
     if (answer) cout << "Connected!" << endl;
     else cout << "Not Connected!" << endl;
     answer = g->isConnectedDFS();
     if (answer) cout << "Connected!" << endl;
     else cout << "Not Connected!" << endl;
-    g->addEdgeUndirected(2,4);
-    answer = g->isConnectedBFS();
-    if (answer) cout << "Connected!" << endl;
-    else cout << "Not Connected!" << endl;
-    answer = g->isConnectedDFS();
-    if (answer) cout << "Connected!" << endl;
-    else cout << "Not Connected!" << endl;
-    delete g;
-    cout << endl;
-    cout << "Directed Graph" << endl;
-    g = new Graph(5);
-    g->addEdgeDirected(0,1);
-    g->addEdgeDirected(0,2);
-    g->addEdgeDirected(1,3);
-    // Nothing connects to node 4 
-    answer = g->isConnectedBFS();
-    if (answer) cout << "Connected!" << endl;
-    else cout << "Not Connected!" << endl;
-    answer = g->isConnectedDFS();
-    if (answer) cout << "Connected!" << endl;
-    else cout << "Not Connected!" << endl;
-    g->addEdgeDirected(2,4);
-    answer = g->isConnectedBFS();
-    if (answer) cout << "Connected!" << endl;
-    else cout << "Not Connected!" << endl;
-    answer = g->isConnectedDFS();
-    if (answer) cout << "Connected!" << endl;
-    else cout << "Not Connected!" << endl;
+}
+
+int main(void)
+{
+    cout << endl << "Undirected Graph" << endl;
+    Graph undirectedGraph(5);
+    undirectedGraph.addEdgeUndirected(0,1);
+    undirectedGraph.addEdgeUndirected(0,2);
+    undirectedGraph.addEdgeUndirected(1,3);
+    printSolution(&undirectedGraph); // nothing connected to node 4
+    undirectedGraph.addEdgeUndirected(2,4);
+    printSolution(&undirectedGraph); // everything connected
+    cout << endl << "Directed Graph" << endl;
+    Graph directedGraph(5);
+    directedGraph.addEdgeDirected(0,1);
+    directedGraph.addEdgeDirected(0,2);
+    directedGraph.addEdgeDirected(1,3);
+    printSolution(&directedGraph); // nothing connected to ndoe 4
+    directedGraph.addEdgeDirected(2,4);
+    printSolution(&directedGraph); // everything connected
     return 0;
-    // note: If this was a different problem and you need to traverse all nodes, you need to re-run the BFS/DFS algorithm on any nodes that are still unseen
-    // as they were not connected to your starting node
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
