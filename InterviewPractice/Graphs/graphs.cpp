@@ -60,53 +60,35 @@ TODO: REFER TO
 38. Johnson using Fibonacci Heap
 39. Check if graph is weakly connected component
 //-------------------------
-note: Complexity is measured in terms of |V| = number of nodes and |E| = number of edges!
+note: Complexity is measured in terms of |V| = number of nodes, |E| = number of edges, |b| = branching factor = average number of neighbours for each vertex
 //-------------------------
-Adjacency Matrix Representation and Adjacency List Representation
-Incidence Matrix Representation and Incidence List Representation
-note: Adjacency Matrix is much easier to implement in an interview
-note: Adjacency List is easier to implement if you use the <list> STL and it is undirected 
-note: Undirected is much easier than directed, since you don't need to store weight information 
-    Otherwise, you need to clear an Edge class/struct to be able to store the edges
-    information such as weight
-    Adjacency Matrix > Adjacency List 
-    for: 
-    - accessing arbitrary node
-    - checking if 2 nodes are connected by an edge 
-    Bad for:
-    - traversing through nodes connected to current node O(V) always
-    Adjacency List > Adjancency Matrix 
-    for:
-    - space requirements (less space if no edge)
-    - Traversing through the nodes connected to the current node  O(V) only in worst case where a node is connected to all other nodes
-//-------------------------
-note: If you find yourself ever adding INT_MAX (e.g. BellmanFord, FloydWarshall), make sure to account for integer overflow!
-//-------------------------
-note: Both incidence Matrix and Incidence list are terrible and should never be used
-    Incidence Matrix is basically Adjacency Matrix nodes at rows and edges at columns, 
-    each column only has 2 1's connected by the vertices and everything else 0
-    Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
+Representation:
+    Adjacency Matrix Representation and Adjacency List Representation
+    Ignore using Incidence Matrix Representation and Incidence List Representation as they are terrible and offer no benefits.
+        Incidence Matrix is basically Adjacency Matrix nodes at rows and edges at columns, 
+        Each column only has 2 1's connected by the vertices and everything else 0
+        Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
+Implementation:
+    Adjacency Matrix = vector<vector<int>>
+    Adjacency List <list> 
+    Undirected > directed, since no weight information needed (assume all weights are positive constant)
+        Otherwise, you need to clear an Edge class/struct to be able to store the edges information such as weight
+Traversals:
     BFS => Must use a queue (append to back)
-    DFS => Use recursion, or use a stack (Append to front)
+    DFS => Use recursion (implicit recursion call stack), or use a stack (explicit user stack) (Append to front)
             note: If you use recursion, you may end up visiting the first node in each list of edges of a node first
-                  whereas in stack, you may end up visiting the last node in each list of edges of a node first
+                  whereas in stack, you may end up visiting the last node in each list of edges of a node first 
+                  (unless you append from right to left, but not possible since for adjacency list representation you append from the first component to the last)
             note: Recursion => Call stack 
                   Stack => User Stack 
-note: E <= V^2 => Complete Graph
-      E <= V => Sparse Graph
-//-------------------------
-
 //-------------------------
 note: Implementation for Djikstra Algorithm and Prim's Algorithm is very similar. The difference is that:
     - Djikstra Algorithm updates the minimum value to the shortest path from source to current node whereas
           if(curr.val + edge.weight < adj.val) adj.val = curr.val + edge.weight;
     - Djikstra is >= 0 weight, directed
-
     - Prim's Algorithm updates the minimum value based on the edges connecting the vertex to a current vertex already included in the MST.
           if(edge.weight < adj.val) adj.val = edge.weight;
     - Must be undirected for greedy approach of picking vertex with current minimum surrounding edges to make sense
-//-------------------------
-
 //-------------------------
 note: Floyd Warshall vs Johnson's Algorithm
     Case 1: Assuming fibonacci heap implementation of Johnson's Algorithm T(V,E) = O(2VE + (V^2)logV) = O(VE + (V^2)logV)
@@ -122,14 +104,49 @@ note: Floyd Warshall vs Johnson's Algorithm
     
     Case 3: If no negative weights and E <= V, can use Djikstra directly and do it for all nodes and not needed to use Johnson's Algorithm
     T(V,E) = O(VE + (V^2)logV) = O(V^2 + (V^2)logV) = O((V^2)logV) which is faster than  T(V,E)=O(V^3) of Floyd Warshall
+Best implementation is using Fibonacci Heap which is
+    T(V,E) = O(E + VlogV) as E >> V => O(E + VlogV) < O(ElogV)
 //-------------------------
-//
+// Common Hints
 //-------------------------
-/*
-Note: Best implementation is using Fibonacci Heap which is
-T(V,E) = O(E + VlogV) as E >> V => O(E + VlogV) < O(ElogV)
-
-*/
+If do DFS, always use recursion instead of explicit user stack
+Choose between Adjacency Matrix and Adjacency List:
+    Do I need to:
+        Traverse neighbour?
+        Check exist edge?
+        Add edge?
+        remove edge? 
+        add vertex?
+        remove vertex?
+    Adjacency List
+        Easier to find out all adjacent O(Adjacent)
+        Uses less space.
+        Easy to add or remove vertex
+    Adjacency Matrix
+        Easier to find out if has edge O(1)
+        Easier to remove an edge. 
+    Detailed Complexity Analysis:
+    Let E = Number of edges
+    Let V = Number of Vertices
+    Let b = branching factor = average number of neighbours
+    E <= V^2 => Complete Graph
+    E <= V => Sparse Graph
+                            Adjacency List, Adjacency Matrix 
+        Traverse Neighbours      O(b)          O(V)
+        CheckHaveEdge            O(b)          O(1)
+        Add Edge                 O(1)          O(1)
+        Remove Edge              O(E)          O(1)
+        Add Vertex               O(1)          O(V^2)
+        Remove Vertex            O(V+E)        O(V^2)
+If you find yourself ever adding INT_MAX (e.g. BellmanFord, FloydWarshall), make sure to account for integer overflow!
+//-------------------------
+// Common Questions:
+//-------------------------
+Weighted or unweighted?
+Unidirectional or Bi-directional? 
+Is it complete graph (E <= V^2) or a sparse graph (E <= V) ?
+//-------------------------
+// */
 //----------------------------------------------------------------------------------------------------------------------------------------------
 // 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
 // Time Complexity, T(V,E) = O(V+E)
