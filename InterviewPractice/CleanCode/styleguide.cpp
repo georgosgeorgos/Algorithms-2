@@ -4,15 +4,33 @@
 from:
     // Saves more lines, Java style
     if (...) {
+        ...
     } else {
+        ...
+    }
+    for (...) {
+        ...
+    }
+    while (...) {
+        ...
     }
 to:
     // Clearer to distinguish, especially for long programs in C++
     if (...)
     {
+        ...
     }
     else
     {
+        ...
+    }
+    for (...)
+    {
+        ...
+    }
+    while (...)
+    {
+        ...
     }
 //----------------------------
 from:
@@ -51,7 +69,7 @@ from:
             void funcB();
     };
 to: 
-    // Will always prefer re-using existing methods than accessing variables directly
+    // Will always prefer re-using existing methods than accessing variables directly, so list method definitions first
     class A {
         public:
             void funcA();
@@ -60,4 +78,63 @@ to:
             void funcB();
             int memberVariableB;
     };
+//----------------------------
+from:
+   // Appending '_' for member variable is only a style guide and is not enforced by compilers to actually represent a member variable.
+   doSomething(memberVariable_);
+to:
+   // Keyword 'this' specifies it is actually a member variable in code
+   doSomething(this->memberVariable);
+//----------------------------
+from:
+    // Problem: Need to make changes to functionA() in both places each time make a change
+    void functionA();
+    void functionB
+    {
+        ...
+        functionA();
+        ...
+    }
+    void functionA()
+    {
+        ...
+    }
+to:
+    // Define before needed, so don't have to change twice anything make a change to functionA()
+    void functionA()
+    {
+        ...
+    }
+    void functionB()
+    {
+        ...
+        functionA();
+        ...
+    }
+from:
+    Problem: If circular dependencies, need a .h file
+    void functionB1() 
+    {
+        functionB2();
+    }
+    void functionB2() 
+    {
+        functionB1();
+    }
+to:
+    // .h file
+    void functionB1();
+    void functionB2();
+    // .cpp file
+    void functionB1() 
+    {
+        functionB2();
+    }
+    void functionB2() 
+    {
+        functionB1();
+    }
+//----------------------------
+Save header files with .h extension
+Save C++ files with .cpp extension
 //----------------------------
