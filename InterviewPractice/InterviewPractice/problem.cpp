@@ -1,7 +1,5 @@
+// Ignore this, it's useless to do this once you have full-time offer at a company and not planning to move to a new company. 
 // This file generates a random question to solve
-// No databases needed for now
-// Database needed if wanna prevent doing the same problem too many times, so always output he lowest count. 
-// Means you will complete one round of all problems before getting brand new ones
 #include <ctime> 
 #include <cstdlib>
 #include <vector> 
