@@ -56,153 +56,161 @@ int main(void)
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
 //-------------------------
-/* //
+/*
+Algorithm:
+    T(n) = O(n) 
+    Note: The reason that the complexity is O(n) instead of O(NlogN) is because 
+    only at the node that you traverse O(logN) nodes in the worst case whereas the finalIndex you will traverse only 1 node
+    Therefore, you traverse:  logN + (logN - 1) + (logN - 2) + ... + 1 in the worst case. 
+    This sums up to N(logN) - ( 1 + 2 + ... + (logN-1)) 
+    At each level, i (root node is level = 1), the maximum number of nodes at that level is  (N+1)/((2^i) + 1)
+    Cost of heapify  at height, i is at most i 
+    Doing the calculations, you will find that the worst case complexity is O(N) instead.  
+    Refer to this for more information: http://www.dgp.toronto.edu/people/JamesStewart/378notes/08buildheap/ 
+*/
+//-------------------------
+//
 #include <cmath> // for log2()
+#include <vector>
 #include <iostream> 
 using namespace std; 
 
+void swap(int& a, int& b)
+{
+    int temp = a; 
+    a = b;
+    b = temp;
+    return;
+}
+
+// TODO: There are 2 ways to heapify, your's is heapify from top to bottom, but needs to check both left and right each time
+//       Good thing is that don't have to heapify leaves
+//       2nd way is to heapfiy from bottom to top, good thing is dont have to check both left and right but only parent, bad thing is need to run through all 10 nodes.
+//       Compare both, implement both and decide which is better
+
 // true => Build a max heap, false => Build a min heap
-int * buildHeap(int * a, int size, bool maxOrMin); 
-int * heapify (int * a, int index, int size, bool maxOrMin);
-void swap(int* a, int* b);
-
-int main(void)
-{
-    int n = 10;
-    int * a = new int[n];
-    for (int i = 0; i < n; i++)
-    {
-        if (i%2)
-            a[i] = i * 3; 
-        else 
-            a[i] = i * 2; 
-                
-    }
-    for (int i = 0; i < n; i++)
-    {
-        cout << a[i] << " ";
-    }
-    cout << endl;
-    cout << "Building Max Heap" << endl;
-    buildHeap(a, n, true); 
-    for (int i = 0; i < n; i++)
-    {
-        cout << a[i] << " ";
-    }
-    cout << endl;
-    cout << "Building Min Heap" << endl;
-    buildHeap(a, n, false); 
-    for (int i = 0; i < n; i++)
-    {
-        cout << a[i] << " ";
-    }
-    cout << endl;
-    return 0; 
-}
-// O(n) 
-// Note: The reason that the complexity is O(n) instead of O(NlogN) is because 
-// only at the node that you traverse O(logN) nodes in the worst case whereas the finalIndex you will traverse only 1 node
-// Therefore, you traverse:  logN + (logN - 1) + (logN - 2) + ... + 1 in the worst case. 
-// This sums up to N(logN) - ( 1 + 2 + ... + (logN-1)) 
-// At each level, i (root node is level = 1), the maximum number of nodes at that level is  (N+1)/((2^i) + 1)
-// Cost of heapify  at height, i is at most i 
-// Doing the calculations, you will find that the worst case complexity is O(N) instead.  
-// Refer to this for more information: http://www.dgp.toronto.edu/people/JamesStewart/378notes/08buildheap/ 
-
-int * buildHeap(int * a, int size, bool maxOrMin)
-{
-    // calculate finalIndex that you need to begin with since there is no point starting from the leaves
-    int finalIndex = floor(log2(size));  
-    finalIndex = pow(2,finalIndex) - 2;
-    for (int i = finalIndex; i >= 0; i--)
-    {
-        // heapify from that index onwards
-        a = heapify(a, i, size, maxOrMin);
-    }
-    return a; 
-}
-
 // Assumes the binary heap below this node is indeed a binary heap 
 // T(n) = O(logn)
-int * heapify (int * a, int index, int size, bool maxOrMin)
+void heapify(vector<int>& arr, int index, bool maxOrMin)
 {
+    const int size = arr.size();
     // Get index of left and right child
-    int left = 2*index + 1; 
-    int right = 2*index + 2; 
+    int leftChildIndex = 2*index + 1; 
+    int rightChildIndex = 2*index + 2; 
     // Mistake: Declared smallest and largest within if statement instead of here so that below can access
     int smallest = -1;
     int largest =  -1;
-    if(left < size && right < size) 
+    if(leftChildIndex < size && rightChildIndex < size) 
     {
         // if want largest to be on top 
         if (maxOrMin)
         {
-            int larger = a[left] >= a[right] ? left : right;
-            largest = a[index] >= a[larger] ? index : larger;
+            int larger = arr[leftChildIndex] >= arr[rightChildIndex] ? leftChildIndex : rightChildIndex;
+            largest = arr[index] >= arr[larger] ? index : larger;
         }
         else 
         {
-            int smaller = a[left] <= a[right] ? left : right;
-            smallest = a[index] <= a[smaller] ? index : smaller;
+            int smaller = arr[leftChildIndex] <= arr[rightChildIndex] ? leftChildIndex : rightChildIndex;
+            smallest = arr[index] <= arr[smaller] ? index : smaller;
         }
     }
-    else if (left < size) 
+    else if (leftChildIndex < size) 
     {
         if (maxOrMin)
         {
-            largest = a[index] >= a[left] ? index : left;
+            largest = arr[index] >= arr[leftChildIndex] ? index : leftChildIndex;
         }
         else 
         {
-            smallest = a[index] <= a[left] ? index : left;
+            smallest = arr[index] <= arr[leftChildIndex] ? index : leftChildIndex;
         }
     }
-    else if (right < size) 
+    else if (rightChildIndex < size) 
     {
         if (maxOrMin)
         {
-            largest = a[index] >= a[right] ? index : right;
+            largest = arr[index] >= arr[rightChildIndex] ? index : rightChildIndex;
         }
         else 
         {
-            smallest = a[index] <= a[left] ? index : left;
+            smallest = arr[index] <= arr[leftChildIndex] ? index : leftChildIndex;
         }
     }
     // Else, if no child, just return it
     else 
     {
-        return a;
+        return;
     }
     // If has any child
     if (maxOrMin)
     {
         if(largest != index) 
         {
-            swap (&a[largest], &a[index]);
+            swap (arr[largest], arr[index]);
             // Recursively heapify 
-            heapify(a, largest, size, maxOrMin);
+            heapify(arr, largest, maxOrMin);
         }
-        // Return a at the end
-        return a; 
     }
     else
     {
         if(smallest != index) 
         {
-            swap (&a[smallest], &a[index]);
+            swap (arr[smallest], arr[index]);
             // Recursively heapify 
-            heapify(a,smallest, size, maxOrMin);
+            heapify(arr,smallest, maxOrMin);
         }
-        return a; 
     }
+    return;
 }
 
-void swap(int* a, int* b)
+void buildHeap(vector<int>& arr, bool maxOrMin)
 {
-    int temp = *a; 
-    *a = *b;
-    *b = temp;
+    const int size = arr.size();
+    // calculate finalIndex that you need to begin with since there is no point starting from the leaves
+    int finalIndex = floor(log2(size));  
+    finalIndex = pow(2,finalIndex) - 2;
+    for (int i = finalIndex; i >= 0; i--)
+    {
+        // heapify from that index onwards
+        heapify(arr, i, maxOrMin);
+    }
     return;
+}
+
+void printArr(const vector<int>& arr)
+{
+    for (int i = 0; i < arr.size(); i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void printSolution(vector<int>& arr)
+{
+    printArr(arr);
+    cout << "Building Max Heap" << endl;
+    buildHeap(arr, true); 
+    printArr(arr);
+    cout << "Building Min Heap" << endl;
+    buildHeap(arr, false); 
+    printArr(arr);
+}
+
+int main(void)
+{
+    int numElements = 10;
+    vector<int> arr;
+    for (int i = 0; i < numElements; i++)
+    {
+        if (i%2)
+            arr.push_back(i * 3);
+        else 
+            arr.push_back(i * 2);
+                
+    }
+    printSolution(arr);
+    return 0; 
 }
 // */
 //----------------------------------------------------------------------------------------
