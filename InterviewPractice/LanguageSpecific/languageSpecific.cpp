@@ -76,7 +76,8 @@ C++ is divided into:
 7. (new, operator new, delete, operator delete, new [], delete [], operator new [], operator delete [])
 8. Include Only Files Needed By Client
 9. Switch vs Else If 
-10. Using
+10. Struct Aggregate Initialization
+11. Using
 TODO:
   100. Memory Layout of C Programs
       http://www.geeksforgeeks.org/memory-layout-of-c-program/
@@ -1360,7 +1361,41 @@ Solution:
         // optional default, don't need it if not needed, compiler will check and make sure you covered all cases
     }
 //----------------------------------------------------------------------------------------------------------------------------------
-// 10 Using
+// 10 Struct Aggregate Initialization
+//---------------------------------
+// Struct Members are public by default
+// Try not to get rid of aggregate initialization
+from:
+    // Problem: Can't do aggregate initialization
+    struct ownType {
+        int a;
+        bool b;
+        // Defining constructor will make it not able to do aggregate initialization
+        ownType(int a, bool b) : a(a), b(b) {}
+    };
+    int main()
+    {
+        // Problem: Feels like the members are private, since you can't see them in usage.
+        // However, they are public and NOT private
+        // Own Constructor initialization
+        ownType own(1, false);
+        // ownType own = { .a(1), .b(false) }; // this is a compiler error
+    }
+to:
+    // Solution: Don't define own constructor
+    struct ownType {
+        int a;
+        bool b;
+    };
+    int main()
+    {
+        // Since struct members are public by default, this method allows you to expose your public members to the user
+        // Can clearly see that you can use these struct members directly
+        // Aggregate initialization
+        ownType own = { .a(1), .b(false) };
+    }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 11 Using
 //---------------------------------
 Replacement for typedef
     using aShorterName = const vector<int>* existingLongClassName;
