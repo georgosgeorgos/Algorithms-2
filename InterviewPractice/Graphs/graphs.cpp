@@ -199,11 +199,6 @@ using namespace std;
 
 class Graph 
 {
-private:
-    // Uses adjacency list representation
-    vector<list<int>> adjList;
-    vector<bool> visited;
-    void DFS(int currNode);
 public:
     Graph(int numNodes)
     {
@@ -227,6 +222,10 @@ public:
     bool isConnectedBFS(); // the main algorithm for this problem using BFS
     bool isConnectedDFS(); // the main algorithm for this problem using DFS
 private:
+    // Uses adjacency list representation
+    vector<list<int>> adjList;
+    vector<bool> visited;
+    void DFS(int currNode);
     void resetVisited();
     bool allVisited();
 };
@@ -244,7 +243,7 @@ bool Graph::isConnectedDFS()
 }
 
 // O(E)
-void  Graph::DFS(int currNode)
+void Graph::DFS(int currNode)
 {
     for(auto i = adjList[currNode].begin(); i != adjList[currNode].end(); i++)
     {
