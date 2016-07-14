@@ -26,18 +26,19 @@ int main(void)
 //----------------------------------------------------------------------------------------------------------------------------------------------
 /* // 
 Table of Contents
-1. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(V,E) = O(V+E), S(V,E) = O(V)
-2. Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0, T(V,E) = O(ElogV), S(V,E) = O(V + E)
-3. Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph, T(V,E) = O(ElogV), S(V,E) = O(V + E)
-4. Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs, T(V,E) = O(VE), S(V,E) = O(V + E)
-5. Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles, T(V,E) = O(V^3), Space Complexity, T(V,E) = O(V^2)
-6. Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy), T(V,E) = O(V + E), S(V,E) = O(V)
+1. BFS, iterativeDFS, recursiveDFS, recursivePostOrder Traversal for unweighted, acyclic directed/undirected adjacencyList
+TODO:2. BFS, DFS Iterative, DFS Recursive Traversal for unweighted, acyclic directed/undirected adjacencyMatrix
+3. Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy), T(V,E) = O(V + E), S(V,E) = O(V)
+4. Check if an unweighted, acyclic directed/undirected graph is connected using BFS/DFS, T(V,E) = O(V+E), S(V,E) = O(V)
+5. Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0, T(V,E) = O(ElogV), S(V,E) = O(V + E)
+6. Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph, T(V,E) = O(ElogV), S(V,E) = O(V + E)
+7. Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs, T(V,E) = O(VE), S(V,E) = O(V + E)
+8. Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles, T(V,E) = O(V^3), Space Complexity, T(V,E) = O(V^2)
 
 Graph Algorithms in other folders:
     - Kruskal (Disjoint Set)
     - Topological Sort (Sorting)
 //-------------------------
-TODO:
 TODO: REFER TO 
     http://stanford.edu/~liszt90/acm/notebook.html 
     FOR THE SHORTEST WAY TO IMPLEMENT EVERYTHING. YOU DON'T EVEN NEED TO MAKE YOUR OWN HEAP AS YOU CAN USE STL'S PRIORITY_QUEUE ==" 
@@ -69,8 +70,9 @@ Representation:
         Each column only has 2 1's connected by the vertices and everything else 0
         Incidence List is basically a single linked list of the pair of vertex that are connected by an edge.
 Implementation:
-    Adjacency Matrix = vector<vector<int>> adjMatrix;
-    Adjacency List = vector<<list<int>>> adjList
+    Use 'int' if unweighted, and a user defined 'Edge' class if weighted
+    Adjacency Matrix = vector<vector<int>> adjMatrix(numVertex, vector<int>(numVertex, 0)); vector<vector<Edge>>;
+    Adjacency List = vector<<list<int>>> adjList;   vector<list<Edge>> adjList;
                      for(int i = 0; i < numNodes; i++)
                      {
                         adjList.push_back(list<int>());
@@ -82,15 +84,24 @@ Implementation:
                             adjList[vertex2].push_back(vertex1);
                      }
     Undirected > directed, since no weight information needed (assume all weights are positive constant)
-        Otherwise, you need to clear an Edge class/struct to be able to store the edges information such as weight
+        Otherwise, you need to write an Edge class/struct to be able to store the edges information such as weight
 Traversals:
+    Can only traverse graph with cycles if mark as visited so that won't visit it again.
     BFS => Must use a queue (append to back)
     DFS => Use recursion (implicit recursion call stack), or use a stack (explicit user stack) (Append to front)
-            note: If you use recursion, you may end up visiting the first node in each list of edges of a node first
-                  whereas in stack, you may end up visiting the last node in each list of edges of a node first 
-                  (unless you append from right to left, but not possible since for adjacency list representation you append from the first component to the last)
-            note: Recursion => Call stack 
-                  Stack => User Stack 
+        Recursion => Call stack 
+        Stack => User Stack 
+        Order of Traversal:
+            Recursion stack, you end up visiting the first node in each list of edges of a node first
+            User stack, you end up visiting the last node in each list of edges of a node first 
+                (unless you append from right to left, but this is not possible for adjacency list representation,
+                because you traverse from the head of the linked list to the end 
+                and will append from the first component to the last)
+        Space Complexity:
+            Recursion stack, S(V,E) = O(d) since you only store the single path to one leave at any time
+            User stack, S(V,E) = O(bd) since you need to keep on appending and storing all adjacent and only pop the furthest adjacent element each time.
+    Always set visited[vertex] = true before adding it to the stack or queue.
+    This way, you won't have to add the same vertex twice if there are more than 1 paths to the vertex.
 //-------------------------
 note: Implementation for Djikstra Algorithm and Prim's Algorithm is very similar. The difference is that:
     - Djikstra Algorithm updates the minimum value to the shortest path from source to current node whereas
@@ -119,7 +130,7 @@ Best implementation is using Fibonacci Heap which is
 //-------------------------
 // Common Hints
 //-------------------------
-If do DFS, always use recursion instead of explicit user stack
+If do DFS, always use recursion instead of explicit user stack, due to lower space complexity and faster implementation.
 Choose between Adjacency Matrix and Adjacency List:
     Do I need to:
         Traverse neighbour?
@@ -153,12 +164,374 @@ If you find yourself ever adding INT_MAX (e.g. BellmanFord, FloydWarshall), make
 // Common Questions:
 //-------------------------
 Weighted or unweighted?
-Unidirectional or Bi-directional? 
+Undirectional or Directional? 
+Can there be cycles in the graph? (excluding self cycles for a undirectional graph)
 Is it complete graph (E <= V^2) or a sparse graph (E <= V) ?
 //-------------------------
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 1 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
+// 1 BFS, iterativeDFS, recursiveDFS, recursivePostOrder Traversal for unweighted, acyclic directed/undirected adjacencyList
+// Time Complexity, T(V, E) = O(V+E)  for BFS, iterativeDFS, recursiveDFS, recursivePostOrder
+// Space Complexity, S(V, E) = O(V) for BFS
+// Space Complexity, S(V, E) = O(d) for recursiveDFS, recursivePostOrder, d = longest depth = V in worst case
+// Space Complexity, S(V, E) = O(bd) for iterativeDFS, b = branching factor, d = longest depth
+//-------------------------
+/*
+TestCase:
+    0 -> 1 -> 2 -> 4
+           -> 3
+    BFS => [0,1,2,3,4]
+    iterativeDFS => [0, 1, 3, 2, 4]
+    recursiveDFS => [0, 1, 2, 4, 3]
+    recursivePostOrder => [4, 2, 3, 1, 0]
+*/
+//-------------------------
+/* //
+#include <stack>
+#include <queue>
+#include <list>
+#include <vector> 
+#include <iostream>
+using namespace std;
+
+class AdjacencyListGraph {
+ public:
+    explicit AdjacencyListGraph(int numVertices);
+    vector<int> BFS();
+    vector<int> iterativeDFS();
+    vector<int> recursiveDFS();
+    vector<int> recursivePostOrder();
+    void addUndirectedEdge(int vertexA, int vertexB);
+    void addDirectedEdge(int vertexA, int vertexB);
+ private:
+    void recursePostOrder(int vertex, vector<int>& result);
+    void recurseDFS(int vertex, vector<int>& result);
+    void resetVisited();
+    vector<list<int>> adjList;
+    vector<bool> visited;
+};
+
+AdjacencyListGraph::AdjacencyListGraph(int numVertices) : adjList(numVertices, list<int>()), visited(numVertices, false) {}
+
+void AdjacencyListGraph::addUndirectedEdge(int vertexA, int vertexB)
+{
+    if (max(vertexA, vertexB) >= this->visited.size()) return;
+    this->adjList[vertexA].push_back(vertexB);
+    this->adjList[vertexB].push_back(vertexA);
+}
+
+void AdjacencyListGraph::addDirectedEdge(int fromVertex, int toVertex)
+{
+    if (max(fromVertex, toVertex) >= this->visited.size()) return;
+    this->adjList[fromVertex].push_back(toVertex);
+}
+
+void AdjacencyListGraph::resetVisited()
+{
+    for (int i = 0; i < visited.size(); i++)
+    {
+        this->visited[i] = false;
+    }
+}
+
+vector<int> AdjacencyListGraph::BFS()
+{
+    this->resetVisited();
+    vector<int> result;
+    queue<int> q;
+    for (int startVertex = 0; startVertex < this->visited.size(); startVertex++)
+    {
+        if (!this->visited[startVertex])
+        {
+            this->visited[startVertex] = true;
+            q.push(startVertex);
+            while (!q.empty())
+            {
+                int vertex = q.front();
+                result.push_back(vertex);
+                q.pop();
+                for (auto adjVertex = this->adjList[vertex].begin(); adjVertex != this->adjList[vertex].end(); adjVertex++)
+                {
+                    if (!this->visited[*adjVertex])
+                    {
+                        this->visited[*adjVertex] = true;
+                        q.push(*adjVertex);
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+
+vector<int> AdjacencyListGraph::iterativeDFS()
+{
+    this->resetVisited();
+    vector<int> result;
+    stack<int> s;
+    for (int startVertex = 0; startVertex < this->visited.size(); startVertex++)
+    {
+        if (!this->visited[startVertex])
+        {
+            this->visited[startVertex] = true;
+            s.push(startVertex);
+            while (!s.empty())
+            {
+                const int vertex = s.top();
+                result.push_back(vertex);
+                s.pop();
+                // iterativeDFS takes mores space  recursiveDFS as you have to add all unvisited adjacent into the stack
+                for (auto adjVertex = this->adjList[vertex].begin(); adjVertex != this->adjList[vertex].end(); adjVertex++)
+                {
+                    if (!this->visited[*adjVertex])
+                    {
+                        this->visited[*adjVertex] = true;
+                        s.push(*adjVertex);
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+
+void AdjacencyListGraph::recurseDFS(int vertex, vector<int>& result)
+{
+    this->visited[vertex] = true;
+    result.push_back(vertex);
+    for (auto adjVertex = this->adjList[vertex].begin(); adjVertex != this->adjList[vertex].end(); adjVertex++)
+    {
+        if (!this->visited[*adjVertex])
+        {
+            this->recurseDFS(*adjVertex, result);
+        }
+    }
+}
+
+vector<int> AdjacencyListGraph::recursiveDFS()
+{
+    this->resetVisited();
+    vector<int> result;
+    for (int startVertex = 0; startVertex < this->visited.size(); startVertex++)
+    {
+        if (!this->visited[startVertex])
+        {
+            this->recurseDFS(startVertex, result);
+        }
+    }
+    return result;
+}
+
+void AdjacencyListGraph::recursePostOrder(int vertex, vector<int>& result)
+{
+    this->visited[vertex] = true;
+    for (auto adjVertex = this->adjList[vertex].begin(); adjVertex != this->adjList[vertex].end(); adjVertex++)
+    {
+        if (!this->visited[*adjVertex])
+        {
+            this->recursePostOrder(*adjVertex, result);
+        }
+    }
+    result.push_back(vertex);
+}
+
+vector<int> AdjacencyListGraph::recursivePostOrder()
+{
+    this->resetVisited();
+    vector<int> result;
+    for (int startVertex = 0; startVertex < this->visited.size(); startVertex++)
+    {
+        if (!this->visited[startVertex])
+        {
+            this->recursePostOrder(startVertex, result);
+        }
+    }
+    return result;
+}
+
+void printResult(const vector<int>& result)
+{
+    cout << endl;
+    for (int curr : result) 
+        cout << curr << " ";
+    cout << endl;
+}
+
+int main(void)
+{
+    AdjacencyListGraph directedListGraph(5);
+    directedListGraph.addDirectedEdge(0, 1);
+    directedListGraph.addDirectedEdge(1, 2);
+    directedListGraph.addDirectedEdge(1, 3);
+    directedListGraph.addDirectedEdge(2, 4);
+    AdjacencyListGraph undirectedListGraph(5);
+    undirectedListGraph.addUndirectedEdge(0, 1);
+    undirectedListGraph.addUndirectedEdge(1, 2);
+    undirectedListGraph.addUndirectedEdge(1, 3);
+    undirectedListGraph.addUndirectedEdge(2, 4);
+    vector<int> directedBFS = directedListGraph.BFS(); // 0, 1, 2, 3, 4
+    vector<int> undirectedBFS = undirectedListGraph.BFS(); // 0, 1, 2, 3, 4
+    vector<int> directedIterativeDFS = directedListGraph.iterativeDFS(); // 0, 1, 3, 2, 4
+    vector<int> undirectedIterativeDFS = undirectedListGraph.iterativeDFS(); // 0, 1, 3, 2, 4
+    vector<int> directedRecursiveDFS = directedListGraph.recursiveDFS(); // 0, 1, 2, 4, 3
+    vector<int> undirectedRecursiveDFS = undirectedListGraph.recursiveDFS(); // 0, 1, 2, 4, 3
+    vector<int> directedRecursivePostOrder = directedListGraph.recursivePostOrder(); // 4, 2, 3, 1, 0
+    vector<int> undirectedRecursivePostOrder = undirectedListGraph.recursivePostOrder(); // 4, 2, 3, 1, 0
+    printResult(directedBFS);
+    printResult(undirectedBFS);
+    printResult(directedIterativeDFS);
+    printResult(undirectedIterativeDFS);
+    printResult(directedRecursiveDFS);
+    printResult(undirectedRecursiveDFS);
+    printResult(directedRecursivePostOrder);
+    printResult(undirectedRecursivePostOrder);
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// TODO: 2. AdjacencyMatrix representation
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 3 Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy)
+// Time Complexity, T(V,E) = O(V + E)
+// Space Complexity, S(V,E) = O(V)
+//---------------------------------
+/*
+Question
+Function Prototype
+TestCases
+1. No cycle
+    0-1-2-3
+          |
+          4-5
+2. 2-3-4
+    0-1-2-3
+         \|
+          4-5
+3. 0-1-2 
+   0-1
+    \|
+     2
+Algorithm
+    Do a DFS 
+    Mark each node as visited, 
+    if ever reach end with no adjacent nodes, you can make as 'definitely not in cycle'
+    no adjacent nodes => no actual adjacent nodes including adjacent nodes that were already marked 'definitely not in cycle'
+    If ever visit a node that was visited already and not marked definitely not in cycle, then you know you already detected a cycle. 
+    Then, just keep outputting current node backwards until reach the same node again. 
+Implement
+Test
+// */
+//---------------------------------
+/* //
+#include <vector> 
+#include <cstdlib> // for bool
+#include <list> 
+#include <iostream> 
+using namespace std; 
+
+class Graph
+{
+private:
+    list<int>* adj; 
+    int numVertices; 
+public: 
+    Graph(int numV)
+    {
+        this->numVertices = numV;
+        adj = new list<int> [numV]; 
+    }
+    
+    void addDirectedEdge(int v, int w)
+    {
+        adj[v].push_back(w); 
+    }
+
+    vector<int> outputCyclicNodesDFS(int numNode, vector<bool>& visited, vector<bool>& notInCycle)
+    {
+        vector<int> cyclicNodes; 
+        for(auto i = this->adj[numNode].begin(); i != this->adj[numNode].end(); i++)
+        {
+            if(!notInCycle[*i])
+            {
+                if(!visited[*i])
+                {
+                    visited[*i] = true; 
+                    cyclicNodes = this->outputCyclicNodesDFS(*i, visited, notInCycle);
+                    // If the cycle has begun, append if same not first as last
+                    if(!cyclicNodes.empty())
+                    {
+                        // If cycle has not been completely appended, append this current node
+                        if ((cyclicNodes.size() > 1) && (cyclicNodes[0] != cyclicNodes[cyclicNodes.size()-1])) // Mistake: Didn't handle case of first node added to cyclic nodes
+                        {
+                            cyclicNodes.push_back(numNode);
+                        }
+                        // return it regardless since either appended current node or cycle has been completed already 
+                        return cyclicNodes; 
+                    }
+                    // else, there is no cycle, just return
+                }
+                // Found a cycle
+                else
+                {
+                    cyclicNodes.push_back(*i); // append the initial node
+                    cyclicNodes.push_back(numNode); // append this node as it is part of cycle
+                    return cyclicNodes; 
+                }
+            }
+        }
+        // otherwise, marked this node as not being in cycle
+        notInCycle[numNode] = true;
+        return cyclicNodes;
+    }
+
+    void outputCyclicNodes()
+    {
+        vector<bool> visited(this->numVertices, false); // to mark nodes that are visited
+        vector<bool> notInCycle(this->numVertices, false); // to mark nodes that are definitely not in cycle
+        // Iterate through every possible starting point
+        for(int i = 0; i < this->numVertices; i++)
+        {
+            if(!visited[i] && !notInCycle[i])
+            {
+                visited[i] = true;
+                vector<int> cyclicNodes = this->outputCyclicNodesDFS(i, visited, notInCycle);
+                if(!cyclicNodes.empty())
+                {
+                    // Iterate from last node added to second node since first node is just a copy and need maintain direction of edges
+                    for(int i = cyclicNodes.size() - 1 ; i > 0; i--)
+                    {
+                        cout << cyclicNodes[i] << " ";
+                    }
+                    cout << endl;
+                    return; // return right away cause a cycle has been detected
+                }
+            }
+        }
+        cout << "No cycle exists!" << endl;
+    }
+};
+
+int main(void)
+{
+    Graph g(6); 
+    g.addDirectedEdge(0,1);
+    g.addDirectedEdge(1,2);
+    g.addDirectedEdge(2,3);
+    g.addDirectedEdge(3,4);
+    g.addDirectedEdge(4,5);
+    g.outputCyclicNodes(); // no cycle 
+    g.addDirectedEdge(4,2); // 2-3-4
+    g.outputCyclicNodes();
+    Graph g2(3);
+    g2.addDirectedEdge(0,1);
+    g2.addDirectedEdge(1,2);
+    g2.addDirectedEdge(2,0);
+    g2.outputCyclicNodes(); // 0-1-2
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// 4 Check if unweighted, acyclic directed/undirected graph is connected using BFS/DFS
 // Time Complexity, T(V,E) = O(V+E)
 // Space Complexity, S(V,E) = O(V)
 //-------------------------
@@ -169,18 +542,17 @@ Algorithm:
     BFS => Queue Implementation:
         T(V,E) = O(V+E)
         S(V,E) = O(V) // to maintain the queue of nodes to visit
-    DFS => Stack Implementation:
+    DFS => Stack (user stack) Implementation:
         T(V,E) = O(V+E)
         S(V,E) = O(V)  = O(bd)  
             To maintain the queue of nodes to visit, b = branching factor, d = depth of graph
-            note: More space as you push all current branch before recursing
+            note: More space as you push all current branch before popping.
     Recursive (call stack) Implementation:
         T(V,E) = O(V+E)
         S(V,E) = O(d) 
-            d = Longest depth of graph (since program runs sequentially instead of in parallel,
+            d = Longest depth of graph (since program runs sequentially instead of in parallel)
             it does not go through every node
-            note: use less space as you recursively first node of all branch and then next node later, so save more space
-3. Check that all nodes are marked as seen, if not , it is unconnected, O(n)
+3. Check that all nodes are marked as seen, if not, it is unconnected, O(n)
 Use Adjacency List as it is more efficient than Adjacency Matrix in looking at the next edge node
     1 = [2,3]    
     2 = [1]
@@ -343,7 +715,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 2 Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0
+// 5 Djikstra Algorithm Using Binary Heap: Find single-source shortest path for Directed, Weighted Graphs, weight >= 0
 // Time Complexity, T(V,E) = O(ElogV)
 // Space Complexity, S(V,E) = O(V + E)
 //-------------------------
@@ -525,7 +897,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 3 Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph
+// 6 Prim's Algorithm using Binary Heap: Find Minimum Spanning Tree of Undirected Weighted Graph
 // Time Complexity, T(V,E) = O(ElogV)
 // Space Complexity, S(V,E) = O(V + E)
 //-------------------------
@@ -695,7 +1067,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 4 Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs
+// 7 Bellman-Ford Algorithm: Single-source shortest path for Directed, Weighted Graphs
 // Time Complexity, T(V,E) = O(VE)
 // Space Complexity, S(V,E) = O(V + E)
 //-------------------------
@@ -791,7 +1163,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------------------
-// 5 Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles
+// 8 Floyd-Warshall Algorithm: All Pairs shortest path for Directed, Weighted Graphs, with no negative cycles
 // Time Complexity, T(V,E) = O(V^3)
 // Space Complexity, T(V,E) = O(V^2)
 //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -884,146 +1256,6 @@ int main(void)
         }
         cout << endl;
     }
-    return 0;
-}
-// */
-//----------------------------------------------------------------------------------------------------------------------------------------------
-// 6 Return nodes for any cycle on unweighted directed graph if it exists (Microsoft: on-site Round 3 scary guy)
-// Time Complexity, T(V,E) = O(V + E)
-// Space Complexity, S(V,E) = O(V)
-//---------------------------------
-/*
-Question
-Function Prototype
-TestCases
-1. No cycle
-    0-1-2-3
-          |
-          4-5
-2. 2-3-4
-    0-1-2-3
-         \|
-          4-5
-3. 0-1-2 
-   0-1
-    \|
-     2
-Algorithm
-    Do a DFS 
-    Mark each node as visited, 
-    if ever reach end with no adjacent nodes, you can make as 'definitely not in cycle'
-    no adjacent nodes => no actual adjacent nodes including adjacent nodes that were already marked 'definitely not in cycle'
-    If ever visit a node that was visited already and not marked definitely not in cycle, then you know you already detected a cycle. 
-    Then, just keep outputting current node backwards until reach the same node again. 
-Implement
-Test
-// */
-//---------------------------------
-/* //
-#include <vector> 
-#include <cstdlib> // for bool
-#include <list> 
-#include <iostream> 
-using namespace std; 
-
-class Graph
-{
-private:
-    list<int>* adj; 
-    int numVertices; 
-public: 
-    Graph(int numV)
-    {
-        this->numVertices = numV;
-        adj = new list<int> [numV]; 
-    }
-    
-    void addDirectedEdge(int v, int w)
-    {
-        adj[v].push_back(w); 
-    }
-
-    vector<int> outputCyclicNodesDFS(int numNode, vector<bool>& visited, vector<bool>& notInCycle)
-    {
-        vector<int> cyclicNodes; 
-        for(auto i = this->adj[numNode].begin(); i != this->adj[numNode].end(); i++)
-        {
-            if(!notInCycle[*i])
-            {
-                if(!visited[*i])
-                {
-                    visited[*i] = true; 
-                    cyclicNodes = this->outputCyclicNodesDFS(*i, visited, notInCycle);
-                    // If the cycle has begun, append if same not first as last
-                    if(!cyclicNodes.empty())
-                    {
-                        // If cycle has not been completely appended, append this current node
-                        if ((cyclicNodes.size() > 1) && (cyclicNodes[0] != cyclicNodes[cyclicNodes.size()-1])) // Mistake: Didn't handle case of first node added to cyclic nodes
-                        {
-                            cyclicNodes.push_back(numNode);
-                        }
-                        // return it regardless since either appended current node or cycle has been completed already 
-                        return cyclicNodes; 
-                    }
-                    // else, there is no cycle, just return
-                }
-                // Found a cycle
-                else
-                {
-                    cyclicNodes.push_back(*i); // append the initial node
-                    cyclicNodes.push_back(numNode); // append this node as it is part of cycle
-                    return cyclicNodes; 
-                }
-            }
-        }
-        // otherwise, marked this node as not being in cycle
-        notInCycle[numNode] = true;
-        return cyclicNodes;
-    }
-
-    void outputCyclicNodes()
-    {
-        vector<bool> visited(this->numVertices, false); // to mark nodes that are visited
-        vector<bool> notInCycle(this->numVertices, false); // to mark nodes that are definitely not in cycle
-        // Iterate through every possible starting point
-        for(int i = 0; i < this->numVertices; i++)
-        {
-            if(!visited[i] && !notInCycle[i])
-            {
-                visited[i] = true;
-                vector<int> cyclicNodes = this->outputCyclicNodesDFS(i, visited, notInCycle);
-                if(!cyclicNodes.empty())
-                {
-                    // Iterate from last node added to second node since first node is just a copy and need maintain direction of edges
-                    for(int i = cyclicNodes.size() - 1 ; i > 0; i--)
-                    {
-                        cout << cyclicNodes[i] << " ";
-                    }
-                    cout << endl;
-                    return; // return right away cause a cycle has been detected
-                }
-            }
-        }
-        cout << "No cycle exists!" << endl;
-    }
-};
-
-int main(void)
-{
-    Graph g(6); 
-    g.addDirectedEdge(0,1);
-    g.addDirectedEdge(1,2);
-    g.addDirectedEdge(2,3);
-    g.addDirectedEdge(3,4);
-    g.addDirectedEdge(4,5);
-    g.outputCyclicNodes(); // no cycle 
-    g.addDirectedEdge(4,2); // 2-3-4
-    g.outputCyclicNodes();
-    Graph g2(3);
-    g2.addDirectedEdge(0,1);
-    g2.addDirectedEdge(1,2);
-    g2.addDirectedEdge(2,0);
-    g2.outputCyclicNodes(); // 0-1-2
     return 0;
 }
 // */
