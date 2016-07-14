@@ -1140,7 +1140,7 @@ TestCase:
     0->1->2
      ->3->2
      Output => [0,1,3,2] or [0,3,1,2]
-    If not fully connectd
+    If not fully connected
     0->1->2
     3->2
     4->1
