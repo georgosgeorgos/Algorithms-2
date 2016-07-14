@@ -101,6 +101,9 @@ from:
 to:
    // Keyword 'this' specifies it is actually a member variable in code
    doSomething(this->memberVariable);
+note: The only time you cannot use 'this' is for constructor initialization list
+    ClassConstructor(int val) : this->val(val) {} // Compile error!
+    ClassConstructor(int val) : val(val) {}
 //----------------------------
 from:
     // Problem: Need to make changes to functionA() in both places each time make a change
