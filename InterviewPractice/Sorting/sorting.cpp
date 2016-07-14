@@ -1140,7 +1140,11 @@ TestCase:
     0->1->2
      ->3->2
      Output => [0,1,3,2] or [0,3,1,2]
-     
+    If not fully connectd
+    0->1->2
+    3->2
+    4->1
+     Output => 0 and 4 before 1, 1 and 3 before 2
 Algorithm:
     DFS, then push into stack from nodes with no outgoing edges
     Finally, output from stack in order
@@ -1199,19 +1203,32 @@ public:
     }
 };
 
-int main(void)
+void printSolution(Graph g) 
 {
-    Graph g(4);
-    g.insertDirectedEdge(0,1);
-    g.insertDirectedEdge(1,2);
-    g.insertDirectedEdge(0,3);
-    g.insertDirectedEdge(3,2);
+    cout << endl;
     stack<int> s = g.topologicalSort();
-    while(!s.empty()) // 0,1,3,2 or 0,3,1,2
+    while (!s.empty())
     {
         cout << s.top() << endl;
         s.pop();
     }
+    cout << endl;
+}
+
+int main(void)
+{
+    Graph connectedGraph(4);
+    connectedGraph.insertDirectedEdge(0,1);
+    connectedGraph.insertDirectedEdge(1,2);
+    connectedGraph.insertDirectedEdge(0,3);
+    connectedGraph.insertDirectedEdge(3,2);
+    Graph disconnectedGraph(5);
+    disconnectedGraph.insertDirectedEdge(0,1);
+    disconnectedGraph.insertDirectedEdge(3,2);
+    disconnectedGraph.insertDirectedEdge(1,2);
+    disconnectedGraph.insertDirectedEdge(4,1);
+    printSolution(connectedGraph);
+    printSolution(disconnectedGraph);
     return 0;
 }
 // */ 
