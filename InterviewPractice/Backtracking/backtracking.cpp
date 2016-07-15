@@ -20,7 +20,7 @@ TODO:
     2. Do I print the solution or return number of solutions ?
     3. Do I need to find all solutions or just output the 1st solution found? 
 //---------------------------------
-// notes;
+// Common Notes
 //---------------------------------
 Subsets => Order/Permutation doesn't matter. 
 Duplicates harder than Distinct, since Distinct is just all permutations, whereas duplicates, if need prevent duplicates, need to account for that
@@ -32,6 +32,41 @@ Every Backtracking Algorithm can be broken down into these steps:
     Step4. Add Move: Add new legal move
     Step5. Search Next Move: Repeat Step 1 to 5 for next move
     Step6. Backtrack: Remove move as current move doesn't work
+//---------------------------------
+    Backtrack(input)
+    {
+        if (inputIsGoal(input)) { // Step 1
+            addToResults(uniqueSet);
+            return;
+        }
+        for (move : allPossibleMoves) // Step 2
+        {
+            if (IsLegal(move)) // Step 3
+            {
+                performMove(uniqueSet); // Set4
+                backtrack(uniqueSet); // Step 5
+                undoMove(uniqueSet); // Step 6
+            }
+        }
+    }
+//---------------------------------
+    Common Step 1:
+        inputIsGoal(input) {
+            if (indexDepth == referenceArr.size()) return true;
+        }
+    Common Step 2:
+        for (int i = index; i < referenceArr.size(); i++)
+    Common Step 4:
+        uniqueSet.push_back(referenceArr[index]);
+            or
+        swap(uniqueSet[index], uniqueSet[index+i]);
+    Common Step 5:
+        backtrack(referenceArr, uniqueSet, results, index + 1)
+    Common Step 6;
+        uniqueSet.pop_back();
+            or
+        swap(uniqueSet[index], uniqueSet[index+i]);
+//---------------------------------
 */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Given a set of distinct integers, nums, return all possible subsets.
@@ -94,7 +129,7 @@ int main(void)
 // Time Complexity, T(n) = O(n!)
 // Space Complexity, S(n) = O(n!) 
 //----------------------------------------------------------------------------------------------------------------------------------
-/* // 
+ // 
 #include <vector>
 #include <iostream> 
 using namespace std; 
