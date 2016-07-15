@@ -24,48 +24,112 @@ TODO:
 //---------------------------------
 Subsets => Order/Permutation doesn't matter. 
 Duplicates harder than Distinct, since Distinct is just all permutations, whereas duplicates, if need prevent duplicates, need to account for that
-
+//---------------------------------
 Every Backtracking Algorithm can be broken down into these steps: 
     Step1. Goal Test: Append to solution or return true if reach goal
-    Step2. Iterate Possible Moves: Iterate through the list of possible moves
+    Step2. Iterate Possible Moves: Iterate through all list of possible moves
     Step3. Check Legal Move: Check if current move is legal 
     Step4. Add Move: Add new legal move
     Step5. Search Next Move: Repeat Step 1 to 5 for next move
     Step6. Backtrack: Remove move as current move doesn't work
+    Step Base Case = Termination Case => When to stop backtracking
+        Termination Case can be part of these Steps.
+            Step1: 
+                if (meetGoalWhichIsBaseCase) 
+                {
+                    addToResults(uniqueSet);
+                    return; // terminate!
+                }
+            Step2:
+                for(allPossibleMovesThatIsNotBaseCase)
+                {
+                    ... 
+                    backtrack();
+                    ...
+                }
+                // Now is termination case since no longer part of for loop
+                return; // terminate!
+
 //---------------------------------
-    Backtrack(input)
+// Common Pseudocode Code for all 6 Steps
+//---------------------------------
+    searchNextMove(input, depth)
     {
         if (inputIsGoal(input)) { // Step 1
             addToResults(uniqueSet);
-            return;
+            return; // base case means terminate and stop backtracking
         }
         for (move : allPossibleMoves) // Step 2
         {
             if (IsLegal(move)) // Step 3
             {
                 performMove(uniqueSet); // Set4
-                backtrack(uniqueSet); // Step 5
+                searchNextMove(uniqueSet, depth + 1); // Step 5
                 undoMove(uniqueSet); // Step 6
             }
         }
     }
 //---------------------------------
-    Common Step 1:
-        inputIsGoal(input) {
-            if (indexDepth == referenceArr.size()) return true;
+    searchNextMove(input, depth)
+    {
+        alwaysAddToResults(uniqueSet);
+        for (ifNotBase)
+        {
+            ...
+            searchNextMove(input, depth + 1);
+            ...
         }
-    Common Step 2:
-        for (int i = index; i < referenceArr.size(); i++)
-    Common Step 4:
-        uniqueSet.push_back(referenceArr[index]);
-            or
-        swap(uniqueSet[index], uniqueSet[index+i]);
-    Common Step 5:
-        backtrack(referenceArr, uniqueSet, results, index + 1)
-    Common Step 6;
-        uniqueSet.pop_back();
-            or
-        swap(uniqueSet[index], uniqueSet[index+i]);
+        // Base case, terminate
+        return;
+    }
+//---------------------------------
+// Step Details
+//---------------------------------
+    Step 1 Details:
+        Common Implementation
+            inputIsGoal(input) {
+                if (depth == referenceArr.size()) 
+                    return true;
+            }
+        In the case where you the goal is always true, you will still need some way to terminate the index. 
+        In that case, you need an if/for statement from Step 3 to backtrack only if it's not the base case
+            if (notBaseCase) // can be a for loop as well
+            {
+                ...
+                searchNextMove();
+                ...
+            }
+            return; // base case will terminate when if condition isn't satisfied.
+                or
+            for (allNonBaseCases)
+            {
+                ...
+                searchNextMove()
+                ...
+            }
+            return; // base case will terminate when for condition isn't satisfied
+//---------------------------------
+    Step 2 Details:        
+        Common Implementation
+            for (int i = indexDepth; i < referenceArr.size(); i++)
+//---------------------------------
+    Step 4 Details:
+        Common Implementation
+            uniqueSet.push_back(referenceArr[indexDepth]);
+                or
+            swap(uniqueSet[index], uniqueSet[indexDepth+i]);
+//---------------------------------
+    Step 5 Details:
+        Needs to backtrack with the new uniqueSet formed and increase indexDepth
+        Common Implementation 
+            searchNextMove(const referenceArr, uniqueSet, results, indexDepth + 1)
+//---------------------------------
+    Step 6 Details: Backtracking
+        Needs to undo whatever you did before.
+        Common Implementation
+            uniqueSet.pop_back();
+                or
+            swap(uniqueSet[index], uniqueSet[indexDepth+i]);
 //---------------------------------
 */
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -129,7 +193,7 @@ int main(void)
 // Time Complexity, T(n) = O(n!)
 // Space Complexity, S(n) = O(n!) 
 //----------------------------------------------------------------------------------------------------------------------------------
- // 
+/* // 
 #include <vector>
 #include <iostream> 
 using namespace std; 
@@ -141,7 +205,7 @@ void swap(vector<int> & arr, int i, int j)
     return;
 }
 
-void permuteHelper(vector<int>& arr, vector< vector<int> >& solution, int index)
+void permuteHelper(vector<int>& arr, vector<vector<int>>& solution, int index)
 {
     // Step1: Goal Test: Only push solution when done permuting
     if(index == arr.size()) 
@@ -158,19 +222,19 @@ void permuteHelper(vector<int>& arr, vector< vector<int> >& solution, int index)
     return;
 }
 
-vector< vector<int> > permute(vector<int>& arr)
+vector<vector<int>> permute(vector<int>& arr)
 {
     // Space complexity is O(n!) as need to store all n! permutations
     // This means, time complexity is at least O(n!) as well as need to visit all permutations
-    vector < vector<int> > solution;
+    vector<vector<int>> solution;
     permuteHelper(arr, solution, 0);
     return solution;
 }
 
 int main(void)
 {
-    vector <int> arr = {1,2,3};
-    vector< vector<int> > solution = permute(arr);
+    vector<int> arr = {1,2,3};
+    vector<vector<int>> solution = permute(arr);
     for(int i = 0; i < solution.size(); i++)
     {
         for(int j = 0; j < solution[i].size();j++)
@@ -228,7 +292,7 @@ using namespace std;
 bool isSafe(int index, int col, vector<int>& state)
 {
     // Check vertical, horizontal and diagonal with previous
-    for(int i = 0; i < index; i++)
+    for (int i = 0; i < index; i++)
     {
         // note: Will never be in same row based on how solution is constructed
         // Check if assigned same row or diagonal with a previous queen
@@ -320,7 +384,7 @@ bool backtrack(int N, int M, vector< vector<int> >& matrix, int index, int x, in
         // Step 3: Check if current move assignment is safe
         if(isSafe(x, y, matrix, i, N, M, xAdd, yAdd))
         {
-            // Step 5: Assign Legal Move
+            // Step 4: Assign Legal Move
             x += xAdd[i]; y += yAdd[i];
             matrix[x][y] = index;
             if(backtrack(N, M, matrix, index + 1, x, y, xAdd, yAdd))
@@ -333,7 +397,7 @@ bool backtrack(int N, int M, vector< vector<int> >& matrix, int index, int x, in
     return false;
 }
 
-vector< vector<int> > knightTour(int N, int M)
+vector<vector<int>> knightTour(int N, int M)
 {
     // Let -1 represented unrepresented cell
     vector< vector<int> > matrix(N, vector<int> (M, -1));
@@ -358,7 +422,7 @@ int main(void)
 {
     int N = 5; 
     int M = 5; 
-    vector< vector<int> > arr = knightTour(N,M); // Should terminate with solution immediately for  (5*5)
+    vector<vector<int>> arr = knightTour(N,M); // Should terminate with solution immediately for  (5*5)
     for(int i = 0; i < arr.size(); i++)
     {
         for(int j = 0; j < arr[i].size(); j++)
