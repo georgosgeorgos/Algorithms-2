@@ -7,6 +7,7 @@ Table of Contents
 4. Knight's Tour: N*M board, touch each cell exactly once, false if impossible, T(n,m) = O(8^(nm)), S(n,m) = O(nm)
 5. M-Coloring : Given an undirected graph, check if every node can be colored from M colors such that no 2 adjacent have same colors, T(V,E,M) = O(M^(V+E)), S(V,E,M) = O(V+E)
 6. Number Keypad Permutation: Find combinations of given set of digits, (Microsoft: Jason, on-site Round 1), T(n) = O(5^n), S(n) = O(5^n)
+7. Print Values From An Arbitrary Dimensional Matrix
 //---------------------------------
 TODO: 
 15. Subset Sum 
@@ -648,6 +649,79 @@ int main(void)
        cout << *i << endl; // note: Error occurs in compiler due to wrong i and j values that are iterated
     }
     return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 7 Print Values From An Arbitrary Dimensional Matrix (N1 x N2 x ... x NM)
+// Time Complexity, T(N1, N2, ..., NM) = O(N1 x N2 x ... x NM)
+// Space Complexity, S(N1, N2, ... , NM) = O(N1 x N2 x ... x NM)
+//---------------------------------
+/*
+    The first thing is to note that all for and while loop programs can be replaced by recursion.
+    It's almost like for and while loops are a subset of recursion
+    This is because recursion, you can choose how to change iteration values i, j, k
+    whereas it is not so easily to change the values of i, j, k using for loops
+    Example to convert from loops to recursion is given for the M = 2 case
+*/
+//---------------------------------
+/* //
+#include <vector>
+#include <iostream>
+using namespace std;
+
+// Example, a 2D case => M = 2 => (N1 x N2)
+void printRecursive2D(vector<vector<int>> matrix, int i, int j)
+{
+    if (i < matrix.size() && j < matrix[i].size())
+    {
+        cout << matrix[i][j] << " ";
+        printRecursive2D(matrix, i, j+1);
+    }
+    else if (i < matrix.size() && j == matrix[i].size())
+    {
+        cout << endl;
+        printRecursive2D(matrix, i+1, 0);
+    }
+    return;
+}
+
+void printLoops2D(vector<vector<int>> matrix)
+{
+    for(int i = 0; i < matrix.size(); i++)
+    {
+        for(int j = 0; j < matrix[i].size(); j++)
+        {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void printRecursive(int value) {
+    cout << value << " ";
+}
+
+template<class T>
+void printRecursive(vector<T> arr) {
+    cout << "[";
+    for(auto subArr : arr){
+        printRecursive(subArr);
+    }
+    cout << "] ";
+}
+
+int main(void)
+{
+    vector<vector<int>>  matrix2D = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9, 10}};
+    cout << "Loops" << endl;
+    printLoops2D(matrix2D);
+    cout << "RECURSIVE" << endl;
+    printRecursive2D(matrix2D, 0, 0);
+    cout << endl << "Arbitrary Dimension Recursive" << endl;
+    printRecursive(matrix2D);
+    vector<vector<vector<int>>>  matrix3D = {{ {1, 2, 3}, {4, 5}, {6, 7, 8, 9, 10}}, {{11, 12, 13}, {14, 15, 16}}, {{17}}};
+    cout << endl;
+    printRecursive(matrix3D);
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
