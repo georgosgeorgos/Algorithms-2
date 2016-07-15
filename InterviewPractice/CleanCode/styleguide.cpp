@@ -62,6 +62,16 @@ to:
     else if (expression)
 //----------------------------
 from:
+    arr[i,j,k]
+    function(int a,int b)
+    vector<int> a = {1,2,3};
+to:
+    // Space after each ',' to be clearer
+    arr[i, j, k]
+    function(int a, int b)
+    vector<int> a = {1, 2, 3};
+//----------------------------
+from:
     // As maintainer, easier to see what is used by public before looking at public
     class A {
      private:
