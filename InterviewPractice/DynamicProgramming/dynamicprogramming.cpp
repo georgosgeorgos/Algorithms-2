@@ -242,14 +242,19 @@ int RodCutting(vector<int> rodPrices)
     }
     return L[n-1];
 }
+
+void printSolution(vector<int>& rodPrices) 
+{
+    int maxValue = RodCutting(rodPrices); 
+    cout << maxValue << endl;
+}
+
 int main(void)
 {
-    vector<int> rodPrices = {0, 1, 5, 8, 9, 10, 17, 17, 20, 24, 23}; // C++11 feature
-    int maxValue = RodCutting(rodPrices); 
-    cout << maxValue << endl; // 25
-    vector<int> rodPrices2 = {5};
-    maxValue = RodCutting(rodPrices2); 
-    cout << maxValue << endl; // 5 
+    vector<int> single = {5}; // 5
+    vector<int> normal = {0, 1, 5, 8, 9, 10, 17, 17, 20, 24, 23}; // 25
+    printSolution(single);
+    printSolution(normal);
     return 0;
 }
 // */
