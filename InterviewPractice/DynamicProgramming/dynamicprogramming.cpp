@@ -188,7 +188,7 @@ int main(void)
 {
     int i = 0;
     int n = 10;
-    for(i = 0; i <= n; i++)
+    for (i = 0; i <= n; i++)
     {
         int j = fibonacci(i);
         cout << "Fibonacci for " << i << " is: " << j << endl;
@@ -202,7 +202,7 @@ int fibonacci(int n)
     vector<int> cache(n+1, 0);
     cache[0] = 1;
     cache[1] = 1;
-    for(int i = 2; i <= n; i++)
+    for (int i = 2; i <= n; i++)
         cache[i] = cache[i-1] + cache[i-2];
     return cache[n] ;
 }
@@ -228,14 +228,14 @@ int RodCutting(vector<int> rodPrices)
     if (n <= 0) return 0;
     vector<int> L (n, 0);
     // Initialize base case for all rod of length 1
-    for(int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         L[i] = rodPrices[i];
     }
 
-    for(int i = 1; i < n; i++)
+    for (int i = 1; i < n; i++)
     {
-        for(int j = 0; j <= i/2; j++)
+        for (int j = 0; j <= i/2; j++)
         {
             L[i] = max(L[i], L[j] + L[i-j-1]);
         }
@@ -277,17 +277,17 @@ using namespace std;
 
 int MaxSumIncreaseSubsequence(vector<int>& arr)
 {
+    if (arr.empty()) return 0;
     int n = arr.size();
-    if (n <= 0) return 0;
     vector<int> L (n, 0);
-    for(int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
         L[i] = arr[i];
-    for(int i = 0; i < n; i ++)
+    for (int i = 0; i < n; i ++)
     {
-        for(int j = 0; j < i; j++)
+        for (int j = 0; j < i; j++)
         {
             // if the value is less than current value
-            if((arr[j] <= arr[i]) && (L[j] + arr[i] > L[i]))
+            if ((arr[j] <= arr[i]) && (L[j] + arr[i] > L[i]))
             {
                 L[i] = L[j] + arr[i];
             }
@@ -296,13 +296,14 @@ int MaxSumIncreaseSubsequence(vector<int>& arr)
     // TODO: Use single pass by putting the logic below into the logic above instead of 2 passes. 
     // Now get the maximum sum
     int maxSum = L[0];
-    for(int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        if(L[i] > maxSum)
+        if (L[i] > maxSum)
             maxSum = L[i];
     }
     return maxSum;
 }
+
 int main(void)
 {
     vector<int> arr = { 5, 1, 2, 1, 3, 2}; // 6 = 1 + 2 + 3
@@ -347,7 +348,7 @@ using namespace std;
 
 void printLCS(vector < vector<int> >& dir, const char* s1, int i, int j)
 {
-    if(i < 0 || j < 0) return; 
+    if (i < 0 || j < 0) return; 
     if (dir[i][j] == 2)
     {
         printLCS(dir, s1, i-1, j-1);
@@ -372,9 +373,9 @@ int LCS(const char* s1, const char* s2)
     vector < vector <int> > arr(n, vector<int> (m, 0));
     vector < vector <int> > dir(n, vector<int> (m, 0));
     int maxSoFar = 0; 
-    for(int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        for(int j = 0; j < m; j++)
+        for (int j = 0; j < m; j++)
         {
             if (s1[i] == s2[j]) // matches
             {
@@ -396,7 +397,7 @@ int LCS(const char* s1, const char* s2)
                 }
                 if (j!=0)
                 {
-                    if(arr[i][j-1] > arr[i][j])
+                    if (arr[i][j-1] > arr[i][j])
                     {
                         arr[i][j] = arr[i][j-1];
                         dir[i][j] = 0; 
@@ -465,18 +466,18 @@ int LIS(vector<int>& arr)
     int n = arr.size(); 
     if ( n <= 0) return 0;
     vector<int> L(n, 1); // initialize all to 1
-    for(int i = 1; i < n; i++)
+    for (int i = 1; i < n; i++)
     {
-        for(int j = i-1; j >= 0; j--)
+        for (int j = i-1; j >= 0; j--)
         {
-            if(arr[j] <= arr[i])
+            if (arr[j] <= arr[i])
             {
                 L[i] = max(1 + L[j], L[i]);
             }
         }
     }
     int maximum = L[0];
-    for(int i = 1; i < n; i++)
+    for (int i = 1; i < n; i++)
     {
         maximum = max(maximum, L[i]);
     }
@@ -517,7 +518,7 @@ using namespace std;
 
 int getEdit(vector < vector<int> >& dir,vector < vector<int> >& arr, const char* s1, int i, int j)
 {
-    if(i < 0 || j < 0) return 0;  // no need to count out of bounds
+    if (i < 0 || j < 0) return 0;  // no need to count out of bounds
 
     // Pick the direction that results in largest
     int direc = -1; // initialize to nowhere
@@ -538,7 +539,7 @@ int getEdit(vector < vector<int> >& dir,vector < vector<int> >& arr, const char*
     }
     else 
     {
-        if(i!= 0 && j != 0)
+        if (i!= 0 && j != 0)
         {
             direc = 2;
             currMax = arr[i-1][j-1];
@@ -552,7 +553,7 @@ int getEdit(vector < vector<int> >& dir,vector < vector<int> >& arr, const char*
             }
 
         }
-        if(j != 0)
+        if (j != 0)
         {
             if (arr[i][j-1] > currMax)
             {
@@ -581,9 +582,9 @@ int LCSThenEdit(const char* s1, const char* s2)
     vector < vector <int> > arr(n, vector<int> (m, 0));
     vector < vector <int> > dir(n, vector<int> (m, 0));
     int maxSoFar = 0; 
-    for(int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        for(int j = 0; j < m; j++)
+        for (int j = 0; j < m; j++)
         {
             if (s1[i] == s2[j])
             {
@@ -603,7 +604,7 @@ int LCSThenEdit(const char* s1, const char* s2)
                 }
                 if (j!=0)
                 {
-                    if(arr[i][j-1] > arr[i][j])
+                    if (arr[i][j-1] > arr[i][j])
                     {
                         arr[i][j] = arr[i][j-1];
                         dir[i][j] = 0; 
@@ -677,9 +678,9 @@ int minCostPath(vector < vector <int> >& arr)
     // minimum[i][j] = minimum cost to go from [0][0] to [i][j]
     minimum[0][0] = arr[0][0]; 
     int j = 1;
-    for(int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
     {
-        for(; j < M; j++)
+        for (; j < M; j++)
         {
             int prev = INT_MAX;  // initialize to 0 if no previous since guaranteed all values are > 0. 
             if (i > 0 && j > 0 && (minimum[i-1][j-1] < prev)) // MISTAKE: USED '<' instead of '>'
@@ -711,7 +712,7 @@ int main(void)
     vector < vector <int> > arr(N, vector<int> (M, 0));
     for (int i = 0; i < N; i++)
     {
-        for(int j = 0; j < M; j++)
+        for (int j = 0; j < M; j++)
         {
             arr[i][j]  = (i+1) * (j+1);
             cout << arr[i][j] << " "; 
@@ -751,11 +752,11 @@ int CoinChange(int N, vector<int>& Coins)
     // currSolution[0] = 1 always
     currSolution[0] = 1;
     // Loop through each coin and include them in the solution
-    for(int i = 0; i < Coins.size(); i++)
+    for (int i = 0; i < Coins.size(); i++)
     {
-        for(int j = 1; j <= N; j++)
+        for (int j = 1; j <= N; j++)
         {
-            if(j - Coins[i] >= 0)
+            if (j - Coins[i] >= 0)
             {
                 // Get the 1*numCombinationAfterDeducting + originalTotalSum for this value of N without this coin
                 currSolution[j] = currSolution[j - Coins[i]] + currSolution[j];
@@ -807,23 +808,23 @@ int MatrixChainMultiplication(vector<int>& matrix)
     if (N <= 2) return 0;
     // Compute base cases
     orders[N-1][N-1] = 0; // extra case outside for loop
-    for(int i = 0; i+1 < N; i++) // O(n)
+    for (int i = 0; i+1 < N; i++) // O(n)
     {
         orders[i][i] = 0;
         orders[i][i+1] = 0;
     }
-    for(int i = 0; i+2 < N; i++) // O(n)
+    for (int i = 0; i+2 < N; i++) // O(n)
     {
         orders[i][i+2] = matrix[i] * matrix[i+1] * matrix[i+2];
     }
     // Done computing base cases
     // O(n^3)
-    for(int i = 2; i < N; i++)
+    for (int i = 2; i < N; i++)
     {
-        for(int j = 0; j+i < N; j++)
+        for (int j = 0; j+i < N; j++)
         {
             // Start from k = 1 since k = 0 does not make sense as you can't have a matrix with rows and no columns
-            for(int k = 1; k < i; k++)
+            for (int k = 1; k < i; k++)
             {
                 // get value of splitting at current k value
                 int temp = orders[j][j+k] + orders[j+k][j+i] + matrix[j]*matrix[j+k]*matrix[j+i];
@@ -873,28 +874,28 @@ int Knapsack01(vector<int>& weights, vector<int>& values, int capacity)
 {
     if (capacity < 0) return 0; 
     int N = values.size();
-    if( N != weights.size()) return 0; // error in inputs given
-    if(N <= 0) return 0; // if no item given, return 0
+    if ( N != weights.size()) return 0; // error in inputs given
+    if (N <= 0) return 0; // if no item given, return 0
     vector< vector<int> > matrix(capacity + 1, vector<int> (N, 0));
     // matrix[weight,itemIndex] => total value obtainable for this weight capacity with items up to and including itemIndex 
     // but not necessarily including item at itemIndex itself
     // Initialize first item
-    for(int i = 0; i <= capacity; i++)
+    for (int i = 0; i <= capacity; i++)
     {
         matrix[i][0] =  i >= weights[0] ? values[0] : 0;
     }
     // Go through each item other item
-    for(int i = 1; i < N; i++)
+    for (int i = 1; i < N; i++)
     {
-        for(int j = 0; j <= capacity; j++)
+        for (int j = 0; j <= capacity; j++)
         {
             // Initialize to not adding current item
             matrix[j][i] = matrix[j][i-1];
             // only if current item weight is less than current total capacity
-            if(j >= weights[i])
+            if (j >= weights[i])
             {
                 // Decide if better to include new item or not include it
-                if((matrix[j-weights[i]][i-1] + values[i]) > matrix[j][i-1])
+                if ((matrix[j-weights[i]][i-1] + values[i]) > matrix[j][i-1])
                 {
                     // Include this item instead 
                     matrix[j][i] = matrix[j-weights[i]][i-1] + values[i];
@@ -934,23 +935,23 @@ using namespace std;
 int EggDrop(int n, int k)
 {
     vector< vector<int> > arr(n+1, vector<int> (k + 1,INT_MAX));
-    for(int i = 1; i <= k; i++)
+    for (int i = 1; i <= k; i++)
     {
         // Can't try anymore if 0 eggs left
         arr[0][i] = 0;
         // Need try all k floors if only have 1 
         arr[1][i] = i; // MISTAKE: Wrote k instead of i here which is wrong!
     }
-    for(int i = 1; i <= n; i++)
+    for (int i = 1; i <= n; i++)
     {
         arr[i][0] = 0; // no floors left to try
         arr[i][1] = 1; // 1 floor left to try
     }
-    for(int i = 2; i <= n; i++)
+    for (int i = 2; i <= n; i++)
     {
-        for(int j = 2; j <= k;j++)
+        for (int j = 2; j <= k;j++)
         {
-            for(int x = 1; x <= j; x++)
+            for (int x = 1; x <= j; x++)
             {
                 arr[i][j] = min(arr[i][j],1 + max(arr[i][j-x], arr[i-1][x-1]));
             }
@@ -1005,19 +1006,19 @@ using namespace std;
 
 int LongestPalindromeSubsequence(const char* str)
 {
-    if(!str) return 0; 
+    if (!str) return 0; 
     int n = strlen(str);
     if (n <= 0) return 0;
     vector< vector<int> > arr(n, vector<int> (n,0)); //initialize all elements to be 0
     // arr[i][j] => Longest palindrome subsequence from substring[i][j] inclusive
     // the case where j < i is always 0 so ignore
-    for(int j = 0; j < n; j++) // first string to compare
+    for (int j = 0; j < n; j++) // first string to compare
     {
-        for(int i = j; i >= 0; i--)
+        for (int i = j; i >= 0; i--)
         {
             if (i == j)
                 arr[i][j] = 1; 
-            else if(str[i] == str[j]) // MISTAKE: used 'if' instead of 'else if', also used arr[i] INSTEAD OF str[i]
+            else if (str[i] == str[j]) // MISTAKE: used 'if' instead of 'else if', also used arr[i] INSTEAD OF str[i]
                 arr[i][j] = 2 + arr[i+1][j-1];
             else
                 arr[i][j] = max(arr[i+1][j], arr[i][j-1]);
@@ -1067,16 +1068,16 @@ using namespace std;
 
 int uniquePaths(int n, int m)
 {
-    if( n <= 0 || m <= 0) return 0;
+    if ( n <= 0 || m <= 0) return 0;
     // Make n1 <= m1
     int n1 = min(n,m);
     int m1 = max(n,m); 
     // Initialize all to 1
     vector<int> arr(n1, 1);
-    for(int i = 1; i < m1; i++) // can skip the first column since will always be 1
+    for (int i = 1; i < m1; i++) // can skip the first column since will always be 1
     {
         // Inner loop is n1 so that space required is only n1
-        for(int j = 1; j < n1; j++) // can skip the first row of every column since will always be 1
+        for (int j = 1; j < n1; j++) // can skip the first row of every column since will always be 1
         {
             arr[j] = arr[j] + arr[j-1];
         }
@@ -1127,14 +1128,14 @@ int minimumNumCoins(vector<int>& coins, int V)
     vector<int> arr(V+1, INT_MAX);
     arr[0] = 0; // V = 0 => 0 coins needed
     // Loop through each coin
-    for(int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
         // Loop through each value for coin from 1 to V
-        for(int j = 1; j <= V; j++)
+        for (int j = 1; j <= V; j++)
         {
             int currMin = INT_MAX; // initialize currMin to INT_MAX
             // If there may be possible ways to get this coin
-            if((j - coins[i] >= 0) && (arr[j-coins[i]] != INT_MAX))
+            if ((j - coins[i] >= 0) && (arr[j-coins[i]] != INT_MAX))
             {
                 currMin = 1 + arr[j-coins[i]];
             }
