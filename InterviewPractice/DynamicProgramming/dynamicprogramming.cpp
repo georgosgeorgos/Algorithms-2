@@ -22,8 +22,6 @@ TODO:
 17. Partitioning Problem
     Hint: Subset Sum Problem
 
-
-
 25.Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
 26. Longest Palindromic Substring 
@@ -179,43 +177,34 @@ Unbounded Knapsack Problem
 // Space Complexity, S(n) = O(n)
 //-------------------------------------
 /* //
+#include <vector>
 #include <iostream>
 #include <stdlib.h>
 
 using namespace std;
 
-int fibonacci(int n, int* p);
+int fibonacci(int n);
 int main(void)
 {
     int i = 0;
     int n = 10;
-    int *p;
-    p = (int *) malloc(sizeof(int) * (n+1));
-    for (i = 0; i < n; i++)
+    for(i = 0; i <= n; i++)
     {
-        p[i] = -1; // initialize with negative numbers
-    }
-    for(i = 0; i < n; i++)
-    {
-        int j = fibonacci(i, p);
+        int j = fibonacci(i);
         cout << "Fibonacci for " << i << " is: " << j << endl;
     }
 }
 
-int fibonacci(int n, int* p)
+int fibonacci(int n)
 {
-    p[0] = 1;
-    p[1] = 1;
     if (n <= 1)
-    {
         return 1;
-    }
-    int i = 0;
-    for(i = 2; i <= n; i++)
-    {
-        p[i] = p[i-1] + p[i-2];
-    }
-    return p[n] ;
+    vector<int> cache(n+1, 0);
+    cache[0] = 1;
+    cache[1] = 1;
+    for(int i = 2; i <= n; i++)
+        cache[i] = cache[i-1] + cache[i-2];
+    return cache[n] ;
 }
 // */
 //----------------------------------------------------------------------------------------------------
