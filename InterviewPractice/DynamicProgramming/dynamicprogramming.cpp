@@ -339,14 +339,13 @@ Implementation:
 Test!
 // */
 //-------------------------------------
-/* //
-#include <cstring> 
+//
 #include <string> 
 #include <vector> 
 #include <iostream> 
 using namespace std; 
 
-void printLCS(vector < vector<int> >& dir, const char* s1, int i, int j)
+void printLCS(vector<vector<int>>& dir, string s1, int i, int j)
 {
     if (i < 0 || j < 0) return; 
     if (dir[i][j] == 2)
@@ -364,61 +363,60 @@ void printLCS(vector < vector<int> >& dir, const char* s1, int i, int j)
     }
 }
 
-int LCS(const char* s1, const char* s2)
+int LCS(const string& s1, const string& s2)
 {
-    if (!s1 || !s2) return 0;
-    int n = strlen(s1); 
-    int m = strlen(s2);
-    if (n == 0 || m == 0) return 0;
-    vector < vector <int> > arr(n, vector<int> (m, 0));
-    vector < vector <int> > dir(n, vector<int> (m, 0));
+    if (s1.empty() || s2.empty()) return 0;
+    int s1Len = s1.length();
+    int s2Len = s2.length();
+    if (s1Len == 0 || s2Len == 0) return 0;
+    vector<vector<int>> arr(s1Len, vector<int> (s2Len, 0));
+    vector<vector<int>> dir(s1Len, vector<int> (s2Len, 0));
     int maxSoFar = 0; 
-    for (int i = 0; i < n; i++)
+    for (int s1Index = 0; s1Index < s1Len; s1Index++)
     {
-        for (int j = 0; j < m; j++)
+        for (int s2Index = 0; s2Index < s2Len; s2Index++)
         {
-            if (s1[i] == s2[j]) // matches
+            if (s1[s1Index] == s2[s2Index]) // matches
             {
-                dir[i][j] = 2; 
-                arr[i][j] = 1; 
-                if (i != 0 && j != 0) // MISTAKE!! USED || instead of &&
+                dir[s1Index][s2Index] = 2; 
+                arr[s1Index][s2Index] = 1; 
+                if (s1Index != 0 && s2Index != 0) // MISTAKE!! USED || instead of &&
                 {
-                    arr[i][j] += arr[i-1][j-1]; 
+                    arr[s1Index][s2Index] += arr[s1Index-1][s2Index-1]; 
                 }
             }
             else // not match
             {
+                // TODO: Fix the fixme below
                 // FIXME: Need to take max of arr[i-1][j] or arr[i][j-1] if both i or j != 0 !!!
                 //          CURRENT IMPLEMENTATION IS WRONG!
-                if (i!=0)
+                if (s1Index != 0)
                 {
-                    dir[i][j] = 1; 
-                    arr[i][j] = arr[i-1][j]; 
+                    dir[s1Index][s2Index] = 1; 
+                    arr[s1Index][s2Index] = arr[s1Index-1][s2Index]; 
                 }
-                if (j!=0)
+                if (s2Index!=0)
                 {
-                    if (arr[i][j-1] > arr[i][j])
+                    if (arr[s1Index][s2Index-1] > arr[s1Index][s2Index])
                     {
-                        arr[i][j] = arr[i][j-1];
-                        dir[i][j] = 0; 
+                        arr[s1Index][s2Index] = arr[s1Index][s2Index-1];
+                        dir[s1Index][s2Index] = 0; 
                     }
                 }
             }
-            if (arr[i][j] > maxSoFar) maxSoFar = arr[i][j]; 
+            if (arr[s1Index][s2Index] > maxSoFar) maxSoFar = arr[s1Index][s2Index]; 
         }
     }
-    printLCS( dir, s1, n-1, m-1);
+    printLCS(dir, s1, s1Len-1, s2Len-1);
     cout << endl;
-    return maxSoFar; // FIXME: Just need to return arr[n-1][m-1] if done correctly without keeping track of maxSoFar.  
+    return arr[s1Len-1][s2Len-1];
+    // return maxSoFar; // FIXME: Just need to return arr[n-1][m-1] if done correctly without keeping track of maxSoFar.  
 }
 
 int main(void)
 {
-    string a1 = "aghbklc";
-    string b1 = "hgalbckzzyw";
-    const char* s1 = a1.c_str();
-
-    const char* s2 = b1.c_str();
+    string s1 = "aghbklc";
+    string s2 = "hgalbcdzzyw";
     int maxLCS = LCS(s1, s2); // 3 => "abc"
     cout << maxLCS << endl;
     return 0; 
