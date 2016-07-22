@@ -25,6 +25,7 @@ C++ is divided into:
 4. Non Member Function to Allow Commutative Operations
 5. Postpone Variable Definitions As Long As Possible but Outside Loops
 6. Lambdas & Functors && std::function
+7. RValue vs LValue
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
@@ -319,6 +320,40 @@ to:
             return false;
         }
     }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 7 RValue vs LValue
+//---------------------------------
+// LValue is anything that is stored as a variable
+int x = 3; // x is a variable
+// RValue is anything that exist temporary only in a single expression.
+int x = 3; // 3 is a r-value
+
+//---------------------------------
+// Use Cases
+//---------------------------------
+// Returning by R-Value
+// The thing is, compiler prevents copying return value (Copy Elicitation)
+// when you return via r-value
+from:
+    // Returning by L-Value
+    int x = 3;
+    x += 2;
+    x += 1;
+    // needs to return by copy x, then return
+    return x;
+to:
+    // Returning by R-Value
+    // Prevents copying 3 + 2 + 1 by returning it directly
+    return 3 + 2 + 1;
+//---------------------------------
+// std::move() takes a r-value reference of an l-value variable. 
+// It's like a static_cast that casts a l-value variable to r-value
+functionTakingInUniquePtrByValue(std::unique_ptr<ClassA> classAByValue);
+
+std::unique_ptr<ClassA> lvalueVariable = new ClassA();
+functionTakingInUniquePtrByValue(std::move(lvalueVariable);
+// pass in r-value directly doesn't need std::move()
+functionTakingInUniquePtrByValue(new ClassA());
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
