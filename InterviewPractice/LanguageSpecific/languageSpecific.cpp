@@ -26,6 +26,7 @@ C++ is divided into:
 5. Postpone Variable Definitions As Long As Possible but Outside Loops
 6. Lambdas & Functors && std::function
 7. RValue vs LValue
+8. Pass By Pointer > Pass by Reference
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
@@ -354,6 +355,20 @@ std::unique_ptr<ClassA> lvalueVariable = new ClassA();
 functionTakingInUniquePtrByValue(std::move(lvalueVariable);
 // pass in r-value directly doesn't need std::move()
 functionTakingInUniquePtrByValue(new ClassA());
+//----------------------------------------------------------------------------------------------------------------------------------
+// 8 Pass By Pointer > Pass by Reference
+//---------------------------------
+from: 
+    functionModifiesParameters(int& willBeModified);
+    int toModify;
+    // Problem: No idea if toModify will be modified or not from the syntax below
+    functionModifiesParameters(toModify);
+to:
+    functionModifiesParameters(int* willBeModified);
+    int toModify;
+    // Solution: Clearly shows toModify will indeed be modified.
+    functionModifiesParameters(&toModify);
+note: If not modifying the variable, pass by const Reference instead or value if needs a copy
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
