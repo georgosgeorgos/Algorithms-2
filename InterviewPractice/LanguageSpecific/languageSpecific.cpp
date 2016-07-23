@@ -27,6 +27,7 @@ C++ is divided into:
 6. Lambdas & Functors && std::function
 7. RValue vs LValue
 8. Pass By Pointer > Pass by Reference
+9. Mark Getters() const
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
@@ -369,6 +370,21 @@ to:
     // Solution: Clearly shows toModify will indeed be modified.
     functionModifiesParameters(&toModify);
 note: If not modifying the variable, pass by const Reference instead or value if needs a copy
+//----------------------------------------------------------------------------------------------------------------------------------
+// 9 Mark Getters() const
+//---------------------------------
+from: 
+    // Really, it is not changing anything.
+    int getInt();
+to:
+    // Makes it clear no changes occur in class. 
+    int getInt() const;
+    // Also, allows it to be used by functions such as
+    // bool CompareClass(ClassA* lhs, ClassA* rhs)
+    // {
+    //      // Could only have called getInt() below if it was marked with const
+    //      return (lhs->getInt() == rhs->getInt())
+    // }
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
