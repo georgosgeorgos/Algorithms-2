@@ -327,3 +327,11 @@ Perform Copy By Object
     Code: Copy objects given by test method to Callback thread.
     TestCode:
         Can now be sure that callback thread does not depend on main thread's object after a certain point as everything has been copied.
+Delete Before Access
+    Problem: Callback method does not call any mockable methods but updates a global state of a variable in an Object.
+    Code: Pass in that variable, call methodUnderTest (which updates the global state of it)
+          However, if you read the variable right away to see if state is updated,
+          you will have race conditions between actual code thread and test thread to check updated state from that same variable.
+          Therefore, update the state, then call another method to get rid of that variable from the object.
+          Now the Object does not have access to that variable anymore, but its state was updated from the methodUnderTest.
+          Now, you can check that the variable was updated to the correct value.
