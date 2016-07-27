@@ -57,6 +57,35 @@ Cover Tree
 //----------------------------------------------------------------------------------------------------------------------------------
 // Notes:
 //----------------------------------------------------------------------------------------------------------------------------------
+#include <set> is a balanced binary search tree with single unique value elements, where value itself is used for indexing. 
+multiset is similar to set but can contain duplicates.
+e.g.
+        2           2
+       / \         / \
+      1   3       2   3 
+       set       multiset
+
+#include <map> is a balanced binary search tree with a key,value pair, where the unique keys is used for indexing
+multimap is similar to map but can contain duplicates
+e.g. 
+      (2,1)                    (2,1)
+       / \                      / \
+    (1,2) (3,4)              (2,3) (3,4)
+       map                      multimap
+
+Also, all set, multiset, map, multimap are binary search trees, which means they are sorted. 
+Also, it is an augmented version, in the sense that it provides a way to iterate through it in linear time. 
+This means every node points to its parent and there are 2 extra pointers, one pointer to the beginning and one pointing to the end
+of the balanced binary search tree. 
+This also means you can get the min() and max() in constant time. 
+map.begin(); // returns iterator to first element which is the minimum in constant time
+map.rbegin(); // reverse begin, returns iterator to last element which is maximum in constant time
+So now, if you can get minimum and maximum in constant time, what are the benefits of using a heap over these anymore?
+This is because if you are given an unsorted array of elements, building a heap is linear whereas building a BST is O(nlogn).
+So if the questions ask you to get min() or max() of real-time incoming data, this augmented BST is better over heap.
+
+For hashtables, used #include <unordered_set> and #include <unordered_map> instead for (unordered_set, unordered_multiset, unordered_map, unordered_multimap)
+//----------------------------------------------------------------------------------------------------------------------------------
 Binary Tree != Binary Search Tree
 note: You can store any k-ary tree in an array. (e.g. binary heaps are a type of binary tree) 
 Just that you can't efficiently perform rotation on a B.S.T. using array as you have the move entire array around. 
