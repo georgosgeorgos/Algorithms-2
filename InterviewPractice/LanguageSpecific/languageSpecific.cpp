@@ -103,13 +103,16 @@ Exceptional C++ Series by Herb Sutter
 <stack> => Stack
 <list> => Doubly Linked List
 <forward_list> => Singly Linked List
-<bitset> => array of bools
-<set> => Set, Multiset (multi => Duplicated keys allowed)
-<map> => Associative Array (Balanced Binary Tree), Multimap (multi => Duplicated keys allowed)
+<bitset> => array of bools (bits)
+<set> => Set, Multiset Balanced Binary Search Tree (multi => Duplicated keys allowed)
+<map> => Associative Array (Balanced Binary Search Tree storing key,value pairs indexed by keys), Multimap (multi => Duplicated keys allowed)
     Keys in map are automatically sorted
-<unordered_map> => Hashed Associative Array (Hash Table)
+    multimap => Keys can be duplicated
+<unordered_map> => Hashed Associative Array (Hash Table) no duplicates
+    unordered_multimap => Keys can be duplicated
     unordered => Don't have any > or <  relation
-<unordered_set> => Hashed Set
+<unordered_set> => Hashed Set (Hash Table), where values are keys themselves, no duplicates, note: This is NOT disjoint set.
+    unordered_multiset => Values which acts as Keys can be duplicated
 //----------------------------------------------------------------------------------------------------------------------------------
 // 2 Benefits of Iterators
 //----------------------------------------------------------------------------------------------------------------------------------

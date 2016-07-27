@@ -255,7 +255,51 @@ ALGORITHM
 	ii) Find similar problems and match 
 	iii) Simplify problem and solve. Then Generalize
 	iv) Start with base case then build 
-	v) Brainstorm data structures
+	v) Brainstorm data structures (some questions require tradeoff between data structures)
+        HashTables
+                O(1) Insertion, access, delete
+                BUT O(capacity) iteration across all elements
+            unordered_map => Hash table with key,value pairs where keys are unique
+            unordered_multimap => Hash table with  key,value pairs where keys can be repeated
+            unordered_set => Hash table with values as keys themselves and are unique.
+            unordered_multiset => Hash table with values as keys themselves and are not unique. Each value has a 'count'
+        Balanced Binary Search Tree with pointers to min(), max() and each node has pointer to parent to iterate in sorted order in linear time.
+                O(logN) insertion, access, delete
+                O(1) min, max
+                O(n) iteration
+                Sorted
+            map => BST with key, value pairs, with sorted unique keys
+            multimap => BST with key, value pairs, with sorted keys that can be repeated
+            set => BST with values, sorted by values which are unique.
+            multiset => BST with values, sorted by values that can be repeated.
+        Linked List
+                Can easily insert in the middle of the list.
+                Can easily merge parts of 2 lists together using splice() in constant time
+                BUT takes O(n) to calculate size of linked list.
+            list => Doubly linked list (forward and back)
+            forward_list => Singly linked list
+        Queue
+                Easy to push into the back of queue and pop from front of queue.
+            queue => FIFO
+        Stack
+                Easy to push into the top of stack and pop from top of stack.
+            stack => LIFO
+        Double Ended Queue
+            deque => Can push and pop from both sides.
+        Heap
+                Min() and Max() in linear time
+                BuildHeap() from array takes only O(n) time.
+            priority_queue
+        Resizable Array
+                Random access at any position
+                Can be sorted and searched in logN time using binary search.
+            vector
+        BitSet
+                Saves space if all you need is storing true/false
+            bitset => Contains N number of bits that can either be true or false. Use this instead of vector<bool>
+        Graphs (build yourself)
+            Adjacency Matrix
+            Adjacency List
 - DON'T INTERRUPT INTERVIEWER WHEN HE/SHE SPEAKS!
 IMPLEMENT
 - Implement solution
