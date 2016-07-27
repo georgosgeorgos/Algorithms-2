@@ -20,7 +20,7 @@ C++ is divided into:
 // B) Functions
 //-------------------------
 1. Pass by Value vs Pass by Reference
-2. Pass by Reference Avoids Slicing
+2. Pass by Reference Avoids Slicing, Never Copy Child Objects into Parent Variables
 3. Return By Value > Return By Reference for Local (stack,heap,static) Variables
 4. Non Member Function to Allow Commutative Operations
 5. Postpone Variable Definitions As Long As Possible but Outside Loops
@@ -137,7 +137,7 @@ can only return 1 value                         Can return multiple values
 less efficient due to copying                   More efficient as no copy constructor called
 
 //----------------------------------------------------------------------------------------------------------------------------------
-// 2 Pass by Reference Avoids Slicing
+// 2 Pass by Reference Avoids Slicing, Never Copy Child Objects into Parent Variables
 //---------------------------------
 If you pass by value, the object gets copied in the function. 
 Problem:
@@ -146,7 +146,9 @@ Problem:
 Solution:
     MethodPassByReferenceWillNotSliceChildren(ParentClass& parent);
     MethodPassByReferenceWillNotSliceChildren(child); // success, it gets a reference to child, so no slicing occurs.
-
+    or
+    MethodPassByPointerWillNotSliceChildren(ParentClass* parent);
+    MethodPassByPointerWillNotSliceChildren(child);
 //----------------------------------------------------------------------------------------------------------------------------------
 // 3 Return By Value > Return By Reference for Local (stack,heap,static) Variables
 //---------------------------------
