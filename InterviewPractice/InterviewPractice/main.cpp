@@ -295,12 +295,12 @@ What does the sentence '...' mean exactly?
 Are the inputs sorted? 
     If it is not, sort them at cost of O(nlgn), if it is, then you just reduced your complexity by a lot
 Are the values unique or can they be repeated? 
+Use bit representation if it helps using #include <bitset> as not limited to 64 bits. 
 Integers: Can there be (-) values?
     If doesn't, then use unsigned int 
-    If (-) => Can only use 32 bit for bit manipulation, otherwise 64 bits
+    If (-) => Can only use 32 bit for bit manipulation, otherwise 64 bits (but can just use bitset)
 Integers: Is there a limit to the values the numbers can have? 
     If small then counting sort is better
-    If < 64 bits, then can use bit representation, 32 bit for signed, 64 bit for unsigned
 Is there a limit to the number of values? (If small then bubble sort is better) 
     If the number is too large but less than 2^64, use unsigned long long int instead of just int
     Refer to below for exact value ranges

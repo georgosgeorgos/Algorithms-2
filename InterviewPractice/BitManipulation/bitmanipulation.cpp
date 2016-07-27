@@ -5,6 +5,18 @@ Table of Contents
 2. Check if a number is a power of 2, T(n) = O(1), S(n) = O(1)
 3. Count first occurence of leading 1 in a variable (Qualcomm interview), T(n) = O(n), S(n) = O(1)
 //----------------------------------------------------------------------------------------------------------------------------------
+#include <bitset> 
+
+bitset<numberOfBits> b;
+b.count(); // number of 'set' bits (bits that are true)
+b.size(); // number of bits allocated for bitset
+bool is2True = b.test(2); // returns if bit at location '2' from 0th-index is true.
+bool isAnyBitSet = b.any(); // returns true if any bit is true
+bool isNoBitSet = b.none(); // returns true if all bits are false
+bool allBitSet = b.all(); // returns true if all bits are set. 
+b[2] = true; // set bit at position 2 to true
+b[2] = false; // set bit at position 2 to false
+//-------------------------------------------
 TODO: 
 5. Write function to determine number of bit swap required to convert integer A to integer B
 4. Write program to swap odd and even bits in an interger with the fewest instructions (O(1))
