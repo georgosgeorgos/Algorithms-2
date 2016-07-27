@@ -202,7 +202,8 @@ QUESTIONS, TEST CASES, THINK, DO, TEST
 //----------------------------------------------------------------------
 A) QUESTIONS
 //----------------------------------------------------------------------
-
+Ask a lot of smart questions! It's a (+) for your work.
+Do NOT rub away the test cases as they serve as a reminder for you to TEST.
 //----------------------------------------------------------------------
 B) THINK
 //----------------------------------------------------------------------
@@ -211,7 +212,9 @@ B) THINK
 // Design Top-Down approach!
 // Run through list of design principles to see which fit:
 // note: List is at GitHub
-
+// Careful of time! It is important to show your code.
+// Implement brute force approach as may have 2nd part, optimize after interviewer asks.
+// If running out of time, just implement the brute force approach.
 //----------------------------------------------------------------------
 C) DO
 //----------------------------------------------------------------------
@@ -245,7 +248,7 @@ TEST_CASES
 - Come up with simple enough test case that covers the corner cases (simple enough -> Quick to test using head), 
 ALGORITHM 
 - When saying complexity, make sure to define variables, O(logn), where n = number of nodes in tree or O(n) where n = height of tree
-- Come up with a solution, test for complexity
+- Come up with a solution, test for complexity. 
 - Come up with a better solution, test for complexity and compare
 - Share both good and bad solution and why. 
 - Can you do this recursively? Can you do this iteratively?
@@ -302,11 +305,13 @@ ALGORITHM
             Adjacency List
 - DON'T INTERRUPT INTERVIEWER WHEN HE/SHE SPEAKS!
 IMPLEMENT
+- Implement brute force if you can't come up with better one quickly as there may be 2nd part to a question.
 - Implement solution
 - Write code in detail 
 - Write neatly & organize space 
 - Write excellent code! 
     - Clean Code (variable name meanings), Refactoring, Testable
+        - Don't use i & j because you may end up confusing yourself. Give them useful names.
     - Google's coding style
     - TODO: 
     - FIXME: 
