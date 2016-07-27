@@ -28,6 +28,7 @@ C++ is divided into:
 7. RValue vs LValue
 8. Pass By Pointer > Pass by Reference
 9. Mark Getters() const
+10. Copy Ellision using Return By Value
 //-------------------------
 // C) Constructors & Overloading
 //-------------------------
@@ -347,6 +348,7 @@ from:
     x += 2;
     x += 1;
     // needs to return by copy x, then return
+    // note: May not need to copy due to copy ellision.
     return x;
 to:
     // Returning by R-Value
@@ -390,6 +392,21 @@ to:
     //      // Could only have called getInt() below if it was marked with const
     //      return (lhs->getInt() == rhs->getInt())
     // }
+//----------------------------------------------------------------------------------------------------------------------------------
+// 10 Copy Ellision using Return By Value
+//---------------------------------
+string returnByCopyEllision()
+{
+    string oneNameOnly = "haha";
+    return oneNameOnly;
+}
+
+int main(void)
+{
+    // This does not perform a copy, but rather a move because the string "haha" will either be pointed by
+    // oneNameOnly or either otherName but never both on the same time. Thus, compiler will move it instead of copy it.
+    string otherName = returnByCopyEllision();
+}
 //----------------------------------------------------------------------------------------------------------------------------------
 // C) Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
