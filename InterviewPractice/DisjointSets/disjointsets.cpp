@@ -83,6 +83,10 @@ Worst Case:
     1+2+3+4+...+n/2 => O(n^2) time 
 Therefore, the original implementation above is much faster! 
 
+note: #include <set> is NOT disjoint set, as #include <set> is a balanced binary tree with single values.
+// Disjoint set is the benefit of doing constant operations with
+// Union(), MakeSet(), IsInSet(). 
+
 */
 //
 //----------------------------------------------------------------------------------------
