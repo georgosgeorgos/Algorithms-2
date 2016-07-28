@@ -13,6 +13,7 @@ Table of Contents
 10. Return if a sorted array contains duplicates that is duplicated at least N/4 times, T(n) = O(lgN), S(n) = O(1) (Google Second Round Interview)
 11. Merge Overlapping Intervals (Amazon 2nd round) = Determine if there is a clash between any pairs of intervals, T(n) = O(nlogn), S(n) = O(1)
 12. Longest Consecutive Sequence, T(n) = O(n), S(n) = O(n)
+13. Shuffle, T(n) = O(n), S(n) = O(1) (Google Mock Interview 4)
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -1094,6 +1095,44 @@ int main(void)
     vector<int> arr = {1, 22, 3, 15, 12, 2, 4, 7}; // 4 = {1, 2, 3, 4}
     int lcs = LongestConsecutiveSequence(arr);
     cout << lcs << endl;
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 13 Shuffle (Google Mock Interview 4)
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1) 
+//-------------------------
+/*
+*/
+//-------------------------
+/* //
+#include <vector>
+#include <iostream>
+using namespace std;
+
+void swap(int& lhs, int& rhs)
+{
+    int temp = lhs;
+    lhs = rhs;
+    rhs = temp;
+    return;
+}
+
+void shuffle(vector<int>& cards)
+{
+    for (int index = cards.size(); index > 0; index--)
+    {
+        int  randPosition = rand() % index;
+        swap(cards[index-1], cards[randPosition]);
+    }
+    return;
+}
+
+int main(void) 
+{
+    vector<int> cards = {1, 2, 3, 4, 5, 6};
+    shuffle(cards);
+    for (int card : cards) cout << card << " ";
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
