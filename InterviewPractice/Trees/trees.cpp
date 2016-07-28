@@ -1204,7 +1204,7 @@ TestCase:
       3   25
        <=> 
     ["1","2","#","3","#", "#", "4", "25", "#","#", "#"]
-    Can't store as string since value can be > 9! Means may have more than 1 character for each value Means may have more than 1 character for each value
+    Can't store as string since value can be > 9. Means may have more than 1 character for each value. (e.g. 23 => 2 characters, 321 => 3 characters)
 Algorithm:
     1. O(2n + 1) space, O(2n + 1) time since need to go through all space to de-serialize, and make all space to serialize`
         Store all NULL nodes with a special marker '#' => All node values need to be stored as char type as well and re-convert back to original type
