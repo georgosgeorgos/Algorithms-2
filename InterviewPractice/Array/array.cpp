@@ -12,6 +12,7 @@ Table of Contents
 9. Return if array is a complete circular array with reference indexing. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview) 
 10. Return if a sorted array contains duplicates that is duplicated at least N/4 times, T(n) = O(lgN), S(n) = O(1) (Google Second Round Interview)
 11. Merge Overlapping Intervals (Amazon 2nd round) = Determine if there is a clash between any pairs of intervals, T(n) = O(nlogn), S(n) = O(1)
+12. Longest Consecutive Sequence, T(n) = O(n), S(n) = O(n)
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -1046,6 +1047,53 @@ int main(void)
    vector<Interval> arr = { Interval(1,3), Interval(5,7), Interval(2,4), Interval(6,8), Interval(8,9) }; 
    mergeOverlapping(arr);
    printSolution(arr);
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 12 Longest Consecutive Sequence
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(n)
+//-------------------------
+/*
+*/
+//-------------------------
+/* //
+#include <unordered_set> // Hash table for 1 element
+#include <vector> 
+#include <iostream>
+using namespace std;
+
+int LongestConsecutiveSequence(vector<int>& arr)
+{
+    unordered_set<int> s;
+    for (int value : arr) s.insert(value);
+    int lcs = 0;
+    for (int value : arr) 
+    {
+        if (s.find(value) == s.end()) continue;
+        int count = 1;
+        s.erase(value);
+        int curr = value;
+        while (s.find(++curr) != s.end())
+        {
+            count++;
+            s.erase(curr);
+        }
+        while (s.find(--value) != s.end())
+        {
+            count++;
+            s.erase(value);
+        }
+        lcs = max(lcs, count);
+    }
+    return lcs;
+}
+
+int main(void) 
+{
+    vector<int> arr = {1, 22, 3, 15, 12, 2, 4, 7}; // 4 = {1, 2, 3, 4}
+    int lcs = LongestConsecutiveSequence(arr);
+    cout << lcs << endl;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
