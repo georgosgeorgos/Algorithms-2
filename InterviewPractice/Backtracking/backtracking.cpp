@@ -8,7 +8,7 @@ Table of Contents
 5. M-Coloring : Given an undirected graph, check if every node can be colored from M colors such that no 2 adjacent have same colors, T(V,E,M) = O(M^(V+E)), S(V,E,M) = O(V+E)
 6. Number Keypad Permutation: Find combinations of given set of digits, (Microsoft: Jason, on-site Round 1), T(n) = O(5^n), S(n) = O(5^n)
 7. Print Values From An Arbitrary Dimensional Matrix
-TODO: Google Mock Interview 2, (all possible strings)
+TODO: Google Mock Interview 2, (all possible start, end points string replacement)
 //---------------------------------
 TODO: 
 15. Subset Sum 
@@ -691,21 +691,19 @@ void outputBacktrack(string input, string currResult, int depth, list<string>& r
     if(depth == input.length())
     {
         result.push_back(currResult);
+        return;
     }
-    // Step 2: Iterate through all possibilities
+    // Step 2: Iterate through all possibilities for the current character
     // Go through each character
-    for(int i = depth; i < input.length(); i++)
+    // Step 3: Every character is legal 
+    string currChar = getAvailableChar(input[depth]);
+    for(int j = 0; j < currChar.length(); j++)
     {
-        // Step 3: Every character is legal 
-        string currChar = getAvailableChar(input[i]);
-        for(int j = 0; j < currChar.length(); j++)
-        {
-            // Step 4: Add move
-            currResult[i] = currChar[j];
-            // Step 5: Backtrack
-            outputBacktrack(input, currResult, depth + 1, result); 
-            // Step 6: Will undo move automatically when overwrite
-        }
+        // Step 4: Add move
+        currResult[depth] = currChar[j];
+        // Step 5: Backtrack
+        outputBacktrack(input, currResult, depth + 1, result); 
+        // Step 6: Will undo move automatically when overwrite
     }
     return;
 }
@@ -719,7 +717,7 @@ list<string> outputCombination(string input)
 
 int main(void)
 {
-    string input = "23"; 
+    string input = "234"; 
     list<string> result = outputCombination(input);
     for(auto i = result.begin(); i != result.end(); i++)
     {
