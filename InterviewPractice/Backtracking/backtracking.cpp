@@ -8,6 +8,7 @@ Table of Contents
 5. M-Coloring : Given an undirected graph, check if every node can be colored from M colors such that no 2 adjacent have same colors, T(V,E,M) = O(M^(V+E)), S(V,E,M) = O(V+E)
 6. Number Keypad Permutation: Find combinations of given set of digits, (Microsoft: Jason, on-site Round 1), T(n) = O(5^n), S(n) = O(5^n)
 7. Print Values From An Arbitrary Dimensional Matrix
+TODO: Google Mock Interview 2, (all possible strings)
 //---------------------------------
 TODO: 
 15. Subset Sum 
@@ -208,7 +209,64 @@ int main(void)
 // 2 Permutation: Generate all permutation for n distinct integers 
 // Time Complexity, T(n) = O(n!)
 // Space Complexity, S(n) = O(n!) 
-//----------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------
+/*
+Algorithm:
+    [1, 2, 3]
+    Really, the only way to solve this problem using pure iterations is to write a 3-nested for loop
+    from:
+        int N = 3; // arr.size();
+        for (int swap0thIndex = 0; swap0thIndex < N; swap0thIndex++)
+        {
+            swap(arr, 0, swap0thIndex);
+            for (int swap1stIndex = 1; swap1stIndex < N; swap1stIndex++)
+            {
+                swap(arr, 1, swap1stIndex); // add move
+                for (int swap2ndIndex = 2; swap 2ndIndex < N; swap2ndIndex++);
+                {
+                    swap(arr, 2, swap2ndIndex); // swap it
+                    result.push_back(arr); // store solution.
+                    swap(arr, 2, swap2ndIndex); // undo previous move
+                }
+                swap(arr, 1, swap1stIndex); // undo previous move
+            }
+            swap(arr, 0, swap0thIndex); // undo previous move
+        }
+        BUT of course, this isn't generalizable to an arbitary array of size N. 
+        Thus, backtracking (recursion) allows you to generate a for loop for each element in an array of size N.
+
+        You can improve above by noticing the 3rd for loop doesn't do anything as it always swap the last element with itself. Hence, remove it.
+    to:
+        for (int swap0thIndex = 0; swap0thIndex < N; swap0thIndex++)
+        {
+            swap(arr, 0, swap0thIndex);
+            for (int swap1stIndex = 1; swap1stIndex < N; swap1stIndex++)
+            {
+                swap(arr, 1, swap1stIndex); // add move
+                result.push_back(arr); // store solution.
+                swap(arr, 1, swap1stIndex); // undo previous move
+            }
+            swap(arr, 0, swap0thIndex); // undo previous move
+        }
+    In backtracking code, this optimization is equivalent to changing from:
+    from:
+        if (depth == arr.size())
+        {
+            result.push_back(arr);
+            return;
+        }
+    to:
+        if (depth == arr.size() - 1)
+        {
+            result.push_back(arr);
+            return;
+        }
+        // Problem: what if array is empty() ? Then it won't handle the case of appending an empty solution.
+        // Hence, in order for this optimization to work, need to ensure arr.size() >= 1, otherwise, treat it as a special case.
+        // But this small optimization of an extra constant lines of code execution isn't worth making the code less readable as it has more lines to handle
+        // the base case, hence, your solution below does the 'from' case as the code looks cleaner. 
+// */
+//---------------------------------
 /* // 
 #include <vector>
 #include <iostream> 
@@ -226,7 +284,7 @@ void permuteHelper(vector<int>& arr, vector<vector<int>>& solution, int depth)
     // Step1: Goal Test: Only push solution when done permuting
     // note: If you are only appending when depth == arr.size(), chances are is that you are using
         // (depth + 1) instead of (currIteration + 1) in your searchNextMove()
-    if(depth == arr.size()) 
+    if(depth == arr.size())
     {
         solution.push_back(arr); 
     }
@@ -678,9 +736,40 @@ int main(void)
 /*
     The first thing is to note that all for and while loop programs can be replaced by recursion.
     It's almost like for and while loops are a subset of recursion
-    This is because recursion, you can choose how to change iteration values i, j, k
-    whereas it is not so easily to change the values of i, j, k using for loops
-    Example to convert from loops to recursion is given for the M = 2 case
+    First reason: choose how to change iteration values i, j, k
+        In recursion, you can choose how to change iteration values i, j, k
+            whereas it is not so easily to change the values of i, j, k using for loops
+            Example to convert from loops to recursion is given for the M = 2 case
+    Second reason: You get to generate N number of nested for loops given an array of size N.  
+        Each recursion is a for loop itself.
+        Given an array of N elements, you need to generate a for loop for each element.
+        Consider the permutation case for [1, 2, 3]
+            1, 2, 3
+            1, 3, 2
+            2, 1, 3
+            2, 3, 1
+            3, 1, 2
+            3, 2, 1
+        Really, the only way to solve this problem using pure iterations is to write a 3-nested for loop
+        int N = 3; // arr.size();
+        for (int swap0thIndex = 0; swap0thIndex < N; swap0thIndex++)
+        {
+            swap(arr, 0, swap0thIndex);
+            for (int swap1stIndex = 1; swap1stIndex < N; swap1stIndex++)
+            {
+                swap(arr, 1, swap1stIndex); // add move
+                for (int swap2ndIndex = 2; swap 2ndIndex < N; swap2ndIndex++);
+                {
+                    swap(arr, 2, swap2ndIndex); // swap it
+                    result.push_back(arr); // store solution.
+                    swap(arr, 2, swap2ndIndex); // undo previous move
+                }
+                swap(arr, 1, swap1stIndex); // undo previous move
+            }
+            swap(arr, 0, swap0thIndex); // undo previous move
+        }
+        BUT of course, this isn't generalizable to an arbitary array of size N. 
+        Thus, backtracking (hence recursion) allows you to generate a for loop for each element.
 */
 //---------------------------------
 /* //
