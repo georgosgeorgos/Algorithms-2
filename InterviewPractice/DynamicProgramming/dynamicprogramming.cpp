@@ -339,7 +339,7 @@ Implementation:
 Test!
 // */
 //-------------------------------------
-//
+/* //
 #include <string> 
 #include <vector> 
 #include <iostream> 
@@ -387,9 +387,6 @@ int LCS(const string& s1, const string& s2)
             }
             else // not match
             {
-                // TODO: Fix the fixme below
-                // FIXME: Need to take max of arr[i-1][j] or arr[i][j-1] if both i or j != 0 !!!
-                //          CURRENT IMPLEMENTATION IS WRONG!
                 if (s1Index != 0)
                 {
                     dir[s1Index][s2Index] = 1; 
@@ -410,7 +407,6 @@ int LCS(const string& s1, const string& s2)
     printLCS(dir, s1, s1Len-1, s2Len-1);
     cout << endl;
     return arr[s1Len-1][s2Len-1];
-    // return maxSoFar; // FIXME: Just need to return arr[n-1][m-1] if done correctly without keeping track of maxSoFar.  
 }
 
 int main(void)
