@@ -501,9 +501,10 @@ Applications: Auto-correct
 OMG YOU SOLVED IT YOURSELF, it is a totally different solution that what's available online, so understand those in future
 Online solution is actually simpler but the fact that you solved it yourself from Longest Common Subsequence is cool! 
 You can actually solve it directly. But your motivation was from LCS. 
+BUT your solution takes O(2nm) time whereas best way to do it only takes O(nm) time. 
 // */
 //-------------------------------------
-/* 
+/*
 #include <cstring> 
 #include <string> 
 #include <vector> 
