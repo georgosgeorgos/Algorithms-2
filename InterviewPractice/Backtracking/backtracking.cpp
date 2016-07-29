@@ -1,20 +1,20 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 /*
 Table of Contents
-1. Given a set of distinct integers, nums, return all possible subsets, T(n) = O(2^n), S(n) = O(n) 
+1. Given a set of distinct integers, nums, return all possible subsets, T(n) = O(2^n), S(n) = O(2^n) 
 2. Permutation: Generate all permutation for n distinct integers, T(n) = O(n!), S(n) = O(n!) 
 3. N-Queens: Given a N*N board, how many configurations for N queens such that no Queen can attack each other, T(n) = O(n!), S(n) = O(n)
 4. Knight's Tour: N*M board, touch each cell exactly once, false if impossible, T(n,m) = O(8^(nm)), S(n,m) = O(nm)
 5. M-Coloring : Given an undirected graph, check if every node can be colored from M colors such that no 2 adjacent have same colors, T(V,E,M) = O(M^(V+E)), S(V,E,M) = O(V+E)
 6. Number Keypad Permutation: Find combinations of given set of digits, (Microsoft: Jason, on-site Round 1), T(n) = O(5^n), S(n) = O(5^n)
 7. Print Values From An Arbitrary Dimensional Matrix
+8. Subset Sum: Return true if there's any subset whose sum = k, T(n) = O(n2^n), S(n) = O(n2^n)
 TODO: Google Mock Interview 2, (all possible start, end points string replacement)
 //---------------------------------
 TODO: 
-15. Subset Sum 
-16. Given n distinct integers, list all k subsets that exist, k <= n, easy just, only add to solution when length of subset is k. (Similar to 1.
-17. Make Valid Equation
-18. Find path in N*N maze 
+106. Given n distinct integers, list all k subsets that exist, k <= n, easy just, only add to solution when length of subset is k. (Similar to 1.
+107. Make Valid Equation
+108. Find path in N*N maze 
 //---------------------------------
 // Questions:
 //---------------------------------
@@ -144,7 +144,7 @@ Every Backtracking Algorithm can be broken down into these steps:
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Given a set of distinct integers, nums, return all possible subsets.
 // Time Complexity, T(n) = O(2^n) as need to visit all possible subsets
-// Space Complexity, S(n) = O(n) as push and pop each number
+// Space Complexity, S(n) = O(2^n) as recursion stack, O(n) for push and pop all elements.
 //---------------------------------
 /* //
 #include<vector>
@@ -828,6 +828,79 @@ int main(void)
     vector<vector<vector<int>>>  matrix3D = {{ {1, 2, 3}, {4, 5}, {6, 7, 8, 9, 10}}, {{11, 12, 13}, {14, 15, 16}}, {{17}}};
     cout << endl;
     printRecursive(matrix3D);
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 8 Subset Sum: Return true if there's any subset whose sum = k
+// Time Complexity, T(n) = O(n2^n)
+// Space Complexity, S(n) = O(n2^n)
+//---------------------------------
+/*
+TestCases:
+    {1, 2, 4, -3}, k = 0 => true, {1, 2, -3}
+    {1}, k = 1 => true, {1}
+    {1, -2}, k = 2 => false
+Time Complexity:
+    T(n) = O(n2^n), multiply n as checking the sum takes n time in worse case.
+*/
+//---------------------------------
+/* //
+#include <forward_list> // using forward_list is better since you don't need random access, but just need to keep adding and removing from front.
+#include <vector>
+#include <iostream>
+using namespace std;
+
+void subsetSumHelper(const vector<int>& arr, const int k, forward_list<forward_list<int>>& result, forward_list<int>& currSubset, int depth)
+{
+    int sum = 0;
+    for (int val : currSubset)
+    {
+        sum += val;
+    }
+    if (sum == k && !currSubset.empty())
+        result.push_front(currSubset);
+
+    for (int i = depth; i < arr.size(); i++)
+    {
+        currSubset.push_front(arr[i]);
+        subsetSumHelper(arr, k, result, currSubset, i+1);
+        currSubset.pop_front();
+    }
+    return;
+}
+
+forward_list<forward_list<int>> subsetSum(const vector<int>& arr, const int k)
+{
+    forward_list<forward_list<int>> result;
+    forward_list<int> currSubset;
+    subsetSumHelper(arr, k, result, currSubset, 0);
+    return result;
+}
+
+void printSolution(vector<int>& arr, int k)
+{
+    auto result = subsetSum(arr, k);
+    if (result.empty())
+        cout << "false" << endl;
+    else
+    {
+        cout << "true" << endl;
+        cout << "k: " << k << endl;
+        for (auto currSubset : result)
+            for (int val : currSubset)
+                cout << val << " ";
+        cout << endl;
+    }
+}
+
+int main(void) 
+{
+    vector<int> normal = {1, 2, 4, -3};
+    vector<int> single = {1};
+    vector<int> noExist = {1, -2};
+    printSolution(normal, 0);
+    printSolution(single, 1);
+    printSolution(noExist, 2);
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
