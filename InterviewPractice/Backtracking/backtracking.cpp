@@ -65,6 +65,7 @@ Every Backtracking Algorithm can be broken down into these steps:
             if (IsLegal(move)) // Step 3
             {
                 performMove(uniqueSet); // Set4
+                // note: NOT always depth + 1, refer to subset problem, where it's (i+1) instead of depth + 1
                 searchNextMove(uniqueSet, depth + 1); // Step 5
                 undoMove(uniqueSet); // Step 6
             }
@@ -124,6 +125,12 @@ Every Backtracking Algorithm can be broken down into these steps:
         Needs to backtrack with the new uniqueSet formed and increase indexDepth
         Common Implementation 
             searchNextMove(const referenceArr, uniqueSet, results, indexDepth + 1)
+                        or
+            for (int currIteration = depth; currIteration < referenceArr.size(); currIteration++)
+            {
+                // note: It does not use depth to searchNextMove() but uses (currentItearation + 1) instead.
+                searchNextMove(const referenceArr, uniqueSet, results, currentIteration + 1);
+            }
 //---------------------------------
     Step 6 Details: Backtracking
         Needs to undo whatever you did before.
@@ -147,6 +154,10 @@ using namespace std;
 void subsetHelper(vector<int>&nums, vector<vector<int>>& solution, vector<int>& currSubset, int index)
 {
     // Step1: Goal Test: add to solution at each node of DFS 
+    // note: If you are always adding the current solution,
+        // chances are is that your searchNextMove() method adds 1 to currIteration instead of depth.
+        // In other words, you use (currIteration + 1) instead of (depth + 1)
+        // since you don't need to check that (depth == referenceArr.size()) before appending to solution.
     solution.push_back(currSubset); // note: also handles base case of pushing empty set
     
     // Special DFS that iteratives over everything (many starting points for DFS) 
@@ -157,6 +168,10 @@ void subsetHelper(vector<int>&nums, vector<vector<int>>& solution, vector<int>& 
         // Step3: Check Legal Move: It is always legal in this case
         currSubset.push_back(nums[i]);  // Step4: Add Move
         // PERMUTE TO NEXT STEP
+        // note: This uses (i+1) instead of (depth + 1) cause it is essentially a dynamic programming problem.
+            // you are saying I can either choose to include current (i) or not include it. 
+            // but regardless, I am going to perform dynamic programming on anything after 'i'
+            // and notice when you do this, you are always adding the solution at every step.
         subsetHelper(nums, solution, currSubset, i+1); // Step5: Search Next Move 
         currSubset.pop_back(); // Step6: Backtrack
     }
@@ -206,19 +221,23 @@ void swap(vector<int> & arr, int i, int j)
     return;
 }
 
-void permuteHelper(vector<int>& arr, vector<vector<int>>& solution, int index)
+void permuteHelper(vector<int>& arr, vector<vector<int>>& solution, int depth)
 {
     // Step1: Goal Test: Only push solution when done permuting
-    if(index == arr.size()) 
+    // note: If you are only appending when depth == arr.size(), chances are is that you are using
+        // (depth + 1) instead of (currIteration + 1) in your searchNextMove()
+    if(depth == arr.size()) 
+    {
         solution.push_back(arr); 
+    }
 
     // Step2: Iterate Possible Moves: List of possible moves are those ahead of index
-    for(int j = index; j < arr.size(); j++)
+    for(int j = depth; j < arr.size(); j++)
     {
         // Step3: Check Legal Move: Every move is legal in this case
-        swap(arr, index, j); // Step4: Add Move
-        permuteHelper(arr, solution, index+1); // Step5: Search Next Move
-        swap(arr, index, j); // Step6: Backtrack 
+        swap(arr, depth, j); // Step4: Add Move
+        permuteHelper(arr, solution, depth+1); // Step5: Search Next Move
+        swap(arr, depth, j); // Step6: Backtrack 
     }
     return;
 }
