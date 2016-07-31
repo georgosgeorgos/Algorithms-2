@@ -507,9 +507,17 @@ OMG YOU SOLVED IT YOURSELF, it is a totally different solution that what's avail
 Online solution is actually simpler but the fact that you solved it yourself from Longest Common Subsequence is cool! 
 You can actually solve it directly. But your motivation was from LCS. 
 BUT your solution takes O(2nm) time whereas best way to do it only takes O(nm) time. 
+Actual solution that you did not figure out yourself:
+    if(current characters are same) 
+        [i][j] = [i-1][j-1]
+    else // different
+        1 + min(replace, delete, add)
+        replace => [i-1][j-1] // arrow is diagonal upwardsLeft
+        delete => [i][j-1] // arrow is Left
+        add => [i-1][j] // arrow is Up
 // */
 //-------------------------------------
-/*
+/* //
 #include <cstring> 
 #include <string> 
 #include <vector> 
@@ -620,6 +628,30 @@ int LCSThenEdit(const char* s1, const char* s2)
     return maxSoFar; 
 }
 
+int optimalEdit(string s1, string s2)
+{
+    vector<vector<int>> cache(s1.length() + 1, vector<int> (s2.length() + 1, 0));
+    for (int i = 0; i < s1.length(); i++)
+        cache[i][0] = i;
+    for (int j = 0; j < s2.length(); j++)
+        cache[0][j] = j;
+    for (int s1Index = 1; s1Index <= s1.length(); s1Index++)
+    {
+        for (int s2Index = 1; s2Index <= s2.length(); s2Index++)
+        {
+            if (s1[s1Index] == s2[s2Index])
+                cache[s1Index][s2Index] = cache[s1Index - 1][s2Index - 1];
+            else 
+            {
+                int minElement =  min(cache[s1Index - 1][s2Index - 1], cache[s1Index][s2Index - 1]);
+                minElement = min(minElement, cache[s1Index - 1][s2Index]);
+                cache[s1Index][s2Index] = 1 + minElement;
+            }
+        }
+    }
+    return cache[s1.length()][s2.length()];
+}
+
 int main(void)
 {
     string a1 = "iaebgch";
@@ -629,8 +661,11 @@ int main(void)
     const char* s1 = a1.c_str();
     const char* s2 = b1.c_str();
     int maxEdit = LCSThenEdit(s1, s2); // 3 => "abc"
-    cout << maxEdit << endl;
-    cout << "OMG, YOU SOLVED IT YOURSELF!" << endl;
+    if (maxEdit == optimalEdit(s1,s2))
+    {
+        cout << maxEdit << endl;
+        cout << "OMG, YOU SOLVED IT YOURSELF!" << endl;
+    }
     return 0; 
 }
 // */
