@@ -18,10 +18,9 @@ Table of Contents
 //----------------------------------------------------------------------------------------------------
 TODO:
 15. Palindrome Partitioning (Solved on paper, not implemented yet)
-16. SubsetSum Problem: Given an array and a sum, figure out if a subset of the array has value equal to that sum. 
+16. SubsetSum Problem: Given an array and a sum, figure out if a subset of the array has value equal to that sum.  (solved on paper, not implemented yet) 
 17. Partitioning Problem
     Hint: Subset Sum Problem
-
 25.Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
 26. Longest Palindromic Substring 
@@ -53,7 +52,14 @@ notes:
 //-------------------
 0. To know when dynamic programming should be tried: 
     - Repeated computation
-    - At each level, you can either move to left or right
+    - At each level, you can either move:
+        1D: to left or right by 1 step.
+        2D: To left, or up or diagonal leftUp for 2D array by 1 step.
+            curr = (m,n) => Cost/Benefit can be 1 or 0.
+            currCost + maxOrMin(subProblem(m-1,n), subProblem(m,n-1), subProblem(m-1,n-1)
+                left = (m-1, n)
+                up = (m, n-1)
+                diagonal leftUp = (m-1, n-1)
     - Can solve sub-problems optimally
 1. Remove useless arguments from function, the different combinations of arguments are the states of the function. Repeat Step 1
 2. Find out equation and create recursive function.  (Really, what you are doing is trial and error until you find a solution that works from these approaches)
@@ -78,7 +84,7 @@ notes:
    - To optimize for space: figure out the solution first, then learn to see what you depend on the get the solution. 
      Note: Normally can save more space if depend on a fixed number of previous elements:
      i) If any number of arbitrary previous elements => Prolly can't save space, but need correct iteration for correct computation
-     ii) If only 1 or a constant number of previous elements => can use that constant number of space to keep track of prevoius contant number of elements
+     ii) If only 1 or a constant number of previous elements => can use that constant number of space to keep track of previous contant number of elements
         e.g. (Binomial Coefficient only needs previous (-1) row of elements, so constant space (only 1 row needed) O(n)
              On other hand, (Knapsack 0-1) needs anywhere from 0->k previous rows of elements, so need all m rows O(nm)
      Change the order of computation that covers what you depend on with as little space as possible as well as correct computation.
@@ -108,8 +114,6 @@ notes:
     what is the worst case for picking it? thats the worst case. 
     Thus, you pick the best cases among all the worst cases. 
     e.g. Egg Dropping Problem
-
-
 Number of subsets from n elements is (2^n), since you can think of it as 1=> in subset, and 0 => Not in subset and so if you have n elements, 
 you can binary count from 00000 to 11111 and there's 2^n total number of them
 //-------------------
