@@ -60,6 +60,7 @@ notes:
                 left = (m-1, n)
                 up = (m, n-1)
                 diagonal leftUp = (m-1, n-1)
+    - It may help to list the correct answers in a small matrix, then figure out the relationship.
     - Can solve sub-problems optimally
 1. Remove useless arguments from function, the different combinations of arguments are the states of the function. Repeat Step 1
 2. Find out equation and create recursive function.  (Really, what you are doing is trial and error until you find a solution that works from these approaches)
