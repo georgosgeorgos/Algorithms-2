@@ -907,7 +907,9 @@ int main(void)
 // */
 //----------------------------------------------------------------------------------------------------
 // 9 Matrix Chain Multiplication: Find most efficient way to multiply a chain of matrices together. 
-// Time Complexity, T(n) = O(n^3), Space Complexity, S(n) = O(n^2) 
+// Time Complexity, T(n) = O(n^3)
+// Space Complexity, S(n) = O(n^2) 
+//-------------------------------------
 /*
 Questions: 
     1. Return order of multiplication of number of multiplication? 
