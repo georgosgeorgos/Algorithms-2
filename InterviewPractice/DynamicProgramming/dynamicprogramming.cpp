@@ -1215,19 +1215,16 @@ int uniquePaths(int n, int m)
     }
     return arr[n1-1];
 }
+void printSolution(int n, int m)
+{
+    cout << n << ", " << m << ": " << uniquePaths(n,m) << endl;
+}
 
 int main(void)
 {
-    int n = 1; 
-    int m = 1; 
-    int result = uniquePaths(n,m); // 1
-    cout << n << ", " << m <<": " << result << endl;
-    n = 2; m = 3; 
-    result = uniquePaths(n,m); // 3
-    cout << n << ", " << m <<": " << result << endl;
-    n = 5; m = 3;  // 15
-    result = uniquePaths(n,m);
-    cout << n << ", " << m <<": " << result << endl;
+    printSolution(1, 1); // 1
+    printSolution(2, 3); // 3
+    printSolution(5, 3);
     return 0;
 }
 // */
