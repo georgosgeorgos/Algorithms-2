@@ -10,20 +10,21 @@ Table of Contents
 7. Minimum Cost Path from [0][0] to [m-1][n-1] in a matrix, T(n,m) = O(mn), S(n,m) = O(mn)
 8. Coin Change: Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm], T(n,m) = O(nm), S(n,m) = O(n)
 9. Matrix Chain Multiplication: Find most efficient way to multiply a chain of matrices together, T(n) = O(n^3), S(n) = O(n^2) 
-10. Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
+10. Knapsack 0-1: Find max profit from items with weights >= 0 and profits, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
 11. Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break, T(n,k) = O(n(k^2)), S(n,k) = O(nk)
 12. Longest Palindrome Subsequence, T(n) = O(n^2), S(n) = O(n^2) 
 13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right) at any time, T(n,m) = O(nm), S(n,m) = O(min(n,m)) 
 14. Minimum Number Coin Change: Find min. number of coins from a set of coin values to get a particular value, T(V,n) = O(Vn), S(V,n) = O(V)
 //----------------------------------------------------------------------------------------------------
 TODO:
-15. Palindrome Partitioning (Solved on paper, not implemented yet)
-16. SubsetSum Problem: Given an array and a sum, figure out if a subset of the array has value equal to that sum.  (solved on paper, not implemented yet) 
-17. Partitioning Problem
+119. Unbounded Knapsack (Easy, just your solution for 0-1 knapsack but with O(n) space cause can add itself many times) 
+115. Palindrome Partitioning (Solved on paper, not implemented yet)
+116. SubsetSum Problem: Given an array and a sum, figure out if a subset of the array has value equal to that sum.  (solved on paper, not implemented yet) 
+117. Partitioning Problem
     Hint: Subset Sum Problem
-25.Longest Common Substring Between Two Strings (Bottom Up)
+125.Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
-26. Longest Palindromic Substring 
+126. Longest Palindromic Substring 
     Note: Optimal solution is not dynamic programming but try dynamic programming for learning, similar to maxContiguousSumSubArray
     Note: Must pass this case: str = abacdfgdcaba
     There are 4 solutions:  (refer to LeetCode textbook)
@@ -31,10 +32,9 @@ TODO:
     2. Dynamic O(n^2) & O(n)
     3. Array  O(n^2) & O(1) (hint: There are only (2n-1) centers and expanding takes O(n)
     4. Manacher Algorithm O(n) & O(n)
-TODO MUST DO: Unbounded Knapsack (Easy, just your solution for 0-1 knapsack but with O(n) space cause can add itself many times) 
-23. Unique Paths with Obstacles given 
-27.Josephus Problem
-28. Triangle Problem
+123. Unique Paths with Obstacles given 
+127. Josephus Problem
+128. Triangle Problem
     This is really a great problem. Easy enough. Note: In this problem, the direction you traverse have different complexities. 
     One has O(n^2 + n), the other has O(n^2) 
     Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
@@ -975,8 +975,9 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------
-// 10 Knapsack 0-1: Find max value from items with weights >= 0 and values, for weight capacity, W.
-// Time Complexity, T(W,n) = O(nW), Space Complexity, S(W,n) = O(nW)
+// 10 Knapsack 0-1: Find max profit from items with weights >= 0 and profit, for weight capacity, W.
+// Time Complexity, T(W,n) = O(nW)
+// Space Complexity, S(W,n) = O(nW)
 //-------------------------------------
 /* 
 Questions:
