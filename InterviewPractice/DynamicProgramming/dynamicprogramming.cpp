@@ -1256,36 +1256,35 @@ using namespace std;
 
 int minimumNumCoins(vector<int>& coins, int V)
 {
-    int n = coins.size(); 
-    vector<int> arr(V+1, INT_MAX);
-    arr[0] = 0; // V = 0 => 0 coins needed
+    vector<int> cache(V+1, INT_MAX);
+    cache[0] = 0; // V = 0 => 0 coins needed
     // Loop through each coin
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < coins.size(); i++)
     {
         // Loop through each value for coin from 1 to V
-        for (int j = 1; j <= V; j++)
+        for (int value = 1; value <= V; value++)
         {
             int currMin = INT_MAX; // initialize currMin to INT_MAX
             // If there may be possible ways to get this coin
-            if ((j - coins[i] >= 0) && (arr[j-coins[i]] != INT_MAX))
+            if ((value - coins[i] >= 0) && (cache[value-coins[i]] != INT_MAX))
             {
-                currMin = 1 + arr[j-coins[i]];
+                currMin = 1 + cache[value-coins[i]];
             }
-            // current array value is minimum of the coin itself + previous combinations, or without using the coin itself from previous coins
-            arr[j] = min(currMin, arr[j]);
+            // current cache value is minimum of the coin itself + previous combinations, or without using the coin itself from previous coins
+            cache[value] = min(cache[value], currMin);
         }
     }
-    return arr[V];
+    return cache[V];
 }
 
 int main(void)
 {
     int V = 9;
     vector<int> arr = {7, 3, 6, 1};
-    int result = minimumNumCoins(arr, V); 
+    int result = minimumNumCoins(arr, V); // 2
     cout << result << endl;
     vector<int> arr2 = {1, 6, 3, 7};
-    result = minimumNumCoins(arr2, V); 
+    result = minimumNumCoins(arr2, V);  // 2
     cout << result << endl;
     return 0;
 }
