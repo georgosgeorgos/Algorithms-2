@@ -9,11 +9,12 @@ Table of Contents
 6. Buy and sell stocks as many times. Max profit?, T(n) = O(n), S(n) = O(1)
 7. Buy and sell stock one time. Max Profit? T(n) = O(n), S(n) = O(1)
 8. Merge Intersection 2 unsorted array with duplicates (Microsoft: girl, on-site Round 2a), T(n,m) = O(n + m), S(n,m) = O(min(n,m))
-9. Return if array is a complete circular array with reference indexing. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview) 
-10. Return if a sorted array contains duplicates that is duplicated at least N/4 times, T(n) = O(lgN), S(n) = O(1) (Google Second Round Interview)
+9. Return if array is a complete circular array with reference indexing. T(n) = O(n), S(n) = O(1) (Google On-Site Practice Interview 2015) 
+10. Return if a sorted array contains duplicates that is duplicated at least N/4 times, T(n) = O(lgN), S(n) = O(1) (Google 2nd Round Phone Interview 2015)
 11. Merge Overlapping Intervals (Amazon 2nd round) = Determine if there is a clash between any pairs of intervals, T(n) = O(nlogn), S(n) = O(1)
 12. Longest Consecutive Sequence, T(n) = O(n), S(n) = O(n)
 13. Shuffle, T(n) = O(n), S(n) = O(1) (Google Mock Interview 4)
+14. Smalllest Subsequence of fixed Size  T(n,m) = O(nm), S(n,m) = O(1)
 //-------------------------
 TODO:
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
@@ -1133,6 +1134,65 @@ int main(void)
     vector<int> cards = {1, 2, 3, 4, 5, 6};
     shuffle(cards);
     for (int card : cards) cout << card << " ";
+}
+// */
+//----------------------------------------------------------------------------------------------------------------------------------
+// 14 Smalllest Subsequence of fixed Size (Google Mock Interview 5)
+// Time Complexity, T(n,m) = O(nm)
+// Space Complexity, S(n,m) = O(1) 
+//-------------------------
+/*
+What is subsequence of size M?
+    Any M elements in the array where each element must be located after the previous element in the actual array
+How do you compare which is smaller ?
+    First compare which is smaller between [0] & [0], if same, compare which is smaller between [1] & [1]
+TestCases:
+    [1, 4, 3, 2], m = 3 => [1, 3, 2]
+    [1,2,3,4], m = 5 => [] // return empty element if m > size of element
+*/
+//-------------------------
+/* //
+#include <vector>
+#include <iostream>
+using namespace std;
+
+vector<int> smallestSubsequence(const vector<int>& arr, int size)
+{
+    vector<int> result;
+    if(size > arr.size()) return result;
+    int lastMinIndex = -1;
+    for (int i = size; i > 0; i--)
+    {
+        int currMin = INT_MAX;
+        for (int j = lastMinIndex + 1; j <= arr.size() - i; j++)
+        {
+            if (arr[j] < currMin)
+            {
+                currMin = arr[j];
+                lastMinIndex = j;
+            }
+        }
+        result.push_back(arr[lastMinIndex]);
+    }
+    return result;
+}
+
+void printSolution(const vector<int>& arr, int m)
+{
+    vector<int> result = smallestSubsequence(arr, m);
+    for (int value : result)
+    {
+        cout << value << " ";
+    }
+    cout << endl;
+}
+
+int main(void)
+{
+    vector<int> normal = {1, 4, 3, 2};
+    printSolution(normal, 3); // 1, 3, 2
+    printSolution(normal, 5); // none
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
