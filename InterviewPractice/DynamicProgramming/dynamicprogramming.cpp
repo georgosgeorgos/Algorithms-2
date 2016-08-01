@@ -89,7 +89,27 @@ notes:
         e.g. (Binomial Coefficient only needs previous (-1) row of elements, so constant space (only 1 row needed) O(n)
              On other hand, (Knapsack 0-1) needs anywhere from 0->k previous rows of elements, so need all m rows O(nm)
      Change the order of computation that covers what you depend on with as little space as possible as well as correct computation.
-       - Swap the 2 inner and outer for loops and see if that works.  (e.g. Coin Change from S(n,m) = O(nm) to O(n)
+       - Swap the 2 inner and outer for loops and see if that works.  (e.g. Coin Change from S(n,m) = O(nm) to O(n))
+            before: arr[arbitraryAccess][alwaysOnly1ElementBefore]
+                for (elements from top to bottom (n elements))
+                {
+                    for (elements from left to right (m elements))
+                    {
+                        You notice it depends on arbitrary elements from upwards, but only 1 element from left, 
+                        This means you will need O(nm) space
+                        Thus, Swap the order!
+                    }
+                }
+            After swapping order
+            after: arr[alwaysOnly1ElementBefore][arbitraryAccess] => arr[arbitraryAccess]
+                for (elements from left to right (m elements))
+                {
+                    for (elements from top to bottom (n elements))
+                    {
+                        Notice it depends on arbitary elements from upwards, but only 1 element from left
+                        Now will only need O(n) space
+                    }
+                }
        - Make the for loop go from 1->N elements or from N->1 elements
        - there are prolly 2 different iterations depending on what current element depends on in matrix
             - Depends on (top and left) of matrix 
@@ -684,7 +704,7 @@ Questions:
     6. Can I modify original matrix passed in to save space? No!
     7. What to return if array size is empty? 
 Function Prototype:
-    int minCostPath(vector < vector <int> >& arr);
+    int minCostPath(vector<vector<int>>& arr);
 Test Case:
     1 2 2
     2 1 2  => 3
@@ -766,14 +786,59 @@ int main(void)
 /*
 Questions
     1. Are the coins integers or can they be floats? 
+        Integer
     2. Is N an integer or can be floats? 
+        Integer
     3. Can the values of the coins be (-)
+        No
     4. Are the coins sorted? 
-    5. Is it min. number of combination of coins or min. number of coins needed to get value N? 
+        No
+    5. Are the coins duplicated or is it infinite supply for each type?
+        Can be duplicated, but that means redundancy cause it's also infinite supply.
+    6. Is it number of combination of coins or min. number of coins needed to get value N? 
+        Number of combinations of coins.
 Test Case: 
     {1,2,3}, N = 1 => 1 = [(1)]
     {1,2,3}, N = 3 => 3 = [(1,1,1), (1,2), (3)] 
     {1,2,3}, N = 6 => 7 = [(1,...,1), (2,2,2), (2,2,1,1), (2,1,..,1), (3,3), (3,2,1), (3,1,1,1)]
+Algorithm: {2, 3, 1}, N = 3 => 3 [(1,1,1), (1,2), (3)]
+
+cache[value+1][arr.size()]
+at each cell except special case and value = 1 cell, it will be cache[currValue][j] = cache[currValue][j-1] + cache[currValue-arr[j]][j]
+for(int currValue = 1; currValue <= targetValue; currValue++)
+    for(int i = 0; i < arr.size(); i++)
+Iteration Approach 
+    ->
+    |
+    v
+    ->
+    |
+    v
+    ->
+      2                    3                  1
+0     1a                   1b                 1c (special case for value = 0 => always 1)
+1     0d         0d + 0e = 0f       0f + 1c = 1g
+2     1a = 1h    1h + 0i = 1j       1j + 1g = 2k
+3     0d = 0l    0l + 1b = 1m       1m + 2k = 3o;
+(arranged in alphabetical is the order of iteration and where the values 0, 1, 2, 3 comes from)
+Thus, answer is 3a. But this requires O((targetValue+1)*(arr.size())) space 
+Note: That each cell only depends on 1 to left of it, but arbitary to right of it, change order of iteration!
+for(int i = 0; i < arr.size(); i++)
+    for(int currValue = 1; currValue <= targetValue; currValue++)
+Iteration Approach
+|     |     |
+|  -> |  -> |
+v     v     v
+      2                   3                   1
+0     1a          ->    1a = 1e    ->      1e = 1i                
+1     0b          ->    0b = 0f    ->   0f+1i = 1j
+2     1a = 1c     ->    1c = 1g    ->   1g+1j = 2k
+3     0b = 0d     -> 0d+1e = 1h    ->   1h+2k = 3l
+Only O(targetValue + 1) space.
+Basically, if you realize its
+arr[arbitraryIndex][constIndex]
+switch the for loop and you get
+arr[constIndex][arbitraryIndex] and you can save space.
 // */
 //-------------------------------------
 /* //
@@ -781,33 +846,62 @@ Test Case:
 #include <iostream> 
 using namespace std; 
 
-int CoinChange(int N, vector<int>& Coins)
+int CoinChangeNonOptimalSpace(int targetValue, vector<int>& Coins)
 {
-    vector<int> currSolution (N+1, 0); // C++ 11 feature
+    // Initialize all values in the cache to be 0
+    vector<vector<int>> cache (targetValue + 1, vector<int> (Coins.size(), 0));
+    for (int i = 0; i < Coins.size(); i++)
+    {
+        // Special Case
+        cache[0][i] = 1;
+    }
+    for (int value = 1; value <= targetValue; value++)
+    {
+        for (int i = 0; i < Coins.size(); i++)
+        {
+            if (value >= Coins[i])
+            {
+                // Can't save space as depend on arbitrary position from [value-Coins[i]]
+                cache[value][i] += cache[value-Coins[i]][i];
+            }
+            if(i > 0)
+            {
+                // Note: It is only - 1 here, which means you can save space if you reverse order of iteration
+                cache[value][i] += cache[value][i-1];
+            }
+        }
+    }
+    return cache[targetValue][Coins.size()-1];
+}
+
+int CoinChangeOptimalSpace(int targetValue, vector<int>& Coins)
+{
+    vector<int> currSolution (targetValue+1, 0); // C++ 11 feature
     // currSolution[0] = 1 always
     currSolution[0] = 1;
     // Loop through each coin and include them in the solution
     for (int i = 0; i < Coins.size(); i++)
     {
-        for (int j = 1; j <= N; j++)
+        for (int value = 1; value <= targetValue; value++)
         {
-            if (j - Coins[i] >= 0)
+            if (value - Coins[i] >= 0)
             {
                 // Get the 1*numCombinationAfterDeducting + originalTotalSum for this value of N without this coin
-                currSolution[j] = currSolution[j - Coins[i]] + currSolution[j];
+                currSolution[value] += currSolution[value - Coins[i]];
             }
             // else, don't do anything as it's just 0*numCombinationAfterDeducting + originalTotalSum for this value of N without this coin, which remains the same
         }
     }
-    return currSolution[N]; 
+    return currSolution[targetValue]; 
 }
 
 int main(void)
 {
-    int N = 6; 
+    int targetValue = 6; 
     vector<int> Coins = {3,1,2}; // to show coin doesn't need to be sorted 
-    int numCombinations = CoinChange(N, Coins); 
-    cout << numCombinations << endl;
+    int numCombinations = CoinChangeOptimalSpace(targetValue, Coins); 
+    if (numCombinations == CoinChangeNonOptimalSpace(targetValue, Coins))
+        cout << numCombinations << endl;
     return 0; 
 }
 // */
