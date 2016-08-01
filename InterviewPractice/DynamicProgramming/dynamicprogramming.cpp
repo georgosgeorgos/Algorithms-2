@@ -15,9 +15,9 @@ Table of Contents
 12. Longest Palindrome Subsequence, T(n) = O(n^2), S(n) = O(n^2) 
 13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right) at any time, T(n,m) = O(nm), S(n,m) = O(min(n,m)) 
 14. Minimum Number Coin Change: Find min. number of coins from a set of coin values to get a particular value, T(V,n) = O(Vn), S(V,n) = O(V)
+15. Unbounded Knapsack, Time Complexity, T(n,W) = O(nW), Space Complexity, S(n,W) = O(W)
 //----------------------------------------------------------------------------------------------------
 TODO:
-119. Unbounded Knapsack (Easy, just your solution for 0-1 knapsack but with O(n) space cause can add itself many times) 
 115. Palindrome Partitioning (Solved on paper, not implemented yet)
 116. SubsetSum Problem: Given an array and a sum, figure out if a subset of the array has value equal to that sum.  (solved on paper, not implemented yet) 
 117. Partitioning Problem
@@ -982,9 +982,13 @@ int main(void)
 /* 
 Questions:
     1. Is there unlimited number of each item? 
+        No, only 1 item
     2. Can weights be < 0 ? Are weights double or integers? 
+        No, integers.
     3. How about weight capacity? 
-    4. Can values be < 0 ?  No
+        Yes, integers.
+    4. Can values be < 0 ?
+        No
 Function Prototype:
     int Knapsack01(vector<int>& weights, vector<int>& values, int capacity); 
 Test:
@@ -1006,9 +1010,8 @@ int Knapsack01(vector<int>& weights, vector<int>& values, int capacity)
 {
     if (capacity < 0) return 0; 
     int N = values.size();
-    if ( N != weights.size()) return 0; // error in inputs given
-    if (N <= 0) return 0; // if no item given, return 0
-    vector< vector<int> > matrix(capacity + 1, vector<int> (N, 0));
+    if (N != weights.size() || N <= 0) return 0; // error in inputs given or no items given
+    vector<vector<int>> matrix(capacity + 1, vector<int> (N, 0));
     // matrix[weight,itemIndex] => total value obtainable for this weight capacity with items up to and including itemIndex 
     // but not necessarily including item at itemIndex itself
     // Initialize first item
@@ -1285,6 +1288,44 @@ int main(void)
     result = minimumNumCoins(arr2, V); 
     cout << result << endl;
     return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 15 Unbounded Knapsack 
+// Time Complexity, T(n,W) = O(nW)
+// Space Complexity, S(n,W) = O(W)
+//-------------------------------------
+/*
+*/
+//-------------------------------------
+/* //
+#include <vector>
+#include <iostream>
+using namespace std;
+
+int UnboundedKnapsack(vector<int>& weights, vector<int>& values, int capacity)
+{
+    if (capacity < 0) return 0; 
+    int N = values.size();
+    if (N != weights.size() || N <= 0) return 0; // error in inputs given or no items given
+    vector<int> cache(capacity + 1, 0); // initialize the cache to store 0's
+    for (int i = 0; i < values.size(); i++)
+    {
+        for (int weightLimit = 1; weightLimit <= capacity; weightLimit++)
+        {
+            if (weightLimit - weights[i] >= 0)
+                cache[weightLimit] = max(cache[weightLimit], values[i] + cache[weightLimit-weights[i]]);
+        }
+    }
+    return cache[capacity]; // MISTAKE: Returned cache[N] instead.
+}
+
+int main(void)
+{
+    int capacity = 5;
+    vector<int> weights = {1, 2, 4};
+    vector<int> values = {2, 5, 8};
+    cout <<  UnboundedKnapsack(weights, values, capacity) << endl; // 12 = 5 + 5 + 2
 }
 // */
 //----------------------------------------------------------------------------------------------------
