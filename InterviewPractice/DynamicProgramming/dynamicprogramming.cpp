@@ -1210,7 +1210,7 @@ int uniquePaths(int n, int m)
         // Inner loop is n1 so that space required is only n1
         for (int j = 1; j < n1; j++) // can skip the first row of every column since will always be 1
         {
-            arr[j] = arr[j] + arr[j-1];
+            arr[j] += arr[j-1];
         }
     }
     return arr[n1-1];
