@@ -10,7 +10,7 @@ Table of Contents
 7. Minimum Cost Path from [0][0] to [m-1][n-1] in a matrix, T(n,m) = O(mn), S(n,m) = O(mn)
 8. Coin Change: Find # of combinations to make a change for value N given infinite supply of a given CoinType = [C1, C2, ... , Cm], T(n,m) = O(nm), S(n,m) = O(n)
 9. Matrix Chain Multiplication: Find most efficient way to multiply a chain of matrices together, T(n) = O(n^3), S(n) = O(n^2) 
-10. Knapsack 0-1: Find max profit from items with weights >= 0 and profits, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(nW)
+10. Knapsack 0-1: Find max profit from items with weights >= 0 and profits, for weight capacity, W, T(W,n) = O(nW), S(W,n) = O(W)
 11. Egg Dropping: Given n eggs and k floors, find minimum number of attempts to determine level at which egg starts to break, T(n,k) = O(n(k^2)), S(n,k) = O(nk)
 12. Longest Palindrome Subsequence, T(n) = O(n^2), S(n) = O(n^2) 
 13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right) at any time, T(n,m) = O(nm), S(n,m) = O(min(n,m)) 
@@ -21,8 +21,7 @@ Table of Contents
 TODO:
 115. Palindrome Partitioning (Solved on paper, not implemented yet)
 117. Partitioning Problem
-    Hint: Subset Sum Problem
-125.Longest Common Substring Between Two Strings (Bottom Up)
+125. Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
 126. Longest Palindromic Substring 
     Note: Optimal solution is not dynamic programming but try dynamic programming for learning, similar to maxContiguousSumSubArray
@@ -87,7 +86,7 @@ notes:
      i) If any number of arbitrary previous elements => Prolly can't save space, but need correct iteration for correct computation
      ii) If only 1 or a constant number of previous elements => can use that constant number of space to keep track of previous contant number of elements
         e.g. (Binomial Coefficient only needs previous (-1) row of elements, so constant space (only 1 row needed) O(n)
-             On other hand, (Knapsack 0-1) needs anywhere from 0->k previous rows of elements, so need all m rows O(nm)
+             Another example, (Knapsack 0-1) needs anywhere from 0->k but only from single previous row of elements, so need only previous row and current row => O(2n) = O(n) space
      Change the order of computation that covers what you depend on with as little space as possible as well as correct computation.
        - Swap the 2 inner and outer for loops and see if that works.  (e.g. Coin Change from S(n,m) = O(nm) to O(n))
             before: arr[arbitraryAccess][alwaysOnly1ElementBefore]
@@ -977,7 +976,7 @@ int main(void)
 //----------------------------------------------------------------------------------------------------
 // 10 Knapsack 0-1: Find max profit from items with weights >= 0 and profit, for weight capacity, W.
 // Time Complexity, T(W,n) = O(nW)
-// Space Complexity, S(W,n) = O(nW)
+// Space Complexity, S(W,n) = O(W)
 //-------------------------------------
 /* 
 Questions:
@@ -1011,34 +1010,32 @@ int Knapsack01(vector<int>& weights, vector<int>& values, int capacity)
     if (capacity < 0) return 0; 
     int N = values.size();
     if (N != weights.size() || N <= 0) return 0; // error in inputs given or no items given
-    vector<vector<int>> matrix(capacity + 1, vector<int> (N, 0));
+    vector<int> prevCache(capacity + 1, 0);
+    vector<int> currCache(capacity + 1, 0);
     // matrix[weight,itemIndex] => total value obtainable for this weight capacity with items up to and including itemIndex 
     // but not necessarily including item at itemIndex itself
     // Initialize first item
-    for (int i = 0; i <= capacity; i++)
+    for (int i = weights[0]; i <= capacity; i++)
     {
-        matrix[i][0] =  i >= weights[0] ? values[0] : 0;
+        prevCache[i] = values[0];
     }
+    currCache = prevCache;
     // Go through each item other item
-    for (int i = 1; i < N; i++)
+    for (int itemIndex = 1; itemIndex < N; itemIndex++)
     {
-        for (int j = 0; j <= capacity; j++)
+        // start from when currCapacity is > weights[itemIndex] to be able to consider it
+        for (int currCapacity = weights[itemIndex]; currCapacity <= capacity; currCapacity++)
         {
-            // Initialize to not adding current item
-            matrix[j][i] = matrix[j][i-1];
-            // only if current item weight is less than current total capacity
-            if (j >= weights[i])
-            {
-                // Decide if better to include new item or not include it
-                if ((matrix[j-weights[i]][i-1] + values[i]) > matrix[j][i-1])
-                {
-                    // Include this item instead 
-                    matrix[j][i] = matrix[j-weights[i]][i-1] + values[i];
-                }
-            }
+            // It is already initialize to not adding current item
+            // Decide if better to include new item or not include it
+            if ((prevCache[currCapacity-weights[itemIndex]] + values[itemIndex]) > currCache[currCapacity])
+                // Include this item instead 
+                currCache[currCapacity] = prevCache[currCapacity-weights[itemIndex]] + values[itemIndex];
         }
+        // Update prevCache
+        prevCache = currCache;
     }
-    return matrix[capacity][N-1];
+    return currCache[capacity];
 }
 
 int main(void)
