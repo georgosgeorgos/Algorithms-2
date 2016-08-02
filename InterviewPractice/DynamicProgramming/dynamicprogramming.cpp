@@ -20,7 +20,7 @@ Table of Contents
 17. Palindrome Partitioning, T(n) = O(n^3), S(n) = O(n^2)
 //----------------------------------------------------------------------------------------------------
 TODO:
-118. Partitioning Problem
+118. Partitioning Problem: Break set into 2 subsets such that the sum of each subset is the same.
 125. Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
 126. Longest Palindromic Substring 
