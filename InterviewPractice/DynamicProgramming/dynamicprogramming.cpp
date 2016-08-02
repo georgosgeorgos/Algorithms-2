@@ -16,10 +16,10 @@ Table of Contents
 13. Unique Paths: Number of unique paths from [0][0] to [n-1][m-1], only move (down,right) at any time, T(n,m) = O(nm), S(n,m) = O(min(n,m)) 
 14. Minimum Number Coin Change: Find min. number of coins from a set of coin values to get a particular value, T(V,n) = O(Vn), S(V,n) = O(V)
 15. Unbounded Knapsack, Time Complexity, T(n,W) = O(nW), Space Complexity, S(n,W) = O(W)
+16. Subset Sum: Given an array with positive integers and a sum, figure out if a subset of the array has value equal to that sum, T(n,S) = O(nS), S(n,S) = O(S)
 //----------------------------------------------------------------------------------------------------
 TODO:
 115. Palindrome Partitioning (Solved on paper, not implemented yet)
-116. SubsetSum Problem: Given an array and a sum, figure out if a subset of the array has value equal to that sum.  (solved on paper, not implemented yet) 
 117. Partitioning Problem
     Hint: Subset Sum Problem
 125.Longest Common Substring Between Two Strings (Bottom Up)
@@ -1325,6 +1325,75 @@ int main(void)
     vector<int> weights = {1, 2, 4};
     vector<int> values = {2, 5, 8};
     cout <<  UnboundedKnapsack(weights, values, capacity) << endl; // 12 = 5 + 5 + 2
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 16 Subset Sum: Given an array with positive integers and a sum, figure out if a subset of the array has value equal to that sum
+// Time Complexity, T(n,S) = O(nS)
+// Space Complexity, S(n,S) = O(S)
+//-------------------------------------
+/*
+Questions:
+    1. Can it contain duplicates?
+        Yes
+    2. Can it contain negative? 
+        No
+    3. What if array is empty?
+        return false cause no way to produce any number
+    4. What if sum is (-) ?
+        return false since won't have any negatives in array.
+Solved yourself twice, the 2nd time was even better as uses less space & time complexity!:D
+*/
+//-------------------------------------
+/* //
+#include <vector>
+#include <iostream>
+using namespace std;
+
+bool subsetSum(const vector<int>& arr, int sum)
+{
+    if (sum < 0 || arr.empty()) return false;
+    // TODO: Change to bitset as only contains bool
+    // Initialize all to false
+    vector<bool> prevCache (sum+1, false);
+    vector<bool> currCache (sum+1, false);
+    // Base condition that if it deducts to 0, it will be true
+    prevCache[0] = true;
+    currCache[0] = true;
+    // Handle first iteration so don't have to do if statement that it isn't first element every time, and also first time will only be a single number that will be set to true
+    if (arr[0] <= sum) {
+        prevCache[arr[0]] = true;
+        currCache[arr[0]] = true;
+    }
+    for (int arrIndex = 1; arrIndex < arr.size(); arrIndex++)
+    {
+        for (int currSum = 0; currSum <= sum; currSum++)
+        {
+            if (currSum - arr[arrIndex] >= 0)
+                currCache[currSum] = prevCache[currSum - arr[arrIndex]];
+        }
+        // Update previous to current
+        prevCache = currCache;
+    }
+    return currCache[sum];
+}
+
+void printSolution(const vector<int>& arr, int sum)
+{
+    if (subsetSum(arr, sum))
+        cout << "Sum exists!" << endl;
+    else 
+        cout << "Sum doesn't exists!" << endl;
+}
+
+int main(void)
+{
+    vector<int> arr = {1, 3, 4, 2};
+    int sumExist = 6; // (4, 2 or (3,1,2))
+    printSolution(arr, sumExist);
+    int noExist = 11;
+    printSolution(arr, noExist);
+    return 0;
 }
 // */
 //----------------------------------------------------------------------------------------------------
