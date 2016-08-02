@@ -834,7 +834,7 @@ int main(void)
 // 8 Subset Sum: Return true if there's any subset whose sum = k
 // Time Complexity, T(n) = O(n2^n)
 // Space Complexity, S(n) = O(n2^n)
-// note: The optimal solution uses a Dynamic Programming approach
+// note: The optimal solution uses a Dynamic Programming approach only if all values in subset are positive.
 //---------------------------------
 /*
 TestCases:
