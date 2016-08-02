@@ -1103,9 +1103,9 @@ int main(void)
 // */
 //----------------------------------------------------------------------------------------------------
 // 12 Longest Palindrome Subsequence 
-// Time Complexity, T(n) = O(n^2), Space Complexity, S(n) = O(n^2) 
+// Time Complexity, T(n) = O(n^2)
+// Space Complexity, S(n) = O(n^2) 
 //-------------------------------------
-// note: Possible to change S(n) = O(2n) but complicated, do later. 
 /*
 Questions
     1. Is it any character  or integers? 
@@ -1119,14 +1119,20 @@ Test Cases:
     2. "abc" => 1 ("a")
     3. "aa" => 2 ( "aa")
 Algorithms: 
-    1.  T(n) = O(n^2) , S(n) = O(n^2) 
-        Loop from down to up, add 2 if equal but not same exist, add 1 if equal but same index
-        move diagonal downwards if equal, move max (horizontal,vertical) if not equal
-        Only use half the matrix, but complicated logic. In fact, better to just reduce to O(2n)
-        Can possible reduce S(n) = O(2n) = O(n) if want to but complicated logic, possible cause only depend on latest 2 rows 
-    2.  T(n) = O(n^2 + n) , S(n) = O(n^2 + n) 
+    1.  T(n) = O(n^2 + n), S(n) = O(n^2 + n) 
         Create a new string as the reversed of the original string. 
         Return the longest common subsequence of the original string and its reversed string.
+    2.  T(n) = O(n^2), S(n) = O(n^2 + n)
+       From 1. instead of reversing the string, you change the order of iteration such that you iterate directly
+       from the back of the 2nd string, but from the front of the first string and do algorithm similar to Longest Common Subsequence.
+    3.  T(n) = O(n^2) , S(n) = O(n^2 + n) 
+        From 2. Notice that anything that results will be repeated, except the middle element which may not be repeated. 
+        Traverse one half the way but add 2 instead of once each time.
+        Loop from down to up, add 2 if equal but not same index, add 1 if equal but same index
+        move diagonal downwards if equal, move max (horizontal,vertical) if not equal
+        Only use half the matrix, but complicated logic. In fact, better to just reduce to O(2n)
+    4. T(n) + O(n^2), S(n) = O(2n + n) (n for copy of string, 2n for latest 2 rows)
+        It is possible reduce S(n) = O(2n) = O(n) if want to but complicated logic, possible cause only depend on latest 2 rows 
 */
 //-------------------------------------
 /* //
@@ -1136,6 +1142,7 @@ Algorithms:
 #include <iostream> 
 using namespace std; 
 
+// TODO: Possible to change S(n) = O(2n) as only depend on latest 2 rows, but complicated, do later. 
 int LongestPalindromeSubsequence(const char* str)
 {
     if (!str) return 0; 
