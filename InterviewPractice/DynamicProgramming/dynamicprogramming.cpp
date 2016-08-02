@@ -17,10 +17,10 @@ Table of Contents
 14. Minimum Number Coin Change: Find min. number of coins from a set of coin values to get a particular value, T(V,n) = O(Vn), S(V,n) = O(V)
 15. Unbounded Knapsack, Time Complexity, T(n,W) = O(nW), Space Complexity, S(n,W) = O(W)
 16. Subset Sum: Given an array with positive integers and a sum, figure out if a subset of the array has value equal to that sum, T(n,S) = O(nS), S(n,S) = O(S)
+17. Palindrome Partitioning, T(n) = O(n^3), S(n) = O(n^2)
 //----------------------------------------------------------------------------------------------------
 TODO:
-115. Palindrome Partitioning (Solved on paper, not implemented yet)
-117. Partitioning Problem
+118. Partitioning Problem
 125. Longest Common Substring Between Two Strings (Bottom Up)
     Easy! Just go diagonal upwards and no vertical horizontal, since no subsequence, iterate properly and keep track of max, once done iterating will have optimal solution
 126. Longest Palindromic Substring 
@@ -1397,6 +1397,78 @@ int main(void)
     printSolution(arr, sumExist);
     int noExist = 11;
     printSolution(arr, noExist);
+    return 0;
+}
+// */
+//----------------------------------------------------------------------------------------------------
+// 17 Palindrome Partitioning
+// Time Complexity, T(n) = O(n^3)
+// Space Complexity, S(n) = O(n^2)
+//-------------------------------------
+/*
+TestCases:
+    "abcde" => 4 ("a","b","c","d","e")
+    "aabbc" => 2 ("aa", "bb", "c")
+    "abba" => 0 ("abba"
+*/
+//-------------------------------------
+/* //
+#include <vector>
+#include <string>
+#include <iostream>
+using namespace std;
+
+bool isPalindrome(const string& word, int startIndex, int endIndex)
+{
+    while(startIndex <= endIndex)
+    {
+        if (word[startIndex++] != word[endIndex--])
+            return false;
+    }
+    return true;
+}
+
+int palindromePartitioning(const string& word)
+{
+    // minPartitionCache(startIndex, endIndex)
+    vector<vector<int>> minPartitionCache (word.length(), vector<int> (word.length(), 0));
+    // All words by itself will be a palindrome and needs 0 number of partitions, so can skip windowSize = 0;
+    // For all possible window size
+    for (int windowSize = 1; windowSize < word.length(); windowSize++)
+    {
+        // For all possible windows in current window size
+        for (int windowStartPos = 0; windowStartPos + windowSize < word.length(); windowStartPos++)
+        {
+            // If it's not palindrome, try all possible cuts and get the minimum
+            if (!isPalindrome(word, windowStartPos, windowStartPos+windowSize))
+            {
+                int minCut = INT_MAX;
+                for (int cutPos = 1; cutPos <= windowSize; cutPos++)
+                {
+                    if (minPartitionCache[windowStartPos][windowStartPos+cutPos-1] + minPartitionCache[windowStartPos+cutPos][windowStartPos+windowSize] < minCut)
+                        minCut = minPartitionCache[windowStartPos][windowStartPos+cutPos-1] + minPartitionCache[windowStartPos+cutPos][windowStartPos+windowSize];
+                }
+                minPartitionCache[windowStartPos][windowStartPos + windowSize] = 1 + minCut; // add 1 to account for cutting into 2 halves.
+            }
+            // If it was a palindrome, this means minPartition is 0, which is the default value, so do nothing.
+        }
+    }
+    return minPartitionCache[0][word.length()-1];
+}
+
+void printSolution(const string& word)
+{
+    cout << word << " needs min: " << palindromePartitioning(word) << " number of partitions." << endl;
+}
+
+int main(void)
+{
+    string distinct = "abcde"; // 4
+    string normal = "aabbc"; // 2
+    string palindrome = "abba"; // 0
+    printSolution(distinct);
+    printSolution(normal);
+    printSolution(palindrome);
     return 0;
 }
 // */
