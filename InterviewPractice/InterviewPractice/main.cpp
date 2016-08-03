@@ -5,6 +5,9 @@
     // 2. To practice new programming questions before documenting into other files
 // However, you should just practice on CoderPad and paste to the correct files if your implementation improves
 // Coderpad also works with Vim, Syntax highlighting, and google hangout, which is nice.
+// note: If preparing for on-site interview, practice on whiteboard.
+    // It's to get muscle memory like organizing notes (test cases on right, don't erase it to remind you to test code at end)
+    // Think staring straight instead of looking down onto paper. 
 https://coderpad.io
 // It also contains notes for you to read to practice programming challenges
 // Before interviewing, go through each problem again was you would not be as good as you were in interviews.
@@ -31,7 +34,6 @@ Check that:
 // For Interviews online, you need to be able to code it.
 // Thus, you need to use Standard Template Library as copying pasting your own previous code is not acceptable
 // Therefore, need to use C++'s STL
-
 //-----------------------------------------------------------------------------------------------
 // Need to know how to:
 // stable_sort()
@@ -39,6 +41,7 @@ Check that:
 // binary search()
 // TODO: qsort() with any arbitrary class
 // work with hash tables, stack, queue, linked list, binary tree, heap
+// sort(vector.begin(), vector.end(), comparisonFunction);
 // lower_bound(), upper_bound(), bsearch(), find()
 // i) Insert
 // ii) Delete
@@ -147,6 +150,12 @@ void swap(int*a, int*b)
     *a = *b; 
     *b = temp;
 }
+void swap(int& a, int& b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
 // */
 //----------------------------------------------------------------------
  //
@@ -187,7 +196,7 @@ void swap(int*a, int*b)
 // 5. Testing (Microsoft) 
     // e.g. Test Soda Machine
     // Questions - Where is the soda can? Who is it being used by? 
-    // Stress testing - Keep using it 1000 times to see if it breaks. put many coins at once 
+    // Load/Stress testing - Keep using it 1000 times to see if it breaks. put many coins at once 
     // Performane - how long does it take to dispense a can? 
     // Security - 
     // Global - 
@@ -207,7 +216,7 @@ Do NOT rub away the test cases as they serve as a reminder for you to TEST.
 //----------------------------------------------------------------------
 B) THINK
 //----------------------------------------------------------------------
-// What is general? What is specific?  (general=> base class, specific => child class
+// What is general? What is specific?  (general=> base class, specific => child class)
 // Is A? Has A?
 // Design Top-Down approach!
 // Run through list of design principles to see which fit:
@@ -246,6 +255,7 @@ FUNCTION PROTOYTPE
 TEST_CASES
 - Come up with test cases, does it work for +, -, 0? (VERY IMPORTANT STEP), and their expected output
 - Come up with simple enough test case that covers the corner cases (simple enough -> Quick to test using head), 
+- Test-Driven Development to think of tests first.
 ALGORITHM 
 - When saying complexity, make sure to define variables, O(logn), where n = number of nodes in tree or O(n) where n = height of tree
 - Come up with a solution, test for complexity. 
@@ -262,6 +272,7 @@ ALGORITHM
         HashTables
                 O(1) Insertion, access, delete
                 BUT O(capacity) iteration across all elements
+            note: C++ iterators return a pair for maps, access key using val.first and value using val.second
             unordered_map => Hash table with key,value pairs where keys are unique
             unordered_multimap => Hash table with  key,value pairs where keys can be repeated
             unordered_set => Hash table with values as keys themselves and are unique.
@@ -297,13 +308,25 @@ ALGORITHM
                 Random access at any position
                 Can be sorted and searched in logN time using binary search.
             vector
+        Array
+            Random access at any position
+            (less constant space than Resizable Array)
         BitSet
                 Saves space if all you need is storing true/false
             bitset => Contains N number of bits that can either be true or false. Use this instead of vector<bool>
         Graphs (build yourself)
             Adjacency Matrix
             Adjacency List
-- DON'T INTERRUPT INTERVIEWER WHEN HE/SHE SPEAKS!
+Past Interview Experiences:
+    - DON'T INTERRUPT INTERVIEWER WHEN HE/SHE SPEAKS!
+    - All those what type of int, unsigned, return by const reference stuff is useful! Ask them and use them!
+    - Clarify what N and M means
+    - Code brute force first as may have 2nd part. 
+    - Keep track of time! Start implementing brute force if not enough time to come up with better solution.
+    - Don't use i & j, give them meaningful names as less confusion.
+    - Come up with test cases? Use all same value, all different values, load testing.
+    - Listen to clues in questions.
+    - There may be a simpler solution and not a complicated one! Think of hash tables! 
 IMPLEMENT
 - Implement brute force if you can't come up with better one quickly as there may be 2nd part to a question.
 - Implement solution
@@ -322,10 +345,10 @@ TEST
 - Check to make sure functions used in function is defined above it and not below it (forward declarations)
 - Check to make sure variable parameters are actually used, and all variables used are defined? Also, are the scoping of variables correct? 
 - Ensure type passed into function is actual type defined, ensure type returned from function is same as actual type collecting
-- Ensure vector is push_back() NOT push(), ensure stack is push() and top() with pop() NOT JUST pop() 
+- Ensure vector is push_back() NOT push(), ensure stack is push() and top() with pop() NOT JUST pop(), forward_list is push_front() & pop_front(), queue is push_back() and front()
 - Fix any possible bugs 
-- Check that in Binary Tree traversals, you pass in root->left into function instead of root->left! 
-- Always use pointers for structs to prevent mistakes! Do constructor in structs to initialization in main is simpler! 
+- Check that in Binary Tree traversals, you pass in root->left into function instead of root! 
+- Always use pointers for structs to prevent mistakes! Do constructor in structs to make initialization in main is simpler! 
 //----------------------------------------------------------------------
 A) QUESTIONS & Function Prototype
 //----------------------------------------------------------------------
@@ -341,19 +364,24 @@ Function Prototype:
 What extra/specific functionalities?
 What is the problem I am trying to solve?
 What does the sentence '...' mean exactly? 
-Are the inputs sorted? 
-    If it is not, sort them at cost of O(nlgn), if it is, then you just reduced your complexity by a lot
-Are the values unique or can they be repeated? 
-Use bit representation if it helps using #include <bitset> as not limited to 64 bits. 
-Integers: Can there be (-) values?
-    If doesn't, then use unsigned int 
-    If (-) => Can only use 32 bit for bit manipulation, otherwise 64 bits (but can just use bitset)
-Integers: Is there a limit to the values the numbers can have? 
-    If small then counting sort is better
-Is there a limit to the number of values? (If small then bubble sort is better) 
-    If the number is too large but less than 2^64, use unsigned long long int instead of just int
-    Refer to below for exact value ranges
-    http://www.cplusplus.com/reference/climits/
+1. Sorted? (don't need to sort it, saves nlogn)
+2. Repeated or Unique? repeated => May need to use lower_bound() or count number of them
+3. Range of values? (if limited, insertion sort may be faster)
+4. Can it be (-)? (unsigned if not (-)) for bigger range
+5. Can input be modified? Pass by const ref if not modified, otherwise, pass by ref to modify input
+    Are the inputs sorted? 
+        If it is not, sort them at cost of O(nlgn), if it is, then you just reduced your complexity by a lot
+    Are the values unique or can they be repeated? 
+    Use bit representation if it helps using #include <bitset> as not limited to 64 bits. 
+    Integers: Can there be (-) values?
+        If doesn't, then use unsigned int 
+        If (-) => Can only use 32 bit for bit manipulation, otherwise 64 bits (but can just use bitset)
+    Integers: Is there a limit to the values the numbers can have? 
+        If small then counting sort is better
+    Is there a limit to the number of values? (If small then bubble sort is better) 
+        If the number is too large but less than 2^64, use unsigned long long int instead of just int
+        Refer to below for exact value ranges
+        http://www.cplusplus.com/reference/climits/
 //----------------------------------------------------------------------
 B) FUNCTION PROTOTYPE 
 //----------------------------------------------------------------------
@@ -405,7 +433,6 @@ TODO (1 course each! => 3 to 4 assignments to upload to Github)
     Natural Language Processing 
     Distributed Systems & Parallel Computing
     Distributed Algorithms
-    Concurrency & Multithreading
     Information Retrieval 
     Computer Networks
     Compilers
@@ -416,6 +443,7 @@ TODO (1 course each! => 3 to 4 assignments to upload to Github)
     Statistics 
     UX & UI 
 DONE
+    Concurrency & Multithreading
     Computer Vision
     Computer Graphics 
     Algorithms
