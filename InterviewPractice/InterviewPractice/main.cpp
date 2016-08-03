@@ -345,7 +345,7 @@ TEST
 - Check to make sure functions used in function is defined above it and not below it (forward declarations)
 - Check to make sure variable parameters are actually used, and all variables used are defined? Also, are the scoping of variables correct? 
 - Ensure type passed into function is actual type defined, ensure type returned from function is same as actual type collecting
-- Ensure vector is push_back() NOT push(), ensure stack is push() and top() with pop() NOT JUST pop(), forward_list is push_front() & pop_front(), queue is push_back() and front()
+- Ensure vector is push_back() NOT push(), ensure stack is push() and top() with pop() NOT JUST pop(), forward_list is push_front() & pop_front(), queue is push() and front(), then pop()
 - Fix any possible bugs 
 - Check that in Binary Tree traversals, you pass in root->left into function instead of root! 
 - Always use pointers for structs to prevent mistakes! Do constructor in structs to make initialization in main is simpler! 
