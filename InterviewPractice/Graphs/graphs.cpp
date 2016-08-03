@@ -1174,6 +1174,7 @@ Questions:
     3. Can more than 1 edge point from one edge to the other? Directed/Undirected? 
 Algorithm: 
     Floyd-Warshall
+        Literally think of Bellman-Ford (single source shortest path), but do it for all nodes instead of that single source.
         T(V,E) = O(V^3), S(V,E) = O(V^2) 
         Can solve this dynamically. 
         Let d(m)[i][j] = the shortest path between vertex i and vertex j passing through m specific vertex not including vertex i and vertex j
