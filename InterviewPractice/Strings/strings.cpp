@@ -91,6 +91,7 @@ str.erase(startIndex,amountToErase);
     // note: This inserts a string
 str.insert(startIndex, str2); // insert str2 from startIndex position in str, if want to append in front, do str.insert(0,str2)
 str.push_back(character1); // to insert 1 single character
+str.substr(startIndex, lengthOfSubstringFromStartIndex); // get a substring of str from startIndex (0) based up to the length of it.
 //-------------------------
 notes:
 //-------------------------
