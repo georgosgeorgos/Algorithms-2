@@ -5,6 +5,8 @@ Table of Contents
    Find two lines, which together with x-axis forms a container, such that the container contains the most water.
 2. 
 //-------------------------
+TODO:
+    Number of perfect squares (Forgot to check for all in the same x an their relationship, although did check all in y and relationship), make sure everything forms a line) (Google FullTime Round 2)
 TODO: Any INTERVAL related code, since interval is essentially comparing any intersection on a single axis, intersection of lines (start point, end point)
       Computational Geometry mix sense
 

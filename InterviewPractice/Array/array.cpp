@@ -17,6 +17,7 @@ Table of Contents
 14. Smalllest Subsequence of fixed Size  T(n,m) = O(nm), S(n,m) = O(1)
 //-------------------------
 TODO:
+Data Center inverted hash map building O(nk), n = number of data centers, k = number of jobs (Google FullTime Round 1)
     (e.g. Product of entire array except itself without using division(/) operator)  Leetcode: O(2n) time and O(1) space (not counting output array)
         Done in LeetCode
     (e.g. Sum of entire array except itself without using deduct (-) operator)  Leetcode: O(2n) time and O(1) space (not counting output array) 
