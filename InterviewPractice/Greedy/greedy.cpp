@@ -1,13 +1,10 @@
 //----------------------------------------------------------------------------------------------------------------------------------------------
 /* //
 Table of Contents
-
-
 Greey Algorithms implemented in other folders:
     Djikstra Algorithm -> Graph
     Kruskal -> Disjoint Set
     Prim -> Graph
-
 // TODO:
 //----------------------------------------------------------------------------------------------------------------------------------------------
 1.Job Sequencing Problem
@@ -49,9 +46,9 @@ Let d = max. deadline integer - earliest deadline (0) = max num. of slots, n = n
 
     3. (Disjoint Set) Union-Find, initialize (d+1) disjoint sets (including slot 0 which is a base case) 
     Each disjoint set points to next available deadline same or earlier than that slot. which means each set element first points to itself as next available deadline slot. 
-    Sort based on maximum value decreasing. Always pick max. value available, and if next available deadline slot for that element’s deadline is > 0,
-    then add it to final and join that deadline’s slot with the (deadline-1)’s slot, 
-    it will then point its next available slot to what the (deadline - 1)’s next available slot is. 
+    Sort based on maximum value decreasing. Always pick max. value available, and if next available deadline slot for that element's deadline is > 0,
+    then add it to final and join that deadline's slot with the (deadline-1)'s slot, 
+    it will then point its next available slot to what the (deadline - 1)'s next available slot is. 
     T(n,d) = O(nlgn + n), S(n,d) = O(d) 
     nlgn -> sort, n to iterate through all elements, (note: no d time to find next available slot since disjoint sets are O(1)) 
     d -> Need only store each time slot as a disjoint set. 

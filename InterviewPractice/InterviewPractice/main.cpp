@@ -327,6 +327,7 @@ Past Interview Experiences:
     - Come up with test cases? Use all same value, all different values, load testing.
     - Listen to clues in questions.
     - There may be a simpler solution and not a complicated one! Think of hash tables! 
+    - Don't use paper and then white board cause end up repeating information, use whiteboard only if on-site.
 IMPLEMENT
 - Implement brute force if you can't come up with better one quickly as there may be 2nd part to a question.
 - Implement solution

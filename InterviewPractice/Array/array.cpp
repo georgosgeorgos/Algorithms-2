@@ -271,12 +271,12 @@ Algorithm:
     Juggling Algorithm: Shift by k until find original from start point, move to next point and repeat. Do this d times!  O(n) since only touch each element once 
         arr[(i+k)%n] = arr[i]
 Notes:
-can’t simply deduct and shift by (k-1) and later shift by (1) as well. cause if
+can't simply deduct and shift by (k-1) and later shift by (1) as well. cause if
 Failed: 1. Shift by (k-1), then shift by 1
     Counter Example n = 2*3*4*5 = 120, k = 4, then shift by k and shift by k-1 will both end up not covering everything. 
 Failed: 2.  Shift by k steps till reach original, then move to next element and repeat. Do this for k times
     If n%(k)> 0 => just shift by k till original 
-    If n%(k) == 0 => Just shift by k till original, then move next and shift by k till original, and do this (k) times, at each time, you’ll cover n/k . 
+    If n%(k) == 0 => Just shift by k till original, then move next and shift by k till original, and do this (k) times, at each time, you'll cover n/k . 
     therefore, as a total, you will only cover n times! thus, O(n)
     Counter Example: n = 10, k = 6
     From
