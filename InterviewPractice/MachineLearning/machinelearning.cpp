@@ -85,6 +85,11 @@
 //---------------------------------
     Probabilistic Graphical Models
 //---------------------------------
+2-class Classification (Email spam or not spam)
+    Solved using:
+        Logistic Regression (if data is poisson)
+        Gaussian Discriminant Analysis (if data is in fact gaussian)
+//---------------------------------
 TODO:
     Support Vector Machines
     Convolutional Neural Networks 
