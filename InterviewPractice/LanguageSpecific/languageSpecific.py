@@ -1,4 +1,20 @@
 #----------------------------------------------------------------------------------------------------------------------------------
+# Headers and Libraries
+#-------------------------
+import numpy as np # Working with matrices
+import tensorflow as tf # Working with Machine Learning
+import pickle # Serialization and De-serialization (python's version of json)
+# Databases
+import sqlalchemy # For working with sql
+# Compilation to other languages
+import Cython # Convert python to C++ 
+# Web Framework
+import django # Web Framework
+import mechanize # For automating client browser interaction
+# Plotting
+import matplotlib # For plotting
+import panda # For plotting
+#----------------------------------------------------------------------------------------------------------------------------------
 # Exceptions
 #-------------------------
 raise NotImplementedError
