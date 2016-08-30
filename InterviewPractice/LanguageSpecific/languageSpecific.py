@@ -1,3 +1,11 @@
+#----------------------------------------------------------------------------------------------------------------------------------
+# Exceptions
+#-------------------------
+raise NotImplementedError
+
+#----------------------------------------------------------------------------------------------------------------------------------
+# Classes
+#-------------------------
 # Object is a special variable in python that must be inherited by all base classes in python
 class NameOfClass(object):
 
@@ -33,3 +41,4 @@ class ChildClass(NameOfClass):
     self.firstProtectedVariable = 1000
   def getThirdVariable(self):
     return self.thirdVariable
+#---------------------------------------------------------------------------------------------------

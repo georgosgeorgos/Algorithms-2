@@ -83,3 +83,13 @@ Variable Names
       aVariableName;
     ```
 //----------------------------------------
+Exceptions
+    ```c++
+      throw e;
+    ```
+    ```java
+      throw e;
+    ```
+    ```python
+      raise NotImplementedException
+    ```
