@@ -99,4 +99,5 @@ Array = Operators are extended to arrays, so loops are normally unnecessary.
 Scientific Computing = Solving engineering, mathematical, and scientific problems using code.
 Programming is very mathematical in nature and often deals with matrices. 
 Examples Programming Languages: Matlab, Numpy, R
+It's almost like using the programming language as a super scientific calculator.
 //-----------------------------------------------------------------------------------------------------------
