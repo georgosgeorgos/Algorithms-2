@@ -12,6 +12,7 @@ Table Of Contents
     Template Metaprogramming = Executes during compilation
     Generic Programming = Programming that works for multiple types.
     Dependency Injection = All dependencies to an object is injected to it automatically.
+    Scientific Computing = Solving engineering, mathematical, and scientific problems using code.
 //-----------------------------------------------------------------------------------------------------------
 Imperative Programming = Every command shows how programming takes place, step by step
     Properties:
@@ -94,3 +95,8 @@ Constraint = Programmer specifies a set of constraints, and an engine infers the
 Aspect-Oriented = Programs have cross-cutting concerns applied transparently.
 Reflective = Programs manipulate their own structures.
 Array = Operators are extended to arrays, so loops are normally unnecessary.
+//-----------------------------------------------------------------------------------------------------------
+Scientific Computing = Solving engineering, mathematical, and scientific problems using code.
+Programming is very mathematical in nature and often deals with matrices. 
+Examples Programming Languages: Matlab, Numpy, R
+//-----------------------------------------------------------------------------------------------------------
