@@ -73,3 +73,9 @@ class ChildClass(NameOfClass):
   def getThirdVariable(self):
     return self.thirdVariable
 #---------------------------------------------------------------------------------------------------
+# Performance
+#---------------------------------------------------------------------------------------------------
+# Matrix Operations > Vectors > For Loops
+    For loops in python is slow
+    Vector operations using numpy is fast as it is implemented in C and uses parallel programming.
+    Matrix operation is faster than looping through vectors to perform operation

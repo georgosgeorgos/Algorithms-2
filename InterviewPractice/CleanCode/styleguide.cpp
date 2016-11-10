@@ -249,3 +249,23 @@ to:
     filename.cpp
     filename_test.cpp
 //----------------------------
+from: // in lala.cpp
+  #include <math>
+  #include "lala.h"
+  #include <iostream> 
+  #include "myOwnCodeB.h"
+  #include "myOwnCodeA.h"
+  #include "thirdPartyCode.h"
+
+to: // in lala.cpp
+  // Main corresponding h.file if it exist
+  #include "lala.h"
+
+  // Own Code First in alphabetical order
+  #include "myOwnCodeA.h"
+  #include "myOwnCodeB.h"
+
+  // Third Party Code & std. library code in alphabetical order
+  #include <iostream> 
+  #include <math>
+  #include "thirdPartyCode.h"
