@@ -73,14 +73,14 @@ Implementation:
     Use 'int' if unweighted, and a user defined 'Edge' class if weighted
     Adjacency Matrix = vector<vector<int>> adjMatrix(numVertex, vector<int>(numVertex, 0)); vector<vector<Edge>>;
     Adjacency List = vector<<list<int>>> adjList;   vector<list<Edge>> adjList;
-                     for(int i = 0; i < numNodes; i++)
+                     for (int i = 0; i < numNodes; i++)
                      {
                         adjList.push_back(list<int>());
                      }
                      AddUnweightedEdge(int vertex1, int vertex2, bool undirected)
                      {
                         adjList[vertex1].push_back(vertex2);
-                        if(undirected)
+                        if (undirected)
                             adjList[vertex2].push_back(vertex1);
                      }
     Undirected > directed, since no weight information needed (assume all weights are positive constant)
@@ -105,10 +105,10 @@ Traversals:
 //-------------------------
 note: Implementation for Djikstra Algorithm and Prim's Algorithm is very similar. The difference is that:
     - Djikstra Algorithm updates the minimum value to the shortest path from source to current node whereas
-          if(curr.val + edge.weight < adj.val) adj.val = curr.val + edge.weight;
+          if (curr.val + edge.weight < adj.val) adj.val = curr.val + edge.weight;
     - Djikstra is >= 0 weight, directed
     - Prim's Algorithm updates the minimum value based on the edges connecting the vertex to a current vertex already included in the MST.
-          if(edge.weight < adj.val) adj.val = edge.weight;
+          if (edge.weight < adj.val) adj.val = edge.weight;
     - Must be undirected for greedy approach of picking vertex with current minimum surrounding edges to make sense
 //-------------------------
 note: Floyd Warshall vs Johnson's Algorithm
@@ -449,16 +449,16 @@ public:
     vector<int> outputCyclicNodesDFS(int numNode, vector<bool>& visited, vector<bool>& notInCycle)
     {
         vector<int> cyclicNodes; 
-        for(auto i = this->adj[numNode].begin(); i != this->adj[numNode].end(); i++)
+        for (auto i = this->adj[numNode].begin(); i != this->adj[numNode].end(); i++)
         {
-            if(!notInCycle[*i])
+            if (!notInCycle[*i])
             {
-                if(!visited[*i])
+                if (!visited[*i])
                 {
                     visited[*i] = true; 
                     cyclicNodes = this->outputCyclicNodesDFS(*i, visited, notInCycle);
                     // If the cycle has begun, append if same not first as last
-                    if(!cyclicNodes.empty())
+                    if (!cyclicNodes.empty())
                     {
                         // If cycle has not been completely appended, append this current node
                         if ((cyclicNodes.size() > 1) && (cyclicNodes[0] != cyclicNodes[cyclicNodes.size()-1])) // Mistake: Didn't handle case of first node added to cyclic nodes
@@ -489,16 +489,16 @@ public:
         vector<bool> visited(this->numVertices, false); // to mark nodes that are visited
         vector<bool> notInCycle(this->numVertices, false); // to mark nodes that are definitely not in cycle
         // Iterate through every possible starting point
-        for(int i = 0; i < this->numVertices; i++)
+        for (int i = 0; i < this->numVertices; i++)
         {
-            if(!visited[i] && !notInCycle[i])
+            if (!visited[i] && !notInCycle[i])
             {
                 visited[i] = true;
                 vector<int> cyclicNodes = this->outputCyclicNodesDFS(i, visited, notInCycle);
-                if(!cyclicNodes.empty())
+                if (!cyclicNodes.empty())
                 {
                     // Iterate from last node added to second node since first node is just a copy and need maintain direction of edges
-                    for(int i = cyclicNodes.size() - 1 ; i > 0; i--)
+                    for (int i = cyclicNodes.size() - 1 ; i > 0; i--)
                     {
                         cout << cyclicNodes[i] << " ";
                     }
@@ -574,9 +574,9 @@ class Graph
 public:
     Graph(int numNodes)
     {
-        for(int i = 0; i < numNodes; i++)
+        for (int i = 0; i < numNodes; i++)
             adjList.push_back(list<int>());
-        for(int i = 0; i < numNodes; i++)
+        for (int i = 0; i < numNodes; i++)
             visited.push_back(false);
     }
     ~Graph()
@@ -617,9 +617,9 @@ bool Graph::isConnectedDFS()
 // O(E)
 void Graph::DFS(int currNode)
 {
-    for(auto i = adjList[currNode].begin(); i != adjList[currNode].end(); i++)
+    for (auto i = adjList[currNode].begin(); i != adjList[currNode].end(); i++)
     {
-        if(!visited[*i])
+        if (!visited[*i])
         {
             visited[*i] = true;
             this->DFS(*i);
@@ -634,17 +634,17 @@ bool Graph::isConnectedBFS()
     queue<int> q; 
     visited[0] = true;
     q.push(0); 
-    while(!q.empty()) // O(E)
+    while (!q.empty()) // O(E)
     {
         // MISTAKE: For queue, it is q.front(), only stacks are s.top()
         int node = q.front();
         q.pop();
         // auto => A C++11 feature, run with: g++ -std=c++11 fileName.cpp
-        for(auto i = adjList[node].begin(); i != adjList[node].end(); i++)
+        for (auto i = adjList[node].begin(); i != adjList[node].end(); i++)
         {
             // MISTAKE: You only declare visited after popping from queue, should declare visited before popping to save space
                 // note: You may end up inserting the same node twice if it has not been visited yet
-                // therefore, you must check if(!visited[node]) above
+                // therefore, you must check if (!visited[node]) above
                 // This also means that the space complexity may be higher than just O(V) 
                 // To prevent this, you have 3 states for each node instead of 2, 
                 // Thus, whenever you push something into the queue, you change its state to the 2nd state and when you pop it, you change its state to 3rd state
@@ -666,7 +666,7 @@ bool Graph::isConnectedBFS()
 
 void Graph::resetVisited()
 {
-    for(int i = 0; i < visited.size(); i++)
+    for (int i = 0; i < visited.size(); i++)
     {
         // reset all visited nodes to false
         visited[i] = false;
@@ -675,10 +675,10 @@ void Graph::resetVisited()
 
 bool Graph::allVisited()
 {
-    for(int i = 0; i < visited.size(); i++)
+    for (int i = 0; i < visited.size(); i++)
     {
         // Graph is not connected fully if any nodes remain unvisited
-        if(!visited[i]) return false;
+        if (!visited[i]) return false;
     }
     return true;
 }
@@ -760,7 +760,7 @@ public:
     MinHeap(int _numNodes)
     {
         this->numNodes = _numNodes; 
-        for(int i = 0; i < numNodes; i++)
+        for (int i = 0; i < numNodes; i++)
         {
             this->distance.push_back(INT_MAX);
             this->posToVer.push_back(i); 
@@ -789,7 +789,7 @@ public:
             {
                 smallest = 2*i + 2;
             }
-            if(smallest != i)
+            if (smallest != i)
             {
                 swap(i, smallest);
                 i = smallest;
@@ -809,15 +809,15 @@ public:
     void updateMinDistance(int vertex, int dist)
     {
         // no changes if already out of heap  or already having an equal or lower distance value
-        if((this->verToPos[vertex] >= numNodes) || (this->distance[this->verToPos[vertex]] <= dist)) return; 
+        if ((this->verToPos[vertex] >= numNodes) || (this->distance[this->verToPos[vertex]] <= dist)) return; 
         // Update it
         this->distance[this->verToPos[vertex]] = dist;
         // Update MinHeap
         // get Parent position of this vertex
         int parentPos = (this->verToPos[vertex]-1)/2; // Mistake: Used (pos/2) - 1 instead of (pos-1)/2
-        while(parentPos >= 0)
+        while (parentPos >= 0)
         {
-            if(this->distance[this->verToPos[vertex]] < this->distance[parentPos]) // Mistake: Accidentally used '>' instead of '<'
+            if (this->distance[this->verToPos[vertex]] < this->distance[parentPos]) // Mistake: Accidentally used '>' instead of '<'
             {
                 this->swap(verToPos[vertex], parentPos);
                 parentPos = (this->verToPos[vertex]-1)/2;
@@ -868,11 +868,11 @@ public:
         MinHeap mH(this->numNodes);
         mH.updateMinDistance(src, 0); // initialize source node to have a distance of 0
         // Extract the minimum for all |V| nodes and update adjacent distances
-        for(int i = 0; i < this->numNodes; i++)
+        for (int i = 0; i < this->numNodes; i++)
         {
             int currVertex = mH.extractMinVertex();
             // Do a BFS to update all adjacent
-            for(auto i = this->adj[currVertex].begin(); i != this->adj[currVertex].end(); i++) // C++ 11 feature
+            for (auto i = this->adj[currVertex].begin(); i != this->adj[currVertex].end(); i++) // C++ 11 feature
             {
                 Edge * currEdge = *i; 
                 // update the distance to currVertex with its weight
@@ -917,11 +917,80 @@ using namespace std;
 // MinHeap class for Prim's Algorithm
 class MinHeap
 {
+public:
+    MinHeap(int _numNodes) // Constructor
+    {
+        this->numNodes = _numNodes;
+        for (int i = 0; i < numNodes; i++)
+        {
+            this->minWeight.push_back(INT_MAX);
+            this->posToVer.push_back(i);
+            this->verToPos.push_back(i);
+        }
+    }
+
+    // T(V,E) = O(1)
+    // S(V,E) = O(1)
+    int getMinWeight(int vertex) { return this->minWeight[verToPos[vertex]]; }
+
+    // Returns current minimum Vertex in MinHeap and pops it out from MinHeap
+    int popMinimumVertex() 
+    {
+        int minVertex = this->posToVer[0]; 
+
+        // Swap to final element
+        this->swap(0, this->numNodes-1);
+        this->numNodes--;
+
+        // Bubble down first element
+        int currIndex = 0;
+        while (currIndex < this->numNodes)
+        {
+            int minPos = currIndex; 
+            if (((currIndex*2 + 1) < this->numNodes) && (this->minWeight[currIndex] > this->minWeight[currIndex*2 + 1]))
+            {
+                minPos = currIndex*2 + 1;
+            }
+            else if (((currIndex*2 + 2) < this->numNodes) && (this->minWeight[currIndex] > this->minWeight[currIndex*2 + 2]))
+            {
+                minPos = currIndex*2 + 2;
+            }
+            if (minPos == currIndex) break; // if already in right position
+            // Update if needed
+            this->swap(minPos, currIndex);
+            currIndex = minPos; 
+        }
+        return minVertex;
+    }
+
+    // Set weight only if no longer in heap or already  minimum
+    void updateIfMin(int numVertex, int weight)
+    {
+        // Return if no longer in heap or already minimum
+        if ((this->verToPos[numVertex] >= this->numNodes) || (this->minWeight[this->verToPos[numVertex]] <= weight)) return; // no changes
+
+        // Set to new value 
+        this->minWeight[this->verToPos[numVertex]] = weight;
+
+        // Push it upwards the heap only if able
+        int parentPos = (this->verToPos[numVertex]-1)/2;
+
+        while (parentPos >= 0)
+        {
+            if (this->minWeight[verToPos[numVertex]] < this->minWeight[parentPos])
+            {
+                this->swap(this->verToPos[numVertex], parentPos);
+                parentPos = (this->verToPos[numVertex]-1)/2;
+            }
+            else break; // break if no changes
+        }
+    }
 private:
     int numNodes;
-    vector<int> verToPos;
-    vector<int> posToVer;
+    vector<int> verToPos; // the vertex number from Graph to it's actual position in the minHeap
+    vector<int> posToVer; // the position of a node in the minHeap to the vertex number from Graph 
     vector<int> minWeight; // minimum weight edges connecting currNode to node already in Minimum Spanning Tree
+
     // Swap nodes in posI and posJ
     void swap(int posI, int posJ)
     {
@@ -938,91 +1007,26 @@ private:
         this->posToVer[posJ] = temp;
         return;
     }
-public:
-    MinHeap(int _numNodes) // Constructor
-    {
-        this->numNodes = _numNodes;
-        for(int i = 0; i < numNodes; i++)
-        {
-            this->minWeight.push_back(INT_MAX);
-            this->posToVer.push_back(i);
-            this->verToPos.push_back(i);
-        }
-    }
-    int getMinWeight(int vertex) { return this->minWeight[verToPos[vertex]]; }
-    // Returns current minimum Vertex in MinHeap and pops it out from MinHeap
-    int popMinimumVertex() 
-    {
-        int minVertex = this->posToVer[0]; 
-        // Swap to final element
-        this->swap(0, this->numNodes-1);
-        this->numNodes--;
-        // Bubble down first element
-        int currIndex = 0;
-        while(currIndex < this->numNodes)
-        {
-            int minPos = currIndex; 
-            if(((currIndex*2 + 1) < this->numNodes) && (this->minWeight[currIndex] > this->minWeight[currIndex*2 + 1]))
-            {
-                minPos = currIndex*2 + 1;
-            }
-            else if(((currIndex*2 + 2) < this->numNodes) && (this->minWeight[currIndex] > this->minWeight[currIndex*2 + 2]))
-            {
-                minPos = currIndex*2 + 2;
-            }
-            // Update if needed
-            if(minPos != currIndex)
-            {
-                this->swap(minPos, currIndex);
-                currIndex = minPos; 
-            }
-            else // break if already at right position
-            {
-                break;
-            }
-        }
-        return minVertex;
-    }
-    void setWeight(int numVertex, int weight)
-    {
-        // Return if no longer in heap or already minimum
-        if((this->verToPos[numVertex] >= this->numNodes) || (this->minWeight[this->verToPos[numVertex]] <= weight)) return; // no changes
-        // Set to new value 
-        this->minWeight[this->verToPos[numVertex]] = weight;
-        // Push it upwards the heap only if able
-        int parentPos = (this->verToPos[numVertex]-1)/2;
-        while(parentPos >= 0)
-        {
-            if(this->minWeight[verToPos[numVertex]] < this->minWeight[parentPos])
-            {
-                this->swap(this->verToPos[numVertex], parentPos);
-                parentPos = (this->verToPos[numVertex]-1)/2;
-            }
-            else break; // break if no changes
-        }
-    }
 };
 
 class Edge {
-private:
-    int dest; // destination node
-    int weight; // weight of this edge
 public:
     Edge(int _dest, int _weight) : dest(_dest), weight(_weight) {};
     int getWeight() { return this->weight; }
     int getNode() { return this->dest; }
+private:
+    int dest; // destination node
+    int weight; // weight of this edge
 };
 
 class Graph {
-private:
-    list<Edge *> * adj; // a pointer to lists of Edges
-    int numNodes; // number of nodes in this graph
 public:
     Graph(int _numNodes) 
     {
         this->numNodes = _numNodes; 
         this->adj = new list<Edge *>[numNodes];
     }
+
     void addUndirectedEdge(int vertexA, int vertexB, int weight)
     {
         Edge * edgeAB = new Edge(vertexB, weight);
@@ -1031,27 +1035,34 @@ public:
         adj[vertexB].push_back(edgeBA);
         return;
     }
+
     // Executes prim algorithm by creating MinHeaps
     void Prim(int srcVertex)
     {
         int totalWeight = 0; 
         // Create a minHeap
         MinHeap mh(this->numNodes);
-        mh.setWeight(srcVertex,0); // initialize sourceVertex to have weight of 0
-        for(int i = 0; i < numNodes; i++)
+
+        mh.updateIfMin(srcVertex,0); // initialize sourceVertex to have weight of 0
+        for (int i = 0; i < numNodes; i++)
         {
             int currMinNode = mh.popMinimumVertex(); 
             totalWeight += mh.getMinWeight(currMinNode); cout << "CurrWeight picked is: " << mh.getMinWeight(currMinNode) << endl;
-            for(auto i = this->adj[currMinNode].begin(); i != this->adj[currMinNode].end(); i++) // C++ 11 feature
+
+            for (auto i = this->adj[currMinNode].begin(); i != this->adj[currMinNode].end(); i++)
             {
                 Edge * currEdge = *i;
-                // Update the weight on that node in minHeap if it is in minHeap
-                mh.setWeight(currEdge->getNode(), currEdge->getWeight());
+                // Update the weight on that node in minHeap if it is still in the minHeap
+                mh.updateIfMin(currEdge->getNode(), currEdge->getWeight());
             }
         }
         cout << "Total weight of edges for Minimum Spanning Tree is: " << totalWeight << endl;
         return; 
     }
+
+private:
+    list<Edge *> * adj; // a pointer to lists of Edges
+    int numNodes; // number of nodes in this graph
 };
 int main(void)
 {
@@ -1115,11 +1126,11 @@ public:
         // Initialize the distance from every node to src node
         vector<int> distance (this->numNodes, INT_MAX);
         distance[src] = 0; // set the src node to be no distance to itself
-        for(int i = 0; i < this->numNodes - 1; i++) // execute V-1 times O(V ( V+E)) = O(V^2 + VE) = O(VE), E <= V^2
+        for (int i = 0; i < this->numNodes - 1; i++) // execute V-1 times O(V ( V+E)) = O(V^2 + VE) = O(VE), E <= V^2
         {
-            for(int j = 0; j < this->numNodes; j++) // to get all edges, O(V + E)
+            for (int j = 0; j < this->numNodes; j++) // to get all edges, O(V + E)
             {
-                for(auto k = adj[j].begin(); k != adj[j].end(); k++)
+                for (auto k = adj[j].begin(); k != adj[j].end(); k++)
                 {
                     Edge * currEdge = *k;
                     // MISTAKE: Didn't account for overflow (Need distance[j] != INT_MAX)
@@ -1129,16 +1140,16 @@ public:
             }
         }
         // Repeat again to make sure no changes to check for negative cycles
-        for(int j = 0; j < this->numNodes; j++) // to get all edges, O(V + E)
+        for (int j = 0; j < this->numNodes; j++) // to get all edges, O(V + E)
         {
-            for(auto k = adj[j].begin(); k != adj[j].end(); k++)
+            for (auto k = adj[j].begin(); k != adj[j].end(); k++)
             {
                 Edge * currEdge = *k;
                 if (distance[j] != INT_MAX && (distance[currEdge->getDest()] > distance[j] + currEdge->getWeight()))
                     return false;
             }
         }
-        for(int i = 0; i < distance.size(); i++)
+        for (int i = 0; i < distance.size(); i++)
         {
             cout << "Node " << i << ": " << distance[i] << endl;
         }
@@ -1153,11 +1164,11 @@ int main(void)
     g.addDirectedEdge(3,2,3);
     g.addDirectedEdge(0,3,2);
     int solved = g.BellmanFord(0);  // 0, -1, 5, 2
-    if(!solved) cout << "Negative cycles" << endl;
+    if (!solved) cout << "Negative cycles" << endl;
     else cout << "No negative cycle" << endl;
     g.addDirectedEdge(0,1,-6); // forms negative cycle
     solved = g.BellmanFord(0);  // negative cycle
-    if(!solved) cout << "Negative cycles" << endl;
+    if (!solved) cout << "Negative cycles" << endl;
     else cout << "No negative cycle" << endl;
     return 0;
 }
@@ -1203,11 +1214,11 @@ public:
     }
     void print()
     {
-        for(int i = 0; i < adj.size(); i++)
+        for (int i = 0; i < adj.size(); i++)
         {
-            for(int j = 0; j < adj[i].size(); j++)
+            for (int j = 0; j < adj[i].size(); j++)
             {
-                if(adj[i][j] == INT_MAX) cout << "INF ";
+                if (adj[i][j] == INT_MAX) cout << "INF ";
                 else cout << adj[i][j] << " ";
             }
             cout << endl;
@@ -1221,14 +1232,14 @@ public:
     {
         // initialize shortest directed distance between each node to be the actual weight
         vector< vector <int> > shortest = this->adj;  
-        for(int i = 0; i < this->numNodes; i++)
+        for (int i = 0; i < this->numNodes; i++)
         {
-            for(int j = 0; j < shortest.size(); j++)
+            for (int j = 0; j < shortest.size(); j++)
             {
-                for(int k = 0; k < shortest[j].size(); k++)
+                for (int k = 0; k < shortest[j].size(); k++)
                 {
                     // only add if there is an edge between the two
-                    if(shortest[j][i] != INT_MAX && shortest[i][k] != INT_MAX)
+                    if (shortest[j][i] != INT_MAX && shortest[i][k] != INT_MAX)
                         shortest[j][k] = min(shortest[j][k], shortest[j][i] + shortest[i][k]);
                 }
             }
@@ -1248,11 +1259,11 @@ int main(void)
     vector< vector<int> > shortest = g.FloydWarshall(0);
     cout << "Shortest Distances Are: " << endl;
     // print the solution
-    for(int i = 0; i < shortest.size(); i++)
+    for (int i = 0; i < shortest.size(); i++)
     {
-        for(int j = 0; j < shortest[i].size(); j++)
+        for (int j = 0; j < shortest[i].size(); j++)
         {
-            if(shortest[i][j] == INT_MAX) cout << "INF ";
+            if (shortest[i][j] == INT_MAX) cout << "INF ";
             else cout << shortest[i][j] << " ";
         }
         cout << endl;
