@@ -10,7 +10,7 @@ TODO:
     hint Method1: Use bit manipulation ==" it was so easy, i was so dumb
     hint Method2: Use DFS (Implemented in Backtracking folder)
     sol.add(path); // add if statement up here if only want full paths
-    for(int i = index; i < n; i++)
+    for (int i = index; i < n; i++)
     {
         path.add(arr[i]);
         recurseFunc(i, arr, path, sol);
@@ -44,7 +44,7 @@ TODO:
     Algorithm: 
         You can use disjoint set to map them, each time you see a new number, you check if number+1, or number-1 already in set. 
         If it is, then you add 1 to that set's maximum. So all consecutive will remain in the same set. 
-        You need to do if(number+1) , then if(number-1) NOT if(number+1), else if(number -1) cause both cases need to be handled separately
+        You need to do if (number+1) , then if (number-1) NOT if (number+1), else if (number -1) cause both cases need to be handled separately
         Each time you merge the sets, you check for longest consecutive number
         T(n) = O(n) since mergeset stuff are all O(1) 
         S(n) = O(n) since you need 1 set for each number
@@ -93,12 +93,14 @@ note: #include <set> is NOT disjoint set, as #include <set> is a balanced binary
 // 1 Kruskal's Algorithm
 // Time Complexity, T(V,E) = O(ElgV)
 // Space Complexity, S(V,E) = O(V) 
+//-------------------------
 //      V is for all the sets made
 //      Assume if modify same graph, will only be deleting edges, so won't create any space for new edges
 //      Uses Object and Pointers representation of Graph
-
 // note: qsort() is for arrays 
 // sort() is for vectors
+//-------------------------
+/* //
 #include <iostream> 
 #include <vector> 
 #include <cstdlib> // qsort()
@@ -108,9 +110,6 @@ using namespace std;
 // Each subset in the entire Disjoint Sets
 class Subset 
 {
-private:
-    int rank; // to know rank of current subset if this subset is the head
-    int parent; // to know which subset this subset belongs to
 public: 
     Subset(int _rank, int _parent) : rank(_rank), parent(_parent) {}
     void setRank(int _rank)
@@ -129,46 +128,49 @@ public:
     {
         return rank;
     }
+
+private:
+    int rank; // to know rank of current subset if this subset is the head
+    int parent; // to know which subset this subset belongs to
 };
 
 class DisjointSet
 {
-private:
-    Subset* s; // array of all the subsets
-    int numSets;
 public:
     DisjointSet(int _numSets)
     {
         numSets = _numSets;
         s = (Subset *) malloc(sizeof(Subset) * numSets);
-        for(int i = 0; i < numSets; i++)
+        for (int i = 0; i < numSets; i++)
         {
             Subset newSubSet = Subset(0, i);
             s[i] = newSubSet;
         }
     }
+
     // Identify which set this node belongs to 
     int find(int node)
     {
         // Base Case
-        if(s[node].getParent() == node)
+        if (s[node].getParent() == node)
             return node;
         // path compression
         s[node].setParent(find(s[node].getParent()));
         return s[node].getParent();
     }
+
     // This merge 2 sets together
     void mergeSets(int node1, int node2) 
     {
         int parent1 = find(node1);
         int parent2 = find(node2);
         // update the ranks
-        if(s[parent1].getRank() == s[parent2].getRank())
+        if (s[parent1].getRank() == s[parent2].getRank())
         {
             s[parent2].setParent(parent1);
             s[parent1].setRank(s[parent1].getRank() + 1); // increase the rank
         }
-        else if(s[parent1].getRank() > s[parent2].getRank())
+        else if (s[parent1].getRank() > s[parent2].getRank())
         {
             s[parent2].setParent(parent1);
         }
@@ -177,14 +179,15 @@ public:
             s[parent1].setParent(parent2);
         }
     }
+
+private:
+    Subset* s; // array of all the subsets
+    int numSets;
 };
 
 // Using Object and Pointers Representation for Graph
 class Edge 
 {
-private: 
-    unsigned int node1, node2; 
-    int weight; 
 public:
     Edge(unsigned int nodeA, unsigned int nodeB, int w) : node1(nodeA), node2(nodeB), weight(w) {}
     int getWeight() 
@@ -207,6 +210,10 @@ public:
     {
         cout << node1 << " : " << node2 << " = " << weight << endl;
     }
+
+private: 
+    unsigned int node1, node2; 
+    int weight; 
 };
 
 // Note: Must pass in const void* and re-cast it to be able to use qsort()
@@ -235,17 +242,19 @@ public:
         numEdges = 0;
         Edges = (Edge *) malloc(sizeof(Edge) * maxEdges);
     }
+
     void addEdge(unsigned int v1, unsigned int v2, int weight)
     {
         Edge newEdge = Edge(v1, v2, weight);
         Edges[numEdges] = newEdge;
         numEdges++;
     }
+
     void print()
     {
         cout << "Number of nodes are: " << numNodes << endl;
         cout << "Number of edges are: " << numEdges << endl;
-        for(int i = 0; i < numEdges; i++)
+        for (int i = 0; i < numEdges; i++)
         {
             Edges[i].print();
             // Note: If using vectors:
@@ -262,6 +271,7 @@ public:
             // i[0]->print()
         } 
     }
+
     Graph* Kruskal()
     {
         // Sort the edges O(ElgE) = O(ElgV) since E <= V^2
@@ -272,7 +282,7 @@ public:
         int numEdgesAdded = 0;
         // Should only add at most V-1 edges, after that no point traversing anymore
         // O(ElogV)
-        for(int i = 0; i < numEdges; i++) // O(min(E, V-1)) 
+        for (int i = 0; i < numEdges; i++) // O(min(E, V-1)) 
         {
             // Group into same set if not the same set already O(1) amortized analysis for disjoint set with rank and path compression implementation
             // Worst case would be O(logV) 
@@ -280,10 +290,10 @@ public:
             int node2 = Edges[i].getDestNode();
             int parent1 = ds.find(node1);
             int parent2 = ds.find(node2);
-            if(parent1 != parent2)
+            if (parent1 != parent2)
             {
                 ds.mergeSets(node1, node2);
-                graph->addEdge(node1,node2,Edges[i].getWeight());
+                graph->addEdge(node1, node2, Edges[i].getWeight());
                 numEdgesAdded++;
                 // If already a Minimum Spanning Tree 
                 if (numEdgesAdded == numNodes - 1)
@@ -293,14 +303,13 @@ public:
                 }
             }
         }
-        // Return the created graph  with the latest edges
+        // Return the created graph with the latest edges
         return graph;
     }
 };
 
 int main(void)
 {
-
     int V = 4;  // Number of nodes in graph
     Graph* graph = new Graph(V,10);
     graph->addEdge(0,1,10);
@@ -313,7 +322,6 @@ int main(void)
     // (0,1), (0,3), (2,3)
     Graph* MST = graph->Kruskal();
     MST->print();
-    
     return 0;
 }
 // */
