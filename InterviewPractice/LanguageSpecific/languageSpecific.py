@@ -1,6 +1,7 @@
 #----------------------------------------------------------------------------------------------------------------------------------
 # Working with new libraries
 #-------------------------
+import libraryName
 help(libraryName)
 print dir(libraryName) # List all methods for the library
 help(libraryName.methodName)
