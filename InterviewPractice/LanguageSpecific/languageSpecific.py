@@ -89,8 +89,10 @@ class ChildClass(NameOfClass):
 
 # Broadcasting => Uses C for loops instead of python for loops
 # Works when:
+    # one of them is a scalar
+    [4,3,2] & [1] => [4, 3, 2]
     # Either one of the dimension is 1
-    [4, 3] & [1] => [4, 3]
+    [4, 3] & [4, 1] => [4, 3]
     [4, 1] & [1,3] => [4, 3]
     # Both dimensions are equal
     [4, 3] & [4, 3] => [4, 3]
