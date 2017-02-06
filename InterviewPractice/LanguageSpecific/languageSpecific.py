@@ -81,8 +81,19 @@ class ChildClass(NameOfClass):
     return self.thirdVariable
 #---------------------------------------------------------------------------------------------------
 # Performance
-#---------------------------------------------------------------------------------------------------
+#-------------------------
 # Matrix Operations > Vectors > For Loops
-    For loops in python is slow
-    Vector operations using numpy is fast as it is implemented in C and uses parallel programming.
-    Matrix operation is faster than looping through vectors to perform operation
+#    For loops in python is slow
+#    Vector operations using numpy is fast as it is implemented in C and uses parallel programming.
+#    Matrix operation is faster than looping through vectors to perform operation
+
+# Broadcasting => Uses C for loops instead of python for loops
+# Works when:
+    # Either one of the dimension is 1
+    [4, 3] & [1] => [4, 3]
+    [4, 1] & [1,3] => [4, 3]
+    # Both dimensions are equal
+    [4, 3] & [4, 3] => [4, 3]
+    # Combining them 
+    [4, 3] & [1, 3] => [4, 3]
+#---------------------------------------------------------------------------------------------------
