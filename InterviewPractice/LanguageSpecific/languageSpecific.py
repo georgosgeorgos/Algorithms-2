@@ -1,4 +1,16 @@
 #----------------------------------------------------------------------------------------------------------------------------------
+# Installation
+#-------------------------
+# Installing pip
+sudo apt-get update
+sudo apt-get install pip
+# Installing any library
+pip install tensorflow
+pip install anyPythonLibraryName
+# Installing from a requirements.txt
+pip install -r requirements.txt
+
+#----------------------------------------------------------------------------------------------------------------------------------
 # Working with new libraries
 #-------------------------
 import libraryName
