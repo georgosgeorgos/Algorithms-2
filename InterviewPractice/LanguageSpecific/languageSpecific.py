@@ -5,10 +5,12 @@
 sudo apt-get update
 sudo apt-get install pip
 # Installing any library
-pip install tensorflow
-pip install anyPythonLibraryName
+sudo pip install tensorflow
+sudo pip install anyPythonLibraryName
 # Installing from a requirements.txt
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
+# Installing from setup.py
+sudo pip install .
 
 #----------------------------------------------------------------------------------------------------------------------------------
 # Working with new libraries
