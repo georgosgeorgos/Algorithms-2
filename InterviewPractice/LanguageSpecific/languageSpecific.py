@@ -3,8 +3,7 @@
 #-------------------------
 # Installing pip
 sudo apt-get update
-sudo apt-get install pip
-# Installing any library
+sudo apt-get install pip # Installing any library
 sudo pip install tensorflow
 sudo pip install anyPythonLibraryName
 # Installing from a requirements.txt
@@ -23,18 +22,25 @@ help(libraryName.methodName)
 # Headers and Libraries
 #-------------------------
 # Built-in
+import os
 import random
 # Testing
 import unittest
 import mock
-# Others
-import numpy as np # Working with matrices, numerical python
-import tensorflow as tf # Working with Machine Learning
+import traceback # For tracing exception handlers
+# File I/O
 import pickle # Serialization and De-serialization (python's version of json)
 import cPickle # Reading files
 import gzip # Opening .gz files
+# Parsing
+import shlex # Lexical Analyzer
+# Concurrency
+import threading # Threading, thread setting events
+import subprocess # To spawn new process and connect pipes
+import signal # Handles signals such as SIGKILL
 # Databases
 import sqlalchemy # For working with sql
+import pymongo # Working with mongoDB
 # Compilation to other languages
 import Cython # Convert python to C++ 
 import Jython # Convert python to Java
@@ -46,6 +52,11 @@ import mechanize # For automating client browser interaction
 # Plotting
 import matplotlib # For plotting
 import panda # For plotting
+# Machine Learning
+import numpy as np # Working with matrices, numerical python
+import tensorflow as tf # Working with Machine Learning
+# Cloud Storage
+import boto3 # API for Amazon Web Services using python
 #----------------------------------------------------------------------------------------------------------------------------------
 # Exceptions
 #-------------------------
@@ -112,4 +123,9 @@ class ChildClass(NameOfClass):
     [4, 3] & [4, 3] => [4, 3]
     # Combining them 
     [4, 3] & [1, 3] => [4, 3]
+
+#---------------------------------------------------------------------------------------------------
+# Concurrency
+#-------------------------
+
 #---------------------------------------------------------------------------------------------------
