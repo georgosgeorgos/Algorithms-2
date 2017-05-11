@@ -9,6 +9,7 @@ Table Of Contents
         Extract Method
         Method Object   
         Record Result After Execution
+        Explain Long Arguments 
     Classes
         Extract Class
         Move Member Variables
@@ -158,6 +159,17 @@ Make any methods that shouldn't be use outside this class private
     to:
         incrementCounter();
         counter++; // only increment counter after it is actually incremented
+//----------------------------
+// Explain Long Arguments 
+//----------------------------
+    Explain the long arguments by bringing the methods down
+    from:
+        int functionName(int firstArgumentStoresTheServerValueUsedToConnect, int secondLongExplanationOfThisArgument)
+    to:
+        int functionName(
+                int serverValue,  // used by clients to connect to server
+                int shortMeaningfulName) // long explanation
+
 //-------------------------------------------------------------------------------------------
 // Classes
 //-------------------------------------------------------------------------------------------
