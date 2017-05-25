@@ -28,10 +28,13 @@ import random
 import unittest
 import mock
 import traceback # For tracing exception handlers
+import pdb # For debugging
 # File I/O
 import pickle # Serialization and De-serialization (python's version of json)
 import cPickle # Reading files
 import gzip # Opening .gz files
+import json # Working with json files
+import io # Opening files, reading and writing
 # Parsing
 import shlex # Lexical Analyzer
 # Concurrency
@@ -49,12 +52,16 @@ import IronPython # Convert python to C#
 import django # Web Framework
 import scrapy # Web scraper
 import mechanize # For automating client browser interaction
+import flask # Simplest web framework 
 # Plotting
 import matplotlib # For plotting
 import panda # For plotting
 # Machine Learning
 import numpy as np # Working with matrices, numerical python
 import tensorflow as tf # Working with Machine Learning
+import keras
+# Images
+import PIL # resize, scale, crop, rotate, translate, flip
 # Cloud Storage
 import boto3 # API for Amazon Web Services using python
 #----------------------------------------------------------------------------------------------------------------------------------
@@ -124,6 +131,16 @@ class ChildClass(NameOfClass):
     # Combining them 
     [4, 3] & [1, 3] => [4, 3]
 
+#----------------------------------
+# Iterables vs Generators
+#------------------------
+# Iterables => stores everything in memory, can iterate as many times
+# Generator => do not store all values in memory, can only iterate each data once, generates on the fly
+    yield # This acts similar keyword 'return', difference is that it only executes last call
+          # to yield statement the next time it is called. 
+    # Benefits 
+        # Allows one to do heavy processing for storage in memory on the fly, no large in memory objects.
+        # Allows one to perform data augmentation for machine learning in keras
 #---------------------------------------------------------------------------------------------------
 # Concurrency
 #-------------------------
