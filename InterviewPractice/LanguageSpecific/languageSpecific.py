@@ -64,6 +64,8 @@ import keras
 import PIL # resize, scale, crop, rotate, translate, flip
 # Cloud Storage
 import boto3 # API for Amazon Web Services using python
+# Time
+import datetime
 #----------------------------------------------------------------------------------------------------------------------------------
 # Exceptions
 #-------------------------
