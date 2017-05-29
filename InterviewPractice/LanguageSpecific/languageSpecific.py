@@ -34,6 +34,7 @@ import pickle # Serialization and De-serialization (python's version of json)
 import cPickle # Reading files
 import gzip # Opening .gz files
 import json # Working with json files
+import simplejson # Better error message if something goes wrong when working wth json files
 import io # Opening files, reading and writing
 # Parsing
 import shlex # Lexical Analyzer
