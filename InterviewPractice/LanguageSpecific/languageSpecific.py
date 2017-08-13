@@ -67,6 +67,8 @@ import PIL # resize, scale, crop, rotate, translate, flip
 import boto3 # API for Amazon Web Services using python
 # Time
 import datetime
+# Languages
+import enchant # pip install pyenchant
 #----------------------------------------------------------------------------------------------------------------------------------
 # Exceptions
 #-------------------------
