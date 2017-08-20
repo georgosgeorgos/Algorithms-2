@@ -1,4 +1,4 @@
-Notes on interview:
+Notes on algorithms interview:
     InterviewPractice
     CleanCode
     Testing 

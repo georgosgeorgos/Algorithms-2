@@ -428,9 +428,7 @@ Make sure to actually run step by step with the conditions and code! Assume you 
 //----------------------------------------------------------------------
 // note: Refer to below for more details on each of them
 // Understand a basic course of all the technologies you could have picked at Google which are:
-
-TODO (1 course each! => 3 to 4 assignments to upload to Github)
-    Machine Learning
+// Topics you were interested in as an undergraduate student: 
     Natural Language Processing 
     Distributed Systems & Parallel Computing
     Distributed Algorithms
@@ -441,7 +439,6 @@ TODO (1 course each! => 3 to 4 assignments to upload to Github)
     Economics & Electronic Commerce
     Data Mining
     Speech Processing 
-    Statistics 
     UX & UI 
 DONE
     Concurrency & Multithreading
@@ -452,8 +449,10 @@ DONE
     Web Front End
     Web Back End 
     Databases
+    Machine Learning
+    Statistics 
 
-You need to prove to yourself and the world that you are the best by winning competitions. 
+Compete to be the best by winning hackathons
 1. Compete in hackathons (Build a prototype from a great idea quickly) 
 	- Goal:
 		- Difficulty => Was what you built difficult to implement, is it just nice graphics on some API? 
@@ -563,11 +562,6 @@ Technical Skills Steps: (How to acquire the technical skills you need)
 
 6. Research Papers
 
-//----------------------------------------------------------------------
-// Track Your Progress
-//----------------------------------------------------------------------
-- Able to know if your current approaches are working and change if it doesn't
-- TODO:  More on this later
 // */
 //----------------------------------------------------------------------
 //
@@ -589,7 +583,6 @@ help breakpoints // access documentation of gdb's commands such as breakpoints
 gcc -g -Wall -o programName main.c // Note: -g command is needed to store symbol table used during gdb sessions
 // */
 //----------------------------------------------------------------------
-
 /*
 //----------------------------------------------------------------------
 // If super lost for any combination, math type question, try everything
@@ -600,7 +593,7 @@ gcc -g -Wall -o programName main.c // Note: -g command is needed to store symbol
 4. Find out optimal solution with math if needed
 5. Assume that you have some function available that already works, how can you use that to solve current problem
     (Google Interview: where you assume you have function to find a range of a duplicated number in sorted array and solved the bigger problem)
-Just trial and error and see which works
+Just trial and error and see which works. 
 //----------------------------------------------------------------------
 // When do you look at solution  
 //----------------------------------------------------------------------
