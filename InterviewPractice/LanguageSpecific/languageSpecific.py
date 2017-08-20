@@ -61,6 +61,7 @@ import panda # For plotting
 import numpy as np # Working with matrices, numerical python
 import tensorflow as tf # Working with Machine Learning
 import keras
+import gensim # Working with Word2Vec
 # Images
 import PIL # resize, scale, crop, rotate, translate, flip
 # Cloud Storage
