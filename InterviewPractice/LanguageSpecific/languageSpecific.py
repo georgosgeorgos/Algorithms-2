@@ -38,6 +38,7 @@ import simplejson # Better error message if something goes wrong when working wt
 import io # Opening files, reading and writing
 # Extract
 import zipfile # To extract zipfiles
+import tarfile # To extract tarfiles
 # Parsing
 import shlex # Lexical Analyzer
 # Concurrency
