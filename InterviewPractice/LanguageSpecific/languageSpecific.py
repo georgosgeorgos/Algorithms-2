@@ -66,6 +66,7 @@ import tensorflow as tf # Working with Machine Learning
 import keras
 import sklearn # A lot of ML algorithms
 import gensim # Working with Word2Vec
+import skgarden # Working with decision trees
 # Images
 import PIL # resize, scale, crop, rotate, translate, flip
 import opencv2 # A lot of image processing algorithms
