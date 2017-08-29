@@ -40,6 +40,7 @@ Table Of Contents
         Replace Control Flag With Break
         Return Immediately Instead Of Assigning Return Value
         For Each Loop
+        While Loop Instead Of Boundaries For Loop
         Continuation Index Instead Of Calculating While Loops
         Post-increment or Post-decrement While Doing
         Calculating Midpoint
@@ -692,6 +693,26 @@ looping through each element without any special iteration logic.
         }
 note: You can't do this when you need i for calculation
     arr[i+k] = arr[i-l];
+//----------------------------
+// While Loop Instead Of Boundaries For Loop
+//----------------------------
+Sometimes, you need a special case only for the first iteration or last iteration.
+Useful for if you can't control the index to be 0 in the for loop like Python.
+    from: // Bad: Need to evaluate special case each time
+        for (int i = 0; i < n; i++) {
+            if (i == 0) {
+                doFirstIterationLogic();
+            } else {
+                doNormalLogic();
+            }
+        }
+    to:
+        doFirstIterationLogic();
+        i = 1;
+        while (i < n) { 
+            doNormalLogic()
+            i++;
+        }
 //----------------------------
 // Continuation Index Instead Of If & Else
 //----------------------------
