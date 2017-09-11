@@ -29,6 +29,7 @@ import traceback # For tracing exception handlers
 import pdb # For debugging
 import pytest
 import nose
+import github # pip install PyGithub, to be able to work with student's Github Repositories directly
 # File I/O
 import pickle # Serialization and De-serialization (python's version of json)
 import cPickle # Reading files
