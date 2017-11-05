@@ -68,6 +68,7 @@ import keras
 import sklearn # A lot of ML algorithms
 import gensim # Working with Word2Vec
 import skgarden # Working with decision trees
+import edward # Probabilistic Programming
 # Images
 import PIL # resize, scale, crop, rotate, translate, flip
 import opencv2 # A lot of image processing algorithms
