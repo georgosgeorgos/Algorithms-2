@@ -64,11 +64,12 @@ import panda # For plotting
 # Machine Learning
 import numpy as np # Working with matrices, numerical python
 import tensorflow as tf # Working with Machine Learning
-import keras
+import keras # tensorflow or pytorch
 import sklearn # A lot of ML algorithms
 import gensim # Working with Word2Vec
 import skgarden # Working with decision trees
-import edward # Probabilistic Programming
+import pyro # Probabilistic programming using pytorch
+import edward # Probabilistic Programming using tensorflow 
 # Images
 import PIL # resize, scale, crop, rotate, translate, flip
 import opencv2 # A lot of image processing algorithms
