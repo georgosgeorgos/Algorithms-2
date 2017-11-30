@@ -6,7 +6,9 @@ sudo apt-get update
 sudo apt-get install pip # Installing any library
 sudo pip install tensorflow
 sudo pip install anyPythonLibraryName
-# Installing from a requirements.txt sudo pip install -r requirements.txt # Installing from setup.py
+# Installing from a requirements.txt
+sudo pip install -r requirements.txt 
+# Installing from setup.py
 sudo pip install .
 
 #----------------------------------------------------------------------------------------------------------------------------------
@@ -166,4 +168,5 @@ class ChildClass(NameOfClass):
 An advantage of jupyter notebook, which behaves like MatLab. 
 So lets just say it’s training while reading variables batchSize, learningRate, etc. 
 You can run the model.train code in a different terminal window in jupyter notebook. Then, pause the execution of the model.train code, then re-run the terminal that defines the values of variables batchSize, learningRate, etc, which is in a different terminal window than model.train, then resume model.train code, it will now read the latest variable values that were defined. 
+Also, it is a great resource for interactive code examples.
 #---------------------------------------------------------------------------------------------------
