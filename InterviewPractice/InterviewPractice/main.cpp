@@ -6,6 +6,9 @@
 // However, you should just practice on CoderPad and paste to the correct files if your implementation improves
 // Coderpad also works with Vim, Syntax highlighting, and google hangout, which is nice.
 // However, if preparing for Google Interviews that uses Google Docs, don't use CoderPad as not allowed to use Vim on Google Docs. 
+    // Install the code pretty so you can highlight stuff and make it colorful with code, easier to read
+    // Remove all the settings that automatically capitalize stuff by clicking Tools->Preferences and unselecting stuff. 
+    // Make indentation 4 spaces instead of 8 by using Fonts: Courier New with Font Size: 12
 // note: If preparing for on-site interview, practice on whiteboard.
     // It's to get muscle memory like organizing notes (test cases on right, don't erase it to remind you to test code at end)
     // Think staring straight instead of looking down onto paper. 
