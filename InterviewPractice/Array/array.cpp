@@ -119,8 +119,11 @@ int maxSubArray(const vector<int>& arr, int& startIndexResult, int& endIndexResu
     int n = arr.size(); 
     for(int i = 0; i < arr.size(); i++)
     {
-        currStartIndex = tempSum < 0 ? i : currStartIndex;
-        tempSum = tempSum < 0 ? arr[i] : tempSum + arr[i];
+        // Idea is to restart whenever the previous sums were negative
+        // or continue summing whenever prevoius sums were positive
+        // However, keep checking if it's larger than the largest cumulative sum so far
+        currStartIndex = tempSum < 0 ? i : currStartIndex; // restart or maintain the index
+        tempSum = tempSum < 0 ? arr[i] : tempSum + arr[i]; // restart or continue summing
         if (tempSum > cumulativeSum)  // Mistake: Did if statement at beginning of for loop which is wrong as the last index wasn't checked
         {
             cumulativeSum= tempSum; 
