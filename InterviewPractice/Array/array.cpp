@@ -126,10 +126,24 @@ int maxSubArray(const vector<int>& arr, int& startIndexResult, int& endIndexResu
         tempSum = tempSum < 0 ? arr[i] : tempSum + arr[i]; // restart or continue summing
         if (tempSum > cumulativeSum)  // Mistake: Did if statement at beginning of for loop which is wrong as the last index wasn't checked
         {
-            cumulativeSum= tempSum; 
+            cumulativeSum = tempSum; 
             startIndexResult = currStartIndex;
             endIndexResult = i;
         }
+    }
+    return cumulativeSum;
+}
+
+// The shortest code you can write for this problem without indices: 7 lines
+int maxSumSubarrayWithoutIndex(const vector<int> &arr) 
+{
+    if (arr.empty()) return 0;
+    int cumulativeSum = numeric_limits<int>::min(); 
+    int tempSum = 0;
+    for (auto curr: arr) 
+    {
+        tempSum = tempSum < 0 ? curr : tempSum + curr; 
+        cumulativeSum = max(cumulativeSum, tempSum); 
     }
     return cumulativeSum;
 }
@@ -236,6 +250,7 @@ void printSolution(vector<int>& arr, int expectedOutput)
     int startIndexResult = 0;
     int endIndexResult = 0;
     int maximum = maxSubArray(arr, startIndexResult, endIndexResult);
+    if(maxSumSubarrayWithoutIndex(arr) != maximum) cout << "Error! Not same output for short code" << endl;
     if (expectedOutput != maximum)  cout << "Error! Not same as expected output" << endl;
     cout<<"Start: "<< startIndexResult <<" to End: " << endIndexResult <<" is maximum: "<< maximum << endl;
     // Commented out below since maxSubArraySplitByPosAndNegCases is wrong! 
