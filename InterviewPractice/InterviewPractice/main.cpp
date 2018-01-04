@@ -1,10 +1,11 @@
 //-----------------------------------------------------------------------------------------------
 // Interview Practice
 // This file used to be for rough paper:
-    // 1. To practce previous programming questions
+    // 1. To practice previous programming questions
     // 2. To practice new programming questions before documenting into other files
 // However, you should just practice on CoderPad and paste to the correct files if your implementation improves
 // Coderpad also works with Vim, Syntax highlighting, and google hangout, which is nice.
+// However, if preparing for Google Interviews that uses Google Docs, don't use CoderPad as not allowed to use Vim on Google Docs. 
 // note: If preparing for on-site interview, practice on whiteboard.
     // It's to get muscle memory like organizing notes (test cases on right, don't erase it to remind you to test code at end)
     // Think staring straight instead of looking down onto paper. 
