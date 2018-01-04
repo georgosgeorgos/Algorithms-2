@@ -153,9 +153,9 @@ Applications: For operating on disk = Each node is the size of a disk page
 // Time Complexity, T(n) = O(n), 
 // Space Complexity, S(n) = O(logn) // assuming no need space for pushing back order of roots and tree is balanced
 //---------------------------------
-/* 
+/* // 
 Questions: 
-How to return nodes€™ values? In array? vector? 
+How to return nodes values? In array? vector? 
 
 Function Prototype: 
 	vector<int> preorderTraversal(struct node * root); 
@@ -172,7 +172,7 @@ Algorithm:
 	Recursively print myself, then print left, then print right. 
 
 Implementation: 
-*/
+// */
 //---------------------------------
 /* // 
 #include <vector> 
@@ -208,10 +208,10 @@ int main(void)
 	struct node C(3, nullptr, nullptr); 
 	struct node B(2, &C, nullptr); 
 	struct node A(1, nullptr, &B);
-	vector<int> ans = preorderTraversal(&A); 
-	for(int i = 0 ; i < ans.size(); i++)
+	vector<int> answer = preorderTraversal(&A); 
+	for(auto value : answer)
 	{
-		cout << ans[i] << " " ; 
+		cout << value << " " ; 
 	}
 	cout << endl; 
     return 0; 
