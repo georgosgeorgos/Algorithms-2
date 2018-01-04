@@ -69,6 +69,8 @@ resizable or fixed size?
 (-) index? 
 circular or straight array? 
 To find min/max sum, what if entire array is (-) ? Do I return 0 or the smallest number? 
+Can the array be modified? If not modifiable, pass in using const reference. 
+What does the array store? int, double, string, char, custom objects? 
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Maximum Contiguous Sum Subarray using Kadane's Algorithm, T(n) = O(n), S(n) = O(1)
@@ -79,7 +81,7 @@ To find min/max sum, what if entire array is (-) ? Do I return 0 or the smallest
 Questions:
     What does contiguous mean? 
     What does the array store?
-    Int? 
+    int?  or double ? 
     Is it unsigned or signed? 
     Is int enough ? or do we need long long int?
     Can the values be repeated or unique?
@@ -88,22 +90,18 @@ Questions:
     If small number of values, bubble sort is faster than quicksort
     If values of number limited by k, then radix sort or counting sort is faster
     Is it a normal array or circular array ? Can it have (-) index?
-    Can input be modified? No, then const vector, no changing the values, read only
+    Can input be modified? No, then pass in  by const vector, no changing the values, read only
     What if entire array is negative? 
 Function Prototype:
     What are the parameters and what does it return? Does it return by reference for anything?
     int MaxContiguousSumSubarray(const vector<int>& arr);  
 TestCase:
-    [] = 0 // empty
-    [2,3,4] = 9 // all positive
-    [-1, -2, -3] = -1 // all negative
-    [-2.4,5,-1,2] = 10 // need to pass by negative 
-    [1, 1, -3, 2, 3] = 5 // bigger positive
+    Refer to test cases in main method.
 Algorithm:
     Need handle all negative case
 */
 //---------------------------------
-/* //
+ //
 #include <climits> // INT_MAX
 #include <vector>
 #include <iostream>
@@ -182,12 +180,15 @@ int maxSubArrayDynamic(const vector<int>& arr)
     else return maxSum; 
 }
 
-int maxSubArraySplitByPosAndNegCases(const vector<int>& arr)
+int maxSubArraySplitByPosAndNegCasesWrong(const vector<int>& arr)
 {
+    // THIS METHOD IS WRONG, IT FAILS THE TEST CASE BELOW!
+    // vector<int> notSumAcrossBlocker = {2, 3, -8, 1, 3, -1, 0, 3}; // -8 is blocker : 6
+    // This method outputs 5 instead. 
     if (arr.empty()) return 0;
     int i = 0;
     int sum = arr[i++];
-    // Initialize to bigger negative element if it is negative
+    // Initialize to biggest negative element if it is all negatives
     // Handle negative case
     while(sum < 0 && i < arr.size())
     {
@@ -221,30 +222,50 @@ int maxSubArraySplitByPosAndNegCases(const vector<int>& arr)
     return sum;
 }
 
-void printSolution(vector<int>& arr)
+void printSolution(vector<int>& arr, int expectedOutput)
 {
+    cout << "Input: [";
+    for (auto curr : arr)
+    {
+        cout << " " << curr; 
+    }
+    cout << " ], Expected Output: " << expectedOutput << " => " ;
     int startIndexResult = 0;
     int endIndexResult = 0;
     int maximum = maxSubArray(arr, startIndexResult, endIndexResult);
-    if(maximum == maxSubArrayDynamic(arr) && maximum == maxSubArraySplitByPosAndNegCases(arr))
-        cout<<"Start: "<< startIndexResult <<" to End: " << endIndexResult <<" is maximum: "<< maximum << endl;
-    else cout << "Error! Different answer between implementations" << endl;
+    if (expectedOutput != maximum)  cout << "Error! Not same as expected output" << endl;
+    cout<<"Start: "<< startIndexResult <<" to End: " << endIndexResult <<" is maximum: "<< maximum << endl;
+    // Commented out below since maxSubArraySplitByPosAndNegCases is wrong! 
+    // if(maximum == maxSubArrayDynamic(arr) && maximum == maxSubArraySplitByPosAndNegCases(arr))
+    //    cout<<"Start: "<< startIndexResult <<" to End: " << endIndexResult <<" is maximum: "<< maximum << endl;
+    //else 
+    //{
+    //   cout << "Error! Different answers between implementations" << endl;
+    //   cout << maxSubArrayDynamic(arr) << endl;
+    //   cout << maxSubArraySplitByPosAndNegCases(arr) << endl;
+    //}
 }
 
 int main(void)
 {
-    vector<int> normal = {1, 3, -3, 4, -5, 3};  // Test normal: 5
+    vector<int> empty; // empty: 0
+    vector<int> allPositive = {1, 2, 3}; // Test all positive: 6 => Sum of array
     vector<int> allNegative = {-4, -2, -3, -1, -5}; // test all negative: -1
+    vector<int> normal = {1, 3, -3, 4, -5, 3};  // Test normal: 5
     vector<int> singlePos = {1, 1, -3, 3}; // single positive: 3
     vector<int> biggerPos = {1, 1, -3, 3, 2}; // bigger positive: 5
-    vector<int> empty; // empty: 0
-    vector<int> allPos = {2, 3, 4}; // all positive: 9
-    printSolution(normal);
-    printSolution(allNegative);
-    printSolution(singlePos);
-    printSolution(biggerPos);
-    printSolution(empty);
-    printSolution(allPos);
+    vector<int> posInFront = {1, 2, -3}; // positives in front: 3
+    vector<int> posInMiddle = {1, 2, -4, 5, 1, -7}; // positives in middle: 6
+    vector<int> notSumAcrossBlocker = {2, 3, -8, 1, 3, -1, 0, 3}; // -8 is blocker : 6
+    printSolution(empty, 0);
+    printSolution(allPositive, 6);
+    printSolution(allNegative, -1);
+    printSolution(normal, 5);
+    printSolution(singlePos, 3);
+    printSolution(biggerPos, 5);
+    printSolution(posInFront, 3);
+    printSolution(posInMiddle, 6);
+    printSolution(notSumAcrossBlocker, 6);
     return 0;
 }
 // */
