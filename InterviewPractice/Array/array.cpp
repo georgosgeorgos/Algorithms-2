@@ -101,8 +101,8 @@ Algorithm:
     Need handle all negative case
 */
 //---------------------------------
- //
-#include <climits> // INT_MAX
+/* //
+#include <limits> // numeric_limits
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -114,7 +114,7 @@ int maxSubArray(const vector<int>& arr, int& startIndexResult, int& endIndexResu
     endIndexResult = 0;
     if(arr.empty()) return 0;
     int currStartIndex = 0; int currEndIndex = 0;
-    int cumulativeSum= -1*INT_MAX;  
+    int cumulativeSum = numeric_limits<int>::min();
     int tempSum = 0;
     int n = arr.size(); 
     for(int i = 0; i < arr.size(); i++)
