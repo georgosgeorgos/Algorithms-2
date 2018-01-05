@@ -36,6 +36,9 @@ Table Of Contents
         And Nested Ifs
         Bring Out Repeated Statements
         Probability To Complete Condition
+    Assignments
+        Replace checking for max with max()
+        Replace conditionals with ? : operator
     Iterations
         Replace Control Flag With Break
         Return Immediately Instead Of Assigning Return Value
@@ -635,6 +638,26 @@ Switch from OOP to Procedural
     to: 
         if (probability10Percent && probability90Percent) {...}
         else if (probability90Percent || probability10Percent) {...}
+//-------------------------------------------------------------------------------------------
+// Assignments
+//-------------------------------------------------------------------------------------------
+//----------------------------
+// Replace checking for max with max()
+//----------------------------
+from:
+    if (currValue > maxValueSoFar) maxValueSoFar = currValue; 
+to:
+    maxValueSoFar = max(maxValueSoFar, currValue); 
+//----------------------------
+// Replace conditionals with ? : operator
+//----------------------------
+from:
+    if (someCondition)
+        finalAssign = ifAssign; 
+    else 
+        finalAssign = elseAssign; 
+to:
+    finalAssign = someCondition ? ifAssign : elseAssign; 
 //-------------------------------------------------------------------------------------------
 // Iterations
 //-------------------------------------------------------------------------------------------
