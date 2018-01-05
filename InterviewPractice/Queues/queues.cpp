@@ -81,8 +81,10 @@ TestCases:
                   k = 10 => [4]
     [8, 2, 5, 4, 3], k = 4 => [8, 5] // next largest is in middle, which is 5
 Algorithm:
-    Solution 1: Push and pop from queue, checking queue each iteration, T(n,k) = O(nk), S(n,k) = O(k)
+    Solution 1a: Push and pop from queue, checking queue each iteration, T(n,k) = O(nk), S(n,k) = O(k)
         (n iteration), each iteration need O(k) to check max)
+    Solution 1b:
+        Don't even need a queue, just double loop through array brute force,T(n,k) = O(nk) S(n,k) = O(1)
     Solution 2: Use a balanced BST, T(n,k) = O(nlogk), S(n,k) = O(k)
         Assuming k <= n;
         Insert k elements => T(n,k) = O(klogk), S(n,k) = O(k)
