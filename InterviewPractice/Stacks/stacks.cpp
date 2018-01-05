@@ -3,7 +3,7 @@
 /* //
 Table of Contents
 0. Implement a class for Stacks using (Array, LinkedList) and comparisons, T(n) = O(1), S(n) = O(n).
-1. Stack that can return mininum value element efficiently, T(n) = O(1), S(n) = O(n). (Bloomberg 2nd round)
+1. Stack that can return minimum value element efficiently, T(n) = O(1), S(n) = O(n). (Bloomberg 2nd round)
 2. Sort A Stack Recursively Without Using for & while loops, T(n) = O(n^2), S(n) = O(n).
 3. Reverse A Stack Recursively Without for & while loops, T(n) = O(n^2), S(n) = O(n)
 
@@ -163,7 +163,7 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
-// 1 Stack that can return the minimum value element efficiently.  
+// 1 Stack that can return minimum value element efficiently
 // Time Complexity, T(n) = O(1)
 // Space Complexity, S(n) = O(n)
 //-------------------------
