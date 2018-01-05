@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Reverse a Linked List, T(n) = O(n),  S(n) = O(1)
+1. Reverse a Linked List, T(n) = O(n),  S(n) = O(1) (Nvidia Round 1)
 2. Adding two numbers that are represented by linked lists, T(n) = O(n), S(n) = O(n)
 3. Remove Duplicates From Linked List, T(n) = O(n^2), S(n) = O(1), (if don't need maintain order), T(n) = O(nlogn), S(n) = O(n)
 4. Return Last K Elements of a Linked List, T(n) = O(n), S(n) = O(1)
@@ -275,13 +275,13 @@ int main(void)
 /* 
 Algoritm:
     Method 1: Sort, Then Remove Duplicates 
-    Time Complexity, T(n) = O(nlogn) 
+    Time Complexity, T(n) = O(nlogn + n) = O(nlogn) // extra n to loop to remove duplicates 
     Space Complexity, S(n) = O(1) 
-    Method 2: Remove Duplicates Directly
+    Method 2: Remove Duplicates Directly, brute force approach.
     Time Complexity, T(n) = O(n^2) 
     Space Complexity, S(n) = O(1) 
-    note: Can reduce T(n) to O(1) by sacrificing space using hash table
     Method 3: Hashing
+    note: Can reduce T(n) to O(n) by sacrificing space using hash table
     Time Complexity, T(n) = O(n)
     Space Complexity, S(n) = O(n)
 */
