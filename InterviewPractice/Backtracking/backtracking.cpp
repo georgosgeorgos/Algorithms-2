@@ -26,6 +26,12 @@ TODO:
 //---------------------------------
 Subsets => Order/Permutation doesn't matter. 
 Duplicates harder than Distinct, since Distinct is just all permutations, whereas duplicates, if need prevent duplicates, need to account for that
+Subset 
+    => Backtrack by incrementing from iteration instead of depth
+    => Add and remove elements
+Permutation 
+    => Backtrack using depth instead of iteration 
+    => Swap elements instead of adding and removing
 //---------------------------------
 Every Backtracking Algorithm can be broken down into these steps: 
     Step1. Goal Test: Append to solution or return true if reach goal
@@ -285,6 +291,16 @@ Algorithm:
         // Hence, in order for this optimization to work, need to ensure arr.size() >= 1, otherwise, treat it as a special case.
         // But this small optimization of an extra constant lines of code execution isn't worth making the code less readable as it has more lines to handle
         // the base case, hence, your solution below does the 'from' case as the code looks cleaner. 
+
+    // Outdated Step1: Goal Test: Only push solution when done permuting
+    // note: If you are only appending when depth == arr.size(), chances are is that you are using
+        // (depth + 1) instead of (currIteration + 1) in your searchNextMove()
+        // not really, updated solution so it doesnt need to. 
+    //if(depth == arr.size())
+    //{
+    //   solution.push_back(arr); 
+    //}
+    //for(int j = depth; j < arr.size(); j++) instead of j = depth + 1
 // */
 //---------------------------------
 /* // 
@@ -301,20 +317,15 @@ void swap(vector<int> & arr, int i, int j)
 
 void permuteHelper(vector<int>& arr, vector<vector<int>>& solution, int depth)
 {
-    // Step1: Goal Test: Only push solution when done permuting
-    // note: If you are only appending when depth == arr.size(), chances are is that you are using
-        // (depth + 1) instead of (currIteration + 1) in your searchNextMove()
-    if(depth == arr.size())
-    {
-        solution.push_back(arr); 
-    }
+    // Step1: Goal Test: Always push solution
+    solution.push_back(arr); 
 
     // Step2: Iterate Possible Moves: List of possible moves are those ahead of index
-    for(int j = depth; j < arr.size(); j++)
+    for(int j = depth + 1; j < arr.size(); j++)
     {
         // Step3: Check Legal Move: Every move is legal in this case
         swap(arr, depth, j); // Step4: Add Move
-        permuteHelper(arr, solution, depth+1); // Step5: Search Next Move
+        permuteHelper(arr, solution, depth + 1); // Step5: Search Next Move
         swap(arr, depth, j); // Step6: Backtrack 
     }
     return;
@@ -329,18 +340,37 @@ vector<vector<int>> permute(vector<int>& arr)
     return solution;
 }
 
+void printResults(vector<int> &arr) 
+{
+    cout << "Input: ";
+    for (auto element : arr) 
+    {
+        cout << element << " ";
+    }
+    cout << endl;
+
+    vector< vector<int> > result = permute(arr);
+    for(auto subset : result)
+    {
+        cout << "[ ";
+        for(auto element : subset)
+        {
+            cout << element << " "; 
+        }
+        cout << "]" << endl;
+    }
+}
+
 int main(void)
 {
-    vector<int> arr = {1,2,3};
-    vector<vector<int>> solution = permute(arr);
-    for(int i = 0; i < solution.size(); i++)
-    {
-        for(int j = 0; j < solution[i].size();j++)
-        {
-            cout << solution[i][j] << " ";
-        }
-        cout << endl;
-    }
+    vector<int> empty = {}; 
+    vector<int> single = {1}; 
+    vector<int> even = {1, 2}; 
+    vector<int> odd = {1, 2, 3}; 
+    printResults(empty);
+    printResults(single);
+    printResults(even);
+    printResults(odd);
     return 0;
 }
 // */
