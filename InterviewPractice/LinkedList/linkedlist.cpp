@@ -91,30 +91,21 @@ struct node
 {
     int value;
     struct node* next;
+    node(int _value, struct node* _next) : value(_value), next(_next) {}
 };
 
 struct node* reverseLinkedList(struct node* head);
 
 int main(void)
 {
-    struct node* head;
-    struct node* a = (struct node*)malloc(sizeof(struct node));
-    struct node* b = (struct node*)malloc(sizeof(struct node));
-    struct node* c = (struct node*)malloc(sizeof(struct node));
-    struct node* d = (struct node*)malloc(sizeof(struct node));
-    a->value = 1;
-    a->next = b;
-    b->value = 2;
-    b->next = c;
-    c->value = 3;
-    c->next = d;
-    d->value = 4;
-    d->next = NULL;
-    head = a;
+    node d(4, nullptr);
+    node c(3, &d);
+    node b(2, &c);
+    node a(1, &b);
+    struct node* head = &a;
     struct node* curr = head;
     cout <<"Before Reversing" << endl;
-    // while (curr)
-    while(curr != NULL)
+    while(curr)
     {
         cout << curr->value << " ";
         curr = curr->next;
@@ -126,7 +117,7 @@ int main(void)
     // But then you have to make sure the original head pointer must be updated to point to the reversed head pointer.
     curr = reverseLinkedList(head);
     cout << "After Reversing" << endl;
-    while(curr != NULL)
+    while(curr)
     {
         cout << curr->value << " ";
         curr = curr->next;
@@ -136,25 +127,24 @@ int main(void)
 
 struct node* reverseLinkedList(struct node* head)
 {
-    struct node* prev;
-    struct node* curr;
-    struct node* next;
-    if(!head || !head->next)
-        return head;
-    prev = head;
-    curr = head->next;
+    // if no element or only 1 element, return
+    if (!head || !head->next) return head;
     // NOTE: MISTAKE HERE!! Forgot to point first element to NULL
-    prev->next = NULL; // point first element to NULL
-    //while(curr) // NOTE: MISTAKE HERE! DID while(!curr) instead of while(curr) 
-    while(curr != NULL)
+    struct node* prev = nullptr; // to point first elment to null
+    struct node* curr = head;
+    struct node* next = curr->next;
+    // Will definitely update prev below as already check that has at least 2 elements above.
+    while(curr)
     {
-        next= curr->next;
+        next = curr->next;
         curr->next = prev;
         prev = curr;
         curr = next;
     }
+    // Update the head to the last element
     head = prev; // set head to previous
-    // Note: Mistake!! You can never return pointer by reference, return pointer using return value instead!!
+    // Note: Mistake!! You can never return pointer by reference,
+    //       return pointer using return value instead!!
     return head;
 }
 // */
