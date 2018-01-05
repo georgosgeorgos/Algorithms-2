@@ -82,6 +82,17 @@ Notes:
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(1)
 //---------------------------------
+/*
+Questions:
+    Singly or doubly linked list? 
+    What does linked list store? 
+    Modify original or return new copy? 
+Function Prototype:
+    struct node* reverseLinkedList(struct node* head);
+TestCases:
+    1->2->3->4->nullptr => 4->3->2->1->nullptr
+*/
+//---------------------------------
 /* //
 #include <stdlib.h>
 #include <iostream>
@@ -94,7 +105,28 @@ struct node
     node(int _value, struct node* _next) : value(_value), next(_next) {}
 };
 
-struct node* reverseLinkedList(struct node* head);
+struct node* reverseLinkedList(struct node* head)
+{
+    // if no element or only 1 element, return
+    if (!head || !head->next) return head;
+    // NOTE: MISTAKE HERE!! Forgot to point first element to NULL
+    struct node* prev = nullptr; // to point first elment to null
+    struct node* curr = head;
+    struct node* next = curr->next;
+    // Will definitely update prev below as already check that has at least 2 elements above.
+    while(curr)
+    {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    // Update the head to the last element
+    head = prev; // set head to previous
+    // Note: Mistake!! You can never return pointer by reference,
+    //       return pointer using return value instead!!
+    return head;
+}
 
 int main(void)
 {
@@ -123,29 +155,6 @@ int main(void)
         curr = curr->next;
     }
     cout << endl;
-}
-
-struct node* reverseLinkedList(struct node* head)
-{
-    // if no element or only 1 element, return
-    if (!head || !head->next) return head;
-    // NOTE: MISTAKE HERE!! Forgot to point first element to NULL
-    struct node* prev = nullptr; // to point first elment to null
-    struct node* curr = head;
-    struct node* next = curr->next;
-    // Will definitely update prev below as already check that has at least 2 elements above.
-    while(curr)
-    {
-        next = curr->next;
-        curr->next = prev;
-        prev = curr;
-        curr = next;
-    }
-    // Update the head to the last element
-    head = prev; // set head to previous
-    // Note: Mistake!! You can never return pointer by reference,
-    //       return pointer using return value instead!!
-    return head;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
