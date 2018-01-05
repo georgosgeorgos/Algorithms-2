@@ -167,24 +167,34 @@ int main(void)
 // Time Complexity, T(n) = O(1)
 // Space Complexity, S(n) = O(n)
 //-------------------------
+/*
+Function Prototype:
+TestCases:
+        [
+        2
+        5
+Stack:  3  => [2, 3, 3, 3, 4] (as you pop from top of stack, the minimum value changes)
+        3
+        4
+        ]
+*/
+//-------------------------
 /* //
-#include <cstdio> 
-#include <cstdlib> 
 #include <iostream> 
 #include <stack>
 using namespace std; 
 
 class minStack {
-private:
-    stack<int> s; 
-    stack<int> sMin; 
-public:
-    minStack();
-    void push(int value);
-    void pop();
-    int top();
-    int min();
-    bool empty();
+    private:
+        stack<int> s; 
+        stack<int> sMin; 
+    public:
+        minStack();
+        void push(int value);
+        void pop();
+        int top();
+        int min();
+        bool empty();
 };
 
 minStack::minStack() 
@@ -195,6 +205,7 @@ minStack::minStack()
 void minStack::push(int value) 
 {
     // If first minimum value or the latest value is a new minimum
+    // Need to push duplicates, so use '<=' instead of '<'
     if(sMin.empty() || value <= sMin.top())
     {
         sMin.push(value);
@@ -234,8 +245,8 @@ bool minStack::empty()
 int main(void)
 {
     minStack m; 
-    // Set stack to be 2,5,3,3,4
-    // which means minStack is: 2,3,3,4
+    // Set stack to be  top->[2,5,3,3,4]<-bottom
+    // which means minStack::sMin is: top->[2,3,3,4]<-bottom 
     m.push(4);
     m.push(3);
     m.push(3);
@@ -255,7 +266,7 @@ int main(void)
 // Space Complexity, S(n) = O(n)
 //-------------------------
 /*
-Function Prototype
+Function Prototype:
     void sortStack(stack<int>& s);
 TestCase:
   3     1
@@ -348,7 +359,7 @@ int main(void)
 Questions:
 Function Prototype:
     void ReverseStack(stack<int>& s);
-TestCase
+TestCases:
     3     2
     1 =>  1
     2     3
