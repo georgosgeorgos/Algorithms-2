@@ -56,6 +56,8 @@ s.size();
 
 // Set (single unique value)
 set<int> s;
+s.insert(2);
+s.erase(2); 
 
 // Map
 map<int, int> m;
