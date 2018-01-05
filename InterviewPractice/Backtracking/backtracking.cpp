@@ -147,18 +147,19 @@ Every Backtracking Algorithm can be broken down into these steps:
 // Space Complexity, S(n) = O(2^n) as recursion stack, O(n) for push and pop all elements.
 //---------------------------------
 /* //
-#include<vector>
-#include<algorithm> // sort()
+#include <vector>
+#include <algorithm> // sort()
 #include <iostream> 
 using namespace std; 
 
-void subsetHelper(vector<int>&nums, vector<vector<int>>& solution, vector<int>& currSubset, int index)
+void subsetHelper(const vector<int> &nums, vector<vector<int>>& solution, vector<int>& currSubset, int index)
 {
     // Step1: Goal Test: add to solution at each node of DFS 
     // note: If you are always adding the current solution,
         // chances are is that your searchNextMove() method adds 1 to currIteration instead of depth.
         // In other words, you use (currIteration + 1) instead of (depth + 1)
         // since you don't need to check that (depth == referenceArr.size()) before appending to solution.
+    // Adds to current solution by copy instead of by reference. 
     solution.push_back(currSubset); // note: also handles base case of pushing empty set
     
     // Special DFS that iteratives over everything (many starting points for DFS) 
@@ -183,25 +184,44 @@ vector<vector<int>> subsets(vector<int>& nums)
 {
     vector<vector<int>> solution; 
     vector<int> currSubset; 
-    // sort the nums array first 
+    // sort the nums array first  => Modifies it for easy printing
     sort(nums.begin(), nums.end()); 
     // start with index of 0 
     subsetHelper(nums, solution, currSubset, 0); 
     return solution; 
 }
 
+void printResults(vector<int> &arr) 
+{
+    cout << "Input: ";
+    for (auto element : arr) 
+    {
+        cout << element << " ";
+    }
+    cout << endl;
+
+    vector< vector<int> > result = subsets(arr);
+    for(auto subset : result)
+    {
+        cout << "[ ";
+        for(auto element : subset)
+        {
+            cout << element << " "; 
+        }
+        cout << "]" << endl;
+    }
+}
+
 int main(void)
 {
-    vector<int> arr = {1, 2, 3}; 
-    vector< vector<int> > result = subsets(arr);
-    for(int i = 0; i < result.size(); i++)
-    {
-        for(int j = 0; j < result[i].size();j++)
-        {
-            cout << result[i][j] << " "; 
-        }
-        cout << endl;
-    }
+    vector<int> empty = {}; 
+    vector<int> single = {1}; 
+    vector<int> even = {1, 2}; 
+    vector<int> odd = {1, 2, 3}; 
+    printResults(empty);
+    printResults(single);
+    printResults(even);
+    printResults(odd);
     return 0;
 }
 // */
@@ -890,7 +910,7 @@ void printSolution(vector<int>& arr, int k)
         for (auto currSubset : result)
             for (int val : currSubset)
                 cout << val << " ";
-        cout << endl;
+        cout << "]" << endl;
     }
 }
 
