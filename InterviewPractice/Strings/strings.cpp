@@ -260,7 +260,7 @@ void reverseStringWhileLoop(string& word)
     {
         // Swap
         char temp = word[startIndex];
-        word[startIndex--] = word[endIndex];
+        word[startIndex++] = word[endIndex];
         word[endIndex--] = temp;
     }
     return;
@@ -294,10 +294,14 @@ int main(void)
     string single = "a"; // "a"
     string even = "ab"; // "ba"
     string odd = "abc"; // "cba"
+    string longEven = "abcd"; // "dcba"
+    string longOdd = "abcde"; // "edcba"
     printSolution(empty);
     printSolution(single);
     printSolution(even);
     printSolution(odd);
+    printSolution(longEven);
+    printSolution(longOdd);
     return 0;
 }
 // */
