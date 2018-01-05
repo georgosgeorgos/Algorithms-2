@@ -200,11 +200,15 @@ Unbounded Knapsack Problem
 // Time Complexity, T(n) = O(n)
 // Space Complexity, S(n) = O(n)
 //-------------------------------------
+/*
+Questions:
+    What to do when n < 0 ? return 1
+    n = 0 and n = 1? return 1
+*/
+//-------------------------------------
 /* //
 #include <vector>
 #include <iostream>
-#include <stdlib.h>
-
 using namespace std;
 
 int fibonacci(int n);
@@ -223,9 +227,8 @@ int fibonacci(int n)
 {
     if (n <= 1)
         return 1;
-    vector<int> cache(n+1, 0);
-    cache[0] = 1;
-    cache[1] = 1;
+    // Initialize as 1 so that 0's are 1's
+    vector<int> cache(n+1, 1);
     for (int i = 2; i <= n; i++)
         cache[i] = cache[i-1] + cache[i-2];
     return cache[n] ;
