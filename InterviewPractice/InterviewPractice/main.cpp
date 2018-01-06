@@ -17,6 +17,8 @@ https://coderpad.io
 // Before interviewing, go through each problem again was you would not be as good as you were in interviews.
 // To make this more enjoyable, jump through each question, so like do 1 Array, then 1 String, then ... then 1 Graph, then 1 Array again
 // Also, document any new refactoring skills you found out if your new solutions are in any way better than existing ones.
+// Also, redo from scratch for mastery. Then, compare with existing solution to figure out 
+// what you did better and what you did worse. Then, improve whatever you had. 
 //-----------------------------------------------------------------------------------------------
 /*
 Testing your code after implementing it
