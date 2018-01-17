@@ -316,7 +316,7 @@ Questions:
 #include <iostream> 
 using namespace std;
 
-int MaxSumIncreaseSubsequence(vector<int>& arr)
+int MaxSumIncreaseSubsequenceForward(vector<int>& arr)
 {
     if (arr.empty()) return 0;
     int n = arr.size();
@@ -324,15 +324,32 @@ int MaxSumIncreaseSubsequence(vector<int>& arr)
     for (int i = 0; i < n; i++)
         L[i] = arr[i];
     int maxSum = L[0];
-    for (int i = 0; i < n; i ++)
+    for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < i; j++)
         {
-            // if the value is less than current value
-            if ((arr[j] <= arr[i]) && (L[j] + arr[i] > L[i]))
-            {
-                L[i] = L[j] + arr[i];
-            }
+            if (arr[j] <= arr[i])
+                L[i] = max(L[i], L[j] + arr[i]);
+        }
+        maxSum = max(maxSum, L[i]);
+    }
+    return maxSum;
+}
+
+int MaxSumIncreaseSubsequenceBackward(vector<int>& arr)
+{
+    if (arr.empty()) return 0;
+    int n = arr.size();
+    vector<int> L (n, 0);
+    for (int i = 0; i < n; i++)
+        L[i] = arr[i];
+    int maxSum = L[0];
+    for (int i = n-1; i >= 0; i--)
+    {
+        for (int j = i-1; j >= 0; j--)
+        {
+            if (arr[j] <= arr[i])
+                L[j] = max(L[j], L[i] + arr[j]);
         }
         maxSum = max(maxSum, L[i]);
     }
@@ -341,8 +358,16 @@ int MaxSumIncreaseSubsequence(vector<int>& arr)
 
 void printSolution(vector<int> &arr) 
 {
-    int maxSum = MaxSumIncreaseSubsequence(arr); 
-    cout << maxSum << endl;
+    int maxSumForward = MaxSumIncreaseSubsequenceForward(arr); 
+    int maxSumBackward = MaxSumIncreaseSubsequenceBackward(arr); 
+    if (maxSumForward != maxSumBackward)
+    {
+        cout << "ERROR!: maxSumForward: " << maxSumForward << " != " << maxSumBackward << " = maxSumBackward"<< endl;
+    }
+    else 
+    {
+        cout << maxSumForward << endl;
+    }
 }
 
 int main(void)
