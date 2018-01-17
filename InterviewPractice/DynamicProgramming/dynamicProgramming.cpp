@@ -242,6 +242,8 @@ int fibonacci(int n)
 /*
 Questions
     1. 
+TestCases:
+[2, 4, 3] => 6 since cutting into (2),(1) better than keeping (3) only.
 */
 //-------------------------------------
 /* //
