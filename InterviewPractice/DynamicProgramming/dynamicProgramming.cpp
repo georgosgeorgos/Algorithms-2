@@ -397,11 +397,27 @@ Test Case:
     "abbc", "abc" = 3 "abc"
     "aghbklc, "hgalbck" = 3 "abc"
     "aghbklc", "hgalbckzzyw";
+    Make sure doesn't repeat twice
+    aaa aab  => 
 Algorithm: 
     initialize a[n][m]; a[i][j] => maximum longest common subsequence that includes str[i] and str[j] 
     if str[i] == str[j] => and i!=0 or j != 0 => a[i][j] = 1 + LCS[i-1][j-1]
     else        => a[i][j] = max(LCS[i-1][j], LCS[i][j-1])
     otherwise, a[i][j] = 0
+
+    Update: Approach 2 wrong:
+        // Approach 2 wouldnt work if repeated alphabets
+        // Don't have to check diagonals as it would always have updated the right side.
+        // Assumes loop from 00, to n-1, n-1
+        for(i = 0 to n)
+            for(j = 0 to n)
+                a[i][j] = max(a[i][j-1], a[i-1][j])
+                if (str[i] == str[j])
+                {
+                    // here, will double count if "abc", "ccc"
+                    a[i][j]++;
+                }
+        return a[n-1][m-1]
 Implementation:
 Test!
 // */
@@ -438,26 +454,30 @@ int LCS(const string& s1, const string& s2)
     if (s1Len == 0 || s2Len == 0) return 0;
     vector<vector<int>> arr(s1Len, vector<int> (s2Len, 0));
     vector<vector<int>> dir(s1Len, vector<int> (s2Len, 0));
-    int maxSoFar = 0; 
     for (int s1Index = 0; s1Index < s1Len; s1Index++)
     {
         for (int s2Index = 0; s2Index < s2Len; s2Index++)
         {
             if (s1[s1Index] == s2[s2Index]) // matches
             {
-                dir[s1Index][s2Index] = 2; 
                 arr[s1Index][s2Index] = 1; 
+                dir[s1Index][s2Index] = 2; 
                 if (s1Index != 0 && s2Index != 0) // MISTAKE!! USED || instead of &&
                 {
+                    // If match, can only come from not accounting for both 
+                    // alphabets from before. Otherwise, may double count same alphabet twice.
                     arr[s1Index][s2Index] += arr[s1Index-1][s2Index-1]; 
                 }
             }
             else // not match
             {
+                // Set to max of previous two directions
+                // Don't have to check max. with diagonal as
+                // would have been updated to one of the two choices below.
                 if (s1Index != 0)
                 {
-                    dir[s1Index][s2Index] = 1; 
                     arr[s1Index][s2Index] = arr[s1Index-1][s2Index]; 
+                    dir[s1Index][s2Index] = 1; 
                 }
                 if (s2Index!=0)
                 {
@@ -468,20 +488,33 @@ int LCS(const string& s1, const string& s2)
                     }
                 }
             }
-            if (arr[s1Index][s2Index] > maxSoFar) maxSoFar = arr[s1Index][s2Index]; 
         }
     }
     printLCS(dir, s1, s1Len-1, s2Len-1);
     cout << endl;
-    return arr[s1Len-1][s2Len-1];
+    return arr[s1Len-1][s2Len-1]; // the end will be the max based on continuous updates
+}
+
+void printSolution(string s1, string s2)
+{
+    int maxLCSa = LCS(s1, s2);
+    int maxLCSb = LCS(s2, s1);
+    if (maxLCSa != maxLCSb)
+    {
+        cout << "Error in implementation!: Operation not commutative!" << endl;
+        return;
+    }
+    cout << "input: (" << s1 << ", " << s2 << "): maxLCS = " << maxLCSa << endl;
 }
 
 int main(void)
 {
-    string s1 = "aghbklc";
-    string s2 = "hgalbcdzzyw";
-    int maxLCS = LCS(s1, s2); // 3 => "abc"
-    cout << maxLCS << endl;
+    string normalA = "aghbklc";
+    string normalB = "hgalbcdzzyw";
+    printSolution(normalA, normalB); // 3 => "abc"
+    string repeatedA = "abbc"; // repeat the b to ensure nothing repeated gets propagated
+    string repeatedB = "abc";
+    printSolution(repeatedA, repeatedB); // 3 => "abc"
     return 0; 
 }
 // */
