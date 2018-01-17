@@ -243,10 +243,14 @@ int fibonacci(int n)
 Questions
     1. 
 TestCases:
-[2, 4, 3] => 6 since cutting into (2),(1) better than keeping (3) only.
+    odd: 
+        [2, 4, 3] => 6 since cutting into (2),(1) better than keeping (3) only.
+    even:
+        [3, 4] => 6 // even double
+        [2, 5] => 5 // even single
 */
 //-------------------------------------
-/* //
+//
 #include <vector> 
 #include <iostream> 
 using namespace std; 
@@ -281,8 +285,16 @@ void printSolution(vector<int>& rodPrices)
 int main(void)
 {
     vector<int> single = {5}; // 5
+    vector<int> evenSingle = {2, 5}; // 5
+    vector<int> evenDouble = {2, 3}; // 4
+    vector<int> oddSingle = {2, 4, 7}; // 7
+    vector<int> oddDouble = {2, 4, 5}; // 6
     vector<int> normal = {0, 1, 5, 8, 9, 10, 17, 17, 20, 24, 23}; // 25
     printSolution(single);
+    printSolution(evenSingle);
+    printSolution(evenDouble);
+    printSolution(oddSingle);
+    printSolution(oddDouble);
     printSolution(normal);
     return 0;
 }
