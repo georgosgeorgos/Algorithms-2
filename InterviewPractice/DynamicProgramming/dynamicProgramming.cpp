@@ -323,6 +323,7 @@ int MaxSumIncreaseSubsequence(vector<int>& arr)
     vector<int> L (n, 0);
     for (int i = 0; i < n; i++)
         L[i] = arr[i];
+    int maxSum = L[0];
     for (int i = 0; i < n; i ++)
     {
         for (int j = 0; j < i; j++)
@@ -333,23 +334,23 @@ int MaxSumIncreaseSubsequence(vector<int>& arr)
                 L[i] = L[j] + arr[i];
             }
         }
-    }
-    // TODO: Use single pass by putting the logic below into the logic above instead of 2 passes. 
-    // Now get the maximum sum
-    int maxSum = L[0];
-    for (int i = 0; i < n; i++)
-    {
-        if (L[i] > maxSum)
-            maxSum = L[i];
+        maxSum = max(maxSum, L[i]);
     }
     return maxSum;
 }
 
-int main(void)
+void printSolution(vector<int> &arr) 
 {
-    vector<int> arr = { 5, 1, 2, 1, 3, 2}; // 6 = 1 + 2 + 3
     int maxSum = MaxSumIncreaseSubsequence(arr); 
     cout << maxSum << endl;
+}
+
+int main(void)
+{
+    vector<int> single = {5}; // 5
+    vector<int> arr = { 5, 1, 2, 1, 3, 2}; // 6 = 1 + 2 + 3
+    printSolution(single);
+    printSolution(arr);
     return 0;
 }
 // */
