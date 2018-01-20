@@ -9,7 +9,8 @@ Table of Contents
 6. Longest Substring With Distinct Characters, T(n) = O(n) (single pass), S(n) = O(1)
 7. Longest Substring With At Most K Distinct Characters, T(n) = O(n), S(n) = O(n)
 8. Isomorphic Strings, T(n,m) = O(n), S(n,m) = O(n)
-9. Exact Matching: Z-Algorithm, T(n,m) = O(n + m), Space Complexity, S(n,m) = O(n + m) TODO:INT
+9. Reverse Vowel in Place, T(n) = O(n), S(n) = O(1) (Google Phone 3rd)
+10. Exact Matching: Z-Algorithm, T(n,m) = O(n + m), Space Complexity, S(n,m) = O(n + m) TODO:INT
 //-------------------------
 TODO:
 14. Reverse Words in a Sentence (Bloomberg Interview Round 1)
@@ -775,7 +776,98 @@ int main(void)
 }
 // */
 //----------------------------------------------------------------------------------------
-// 9 Exact Matching: Z-Algorithm
+// 9 Reverse Vowel in Place 
+// Time Complexity, T(n) = O(n)
+// Space Complexity, S(n) = O(1)
+//-------------------------
+/*
+Questions:
+    Does cases matter? 
+    Yes. 
+Function Prototype: 
+    void reverseVowel(string &input); 
+Test Cases: 
+    "" => ""
+    "a" => "a"
+    "aA" => "Aa"
+    "a-e_i" => "i-e_a"
+    "   o u" => "   u o"
+*/
+//-------------------------
+/* // 
+#include <set>
+#include <string>
+#include <iostream>
+using namespace std; 
+
+bool aVowel(char c) 
+{
+    set<char> vowels; 
+    for (auto vowel : "aeiouAEIOU")
+        vowels.insert(vowel);
+    if (vowels.find(c) != vowels.end()) return true;
+    return false;
+}
+
+void swap(string &input, unsigned int i, unsigned int j)
+{
+    char temp = input[i];
+    input[i] = input[j];
+    input[j] = temp;
+    return;
+}
+
+void reverseVowel(string &input) 
+{
+    if (input.size() <= 1) return;
+    unsigned int start = 0;
+    unsigned int end = input.size() - 1; 
+    while (start < end) 
+    {
+        if (!aVowel(input[start]))
+        {
+            start++;
+            continue;
+        }
+        if (!aVowel(input[end]))
+        {
+            end--;
+            continue;
+        }
+        swap(input, start, end);
+        start++;
+        end--;
+    }
+    return;
+}
+
+void printSolution(string& input) 
+{
+    cout << "Input: " << input;
+    reverseVowel(input);
+    cout  << " => Output: " << input << endl;
+}
+
+int main(void)
+{
+    string empty = ""; // ""
+    string single = "a"; // "a"
+    string noVowel = " - _ ^"; // " - _^"
+    string caseMatter = "aA"; // "Aa"
+    string oddVowels = "a-e_i"; // "i-e_a"
+    string evenVowels = "   o u"; // "   u o"
+    printSolution(empty);
+    printSolution(single);
+    printSolution(noVowel);
+    printSolution(caseMatter);
+    printSolution(oddVowels);
+    printSolution(evenVowels);
+    return 0;
+}
+
+// */
+//----------------------------------------------------------------------------------------
+// 10 Exact Matching: Z-Algorithm
 // Time Complexity, T(n,m) = O(n + m)
 // Space Complexity, S(n,m) = O(n + m)
 //-------------------------
