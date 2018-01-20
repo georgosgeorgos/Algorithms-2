@@ -58,10 +58,11 @@ s.size();
 set<int> s;
 s.insert(2);
 s.erase(2); 
+if (s.find(key) != s.end()) // check if it exist
 
 // Map
 map<int, int> m;
 m[key] = val;
-if(m.count(key)) // check if it exist 
-if(m.find(key) != m.end()) // check if it exist
+if (m.count(key)) // check if it exist 
+if (m.find(key) != m.end()) // check if it exist
 m.erase(key)
