@@ -3,6 +3,12 @@
 Table of Contents
 1. Generate Indices for Arbitrary Dimension Numpy Array
 '''
+#---------------------------------
+'''
+Implementing Variable Elimination (Recursively restrict, recursively marginalize, recursively product)
+is an awesome exercise for practicing backtracking. Refer to CSC384 Winter 2015 Bayes Net. 
+
+'''
 #----------------------------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------------------------------------
 # 1 Generate Indices for Arbitrary Dimension Numpy Array
