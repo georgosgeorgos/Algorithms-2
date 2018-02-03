@@ -152,6 +152,21 @@ class ChildClass(NameOfClass):
 #----------------------------------
 # Iterables vs Generators
 #------------------------
+# For each loop
+for curr in arr:
+    print(curr)
+# Indexing for loop:
+for index in range(arr.size):
+    print(arr[index])
+# To access 2 elements
+for currA, currB in zip(arrA, arrB):
+    print(currA)
+    print(currB)
+for currA in arrA:
+    print(currA)
+    print(arrB[0])
+    arrB = arrB[1:] # ugly, but can be used for python
+
 # Iterables => stores everything in memory, can iterate as many times
 # Generator => do not store all values in memory, can only iterate each data once, generates on the fly
     yield # This acts similar keyword 'return', difference is that it only executes last call
