@@ -189,7 +189,7 @@ Let
 n = numRow
 m = numCol
 k = number of non-zero elements
-Storage => O(2k + (n+1)) = O(k + n)
+Storage => O(2k + (m+1)) = O(k + m)
 */
 //---------------------------------
 /* //
