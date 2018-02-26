@@ -63,6 +63,7 @@ import flask # Simplest web framework
 # Plotting
 import matplotlib # For plotting
 import panda # For plotting
+import seaborn # For plotting
 # Machine Learning
 import numpy as np # Working with matrices, numerical python
 import tensorflow as tf # Working with Machine Learning
