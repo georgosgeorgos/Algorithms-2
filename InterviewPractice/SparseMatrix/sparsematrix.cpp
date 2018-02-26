@@ -11,8 +11,8 @@ Block Compressed Sparse Row (BSR in scipy) => CSR on Blocks
 Block Compressed Sparse Column  => CSC on Blocks
 Diagonal Storage (DIA in scipy) => Diagonal Storage
 Dictionary of Keys (DOK in scipy) (similar to COO, but hashes[(userIndex, itemIndex)] -> Value)
-Row-based Linked List (LIL in scipy) => Each row is index to array, each value of array is a linked list of non-zero column with values
-Col-based Linked List => Each col is index to array of items, each value is a linked list of non-zero rows with values
+Row-based List of List (LIL in scipy) => Each row is index to array, each value of array is a linked list of non-zero column with values
+Col-based List of List => Each col is index to array of items, each value is a linked list of non-zero rows with values
 //----------------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Coordinate Format Sparse Matrix (COO in scipy)
