@@ -14,16 +14,18 @@ Row-based Linked List
 //----------------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------------
 // 1 Coordinate Format Sparse Matrix
-// Time Complexity, T(n) = TODO
-// Space Complexity, S(n) = TODO
+// Time Complexity, T(n, m, k) =  = O(k)
+// Space Complexity, S(n, m, k) =  O(k)
 //---------------------------------
 /*
-Questions:
-TestCase:
-Algorithm:
+Let
+n = numRow
+m = numCol
+k = number of non-zero elements
+Storage => O(3k) = O(k)
 */
 //---------------------------------
-//
+/* //
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -32,6 +34,7 @@ class SparseMatrixCoordinate {
 public:
     SparseMatrixCoordinate(vector<vector<int>>& matrix);
     ~SparseMatrixCoordinate();
+    vector<int> dotProductVector(const vector<int>& vec);
 private:
     vector<int> row;
     vector<int> col;
@@ -47,15 +50,25 @@ SparseMatrixCoordinate::SparseMatrixCoordinate(vector<vector<int>>& matrix)
             int currVal = matrix[rowIndex][colIndex];
             if (currVal != 0)
             {
-                row.push_back(rowIndex);
-                col.push_back(colIndex);
-                val.push_back(currVal);
+                this->row.push_back(rowIndex);
+                this->col.push_back(colIndex);
+                this->val.push_back(currVal);
             }
         }
     }
 }
 
 SparseMatrixCoordinate::~SparseMatrixCoordinate() {}
+
+vector<int> SparseMatrixCoordinate::dotProductVector(const vector<int>& vec)
+{
+    vector<int> result(vec.size(), 0);
+    for (int index = 0; index < this->row.size(); index++)
+    {
+        result[this->row[index]] += vec[this->col[index]] * this->val[index];
+    }
+    return result;
+}
 
 int main(void)
 {
@@ -66,9 +79,18 @@ int main(void)
     sparseMatrix[1][3] = 7;
     sparseMatrix[2][1] = 8;
     sparseMatrix[3][3] = 9;
+    sparseMatrix[4][0] = 5;
     sparseMatrix[4][3] = 1;
     SparseMatrixCoordinate smc(sparseMatrix);
-    cout << "done" << endl;
+    vector<int> vec = {1, 1, 1, 1, 1};
+    vector<int> result = smc.dotProductVector(vec);
+    // Output: [5, 7, 8, 9, 6]
+    cout << "[";
+    for (int val : result)
+    {
+        cout << val << ", ";
+    }
+    cout << "]" << endl;
 }
 // */
 //----------------------------------------------------------------------------------------------------------------------------------
