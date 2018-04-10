@@ -18,6 +18,10 @@ import libraryName
 help(libraryName)
 print dir(libraryName) # List all methods for the library
 help(libraryName.methodName)
+
+# To print all variables of a class object
+from pprint import pprint
+pprint(vars(classInstance))
 #----------------------------------------------------------------------------------------------------------------------------------
 # Headers and Libraries
 #-------------------------
