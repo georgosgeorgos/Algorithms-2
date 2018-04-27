@@ -182,11 +182,3 @@ for currA in arrA:
 #---------------------------------------------------------------------------------------------------
 # Concurrency
 #-------------------------
-#---------------------------------------------------------------------------------------------------
-# Jupyter Notebook
-#-------------------------
-An advantage of jupyter notebook, which behaves like MatLab. 
-So lets just say it’s training while reading variables batchSize, learningRate, etc. 
-You can run the model.train code in a different terminal window in jupyter notebook. Then, pause the execution of the model.train code, then re-run the terminal that defines the values of variables batchSize, learningRate, etc, which is in a different terminal window than model.train, then resume model.train code, it will now read the latest variable values that were defined. 
-Also, it is a great resource for interactive code examples.
-#---------------------------------------------------------------------------------------------------

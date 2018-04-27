@@ -1,13 +1,14 @@
 Below are the arguments for advantages and disadvantages of Pythons vs Jupyter Notebook
 
 #-----------------------------------------------------------------------------------------
-# Jupyter Notebook: 
+# Jupyter Notebook: (Behaves like Matlab)
 #-----------------------------------------------------------------------------------------
 Advantages
 - Easy to explain
 - Easy to store global variables and work on small interactive code.
 - Easy to debug (can split into small sections)
 - Can change hyperparameter values while code is training.
+- Can pause execution of code, change variable (e.g. hyperparam) values, and resume training.
 - Good for explanation on scientific work.
 - Good for easily duplicating notebook to test out other ideas.
 
