@@ -11,12 +11,14 @@ Advantages
 - Can pause execution of code, change variable (e.g. hyperparam) values, and resume training.
 - Good for explanation on scientific work.
 - Good for easily duplicating notebook to test out other ideas.
+- Easy to save little output as pdf for communication
 
 Disadvantages:
 - Difficult to share or re-use code
 - Not robust as you keep copying code.
 - Difficult to search for code as latex search only works within current small window
 - Not versio control friendly as you cannot know what change
+- Cannot just print stuff as will run out of space
 #-----------------------------------------------------------------------------------------
 # Python Scripts
 #-----------------------------------------------------------------------------------------
@@ -25,6 +27,8 @@ Advantages
 - Easy to re-use code
 - Robust (production code)
 - Version control friendly to keep track of updates.
+- Easy to run and log everything into a txt file for debugging purposes,
+  can print as much as you want
 
 Disadvantages:
 - Difficult to debug as hard to run small snippets without running from scratch.
