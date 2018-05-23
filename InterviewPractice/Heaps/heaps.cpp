@@ -11,6 +11,13 @@ TODO:
 4. Prim's Algorithm
     TODO: THIS IS TOO MUCH IMPLEMENTATION, DON'T THINK CAN FIT IN 1 INTERVIEW SLOT, YES YOU CAN! JUST PRACTICE IMPLEMENTING 10 TIMES
           CAN IF YOU USE STL's PRIORITY_QUEUE 
+MedianHeap 
+    - Build a min heap O(n) and max heap O(n)
+    - Extract min half away from minheap => Min heap contains half of data bigger than median
+    - Extract max half away from maxheap => Max heap contains half of data smaller than median
+    - Then, to extract median, just compare min of min heap and max of max heap and extract whichever,
+      keeping track of size of both heaps. 
+    - This way, you are always extracting the median
 Binary Heap
 Binomial Heap 
 B-Heap 
