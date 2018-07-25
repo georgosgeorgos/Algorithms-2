@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------
 /* //
 Table of Contents
-1. Kruskal's Algorithm, T(V,E) = O(ElgV), S(V,E) = O(V)
+1. Kruskal's Algorithm, T(V,E) = O(ElgV), S(V,E) = O(V + E)
 //-------------------------
 TODO: 
 12.  Subset: Given an array of distinct integers of size n, return all possible subsets. Solution Set cannot contain duplicates
@@ -92,11 +92,12 @@ note: #include <set> is NOT disjoint set, as #include <set> is a balanced binary
 //----------------------------------------------------------------------------------------
 // 1 Kruskal's Algorithm
 // Time Complexity, T(V,E) = O(ElgV)
-// Space Complexity, S(V,E) = O(V) 
+// Space Complexity, S(V,E) = O(V + E) 
 //-------------------------
 //      V is for all the sets made
 //      Assume if modify same graph, will only be deleting edges, so won't create any space for new edges
 //      Uses Object and Pointers representation of Graph
+//      E is needed to store edges into an array in order to sort it. 
 // note: qsort() is for arrays 
 // sort() is for vectors
 //-------------------------
