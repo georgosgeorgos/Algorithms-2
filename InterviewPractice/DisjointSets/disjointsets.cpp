@@ -165,6 +165,8 @@ public:
     {
         int parent1 = find(node1);
         int parent2 = find(node2);
+        // TODO: Uncomment below to ensure merging 2 set in same node doesn't do anything after testing it works
+        // if (parent1 == parent2) {return;}
         // update the ranks
         if (s[parent1].getRank() == s[parent2].getRank())
         {
